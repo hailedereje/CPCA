@@ -7,6 +7,7 @@ const GenerateJWT = async (res, tokenData) => {
     expiresIn: TOKEN_EXPIRY,
   });
   res.cookie("jwt", token, {
+    //security  options
     httpOnly: true,
     secure: NODE_ENV !== "developement",
     sameSite: "strict",

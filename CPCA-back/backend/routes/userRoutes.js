@@ -1,14 +1,30 @@
 import express from "express";
 
+import multer from "multer";
 import { authenticate, isAdmin } from "../middlewares/authenticate.js";
-import { createInstructor, editUserProfile, getUserProfile, userLogin, userLogout, userRegister } from "../controllers/userController.js";
+
+import {
+  createInstructor,
+  editUserProfile,
+  getUserProfile,
+  userLogin,
+  userLogout,
+  userRegister,
+} from "../controllers/userController.js";
+import { imageStorage } from "../config/multerConfig.js";
 const router = express.Router();
+
+
+const upload = multer({ storage: imageStorage });
 
 router.route("/register").post(userRegister);
 router.route("/login").post(userLogin);
-router.route("/profile").get(authenticate, getUserProfile).put(authenticate, editUserProfile);
-router.route('/logout').post(userLogout)
-
+router.use(authenticate);
+router
+  .route("/profile")
+  .get(getUserProfile)
+  .patch(upload.single("profileImg"), editUserProfile);
+router.route("/logout").post(userLogout);
 router.route("/createInstructor").post(isAdmin, createInstructor);
 
 export default router;

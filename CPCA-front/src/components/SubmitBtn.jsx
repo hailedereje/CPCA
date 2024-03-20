@@ -5,7 +5,7 @@ function SubmitBtn({ text }) {
   const isSubmitting = false;
 
   return (
-    <button type="submit" disabled={isSubmitting} className="btn btn-secondary">
+    <button type="submit" disabled={isSubmitting} className="btn btn-primary">
       {isSubmitting ? (
         <>
           <span className="loading loading-spinner"></span>
