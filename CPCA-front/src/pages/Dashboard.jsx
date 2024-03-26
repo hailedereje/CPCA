@@ -3,15 +3,34 @@ import SectionTitle from "../components/SectionTitle";
 import CourseContent from "../components/CourseContent";
 import Greeting from "../components/Greeting";
 import RecommendedCoursesGrid from "../components/RecommendedCoursesGrid";
-import { SubmitBtn } from "../components";
+import { BigSidebar, DashboardNavbar, SubmitBtn } from "../components";
+import { Outlet } from "react-router-dom";
 
 function Dashboard() {
   return (
-    <div className="p-10 ">
-      <Greeting />
-      <SectionTitle text="My Courses" />
+    <div className="flex">
+      <div className="w-66">
+        <BigSidebar />
+      </div>
+      <div className="flex-grow flex  flex-col justify-center">
+        <div className="  ">
+          <DashboardNavbar />
+        </div>
+        <div className="bg-base-200 m-3 flex-grow p-5  shadow-sm">
+          <Outlet />
+        </div>
+      </div>
+    </div>
+  );
+  {
+    /* <Greeting /> */
+  }
+  {
+    /* <SectionTitle text="My Courses" /> */
+  }
 
-      <div className=" border border-base-200 m-4 flex items-center justify-between p-4">
+  {
+    /* <div className=" border border-base-200 m-4 flex items-center justify-between p-4">
         <div className="collapse   bg-base-200 w-3/4  mt-2">
           <input type="checkbox" />
           <div className="collapse-title text-xl font-medium">
@@ -38,11 +57,13 @@ function Dashboard() {
         <button className="join-item btn btn-active">2</button>
         <button className="join-item btn">3</button>
         <button className="join-item btn">4</button>
-      </div>
+      </div> */
+  }
 
-      <RecommendedCoursesGrid />
-    </div>
-  );
+  {
+    /* <RecommendedCoursesGrid /> */
+  }
+  // </div>
 }
 
 export default Dashboard;

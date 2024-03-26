@@ -2,20 +2,26 @@ import { BadRequestError, NotFoundError } from "../errors/index.js";
 import { Progress } from "../models/index.js";
 import Course from "../models/course.js";
 
+
 const createCourse = async (req, res) => {
+
   const { title, description } = req.body;
   if (!title && !description) {
     throw new NotFoundError("course data not found");
   }
+  
   const newCourse = await Course.create({
     title,
     description,
     instructor: req.user._id, // Assuming the instructor is the logged-in user
   });
+
   if (newCourse) {
     return res.status(201).json(newCourse);
   }
+
   throw new BadRequestError("Invalid course data");
+
 };
 
 const getAllCourses = async (req, res) => {
