@@ -39,7 +39,7 @@ function App() {
       element: <Dashboard />,
       children: [
        { index: true, element: <Status/> }, 
-       {path: 'profile', element: <Profile/>}, 
+       {path: 'profile', element: <Profile/>, action: EditProfileAction(store)}, 
        {path: 'all-course', element: <AllCourses />}, 
        {path: 'add-course', element: <AddCourse/>}
 

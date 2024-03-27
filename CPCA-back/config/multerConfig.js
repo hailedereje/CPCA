@@ -37,7 +37,6 @@ const videoStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "videos",
-    resource_type: "video", 
     format: "mp4",
     public_id: (req, file) => {
       return `video-${Date.now()}-${file.originalname}`;

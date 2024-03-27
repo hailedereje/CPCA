@@ -13,7 +13,7 @@ const App = async (app) => {
   app.use(cors());
   app.use(morgan("dev"));
   app.get("/", (req, res) => {
-    res.send("hello world");
+    res.send("server running ...");
   });
   app.use("/api/v1/user", userRoutes);
   app.use("/api/v1/courses", courseRoutes);

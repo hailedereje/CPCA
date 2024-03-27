@@ -1,5 +1,7 @@
 // Desc: Auth service to handle login, logout and register
 
+import { data } from "autoprefixer";
+
 export const authService = (builder) => ({
     loginUser: builder.mutation({
         query: (credentials) => ({
@@ -19,6 +21,13 @@ export const authService = (builder) => ({
             url: '/user/register',
             method: 'post', 
             body: credentials,
+        })
+    }), 
+    editUserInfo: builder.mutation({
+        query: (data) => ({
+            url: '/user/edit', 
+            method: 'patch', 
+            body: data
         })
     })
 })

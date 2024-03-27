@@ -3,28 +3,29 @@ import { FormInput } from "../components";
 import { SubmitBtn } from "../components";
 import { Form, Link, redirect } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { loginUser } from "../features/user/userSlice";
-import { customFetch } from "../utils";
 import { toast } from "react-toastify";
+import { api } from "../api";
 export const action =
   (store) =>
   async ({ request }) => {
     const formData = await request.formData();
-    console.log(formData);
     const data = Object.fromEntries(formData); // convert to plain js
     try {
-      const response = await customFetch.post("/user/login", data);
-      console.log(response.data);
-      store.dispatch(loginUser(response.data));
-      toast.success("User Logged In successfully");
-      return redirect('/')
+      const result = await store
+        .dispatch(api.endpoints.loginUser.initiate(data))
+        .unwrap();
+        console.log(result)
+      if (result) {
+        toast.success("User Logged In successfully");
+        return redirect("/");
+      }
     } catch (err) {
-      const errorMessage = err?.response?.data?.msg || 'check your credentials';
-      console.log(errorMessage); 
+      console.log(err);
+      const errorMessage = err.data.msg || 
+      "Server Error. Please try again later.";
       toast.error(errorMessage);
     }
-    // console.log(data);
+    console.log(data);
     return null;
   };
 
@@ -32,12 +33,6 @@ function Login() {
   const navigate = useNavigate();
 
   const loginAsGuestUser = () => {};
-
-  const handleSumbit = (e) => {
-    e.preventDefault();
-    navigate("/dashboard", { replace: true });
-    console.log("login clicked");
-  };
 
   return (
     <section className="h-screen grid place-items-center">
