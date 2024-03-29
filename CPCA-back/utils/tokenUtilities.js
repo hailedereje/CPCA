@@ -9,7 +9,7 @@ const GenerateJWT = async (res, tokenData) => {
   res.cookie("jwt", token, {
     //security  options
     httpOnly: true,
-    secure: NODE_ENV !== "developement",
+    // secure: NODE_ENV !== "developement",
     sameSite: "strict",
     maxAge: 30 * 24 * 60 * 1000,
   });

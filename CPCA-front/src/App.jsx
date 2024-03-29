@@ -42,21 +42,12 @@ function App() {
       children: [
        { index: true, element: <Status/> }, 
        {path: 'profile', element: <Profile/>, action: EditProfileAction(store)}, 
-       {path: 'all-course', element: <AllCourses />}, 
+       {path: 'all-course', element: <AllCourses />, loader: CoursesLoader(store)}, 
        {path: 'add-course', element: <AddCourse/>}
 
       ]
     },
-    {
-      path: "/instructor",
-      element: <InstructorDashboardLayout />,
-      children: [
-        { index: true, element: <Status /> },
-        { path: "all-courses", element: <AllCourses /> , loader:  CoursesLoader(store)},
-        { path: "add-course", element: <AddCourse /> },
-        { path: "profile", element: <Profile /> },
-      ],
-    },
+    
   ]);
   return <RouterProvider router={router} />;
 }

@@ -10,7 +10,12 @@ const App = async (app) => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
-  app.use(cors());
+  app.use(cors({
+    origin: function (origin, callback) {
+      callback(null, origin);
+    }, 
+    credentials: true
+  }));
   app.use(morgan("dev"));
   app.get("/", (req, res) => {
     res.send("server running ...");
