@@ -3,13 +3,14 @@ import { Progress } from "../models/index.js";
 import Course from "../models/course.js";
 
 const createCourse = async (req, res) => {
-  const { title, description } = req.body;
-  if (!title && !description) {
-    throw new NotFoundError("course data not found");
+  const { title, description, templateImg } = req.body;
+  if (!title && !description && !templateImg) {
+    throw new BadRequestError("provide all course infos ");
   }
   const newCourse = await Course.create({
     title,
     description,
+    templateImg, // Assuming the template image is provided
     instructor: req.user._id, // Assuming the instructor is the logged-in user
   });
   if (newCourse) {
