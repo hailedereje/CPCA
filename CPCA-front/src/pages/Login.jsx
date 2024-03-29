@@ -17,11 +17,11 @@ export const action =
         console.log(result)
       if (result) {
         toast.success("User Logged In successfully");
-        return redirect("/");
+        return redirect("/dashboard");
       }
     } catch (err) {
       console.log(err);
-      const errorMessage = err.data.msg || 
+      const errorMessage = err?.data?.msg || 
       "Server Error. Please try again later.";
       toast.error(errorMessage);
     }

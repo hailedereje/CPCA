@@ -11,8 +11,10 @@ import {
   InstructorDashboardLayout,
 } from "./pages";
 import { loader as adminLoader } from "./pages/Admin";
+import { loader as CoursesLoader } from "./pages/dashboard/AllCourses";
 import { action as loginAction } from "./pages/Login";
 import {action as registerAction} from './pages/Register'
+import {action as EditProfileAction} from './pages/dashboard/Profile';
 import { store } from "./store";
 import { AddCourse, AllCourses, Profile, Status } from "./pages/dashboard";
 import { HeroSection } from "./components";
@@ -50,7 +52,7 @@ function App() {
       element: <InstructorDashboardLayout />,
       children: [
         { index: true, element: <Status /> },
-        { path: "all-courses", element: <AllCourses /> },
+        { path: "all-courses", element: <AllCourses /> , loader:  CoursesLoader(store)},
         { path: "add-course", element: <AddCourse /> },
         { path: "profile", element: <Profile /> },
       ],

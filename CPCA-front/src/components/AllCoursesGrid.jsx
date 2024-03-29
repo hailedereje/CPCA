@@ -23,10 +23,10 @@ const courses = [
   },
 ];
 
-const RecommendedCoursesGrid = () => {
+const AllCoursesGrid = () => {
   return (
     <>
-    <SectionTitle text='Recommended Courses' />
+    <SectionTitle text='All Courses' />
       <div className="pt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {courses.map((course) => {
           const { id, title, rating, image } = course;
@@ -57,4 +57,4 @@ const RecommendedCoursesGrid = () => {
   );
 };
 
-export default RecommendedCoursesGrid;
+export default AllCoursesGrid;

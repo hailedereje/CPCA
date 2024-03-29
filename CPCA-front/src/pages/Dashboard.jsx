@@ -2,7 +2,7 @@ import React from "react";
 import SectionTitle from "../components/SectionTitle";
 import CourseContent from "../components/CourseContent";
 import Greeting from "../components/Greeting";
-import RecommendedCoursesGrid from "../components/RecommendedCoursesGrid";
+import RecommendedCoursesGrid from "../components/AllCoursesGrid";
 import { BigSidebar, DashboardNavbar, SubmitBtn } from "../components";
 import { Outlet } from "react-router-dom";
 

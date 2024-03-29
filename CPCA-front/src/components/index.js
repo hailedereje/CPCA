@@ -12,4 +12,4 @@ export {default as HeroSection} from './HeroSection'
 export {default as CourseContent} from './CourseContent'
 export {default as SectionTitle} from './SectionTitle'
 export {default as Greeting} from './Greeting'
-export {default as RecommendedCoursesGrid} from './RecommendedCoursesGrid'
+export {default as AllCoursesGrid} from './AllCoursesGrid'; 
