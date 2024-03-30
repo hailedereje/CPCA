@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 // import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -30,10 +30,49 @@ import {
 import { HeroSection } from "./components";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { io } from 'socket.io-client'
+import { addUsers } from './onlineSlice'
+import Askquestion from "./components/Askquestion";
+import Content from "./components/Content";
+import MyQuestions from "./pages/MyQuestions";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const socket = io("http://localhost:8000", {
+  withCredentials: true,
+  secure: true,
+});
 
 function App() {
+  // const [users, setUsers] = useState([])
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.userState.user);
-  console.log(user);
+  console.log("user", user);
+
+  useEffect(() => {
+    socket.connect();
+    socket.on("connect", () => {
+      console.log("socket connected");
+    });
+    socket.auth = user;
+
+    socket.on("user-connected", (users) => {
+      console.log("users", users);
+
+      dispatch(addUsers(users));
+    });
+
+    socket.on("user-disconnected", (users) => {
+      console.log("users", users);
+      dispatch(addUsers(users));
+    });
+    // const getUsers = async () => {
+    //   const res = await axios.get(
+    //     "http://localhost:5000/allusers"
+    //   );
+    //   setUsers(res.data);
+    // };
+    // getUsers();
+  },[dispatch, user]);
 
   const getDashboardRoutes = () => {
     if (!user) return [];
@@ -86,6 +125,18 @@ function App() {
           path: "enrolled-courses",
           element: <EnrolledCourses />,
           // loader: EnrolledCourses(store),
+        },
+        {
+          path: "forum",
+          element: <Content />,
+        },
+        {
+          path: "ask",
+          element: <Askquestion />,
+        },
+        {
+          path: "myqns",
+          element: <MyQuestions />,
         },
       ];
     }

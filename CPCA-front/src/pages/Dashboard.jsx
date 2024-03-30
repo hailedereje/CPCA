@@ -5,22 +5,26 @@ import Greeting from "../components/Greeting";
 import RecommendedCoursesGrid from "../components/AllCoursesGrid";
 import { BigSidebar, DashboardNavbar, SubmitBtn } from "../components";
 import { Outlet } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+const queryClient = new QueryClient();
 
 function Dashboard() {
   return (
-    <div className="flex">
-      <div className="w-66">
-        <BigSidebar />
-      </div>
-      <div className="flex-grow flex  flex-col justify-center">
-        <div className="  ">
-          <DashboardNavbar />
+    <QueryClientProvider client={queryClient} contextSharing={true}>
+      <div className="flex">
+        <div className="w-66">
+          <BigSidebar />
         </div>
-        <div className="bg-base-200 m-3 flex-grow p-5  shadow-sm">
-          <Outlet />
+        <div className="flex-grow flex  flex-col justify-center">
+          <div className="  ">
+            <DashboardNavbar />
+          </div>
+          <div className="bg-base-200 m-3 flex-grow p-5  shadow-sm">
+            <Outlet />
+          </div>
         </div>
       </div>
-    </div>
+    </QueryClientProvider>
   );
   {
     /* <Greeting /> */
