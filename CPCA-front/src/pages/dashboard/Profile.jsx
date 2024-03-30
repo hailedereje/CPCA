@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { store } from "../../store";
 
 export const action = (store) => {
-  return async ({request}) => {
-    const formData  = await request.formData(); 
+  return async ({ request }) => {
+    const formData = await request.formData();
     const data = Object.fromEntries(formData);
     console.log(data);
-  }
-}
+  };
+};
 
 function Profile() {
   const user = useSelector((state) => state.userState.user);
@@ -32,7 +32,17 @@ function Profile() {
         <div className="card-body">
           <h2 className="card-title">{user.username}</h2>
           <p>{user.email}</p>
-          <div className="badge badge-outline">{user.role}</div>
+          <div
+            className={`badge ${
+              user.role === "admin"
+                ? "badge-primary"
+                : user.role === "instructor"
+                ? "badge-secondary"
+                : "badge-accent"
+            }`}
+          >
+            {user.role}
+          </div>
           <div className="justify-end card-actions">
             <button className="btn btn-primary">Edit Profile</button>
           </div>

@@ -3,6 +3,11 @@ import { MdQueryStats } from "react-icons/md";
 import { FaWpforms } from "react-icons/fa";
 import { ImProfile } from "react-icons/im";
 import { BsFiles } from "react-icons/bs";
+import { BsPersonFillAdd } from "react-icons/bs";
+import { FaUsers } from "react-icons/fa";
+import { LiaChalkboardTeacherSolid } from "react-icons/lia";
+
+
 
 export const InstructLinks = [
   { id: 1, text: "stats", path: "/dashboard", icon: <IoBarChartSharp /> },
@@ -13,8 +18,8 @@ export const InstructLinks = [
 
 export const StudentLinks = [
   { id: 1, text: "My Courses", path: "/", icon: <IoBarChartSharp /> },
-  { id: 2, text: "all Courses", path: "all-jobs", icon: <MdQueryStats /> },
-  { id: 3, text: "Enroll", path: "add-job", icon: <FaWpforms /> },
+  { id: 2, text: "all Courses", path: "all-courses", icon: <MdQueryStats /> },
+  { id: 3, text: "Enroll", path: "add-course", icon: <FaWpforms /> },
   { id: 4, text: "profile", path: "profile", icon: <ImProfile /> },
   { id: 5, text: "Files", path: "Files", icon: <BsFiles /> },
 ];
@@ -26,13 +31,13 @@ export const AdminLinks = [
     id: 3,
     text: "All Instructors",
     path: "all-instructors",
-    icon: <MdQueryStats />,
+    icon: <LiaChalkboardTeacherSolid />,
   },
   {
     id: 4,
     text: "Add Instructor",
     path: "add-instructor",
-    icon: <FaWpforms />,
+    icon: <BsPersonFillAdd />,
   },
-  { id: 5, text: "All Students", path: "all-students", icon: <BsFiles /> },
+  { id: 5, text: "All Students", path: "all-students", icon: <FaUsers /> },
 ];
