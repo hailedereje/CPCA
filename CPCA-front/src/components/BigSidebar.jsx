@@ -3,9 +3,15 @@ import React from "react";
 import { useSelector } from "react-redux";
 import NavbarHeader from "./NavbarHeader";
 import NavLinks from "./NavLinks";
-import { InstructLinks, StudentLinks } from "../utils/links";
+import { AdminLinks, InstructLinks, StudentLinks } from "../utils/links";
 const BigSidebar = () => {
-  const { isSidebarOpen } = useSelector((state) => state.userState);
+  const { isSidebarOpen, user } = useSelector((state) => state.userState);
+  const sidebarlinks =
+    user.role === "instructor"
+      ? InstructLinks
+      : user.role === "admin"
+      ? AdminLinks
+      : StudentLinks;
   return (
     <div
       className={`bg-base-100 border-r border-base-200 shadow-md w-[250px] transition-all duration-300 ease-in-out h-screen ${
@@ -14,7 +20,7 @@ const BigSidebar = () => {
     >
       <NavbarHeader />
       <div className="pt-[2rem]">
-        <NavLinks links={InstructLinks} />
+        <NavLinks links={sidebarlinks} />
       </div>
     </div>
   );

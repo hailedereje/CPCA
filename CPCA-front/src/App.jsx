@@ -70,7 +70,6 @@ function App() {
     } else {
       // Assume student role
       // Define routes for student dashboard
-      // Modify this according to your requirements
       dashboardRoutes = [
         { index: true, element: <Status /> },
         {
