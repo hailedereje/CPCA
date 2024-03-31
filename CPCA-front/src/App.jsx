@@ -80,7 +80,7 @@ function App() {
         {
           path: "all-courses",
           element: <AllCourses />,
-          // loader: CoursesLoader(store),
+          loader: CoursesLoader(store),
         },
         {
           path: "enrolled-courses",

@@ -6,8 +6,7 @@ import { BsFiles } from "react-icons/bs";
 import { BsPersonFillAdd } from "react-icons/bs";
 import { FaUsers } from "react-icons/fa";
 import { LiaChalkboardTeacherSolid } from "react-icons/lia";
-
-
+import { RiLogoutBoxFill } from "react-icons/ri";
 
 export const InstructLinks = [
   { id: 1, text: "stats", path: "/dashboard", icon: <IoBarChartSharp /> },
@@ -22,6 +21,7 @@ export const StudentLinks = [
   { id: 3, text: "Enroll", path: "add-course", icon: <FaWpforms /> },
   { id: 4, text: "profile", path: "profile", icon: <ImProfile /> },
   { id: 5, text: "Files", path: "Files", icon: <BsFiles /> },
+  
 ];
 
 export const AdminLinks = [

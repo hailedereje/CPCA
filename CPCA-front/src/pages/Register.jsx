@@ -2,31 +2,31 @@ import { Form, Link, redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 import FormInput from "../components/FormInput";
 import SubmitBtn from "../components/SubmitBtn";
-import { customFetch } from "../utils";
+import { api } from "../api";
 
-
-
-export const action = store => async ({ request }) => {
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData);
-  console.log(request);
-  console.log("form data", formData);
-  console.log(data);
-  try {
-    const response = await customFetch.post("/user/register", data);
-    toast.success("account created successfully");
-    return redirect("/login");
-    // return null;
-  } catch (error) {
-    console.log(error)
-    const errorMessage =
-      error?.response?.data?.error?.message ||
-      "please double check your credentials";
-    toast.error(errorMessage);
+export const action =
+  (store) =>
+  async ({ request }) => {
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData); // convert to plain js
+    try {
+      const result = await store
+        .dispatch(api.endpoints.registerUser.initiate(data))
+        .unwrap();
+      console.log(result);
+      if (result) {
+        toast.success("User Registered  successfully");
+        return redirect("/login");
+      }
+    } catch (err) {
+      console.log(err);
+      const errorMessage =
+        err?.data?.msg || "Server Error. Please try again later.";
+      toast.error(errorMessage);
+    }
+    console.log(data);
     return null;
-  }
-};
-
+  };
 
 const Register = () => {
   return (
