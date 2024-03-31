@@ -28,7 +28,7 @@ const userRegister = async (req, res) => {
   if (newUser) {
     const tokenData = { _id: newUser._id };
     await GenerateJWT(res, tokenData);
-    console.log(newUser);
+    // console.log(newUser);
     return res
       .status(StatusCodes.CREATED)
       .json({ msg: "User registered successfully" });
@@ -42,8 +42,8 @@ const userLogin = async (req, res) => {
   console.log(await user.matchPasswords(password)); 
   if (user && (await user.matchPasswords(password))) {
     const jwt = await GenerateJWT(res, { _id: user._id });
-    // console.log(user);
-    return res.json({ user, jwt });
+    console.log(user);
+    return res.json({ userId:user._id, user, jwt });
   }
   throw new NotFoundError("Invalid email or password");
 };

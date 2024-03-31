@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FormInput } from "../components";
 import { SubmitBtn } from "../components";
 import { Form, Link, redirect } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { api } from "../api";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/user/userSlice";
 export const action =
   (store) =>
   async ({ request }) => {
@@ -14,8 +16,9 @@ export const action =
       const result = await store
         .dispatch(api.endpoints.loginUser.initiate(data))
         .unwrap();
-        console.log(result)
+        console.log("result", result)
       if (result) {
+        await store.dispatch(setUser(result))
         toast.success("User Logged In successfully");
         return redirect("/dashboard");
       }
@@ -30,7 +33,12 @@ export const action =
   };
 
 function Login() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  // const dispatch = useDispatch()
+  
+  // useEffect(() => {
+  //   dispatch(setUser(result))
+  // })
 
   const loginAsGuestUser = () => {};
 
