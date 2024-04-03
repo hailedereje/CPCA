@@ -21,7 +21,7 @@ router.post("/:courseId/enroll",studentCheck,enrollCourse);
 
 // For instructors
 router.use(isInstructor);
-router.post("", createCourse);
+router.post("/new", createCourse);
 router.patch("/:id", updateCourse);
 router.delete("/:id", deleteCourse);
 

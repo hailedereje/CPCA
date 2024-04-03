@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const lessonSchema = new Schema({
-  courseId: {type: String},
+  moduleId: {type: String},
   title: { type: String, required: true },
   content: { type: String },
   attachedFiles: [{ type: String }], // store file URLs or paths
