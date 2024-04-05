@@ -1,23 +1,39 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {api} from '../../api'
+import { api } from "../../api";
 const getUserFromLocalStorage = () => {
- return JSON.parse(localStorage.getItem("user")) || null;
+  return JSON.parse(localStorage.getItem("user")) || null;
+};
+
+const getThemeFromLocalStorage = () => {
+  const theme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', theme);
+  return theme;
 };
 
 const initialState = {
- isSidebarOpen: true, 
- user: getUserFromLocalStorage(),
+  isSidebarOpen: true,
+  user: getUserFromLocalStorage(),
+  theme: getThemeFromLocalStorage(),
 };
 
 const userSlice = createSlice({
- name: "user",
- initialState,
- reducers: {
+  name: "user",
+  initialState,
+  reducers: {
+    toggleTheme: (state) => {
+      state.theme = state.theme === "light" ? "dracula" : "light";
+      document.documentElement.setAttribute('data-theme', state.theme);
+      localStorage.setItem("theme", JSON.stringify(state.theme));
+    },
     toggleSidebar: (state) => {
-      state.isSidebarOpen = !state.isSidebarOpen; 
+      state.isSidebarOpen = !state.isSidebarOpen;
     },
     setUser: (state, action) => {
-      const user = { ...action.payload.user, _id:action.payload.userId, token: action.payload.jwt };
+      const user = {
+        ...action.payload.user,
+        _id: action.payload.userId,
+        token: action.payload.jwt,
+      };
       state.user = user;
       localStorage.setItem("user", JSON.stringify(user));
     },
@@ -25,13 +41,17 @@ const userSlice = createSlice({
       state.user = null;
       localStorage.setItem("user", null);
     },
- },
- extraReducers: (builder) => {
+  },
+  extraReducers: (builder) => {
     builder
       .addMatcher(api.endpoints.loginUser.matchFulfilled, (state, action) => {
         // Assuming the payload contains user and jwt
-        console.log(action.payload); 
-        const user = { ...action.payload.user, _id:action.payload.userId, token: action.payload.jwt };
+        console.log(action.payload);
+        const user = {
+          ...action.payload.user,
+          _id: action.payload.userId,
+          token: action.payload.jwt,
+        };
         state.user = user;
         localStorage.setItem("user", JSON.stringify(user));
       })
@@ -40,10 +60,10 @@ const userSlice = createSlice({
         state.user = null;
         localStorage.setItem("user", null);
       });
- },
+  },
 });
 
 console.log(userSlice.reducer);
-export const { setUser, logoutUser, toggleSidebar } = userSlice.actions;
+export const { setUser, logoutUser, toggleSidebar, toggleTheme } = userSlice.actions;
 
 export default userSlice.reducer;

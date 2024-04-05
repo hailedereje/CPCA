@@ -1,22 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SectionTitle from "./SectionTitle";
-import {useLoaderData } from 'react-router-dom'; 
-
+import { useLoaderData, Link } from "react-router-dom";
 
 const AllCoursesGrid = () => {
-
   const courses = useLoaderData();
-  console.log(courses); 
+  console.log(courses);
+
+  // const [isLoading, setIsLoading] = useState(true);
+
+  // useEffect(() => {
+  //    if (courses) {
+  //      setIsLoading(false);
+  //    }
+  // }, [courses]);
+
+  // if (isLoading) {
+  //    return <div>Loading...</div>
+  // }
   return (
     <>
-    <SectionTitle text='All Courses' />
+      <SectionTitle text="All Courses" />
       <div className="pt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {courses.map((course) => {
-          const { _id:id, title, templateImg:image } = course;
+          // const { _id: id, title, templateImg: image } = course;
+          const { id: id, title, templateImg: image } = course;
+          console.log(courses);
           return (
-            <a
+            <Link
               key={id}
-              href={`/products/${id}`}
+              to={`${id}`}
               className="card w-full shadow-xl hover:shadow-2xl transition duration-300"
             >
               <figure className="px-4 pt-4">
@@ -32,7 +44,7 @@ const AllCoursesGrid = () => {
                 </h2>
                 {/* <span className="text-secondary">{rating}</span> */}
               </div>
-            </a>
+            </Link>
           );
         })}
       </div>

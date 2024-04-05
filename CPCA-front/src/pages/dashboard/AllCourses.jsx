@@ -10,7 +10,11 @@ export const loader = (store) => async () => {
   // console.log(response);
   return response;
 };
+
 function AllCourses() {
+
+
+
   return (
     <div>
       <AllCoursesGrid />

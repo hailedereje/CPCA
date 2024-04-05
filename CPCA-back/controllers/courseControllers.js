@@ -8,6 +8,7 @@ const createCourse = async (req, res) => {
     throw new BadRequestError("provide all course infos ");
   }
   const newCourse = await Course.create({
+    
     title,
     description,
     templateImg, // Assuming the template image is provided

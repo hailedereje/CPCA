@@ -1,16 +1,23 @@
-import React from "react";
-import {useSelector, useDispatch} from 'react-redux'; 
-import { toggleSidebar } from "../features/user/userSlice";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser, toggleSidebar } from "../features/user/userSlice";
+import {useNavigate} from 'react-router-dom'; 
 
 function DashboardNavbar() {
-    const {user} = useSelector(state => state.userState)
-    const dispatch = useDispatch(); 
-    const toggle = ()=> {
-        // console.log('toggled')
-        dispatch(toggleSidebar())
-    }
+  const [showLogout, setShowLogout] = useState(false);
+  const { user } = useSelector((state) => state.userState);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();; 
+  const toggle = () => {
+    // console.log('toggled')
+    dispatch(toggleSidebar());
+  };
+  const handleLogout = () => {
+    navigate("/");
+    dispatch(logoutUser());
+  };
 
-    console.log(user); 
+  // console.log(user);
   return (
     <div className="navbar bg-base-100 border-b border-base-200  shadow-sm">
       <div className="navbar-start">
@@ -21,7 +28,8 @@ function DashboardNavbar() {
               className="h-5 w-5"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor">
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -36,10 +44,16 @@ function DashboardNavbar() {
         <a className="btn btn-ghost text-xl">Dashboard</a>
       </div>
       <div className="navbar-end">
-        <button className="">
-         
-          <img className=" object-contain mask mask-circle btn" src={user.profileImg} alt="profileImg" />
+        <button className="" onClick={() => setShowLogout(!showLogout)}>
+          <img
+            className=" object-contain mask mask-circle btn"
+            src={user.profileImg}
+            alt="profileImg"
+          />
         </button>
+        {showLogout && (<div>
+          <button className="btn btn-ghost" onClick={handleLogout}>Logout</button>
+        </div>)}
         {/* <button className="btn btn-ghost btn-circle">
           <div className="indicator">
             <svg
