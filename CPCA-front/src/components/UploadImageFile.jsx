@@ -1,7 +1,7 @@
 import React from "react";
 import SectionTitle from "./SectionTitle";
 const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-function UploadImageFile() {
+function UploadImageFile({ onUploadImage }) {
   const openUploadWidget = () => {
     const uploadOptions = {
       cloudName: cloudName, // Make sure to set this in your .env file
@@ -17,6 +17,7 @@ function UploadImageFile() {
             console.log(result.info); 
             
           const imageUrl = result.info.secure_url;
+          onUploadImage(imageUrl);
           // Handle successful upload: e.g., display the uploaded image URL
           console.log("Image uploaded:", imageUrl);
         }

@@ -9,7 +9,6 @@ import { action as loginAction } from "./pages/Login";
 import { action as registerAction } from "./pages/Register";
 import { action as EditProfileAction } from "./pages/dashboard/Profile";
 import { store } from "./store";
-import { loader as AddCourseLoader } from "./pages/dashboard/AddCourse";
 import {
   AddCourse,
   AddInstructor,
@@ -91,6 +90,7 @@ function App() {
           element: <Profile />,
           action: EditProfileAction(store),
         },
+        { path: "add-course", element: <AddCourse /> },
         {
           path: "add-course",
           element: <AddCourse />,

@@ -4,10 +4,15 @@ const courseSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   templateImg: {type: String, required: true},
-  objectives: [{ type: String }], // Array of objectives
-  lessons: [{ type: Schema.Types.ObjectId, ref: "Lesson" }], // Array of lesson references
+  objectives: { type: String },
+  modules: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Module",
+    default: [],
+  },
   instructor: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  // requests: [{ type: Schema.Types.ObjectId, ref: 'Request' }],
+}, {
+  timestamps: true,
 });
 
 const Course = mongoose.model("Course", courseSchema);
