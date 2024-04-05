@@ -26,7 +26,7 @@ import {
   InstructorsList,
   Profile,
   Status,
-} from "./pages/dashboard";
+} from "./pages/dashboard/index";
 import { HeroSection } from "./components";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -37,7 +37,7 @@ import Content from "./components/Content";
 import MyQuestions from "./pages/MyQuestions";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const socket = io("http://localhost:8000", {
+export const socket = io("http://localhost:3000", {
   withCredentials: true,
   secure: true,
 });
