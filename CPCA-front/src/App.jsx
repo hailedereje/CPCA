@@ -1,22 +1,14 @@
-import { useEffect } from "react";
+import { Children, useEffect } from "react";
 // import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {
-  Admin,
-  Dashboard,
-  HomeLayout,
-  Login,
-  Register,
-  InstructorDashboardLayout,
-} from "./pages";
-import { loader as adminLoader } from "./pages/Admin";
+import {  Dashboard, HomeLayout, Login, Register, SingleCourse } from "./pages";
 import { loader as CoursesLoader } from "./pages/dashboard/AllCourses";
+import { loader as SingleCourseLoader } from "./pages/SingleCourse";
 import { action as loginAction } from "./pages/Login";
 import { action as registerAction } from "./pages/Register";
 import { action as EditProfileAction } from "./pages/dashboard/Profile";
 import { store } from "./store";
-import { loader as AddCourseLoader } from "./pages/dashboard/AddCourse";
 import {
   AddCourse,
   AddInstructor,
@@ -30,49 +22,49 @@ import {
 import { HeroSection } from "./components";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { io } from 'socket.io-client'
-import { addUsers } from './onlineSlice'
+import { io } from "socket.io-client";
+import { addUsers } from "./onlineSlice";
 import Askquestion from "./components/Askquestion";
 import Content from "./components/Content";
 import MyQuestions from "./pages/MyQuestions";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const socket = io("http://localhost:3000", {
+export const socket = io("http://localhost:5000", {
   withCredentials: true,
   secure: true,
 });
 
 function App() {
   // const [users, setUsers] = useState([])
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const user = useSelector((state) => state.userState.user);
-  console.log("user", user);
+  // console.log("user", user);
 
-  useEffect(() => {
-    socket.connect();
-    socket.on("connect", () => {
-      console.log("socket connected");
-    });
-    socket.auth = user;
+  // useEffect(() => {
+  //   socket.connect();
+  //   socket.on("connect", () => {
+  //     console.log("socket connected");
+  //   });
+  //   socket.auth = user;
 
-    socket.on("user-connected", (users) => {
-      console.log("users", users);
+  //   socket.on("user-connected", (users) => {
+  //     console.log("users", users);
 
-      dispatch(addUsers(users));
-    });
+  //     dispatch(addUsers(users));
+  //   });
 
-    socket.on("user-disconnected", (users) => {
-      console.log("users", users);
-      dispatch(addUsers(users));
-    });
-    // const getUsers = async () => {
-    //   const res = await axios.get(
-    //     "http://localhost:5000/allusers"
-    //   );
-    //   setUsers(res.data);
-    // };
-    // getUsers();
-  },[dispatch, user]);
+  //   socket.on("user-disconnected", (users) => {
+  //     console.log("users", users);
+  //     dispatch(addUsers(users));
+  //   });
+  //   // const getUsers = async () => {
+  //   //   const res = await axios.get(
+  //   //     "http://localhost:5000/allusers"
+  //   //   );
+  //   //   setUsers(res.data);
+  //   // };
+  //   // getUsers();
+  // }, [dispatch, user]);
 
   const getDashboardRoutes = () => {
     if (!user) return [];
@@ -98,9 +90,13 @@ function App() {
           element: <Profile />,
           action: EditProfileAction(store),
         },
-        { path: "add-course", element: <AddCourse /> , loader: AddCourseLoader()},
+        { path: "add-course", element: <AddCourse /> },
         {
-          path: "all-courses",
+          path: "add-course",
+          element: <AddCourse />,
+        },
+        {
+          path: "courses",
           element: <AllCourses />,
           loader: CoursesLoader(store),
         },
@@ -117,10 +113,18 @@ function App() {
           action: EditProfileAction(store),
         },
         {
-          path: "all-courses",
+          path: "courses",
           element: <AllCourses />,
           loader: CoursesLoader(store),
+          errorElement: <div>Failed to load courses</div>,
         },
+
+        {
+          path: "courses/:id",
+          element: <SingleCourse />,
+          loader: SingleCourseLoader(store),
+        },
+
         {
           path: "enrolled-courses",
           element: <EnrolledCourses />,
@@ -155,19 +159,15 @@ function App() {
           element: <Register />,
           action: registerAction(store),
         },
+      
       ],
     },
-
     {
-      path: "/admin",
-      element: <Admin />,
-      loader: adminLoader,
-    },
-    {
-      path: "/dashboard",
+      path: "dashboard",
       element: <Dashboard />,
       children: [...getDashboardRoutes()],
     },
+    
   ]);
   return <RouterProvider router={router} />;
 }

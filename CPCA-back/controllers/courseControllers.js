@@ -3,13 +3,15 @@ import { Progress } from "../models/index.js";
 import Course from "../models/course.js";
 
 const createCourse = async (req, res) => {
-  const { title, description, templateImg } = req.body;
-  if (!title && !description && !templateImg) {
+  const { title, description, objectives, templateImg } = req.body;
+  if (!title && !description && !templateImg && !objectives) {
     throw new BadRequestError("provide all course infos ");
   }
   const newCourse = await Course.create({
+    
     title,
     description,
+    objectives,
     templateImg, // Assuming the template image is provided
     instructor: req.user._id, // Assuming the instructor is the logged-in user
   });

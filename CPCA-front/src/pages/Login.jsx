@@ -33,12 +33,7 @@ export const action =
   };
 
 function Login() {
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch()
-  
-  // useEffect(() => {
-  //   dispatch(setUser(result))
-  // })
+ 
 
   const loginAsGuestUser = () => {};
 

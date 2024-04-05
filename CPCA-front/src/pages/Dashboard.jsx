@@ -1,16 +1,11 @@
 import React from "react";
-import SectionTitle from "../components/SectionTitle";
-import CourseContent from "../components/CourseContent";
-import Greeting from "../components/Greeting";
-import RecommendedCoursesGrid from "../components/AllCoursesGrid";
 import { BigSidebar, DashboardNavbar, SubmitBtn } from "../components";
 import { Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-const queryClient = new QueryClient();
 
 function Dashboard() {
   return (
-    <QueryClientProvider client={queryClient} contextSharing={true}>
+    <>
       <div className="flex">
         <div className="w-66">
           <BigSidebar />
@@ -19,12 +14,12 @@ function Dashboard() {
           <div className="  ">
             <DashboardNavbar />
           </div>
-          <div className="bg-base-200 m-3 flex-grow p-5  shadow-sm">
+          <div className="bg-base-200 m-1 flex-grow p-5  shadow-sm">
             <Outlet />
           </div>
         </div>
       </div>
-    </QueryClientProvider>
+    </>
   );
   {
     /* <Greeting /> */

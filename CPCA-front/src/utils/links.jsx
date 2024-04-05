@@ -10,14 +10,14 @@ import { RiLogoutBoxFill } from "react-icons/ri";
 
 export const InstructLinks = [
   { id: 1, text: "stats", path: "/dashboard", icon: <IoBarChartSharp /> },
-  { id: 2, text: "All courses", path: "all-course", icon: <MdQueryStats /> },
+  { id: 2, text: "All courses", path: "courses", icon: <MdQueryStats /> },
   { id: 3, text: "Add-course", path: "add-course", icon: <FaWpforms /> },
   { id: 4, text: "profile", path: "profile", icon: <ImProfile /> },
 ];
 
 export const StudentLinks = [
-  { id: 1, text: "My Courses", path: "/", icon: <IoBarChartSharp /> },
-  { id: 2, text: "all Courses", path: "all-courses", icon: <MdQueryStats /> },
+  { id: 1, text: "Status", path: "/dashboard", icon: <IoBarChartSharp /> },
+  { id: 2, text: "all Courses", path: "courses", icon: <MdQueryStats /> },
   { id: 3, text: "Enroll", path: "add-course", icon: <FaWpforms /> },
   { id: 4, text: "profile", path: "profile", icon: <ImProfile /> },
   { id: 5, text: "Files", path: "Files", icon: <BsFiles /> },
