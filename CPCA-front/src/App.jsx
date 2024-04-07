@@ -18,7 +18,7 @@ import {
   InstructorsList,
   Profile,
   Status,
-} from "./pages/dashboard";
+} from "./pages/dashboard/index";
 import { HeroSection } from "./components";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
