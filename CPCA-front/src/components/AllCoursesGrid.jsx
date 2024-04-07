@@ -22,8 +22,8 @@ const AllCoursesGrid = () => {
       <SectionTitle text="All Courses" />
       <div className="pt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {courses.map((course) => {
-          // const { _id: id, title, templateImg: image } = course;
-          const { id: id, title, templateImg: image } = course;
+          const { _id: id, title, templateImg: image } = course;
+          // const { id: id, title, templateImg: image } = course;
           console.log(courses);
           return (
             <Link

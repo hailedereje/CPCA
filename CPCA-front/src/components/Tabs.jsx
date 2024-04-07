@@ -51,7 +51,7 @@ export default function Tabs({ course }) {
           {course.description}
         </TETabsPane>
         <TETabsPane show={fillActive === "tab2"}>
-          {course.objectives.map((objective, index) => (
+          {course.objectives && course.objectives.map((objective, index) => (
             <ul>
               <li key={index}>{objective}</li>
             </ul>

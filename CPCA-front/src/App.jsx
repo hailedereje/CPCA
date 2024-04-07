@@ -163,7 +163,7 @@ function App() {
       ],
     },
     {
-      path: "dashboard",
+      path: "/dashboard",
       element: <Dashboard />,
       children: [...getDashboardRoutes()],
     },
