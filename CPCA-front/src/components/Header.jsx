@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../features/user/userSlice";
 
@@ -18,12 +18,11 @@ function Header() {
         {user ? (
           <div className="flex gap-x-2 sm:gap-x-8 items-center">
             <p className="text-xs sm:text-sm">Hello, {user.username}</p>
-            <button
+            <NavLink to = '/dashboard'
               className="btn btn-xs btn-outline btn-primary"
-              onClick={handleLogout}
             >
-              logout
-            </button>
+              My Dashboard
+            </NavLink>
           </div>
         ) : (
           <div className="flex gap-x-6 justify-center items-center">

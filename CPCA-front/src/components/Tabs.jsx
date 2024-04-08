@@ -5,6 +5,8 @@ import {
   TETabsItem,
   TETabsPane,
 } from "tw-elements-react";
+import CourseContent from "./CourseContent";
+import VideoContainer from "./VideoPlayer";
 
 export default function Tabs({ course }) {
   const [fillActive, setFillActive] = useState("tab1");
@@ -18,6 +20,7 @@ export default function Tabs({ course }) {
 
   return (
     <div className="mb-3">
+      <VideoContainer />
       <TETabs fill>
         <TETabsItem
           onClick={() => handleFillClick("tab1")}
@@ -48,16 +51,19 @@ export default function Tabs({ course }) {
 
       <TETabsContent>
         <TETabsPane show={fillActive === "tab1"}>
-          {course.description}
+          <CourseContent />
         </TETabsPane>
         <TETabsPane show={fillActive === "tab2"}>
-          {course.objectives.map((objective, index) => (
-            <ul>
-              <li key={index}>{objective}</li>
-            </ul>
-          ))}
+          {course.objectives &&
+            course.objectives.map((objective, index) => (
+              <ul>
+                <li key={index}>{objective}</li>
+              </ul>
+            ))}
         </TETabsPane>
-        <TETabsPane show={fillActive === "tab3"}>Tab 3 content</TETabsPane>
+        <TETabsPane show={fillActive === "tab3"}>
+          
+        </TETabsPane>
         <TETabsPane show={fillActive === "tab4"}>Tab 4 content</TETabsPane>
       </TETabsContent>
     </div>

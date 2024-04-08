@@ -4,17 +4,18 @@ import { AllCoursesGrid, CourseContent } from "../../components";
 import { api } from "../../api";
 
 export const loader = (store) => async () => {
-  const response = await store
-    .dispatch(api.endpoints.getAllCourses.initiate())
-    .unwrap();
-  // console.log(response);
-  return response;
+  try {
+    const response = await store
+      .dispatch(api.endpoints.getAllCourses.initiate())
+      .unwrap();
+    // console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 function AllCourses() {
-
-
-
   return (
     <div>
       <AllCoursesGrid />

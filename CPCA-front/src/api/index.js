@@ -7,9 +7,9 @@ import { profileService } from "./services/profileServices";
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/v1",
+     baseUrl: "http://localhost:5000/api/v1",
     // baseUrl: "http://localhost:3000",
-    // credentials: 'include'
+    credentials: 'include'
   }),
   
   endpoints: (builder) => ({
@@ -24,8 +24,8 @@ export const {
   useLoginUserMutation,
   useLogoutUserMutation,
   useRegisterUserMutation,
-  useGetAllCoursesMutation,
-  useGetCourseByIdQuery,
+  useGetAllCoursesQuery,
+  useGetCourseQuery,
   useCreateCourseMutation,
   useUpdateCourseMutation,
   useDeleteCourseMutation,

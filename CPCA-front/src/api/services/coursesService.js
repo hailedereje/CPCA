@@ -7,7 +7,8 @@ export const courseService = (builder) => {
       }),
     }),
     getCourse: builder.query({
-      query: (id) => {
+      query:  (id) => {
+        // await new Promise((resolve) => setTimeout(resolve, 2000));
         return {
           url: `/courses/${id}`,
           method: "get",

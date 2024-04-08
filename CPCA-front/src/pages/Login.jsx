@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { FormInput } from "../components";
 import { SubmitBtn } from "../components";
-import { Form, Link, redirect } from "react-router-dom";
+import { Form, Link, redirect, useActionData } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { api } from "../api";
@@ -16,16 +16,15 @@ export const action =
       const result = await store
         .dispatch(api.endpoints.loginUser.initiate(data))
         .unwrap();
-        console.log("result", result)
+      console.log(result);
       if (result) {
-        await store.dispatch(setUser(result))
-        toast.success("User Logged In successfully");
+        toast.success("User Logged in   successfully");
         return redirect("/dashboard");
       }
     } catch (err) {
       console.log(err);
-      const errorMessage = err?.data?.msg || 
-      "Server Error. Please try again later.";
+      const errorMessage =
+        err?.data?.msg || "Server Error. Please try again later.";
       toast.error(errorMessage);
     }
     console.log(data);
@@ -33,8 +32,8 @@ export const action =
   };
 
 function Login() {
- 
-
+  const actionData = useActionData();
+  console.log(actionData);
   const loginAsGuestUser = () => {};
 
   return (
