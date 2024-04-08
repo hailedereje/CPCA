@@ -63,7 +63,7 @@ const userSlice = createSlice({
   },
 });
 
-console.log(userSlice.reducer);
+// console.log(userSlice.reducer);
 export const { setUser, logoutUser, toggleSidebar, toggleTheme } = userSlice.actions;
 
 export default userSlice.reducer;

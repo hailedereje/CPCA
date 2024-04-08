@@ -13,7 +13,7 @@ import {
 
 const router = express.Router();
 
-router.use(authenticate);
+// router.use(authenticate);
 // For students
 router.get("/", getAllCourses);
 router.get("/:courseId", getCourseById);

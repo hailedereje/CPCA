@@ -13,7 +13,7 @@ import {
   AddCourse,
   AddInstructor,
   AllCourses,
-  CreateCourse,
+  // CreateCourse,
   EnrolledCourses,
   InstructorsList,
   Profile,
@@ -27,12 +27,14 @@ import { addUsers } from "./onlineSlice";
 import Askquestion from "./components/Askquestion";
 import Content from "./components/Content";
 import MyQuestions from "./pages/MyQuestions";
+import { CodeEditor } from "./components/CodeEditor";
+import EditorComponent from "./components/codeEditor/Editor";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const socket = io("http://localhost:5000", {
-  withCredentials: true,
-  secure: true,
-});
+// export const socket = io("http://localhost:5000", {
+//   withCredentials: true,
+//   secure: true,
+// });
 
 function App() {
   // const [users, setUsers] = useState([])
@@ -162,11 +164,20 @@ function App() {
       
       ],
     },
+
     {
       path: "dashboard",
       element: <Dashboard />,
       children: [...getDashboardRoutes()],
     },
+    {
+      path: "code-editor",
+      element: <CodeEditor/>
+    },
+    {
+      path: "instructor",
+      element: <EditorComponent/>
+    }
     
   ]);
   return <RouterProvider router={router} />;

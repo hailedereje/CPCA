@@ -1,11 +1,14 @@
-import React from 'react'
 
-function CreateCourse() {
+
+const CreateCourse = () => {
+  
+
   return (
-    <div>
-      create course goes here
+    <div className="">
+      hello
     </div>
-  )
-}
+  );
+};
 
-export default CreateCourse
+
+export default CreateCourse;
