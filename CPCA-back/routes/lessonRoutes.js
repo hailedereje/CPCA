@@ -3,11 +3,6 @@ import { createLesson, deleteLesson, updateLesson } from "../controllers/index.j
 import multer from "multer";
 
 
-// const upload = multer({
-//     storage: {
-//         ''
-//     }
-// })
 const router = express.Router();
 
 router.post("/:courseId/lessons", createLesson);

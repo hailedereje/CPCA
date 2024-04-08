@@ -2,9 +2,9 @@ import { Children, useEffect } from "react";
 // import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {  Dashboard, HomeLayout, Login, Register, SingleCourse } from "./pages";
+import {  Dashboard, HomeLayout, LessonDetails, Login, Register, SingleCourse } from "./pages";
 import { loader as CoursesLoader } from "./pages/dashboard/AllCourses";
-import { loader as SingleCourseLoader } from "./pages/SingleCourse";
+import { loader as SingleCourseLoader } from "./pages/LessonDetails";
 import { action as loginAction } from "./pages/Login";
 import { action as registerAction } from "./pages/Register";
 import { action as EditProfileAction } from "./pages/dashboard/Profile";
@@ -121,7 +121,7 @@ function App() {
 
         {
           path: "courses/:id",
-          element: <SingleCourse />,
+          element: <LessonDetails />,
           loader: SingleCourseLoader(store),
         },
 

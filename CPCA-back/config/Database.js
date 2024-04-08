@@ -1,15 +1,10 @@
 import mongoose from "mongoose";
+import { dbURI } from "./constants.js";
 import User from "../models/user.js";
-import dotenv from 'dotenv'; 
-import { DBURL } from "../constants.js";
-dotenv.config(); 
-
-
 
 const connectToDB = async () => {
   try {
-    console.log('dbURI', ); 
-    await mongoose.connect(DBURL);
+    await mongoose.connect(dbURI);
     console.log("DB connected succesffully...");
   } catch (error) {
     console.error(error);

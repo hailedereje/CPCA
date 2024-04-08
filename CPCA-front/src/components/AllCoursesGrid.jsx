@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import SectionTitle from "./SectionTitle";
 import { useLoaderData, Link } from "react-router-dom";
+import ProgressIndicator from "./ProgressIndicator";
+import { useDispatch } from "react-redux";
+import { useGetCourseQuery } from "../api";
+import { setSelectedCourse } from "../features/course/courseSlice";
 
 const AllCoursesGrid = () => {
   const courses = useLoaderData();
-  console.log(courses);
+  const dispatch = useDispatch();
 
   // const [isLoading, setIsLoading] = useState(true);
 
@@ -17,6 +21,9 @@ const AllCoursesGrid = () => {
   // if (isLoading) {
   //    return <div>Loading...</div>
   // }
+  const handleClick = (id) => {
+    dispatch(setSelectedCourse(id));
+  };
   return (
     <>
       <SectionTitle text="All Courses" />
@@ -27,6 +34,7 @@ const AllCoursesGrid = () => {
           console.log(courses);
           return (
             <Link
+              onClick={() => handleClick(id)}
               key={id}
               to={`${id}`}
               className="card w-full shadow-xl hover:shadow-2xl transition duration-300"
@@ -42,6 +50,7 @@ const AllCoursesGrid = () => {
                 <h2 className="card-title capitalize tracking-wider">
                   {title}
                 </h2>
+                <ProgressIndicator />
                 {/* <span className="text-secondary">{rating}</span> */}
               </div>
             </Link>

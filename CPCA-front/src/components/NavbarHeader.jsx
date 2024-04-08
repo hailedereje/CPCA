@@ -1,11 +1,13 @@
-import React from 'react'
-
+import React from "react";
+import { NavLink } from "react-router-dom";
 function NavbarHeader() {
   return (
-    <div className='h-[5rem] text-3xl  flex items-center pl-[2.5rem]'>
+    <NavLink
+      to="/"
+      className="h-[5rem] text-3xl  flex items-center pl-[2.5rem]">
       LOGO
-    </div>
-  )
+    </NavLink>
+  );
 }
 
-export default NavbarHeader; 
+export default NavbarHeader;

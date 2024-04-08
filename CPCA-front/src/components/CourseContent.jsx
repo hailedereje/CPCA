@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaReact } from "react-icons/fa"; // Importing React icons
 import { Link } from "react-router-dom";
+
+
 
 function CourseContent() {
   // Define an array of lesson titles
@@ -17,8 +19,15 @@ function CourseContent() {
     "ES6 Features",
   ];
 
+  // return AccordionAlwaysOpen();
+
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const handleAccordionClick = (index) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
   return (
-    <div className="p-4 my-3 border-t border-base-400 border-b">
+    <div className="p-4 my-3 border  border-base-400  w-1/2">
       <h3 className="text-md font-semibold mb-2">
         What You'll Learn from this course 😊
       </h3>

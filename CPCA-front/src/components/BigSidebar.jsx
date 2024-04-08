@@ -24,12 +24,8 @@ const BigSidebar = () => {
       <NavbarHeader />
       <div className="pt-[2rem]">
         <NavLinks links={sidebarlinks} />
-       
       </div>
-      <button className=" hover:pl-[2rem] hover:bg-base-200 transition-all duration-300 ease-in-out flex items-center py-[1rem]">
-          {<RiLogoutBoxFill />}
-          Logout
-        </button>
+    
     </div>
   );
 };
