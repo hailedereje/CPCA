@@ -2,9 +2,16 @@ import { Children, useEffect } from "react";
 // import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {  Dashboard, HomeLayout, LessonDetails, Login, Register, SingleCourse } from "./pages";
+import {
+  Dashboard,
+  HomeLayout,
+  Lessons,
+  Login,
+  Register,
+  SingleCourse,
+} from "./pages";
 import { loader as CoursesLoader } from "./pages/dashboard/AllCourses";
-import { loader as SingleCourseLoader } from "./pages/LessonDetails";
+import { loader as SingleCourseLoader } from "./pages/Lessons";
 import { action as loginAction } from "./pages/Login";
 import { action as registerAction } from "./pages/Register";
 import { action as EditProfileAction } from "./pages/dashboard/Profile";
@@ -29,6 +36,7 @@ import Content from "./components/Content";
 import MyQuestions from "./pages/MyQuestions";
 import { CodeEditor } from "./components/CodeEditor";
 import EditorComponent from "./components/codeEditor/Editor";
+import LessonDetails from "./pages/LessonDetails";
 
 // eslint-disable-next-line react-refresh/only-export-components
 // export const socket = io("http://localhost:5000", {
@@ -119,13 +127,15 @@ function App() {
           element: <AllCourses />,
           loader: CoursesLoader(store),
           errorElement: <div>Failed to load courses</div>,
+          
         },
 
         {
           path: "courses/:id",
-          element: <LessonDetails />,
+          element: <Lessons />,
           loader: SingleCourseLoader(store),
         },
+        { path: "courses/:id/lessons/:id", element: <LessonDetails /> },
 
         {
           path: "enrolled-courses",
@@ -161,7 +171,6 @@ function App() {
           element: <Register />,
           action: registerAction(store),
         },
-      
       ],
     },
 
@@ -172,13 +181,12 @@ function App() {
     },
     {
       path: "code-editor",
-      element: <CodeEditor/>
+      element: <CodeEditor />,
     },
     {
       path: "instructor",
-      element: <EditorComponent/>
-    }
-    
+      element: <EditorComponent />,
+    },
   ]);
   return <RouterProvider router={router} />;
 }

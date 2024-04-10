@@ -101,7 +101,7 @@ function AllLessonsGrid() {
   return (
     <div className="grid  gap-4 lg:grid-cols-3 ">
       {lessons.map((lesson) => (
-        <NavLink className="" key={lesson.id}>
+        <NavLink to = {`lessons/${lesson.id}`} className="" key={lesson.id}>
           <div className="card bg-base-100 shadow-xl hover:shadow-2xl">
             <div className="card-body">
               <h2 className="card-title">{lesson.title}</h2>
