@@ -8,6 +8,21 @@ export default {
 
   theme: {
     extend: {
+      colors: {
+        green: {
+          1: "#008080",
+          2: "#20B2AA",
+        },
+      },
+      transitionProperty: {
+        slide: "transform, opacity",
+      },
+      transitionDuration: {
+        500: "500ms",
+      },
+      transitionTimingFunction: {
+        "ease-in-out": "ease-in-out",
+      },
       animation: {
         bounce: "bounce 2s ease-in-out infinite",
       },
