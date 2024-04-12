@@ -9,7 +9,7 @@ import {
   getMyQuestions,
   likeQuestion,
 } from "../controllers/index.js";
-
+  
 const router = express.Router();
 
 router.use(authenticate);

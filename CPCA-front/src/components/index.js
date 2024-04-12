@@ -21,3 +21,4 @@ export {default as ProgressIndicator} from "./ProgressIndicator";
 export {default as VideoPlayer} from "./VideoPlayer";
 export {default as BreadCrumb} from './BreadCrumb'
 export {default as AllLessonsGrid} from './AllLessonsGrid'
+export {default as ProfileInputElt} from './ProfileInputElt'; 

@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {
   Dashboard,
+  ErrorPage,
   HomeLayout,
   Lessons,
   Login,
@@ -17,9 +18,11 @@ import { action as registerAction } from "./pages/Register";
 import { action as EditProfileAction } from "./pages/dashboard/Profile";
 import { store } from "./store";
 import {
+  Activities,
   AddCourse,
   AddInstructor,
   AllCourses,
+  CreateCourse,
   // CreateCourse,
   EnrolledCourses,
   InstructorsList,
@@ -94,7 +97,7 @@ function App() {
     } else if (user.isInstructor) {
       // Define routes for instructor dashboard
       dashboardRoutes = [
-        { index: true, element: <Status /> },
+        { index: true, element: <Activities /> },
         {
           path: "profile",
           element: <Profile />,
@@ -127,7 +130,6 @@ function App() {
           element: <AllCourses />,
           loader: CoursesLoader(store),
           errorElement: <div>Failed to load courses</div>,
-          
         },
 
         {
@@ -163,6 +165,7 @@ function App() {
     {
       path: "/",
       element: <HomeLayout />,
+      errorElement: <ErrorPage />,
       children: [
         { index: true, element: <HeroSection /> },
         { path: "login", element: <Login />, action: loginAction(store) },
