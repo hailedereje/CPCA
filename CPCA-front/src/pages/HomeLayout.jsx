@@ -10,7 +10,7 @@ function HomeLayout() {
       <Navbar />
       <Outlet />
       <About />
-      <Courses />
+      {/* <Courses /> */}
       <ContactUs />
     </div>
   );
