@@ -13,6 +13,10 @@ export default {
           1: "#008080",
           2: "#20B2AA",
         },
+        blue: {
+          1: "#0C2340",
+          2: "#CCCCFF",
+        },
       },
       transitionProperty: {
         slide: "transform, opacity",

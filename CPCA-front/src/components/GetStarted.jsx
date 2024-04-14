@@ -3,7 +3,7 @@ import arrow from "../assets/arrow.svg";
 import { Link } from "react-router-dom";
 
 const GetStarted = () => (
-  <div className="hidden md:flex justify-center w-1/3 h-screen">
+  <div className="hidden md:flex justify-center w-1/3 h-auto">
     <div className="flex flex-col w-[140px] h-[140px] rounded-full bg-blue-gradient p-[2px] cursor-pointer">
       <Link
         to="/Login"

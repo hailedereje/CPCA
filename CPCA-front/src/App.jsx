@@ -2,7 +2,14 @@ import { Children, useEffect } from "react";
 // import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {  Dashboard, HomeLayout, LessonDetails, Login, Register, SingleCourse } from "./pages";
+import {
+  Dashboard,
+  HomeLayout,
+  LessonDetails,
+  Login,
+  Register,
+  SingleCourse,
+} from "./pages";
 import { loader as CoursesLoader } from "./pages/dashboard/AllCourses";
 import { loader as SingleCourseLoader } from "./pages/LessonDetails";
 import { action as loginAction } from "./pages/Login";
@@ -19,11 +26,12 @@ import {
   Profile,
   Status,
 } from "./pages/dashboard/index";
-import { HeroSection } from "./components";
+import { ContactUs, HeroSection } from "./components";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import { addUsers } from "./onlineSlice";
+import About from "./components/About";
 import Askquestion from "./components/Askquestion";
 import Content from "./components/Content";
 import MyQuestions from "./pages/MyQuestions";
@@ -155,13 +163,25 @@ function App() {
       element: <HomeLayout />,
       children: [
         { index: true, element: <HeroSection /> },
-        { path: "login", element: <Login />, action: loginAction(store) },
+
         {
           path: "register",
           element: <Register />,
           action: registerAction(store),
         },
-      
+        {
+          path: "about",
+          element: <About />,
+        },
+        {
+          path: "login",
+          element: <Login />,
+          action: loginAction(store),
+        },
+        {
+          path: "contact",
+          element: <ContactUs></ContactUs>,
+        },
       ],
     },
 
@@ -172,13 +192,12 @@ function App() {
     },
     {
       path: "code-editor",
-      element: <CodeEditor/>
+      element: <CodeEditor />,
     },
     {
       path: "instructor",
-      element: <EditorComponent/>
-    }
-    
+      element: <EditorComponent />,
+    },
   ]);
   return <RouterProvider router={router} />;
 }

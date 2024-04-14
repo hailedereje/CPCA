@@ -46,7 +46,7 @@ function Header() {
               </li>
               <li>
                 <Link
-                  to="/services"
+                  to="/about"
                   className="font-sans hover:font-serif text-xl font-medium p-3 pl-8 pr-8 hover:active:text-green-1 shadow-lg rounded-md"
                 >
                   About
