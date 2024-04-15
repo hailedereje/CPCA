@@ -9,7 +9,7 @@ import { LiaChalkboardTeacherSolid } from "react-icons/lia";
 import { RiLogoutBoxFill } from "react-icons/ri";
 
 export const InstructLinks = [
-  { id: 1, text: "stats", path: "/dashboard", icon: <IoBarChartSharp /> },
+  { id: 1, text: "Activities", path: "/dashboard", icon: <IoBarChartSharp /> },
   { id: 2, text: "All courses", path: "courses", icon: <MdQueryStats /> },
   { id: 3, text: "Add-course", path: "add-course", icon: <FaWpforms /> },
   { id: 4, text: "profile", path: "profile", icon: <ImProfile /> },

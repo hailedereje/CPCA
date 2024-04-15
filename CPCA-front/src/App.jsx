@@ -4,22 +4,26 @@ import "react-toastify/dist/ReactToastify.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {
   Dashboard,
+  ErrorPage,
   HomeLayout,
-  LessonDetails,
+  Lessons,
+  HomeLayout,
   Login,
   Register,
   SingleCourse,
 } from "./pages";
 import { loader as CoursesLoader } from "./pages/dashboard/AllCourses";
-import { loader as SingleCourseLoader } from "./pages/LessonDetails";
+import { loader as SingleCourseLoader } from "./pages/Lessons";
 import { action as loginAction } from "./pages/Login";
 import { action as registerAction } from "./pages/Register";
 import { action as EditProfileAction } from "./pages/dashboard/Profile";
 import { store } from "./store";
 import {
+  Activities,
   AddCourse,
   AddInstructor,
   AllCourses,
+  CreateCourse,
   // CreateCourse,
   EnrolledCourses,
   InstructorsList,
@@ -37,6 +41,7 @@ import Content from "./components/Content";
 import MyQuestions from "./pages/MyQuestions";
 import { CodeEditor } from "./components/CodeEditor";
 import EditorComponent from "./components/codeEditor/Editor";
+import LessonDetails from "./pages/LessonDetails";
 
 // eslint-disable-next-line react-refresh/only-export-components
 // export const socket = io("http://localhost:5000", {
@@ -94,7 +99,7 @@ function App() {
     } else if (user.isInstructor) {
       // Define routes for instructor dashboard
       dashboardRoutes = [
-        { index: true, element: <Status /> },
+        { index: true, element: <Activities /> },
         {
           path: "profile",
           element: <Profile />,
@@ -131,9 +136,10 @@ function App() {
 
         {
           path: "courses/:id",
-          element: <LessonDetails />,
+          element: <Lessons />,
           loader: SingleCourseLoader(store),
         },
+        { path: "courses/:id/lessons/:id", element: <LessonDetails /> },
 
         {
           path: "enrolled-courses",
@@ -161,6 +167,7 @@ function App() {
     {
       path: "/",
       element: <HomeLayout />,
+      errorElement: <ErrorPage />,
       children: [
         { index: true, element: <HeroSection /> },
 
@@ -169,6 +176,8 @@ function App() {
           element: <Register />,
           action: registerAction(store),
         },
+
+
         {
           path: "about",
           element: <About />,
@@ -182,6 +191,7 @@ function App() {
           path: "contact",
           element: <ContactSection></ContactSection>,
         },
+
       ],
     },
 
