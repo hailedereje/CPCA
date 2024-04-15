@@ -1,5 +1,5 @@
 import React from "react";
-import { Header, Navbar, About, ContactUs, Courses } from "../components";
+import { Header, Navbar, About, ContactSection, Courses } from "../components";
 
 import { Outlet } from "react-router-dom";
 
@@ -11,7 +11,7 @@ function HomeLayout() {
       <Outlet />
       <About />
       {/* <Courses /> */}
-      <ContactUs />
+      <ContactSection />
     </div>
   );
 }

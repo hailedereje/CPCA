@@ -26,7 +26,7 @@ import {
   Profile,
   Status,
 } from "./pages/dashboard/index";
-import { ContactUs, HeroSection } from "./components";
+import { ContactSection, HeroSection } from "./components";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
@@ -180,7 +180,7 @@ function App() {
         },
         {
           path: "contact",
-          element: <ContactUs></ContactUs>,
+          element: <ContactSection></ContactSection>,
         },
       ],
     },

@@ -21,5 +21,5 @@ export { default as SectionSubTitle } from "./SectionSubTitle";
 export { default as ProgressIndicator } from "./ProgressIndicator";
 export { default as VideoPlayer } from "./VideoPlayer";
 export { default as BreadCrumb } from "./BreadCrumb";
-export { default as ContactUs } from "./ContactUs";
 export { default as Courses } from "./Courses";
+export { default as ContactSection } from "./ContactSection";
