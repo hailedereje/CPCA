@@ -7,6 +7,7 @@ import {
   ErrorPage,
   HomeLayout,
   Lessons,
+  HomeLayout,
   Login,
   Register,
   SingleCourse,
@@ -29,11 +30,12 @@ import {
   Profile,
   Status,
 } from "./pages/dashboard/index";
-import { HeroSection } from "./components";
+import { ContactSection, HeroSection } from "./components";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import { addUsers } from "./onlineSlice";
+import About from "./components/About";
 import Askquestion from "./components/Askquestion";
 import Content from "./components/Content";
 import MyQuestions from "./pages/MyQuestions";
@@ -168,12 +170,28 @@ function App() {
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <HeroSection /> },
-        { path: "login", element: <Login />, action: loginAction(store) },
+
         {
           path: "register",
           element: <Register />,
           action: registerAction(store),
         },
+
+
+        {
+          path: "about",
+          element: <About />,
+        },
+        {
+          path: "login",
+          element: <Login />,
+          action: loginAction(store),
+        },
+        {
+          path: "contact",
+          element: <ContactSection></ContactSection>,
+        },
+
       ],
     },
 
