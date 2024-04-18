@@ -5,8 +5,8 @@ const getUserFromLocalStorage = () => {
 };
 
 const getThemeFromLocalStorage = () => {
-  const theme = localStorage.getItem('theme') || 'light';
-  document.documentElement.setAttribute('data-theme', theme);
+  const theme = localStorage.getItem("theme") || "light";
+  document.documentElement.setAttribute("data-theme", theme);
   return theme;
 };
 
@@ -22,7 +22,7 @@ const userSlice = createSlice({
   reducers: {
     toggleTheme: (state) => {
       state.theme = state.theme === "light" ? "dracula" : "light";
-      document.documentElement.setAttribute('data-theme', state.theme);
+      document.documentElement.setAttribute("data-theme", state.theme);
       localStorage.setItem("theme", JSON.stringify(state.theme));
     },
     toggleSidebar: (state) => {
@@ -64,6 +64,7 @@ const userSlice = createSlice({
 });
 
 // console.log(userSlice.reducer);
-export const { setUser, logoutUser, toggleSidebar, toggleTheme } = userSlice.actions;
+export const { setUser, logoutUser, toggleSidebar, toggleTheme } =
+  userSlice.actions;
 
 export default userSlice.reducer;
