@@ -50,8 +50,8 @@ const Testimonials = () => {
 
       <div className="flex flex-wrap sm:justify-start justify-center w-full feedback-container relative z-10 mt-12 sm:mt-0 -mx-4">
         {feedback.map((card) => (
-          <div className="w-full sm:w-1/2 lg:w-1/3 px-4 ">
-            <FeedbackCard key={card.id} {...card} />
+          <div key={card.id} className="w-full sm:w-1/2 lg:w-1/3 px-4 ">
+            <FeedbackCard {...card} />
           </div>
         ))}
       </div>

@@ -7,7 +7,6 @@ import {
   ErrorPage,
   HomeLayout,
   Lessons,
-  HomeLayout,
   Login,
   Register,
   SingleCourse,
@@ -177,7 +176,6 @@ function App() {
           action: registerAction(store),
         },
 
-
         {
           path: "about",
           element: <About />,
@@ -191,7 +189,6 @@ function App() {
           path: "contact",
           element: <ContactSection></ContactSection>,
         },
-
       ],
     },
 
