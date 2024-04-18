@@ -8,8 +8,8 @@ import SectionTitle from "./SectionTitle";
 const ContactSection = () => {
   return (
     <div>
-      <div id="contact" className="container -mt-12">
-        <div className="flex flex-col sm:flex-row p-5 sm:p-10 m-3 sm:m-20 justify-between mt-0 sm:pr-0">
+      <div id="contact" className="container w-3/4 ml-20 -mt-12">
+        <div className="flex flex-col sm:flex-row p-5 sm:p-10 m-3  justify-between mt-0 sm:pr-0">
           <div className="flex-1 ">
             <ContactBanner />
             <ContactInfoItem icon={<MdLocalPhone />} text="+8801231" />
