@@ -17,8 +17,9 @@ export { default as Greeting } from "./Greeting";
 export { default as AllCoursesGrid } from "./AllCoursesGrid";
 export { default as Tabs } from "./Tabs";
 export { default as SectionSubTitle } from "./SectionSubTitle";
-export {default as ProgressIndicator} from "./ProgressIndicator";
-export {default as VideoPlayer} from "./VideoPlayer";
-export {default as BreadCrumb} from './BreadCrumb'
-export {default as AllLessonsGrid} from './AllLessonsGrid'
-export {default as ProfileInputElt} from './ProfileInputElt'; 
+export { default as ProgressIndicator } from "./ProgressIndicator";
+export { default as VideoPlayer } from "./VideoPlayer";
+export { default as BreadCrumb } from "./BreadCrumb";
+export { default as AllLessonsGrid } from "./AllLessonsGrid";
+export { default as ProfileInputElt } from "./ProfileInputElt";
+export { default as ActivityCard } from "./ActivityCard";
