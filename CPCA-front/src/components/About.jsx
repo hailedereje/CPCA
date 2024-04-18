@@ -22,7 +22,10 @@ const About = () => {
 
   return (
     <>
-      <section className="flex flex-col md:flex-row justify-center items-center w-full md:w-3/4 space-y-6 md:space-y-0 md:space-x-20 ml-auto mr-auto mt-20 ">
+      <section
+        id="about"
+        className="flex flex-col md:flex-row justify-center items-center w-full md:w-3/4 space-y-6 md:space-y-0 md:space-x-20 ml-auto mr-auto mt-20 "
+      >
         {stats.map((stat) => (
           <div
             key={stat.id}
