@@ -108,7 +108,6 @@ function Header() {
                 <Link
                   to="/login"
                   className="btn flex items-center text-white p-2 sm:p-3 text-lg sm:text-2xl ml-2 mr-2 sm:ml-8  dark:bg-green-1"
-                  onClick={() => scrollToSection("login")}
                 >
                   Get Started
                 </Link>

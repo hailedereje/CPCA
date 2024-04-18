@@ -104,7 +104,7 @@ function App() {
           element: <Profile />,
           action: EditProfileAction(store),
         },
-        { path: "add-course", element: <AddCourse /> },
+        // { path: "add-course", element: <AddCourse /> },
         {
           path: "add-course",
           element: <AddCourse />,
@@ -177,17 +177,9 @@ function App() {
         },
 
         {
-          path: "about",
-          element: <About />,
-        },
-        {
           path: "login",
           element: <Login />,
           action: loginAction(store),
-        },
-        {
-          path: "contact",
-          element: <ContactSection></ContactSection>,
         },
       ],
     },
