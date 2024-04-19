@@ -16,18 +16,18 @@ function Navbar() {
     dispatch(toggleTheme());
   };
   return (
-    <nav className="bg-base-200">
+    <nav className="bg-base-200 mt-10">
       <div className="navbar align-element">
         <div className="navbar-start">
           {/* TITLE */}
           <NavLink
-            to="/"
-            className="hidden lg:flex btn btn-primary text-3xl items-center"
+            to="/login"
+            className="hidden text-white lg:flex btn bg-green-1 text-3xl items-center"
           >
             Learn with us
           </NavLink>
           {/* DROPDOWN */}
-          <div className="dropdown">
+          <NavLink className="dropdown" to="/login">
             <label tabIndex={0} className="btn btn-ghost lg:hidden">
               <FaBarsStaggered className="h-6 w-6" />
             </label>
@@ -37,24 +37,10 @@ function Navbar() {
             >
               {/* <NavLinks /> */}
             </ul>
-          </div>
+          </NavLink>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal">{/* <NavLinks /> */}</ul>
-        </div>
-        <div className="navbar-end">
-          {/* THEME SETUP */}
-          <label className="swap swap-rotate">
-            <input
-              type="checkbox"
-              onChange={handleTheme}
-              defaultChecked={isDarkTheme}
-            />
-            {/* sun icon*/}
-            <BsSunFill className="swap-on h-4 w-4" />
-            {/* moon icon*/}
-            <BsMoonFill className="swap-off h-4 w-4" />
-          </label>
         </div>
       </div>
     </nav>

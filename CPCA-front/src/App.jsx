@@ -2,28 +2,39 @@ import { Children, useEffect } from "react";
 // import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {  Dashboard, HomeLayout, LessonDetails, Login, Register, SingleCourse } from "./pages";
+import {
+  Dashboard,
+  ErrorPage,
+  HomeLayout,
+  Lessons,
+  Login,
+  Register,
+  SingleCourse,
+} from "./pages";
 import { loader as CoursesLoader } from "./pages/dashboard/AllCourses";
-import { loader as SingleCourseLoader } from "./pages/LessonDetails";
+import { loader as SingleCourseLoader } from "./pages/Lessons";
 import { action as loginAction } from "./pages/Login";
 import { action as registerAction } from "./pages/Register";
 import { action as EditProfileAction } from "./pages/dashboard/Profile";
 import { store } from "./store";
 import {
+  Activities,
   AddCourse,
   AddInstructor,
   AllCourses,
+  CreateCourse,
   // CreateCourse,
   EnrolledCourses,
   InstructorsList,
   Profile,
   Status,
 } from "./pages/dashboard/index";
-import { HeroSection } from "./components";
+import { ContactSection, HeroSection } from "./components";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import { addUsers } from "./onlineSlice";
+import About from "./components/About";
 import Askquestion from "./components/Askquestion";
 import Content from "./components/Content";
 import MyQuestions from "./pages/MyQuestions";
@@ -86,7 +97,7 @@ function App() {
     } else if (user.isInstructor) {
       // Define routes for instructor dashboard
       dashboardRoutes = [
-        { index: true, element: <Status /> },
+        { index: true, element: <Activities /> },
         {
           path: "profile",
           element: <Profile />,
@@ -120,9 +131,10 @@ function App() {
 
         {
           path: "courses/:id",
-          element: <LessonDetails />,
+          element: <Lessons />,
           loader: SingleCourseLoader(store),
         },
+        { path: "courses/:id/lessons/:id", element: <LessonDetails /> },
 
         {
           path: "enrolled-courses",
@@ -150,15 +162,21 @@ function App() {
     {
       path: "/",
       element: <HomeLayout />,
+      errorElement: <ErrorPage />,
       children: [
         { index: true, element: <HeroSection /> },
-        { path: "login", element: <Login />, action: loginAction(store) },
+
         {
           path: "register",
           element: <Register />,
           action: registerAction(store),
         },
-      
+
+        {
+          path: "login",
+          element: <Login />,
+          action: loginAction(store),
+        },
       ],
     },
 
@@ -169,7 +187,7 @@ function App() {
     },
     {
       path: "code-editor",
-      element: <CodeEditor/>
+      element: <CodeEditor />,
     },
 
     {
