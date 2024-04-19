@@ -7,7 +7,6 @@ import {
   ErrorPage,
   HomeLayout,
   Lessons,
-  HomeLayout,
   Login,
   Register,
   SingleCourse,

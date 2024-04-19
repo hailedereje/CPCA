@@ -24,4 +24,6 @@ export {default as BreadCrumb} from './BreadCrumb'
 export {default as AllLessonsGrid} from './AllLessonsGrid'
 export { default as Courses } from "./Courses";
 export { default as ContactSection } from "./ContactSection";
+export {default as ProfileInputElt} from './ProfileInputElt'
+export {default as ActivityCard} from './ActivityCard'
 
