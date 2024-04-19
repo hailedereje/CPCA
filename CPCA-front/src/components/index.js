@@ -1,4 +1,4 @@
-import { Video } from "video-react";
+// import { Video } from "video-react";
 
 export { default as FormInput } from "../components/FormInput";
 export { default as SubmitBtn } from "../components/SubmitBtn";
@@ -18,5 +18,5 @@ export { default as AllCoursesGrid } from "./AllCoursesGrid";
 export { default as Tabs } from "./Tabs";
 export { default as SectionSubTitle } from "./SectionSubTitle";
 export {default as ProgressIndicator} from "./ProgressIndicator";
-export {default as VideoPlayer} from "./VideoPlayer";
+// export {default as VideoPlayer} from "./VideoPlayer";
 export {default as BreadCrumb} from './BreadCrumb'

@@ -1,5 +1,5 @@
 import React from "react";
-import { BreadCrumb, VideoPlayer } from "../components";
+import { BreadCrumb } from "../components";
 
 import { api } from "../api";
 import { useLoaderData } from "react-router-dom";

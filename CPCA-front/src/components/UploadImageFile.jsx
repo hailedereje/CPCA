@@ -1,6 +1,6 @@
 import React from "react";
 import SectionTitle from "./SectionTitle";
-const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const cloudName = import.meta.env.CLOUDINARY_CLOUD_NAME;
 function UploadImageFile({ onUploadImage }) {
   const openUploadWidget = () => {
     const uploadOptions = {

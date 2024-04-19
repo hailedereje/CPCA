@@ -1,22 +1,11 @@
 import { useEffect, useRef, useState } from "react"
 import { SNIPTS,LANGUAGES } from "../assets/constants"
 import { Output } from "./OutPut"
-// import { getLanguages } from "../api"
 import { EditorModal } from "./Editor"
 import { Languages, MobileSidebar } from "./CodeNavigation"
 
 export const CodeEditor = () => {
-    // useEffect(() => {
-    //     (async () => {
-    //         await getLanguages().then((res) => {
-    //             setLanguages(res)
-    //         })
-    //     })()
-
-    // }, [])
-
-    
-
+ 
     const editorRef = useRef()
     const [language, setLanguage] = useState('javascript')
     const [value, setValue] = useState(SNIPTS[language])
