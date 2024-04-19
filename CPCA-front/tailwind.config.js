@@ -1,59 +1,21 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  darkMode: ["class"],
-  content: [
-    './pages/**/*.{js,jsx}',
-    './components/**/*.{js,jsx}',
-    './app/**/*.{js,jsx}',
-    './src/**/*.{js,jsx}',
-  ],
-  prefix: "",
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
-      colors: {
-        green: {
-          1: "#008080",
-          2: "#20B2AA",
-        },
-        blue: {
-          1: "#0C2340",
-          2: "#CCCCFF",
-        },
-      },
-      transitionProperty: {
-        slide: "transform, opacity",
-      },
-      transitionDuration: {
-        500: "500ms",
-      },
-      transitionTimingFunction: {
-        "ease-in-out": "ease-in-out",
-      },
       animation: {
-        bounce: "bounce 2s ease-in-out infinite",
+        bounce: 'bounce 2s ease-in-out infinite',
       },
       keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+        bounce: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
         },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
+  plugins: [require('@tailwindcss/typography'), require('daisyui')],
+  daisyui: {
+    themes: ['dark'],
+  },
+};
