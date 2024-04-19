@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 import { dbURI } from "./constants.js";
 import User from "../models/user.js";
+import { DBURL } from "../constants.js";
 
 const connectToDB = async () => {
   try {
-    await mongoose.connect(dbURI);
+    console.log(DBURL)
+    await mongoose.connect(DBURL);
     console.log("DB connected succesffully...");
   } catch (error) {
     console.error(error);

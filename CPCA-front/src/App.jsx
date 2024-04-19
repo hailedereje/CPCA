@@ -39,8 +39,7 @@ import Askquestion from "./components/Askquestion";
 import Content from "./components/Content";
 import MyQuestions from "./pages/MyQuestions";
 import { CodeEditor } from "./components/CodeEditor";
-import EditorComponent from "./components/codeEditor/Editor";
-import LessonDetails from "./pages/LessonDetails";
+import RichTextExample from "./components/textEditor/textEditor";
 
 // eslint-disable-next-line react-refresh/only-export-components
 // export const socket = io("http://localhost:5000", {
@@ -104,17 +103,14 @@ function App() {
           element: <Profile />,
           action: EditProfileAction(store),
         },
-        { path: "add-course", element: <AddCourse /> },
-        {
-          path: "add-course",
-          element: <AddCourse />,
-        },
+        { path: "add-course", element: <RichTextExample /> },
+        
         {
           path: "courses",
           element: <AllCourses />,
           loader: CoursesLoader(store),
         },
-        { path: "create-course", element: <CreateCourse /> },
+        // { path: "create-course", element: <CreateCourse /> },
       ];
     } else {
       // Assume student role
@@ -176,21 +172,11 @@ function App() {
           action: registerAction(store),
         },
 
-
-        {
-          path: "about",
-          element: <About />,
-        },
         {
           path: "login",
           element: <Login />,
           action: loginAction(store),
         },
-        {
-          path: "contact",
-          element: <ContactSection></ContactSection>,
-        },
-
       ],
     },
 
@@ -203,10 +189,12 @@ function App() {
       path: "code-editor",
       element: <CodeEditor />,
     },
+
     {
-      path: "instructor",
-      element: <EditorComponent />,
-    },
+      path: "test",
+      element: <RichTextExample/>
+    }
+    
   ]);
   return <RouterProvider router={router} />;
 }

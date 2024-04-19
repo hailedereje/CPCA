@@ -9,6 +9,16 @@ export const LANGUAGE_VERSIONS = {
     c:"10.2.0"
 }
 
+export const LANGUAGE_List = [
+    "javascript",
+    "typescript",
+    "python",
+    "java",
+    "php",
+    "cpp",
+    "c",
+    "csharp"
+]
 export const LANGUAGES = {
   javascript: {name:"javascript",version: "18.15.0"},
   typescript: {name:"typescript",version:"5.0.3"},

@@ -1,4 +1,4 @@
-import { Video } from "video-react";
+// import { Video } from "video-react";
 
 export { default as FormInput } from "../components/FormInput";
 export { default as SubmitBtn } from "../components/SubmitBtn";
