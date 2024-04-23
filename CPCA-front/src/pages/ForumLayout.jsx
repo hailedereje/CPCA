@@ -1,21 +1,10 @@
-import Content from "./components/Content";
-import CreateButton from "./components/CreateButton";
-import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-import Askquestion from "./components/Askquestion";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import Chat from "./pages/Chat";
-import MyQuestions from "./pages/MyQuestions";
-import Explore from "./pages/Explore";
-import Notfound from "./components/Notfound";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
-import { addUsers } from "./context/onlineSlice";
+import CreateButton from "@/components/CreateButton";
+import { addUsers } from "@/onlineSlice";
 const queryClient = new QueryClient();
 
 export const socket = io("http://localhost:5000", {
@@ -24,20 +13,16 @@ export const socket = io("http://localhost:5000", {
 });
 
 export const Layout = () => {
+  const user = useSelector((state) => state.userState.user);
+  console.log("user", user)
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-      window.location.href = "/login";
-    }
-
     socket.connect();
     socket.on("connect", () => {
       console.log("socket connected");
     });
     socket.auth = user;
-
     socket.on("user-connected", (users) => {
       console.log("users", users);
 
@@ -48,7 +33,7 @@ export const Layout = () => {
       console.log("users", users);
       dispatch(addUsers(users));
     });
-  },[dispatch]);
+  },[dispatch, user]);
 
   return (
     <QueryClientProvider client={queryClient} contextSharing={true}>
@@ -74,4 +59,4 @@ export const Layout = () => {
   );
 };
 
-
+export default Layout;

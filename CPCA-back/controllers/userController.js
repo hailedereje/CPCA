@@ -38,8 +38,6 @@ const userRegister = async (req, res) => {
 const userLogin = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  console.log(user);
-  console.log(await user.matchPasswords(password)); 
   if (user && (await user.matchPasswords(password))) {
     const jwt = await GenerateJWT(res, { _id: user._id });
     console.log(user);

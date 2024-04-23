@@ -11,6 +11,7 @@ import { useState } from "react";
 import LikeDislikeComponent from "../icons/LikeDislike";
 
 const Content = () => {
+  console.log("content is loaded");
   const { topic } = useParams();
   const [openId, setOpenId] = useState([]);
   const [answer, setAnswer] = useState("");
