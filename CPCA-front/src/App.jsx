@@ -40,6 +40,7 @@ import Content from "./components/Content";
 import MyQuestions from "./pages/MyQuestions";
 import { CodeEditor } from "./components/CodeEditor";
 import RichTextExample from "./components/textEditor/textEditor";
+import LessonDetails from "./pages/LessonDetails";
 
 // eslint-disable-next-line react-refresh/only-export-components
 // export const socket = io("http://localhost:5000", {
@@ -134,7 +135,7 @@ function App() {
           element: <Lessons />,
           loader: SingleCourseLoader(store),
         },
-        { path: "courses/:id/lessons/:id", element: <LessonDetails /> },
+        { path: "courses/:id/lessons/:id", element: <LessonDetails/> },
 
         {
           path: "enrolled-courses",
