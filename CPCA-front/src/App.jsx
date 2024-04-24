@@ -28,7 +28,7 @@ import {
 import { HeroSection } from "./components";
 import { useSelector } from "react-redux";
 import Askquestion from "./components/Askquestion";
-import Content from "./components/Content";
+import Forum from "./pages/Forum";
 import MyQuestions from "./pages/MyQuestions";
 import { CodeEditor } from "./components/CodeEditor";
 import RichTextExample from "./components/textEditor/textEditor";
@@ -108,7 +108,7 @@ function App() {
           path: "forum",
           element: <ForumLayout />,
           children: [
-            { path: "content", element: <Content /> },
+            { path: "content", element: <Forum /> },
             { path: "myqns", element: <MyQuestions /> },
             // other child routes...
           ]

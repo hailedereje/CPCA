@@ -1,20 +1,48 @@
-import UserInfo from "./UserInfo";
+import UserInfo from "../components/UserInfo";
 import Write from "../icons/Write";
 import Send from "../icons/Send";
 import { useQuery } from "react-query";
 import newRequests from "../utils/newRequest";
 import { useParams } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import Loading from "./Loading";
-import NothingHere from "./NothingHere";
+import Loading from "../components/Loading";
+import NothingHere from "../components/NothingHere";
 import { useState } from "react";
 import LikeDislikeComponent from "../icons/LikeDislike";
+import { useEffect } from "react";
+import { io } from "socket.io-client";
+import { useDispatch, useSelector } from "react-redux";
+import { addUsers } from "@/onlineSlice";
 
-const Content = () => {
-  console.log("content is loaded");
+export const socket = io("http://localhost:5000", {
+  withCredentials: true,
+  secure: true,
+});
+
+const Forum = () => {
   const { topic } = useParams();
   const [openId, setOpenId] = useState([]);
   const [answer, setAnswer] = useState("");
+  const user = useSelector((state) => state.userState.user);
+  console.log("user", user)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    socket.connect();
+    socket.on("connect", () => {
+      console.log("socket connected");
+    });
+    socket.auth = user;
+    socket.on("user-connected", (users) => {
+      dispatch(addUsers(users));
+      console.log("users", users);
+    });
+
+    socket.on("user-disconnected", (users) => {
+      console.log("users", users);
+      dispatch(addUsers(users));
+    });
+  },[dispatch, user]);
 
   const { isLoading, data } = useQuery("getAllQuestions", async () => {
     if (topic) {
@@ -31,7 +59,7 @@ const Content = () => {
 
   return (
     <div
-      className="md:w-[60%] flex flex-col items-center gap-y-5 
+      className="flex flex-col items-center gap-y-5 
     md:gap-8 my-8 "
     >
       <Toaster />
@@ -41,7 +69,7 @@ const Content = () => {
           return (
             <div
               key={index}
-              className="w-full mx-12 flex flex-col 
+              className="w-[96%] md:w-[80%] mx-12 flex flex-col 
               items-end  p-3 md:p-4 rounded-md bg-purple-100
                dark:bg-slate-400"
             >
@@ -118,4 +146,4 @@ const Content = () => {
   );
 };
 
-export default Content;
+export default Forum;

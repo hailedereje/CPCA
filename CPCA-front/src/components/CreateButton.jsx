@@ -1,4 +1,3 @@
-import React from "react";
 import Add from "../icons/Add";
 import { useNavigate } from "react-router-dom";
 
