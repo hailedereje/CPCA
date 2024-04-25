@@ -21,8 +21,8 @@ export const StudentLinks = [
   { id: 3, text: "Enroll", path: "add-course", icon: <FaWpforms /> },
   { id: 4, text: "profile", path: "profile", icon: <ImProfile /> },
   { id: 5, text: "Files", path: "Files", icon: <BsFiles /> },
-  { id: 6, text: "Forum", path: "forum", icon: <FaWpforms /> },
-  { id: 7, text: "My Questions", path: "myqns", icon: <ImProfile /> },
+  { id: 6, text: "Forum", path: "forum/content", icon: <FaWpforms /> },
+  { id: 7, text: "My Questions", path: "forum/myqns", icon: <ImProfile /> },
   { id: 8, text: "Ask New Question", path: "ask", icon: <BsFiles /> },
 ];
 

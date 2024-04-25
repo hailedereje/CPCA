@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Comment from "../icons/Comment";
 import moment from "moment";
 import {useSelector} from 'react-redux'
@@ -5,7 +6,7 @@ import {useSelector} from 'react-redux'
 const UserInfo = ({ openId, index, setOpenId, question, answer }) => {
   const currentUser = useSelector((state) => state.userState.user);
   return (
-    <div className="w-full  flex items-cente justify-between">
+    <div className="w-full  flex items-center justify-between">
       <div className="w-[48%] md:max-w-screen-md posted-by flex items-center gap-2 md:gap-3">
         <img
           src={
@@ -40,10 +41,9 @@ const UserInfo = ({ openId, index, setOpenId, question, answer }) => {
       </div>
       {openId && (
         <div
-          className="comment flex gap-2 ml-auto cursor-pointer"
+          className="comment flex gap-1 ml-auto p-1 cursor-pointer"
           onClick={() => {
             if (!openId.find((ele) => ele === index)) {
-              console.log("hello");
               setOpenId([...openId, index]);
             }
             if (openId.find((ele) => ele === index)) {

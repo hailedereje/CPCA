@@ -5,7 +5,7 @@ import { FaChalkboardTeacher } from "react-icons/fa";
 import { AiOutlineFileAdd } from "react-icons/ai";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { GiTeacher } from "react-icons/gi";
-import { ActivityCard } from "../../components";
+import { ActivityCard } from "../../components/";
 
 export const instructorActivities = [
   {

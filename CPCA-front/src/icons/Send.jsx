@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "react-query";
 import newRequests from "../utils/newRequest";
 
+// eslint-disable-next-line react/prop-types
 const Send = ({ answer, questionId, setAnswer }) => {
   const queryClient = useQueryClient();
 
