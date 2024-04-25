@@ -11,7 +11,7 @@ function Header() {
   console.log(theme);
   const dispatch = useDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isDarkTheme = theme === "dracula";
+  const isDarkTheme = theme === "dark";
   const handleLogout = () => {
     dispatch(logoutUser());
   };

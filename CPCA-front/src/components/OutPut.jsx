@@ -18,7 +18,7 @@ export const Output = ({editorRef, language}) => {
             result.stderr ? setIsError(true) : setIsError(false)
             
             const output = result.output.split("\n")
-            const cleaned = output.filter(data =>  data.trim() !== '').slice(0,4)
+            const cleaned = outpuft.filter(data =>  data.trim() !== '').slice(0,4)
             
             setOutput(cleaned)
         } catch(error) {
