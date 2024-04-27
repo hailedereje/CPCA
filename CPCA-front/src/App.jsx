@@ -84,7 +84,6 @@ function App() {
         {
           path: "courses",
           element: <AllCourses />,
-          loader: CoursesLoader(store),
           errorElement: <div>Failed to load courses</div>,
         },
 

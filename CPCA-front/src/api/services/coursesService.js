@@ -7,7 +7,7 @@ export const courseService = (builder) => {
       }),
     }),
     getCourse: builder.query({
-      query:  (id) => {
+      query: (id) => {
         // await new Promise((resolve) => setTimeout(resolve, 2000));
         return {
           url: `/courses/${id}`,
@@ -33,6 +33,29 @@ export const courseService = (builder) => {
       query: (id) => ({
         url: `/course/${id}`,
         method: "delete",
+      }),
+    }),
+    getLessons: builder.query({
+      query: (courseId) => `courses/${courseId}/lessons`,
+    }),
+
+    getLesson: builder.query({
+      query: ({ courseId, lessonId }) =>
+        `courses/${courseId}/lessons/${lessonId}`,
+    }),
+
+    updateLesson: builder.mutation({
+      query: ({ courseId, lessonId, data }) => ({
+        url: `courses/${courseId}/lessons/${lessonId}`,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
+
+    deleteLesson: builder.mutation({
+      query: ({ courseId, lessonId }) => ({
+        url: `courses/${courseId}/lessons/${lessonId}`,
+        method: "DELETE",
       }),
     }),
   };

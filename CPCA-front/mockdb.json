@@ -1,11 +1,11 @@
 {
-    "user"
+    
     "courses": [
         {
             "id": "1",
             "title": "Introduction to Programming",
             "description": "This course will introduce you to the basics of programming.",
-            "templateImg": "https://example.com/images/course1.jpg",
+            "templateImg": "https://res.cloudinary.com/ddc2e1mzy/image/upload/v1711743360/photo-1711669670318-689b1cbfae70_kd3tsh.jpg",
             "objectives": [
                 "Understand the basics of programming",
                 "Learn how to write simple programs",
@@ -18,50 +18,7 @@
             "instructor": "1"
         }
     ],
-    "lessons": [
-        {
-            "id": "1",
-            "courseId": "1",
-            "title": "Lesson 1: Introduction",
-            "content": "In this lesson, we will introduce the basics of programming.",
-            "attachedFiles": [
-                "https://example.com/files/file1.pdf"
-            ],
-            "courseImages": [
-                "https://example.com/images/lesson1.jpg"
-            ],
-            "courseVideos": [
-                "https://example.com/videos/lesson1.mp4"
-            ],
-            "codeSnippets": [
-                "console.log('Hello, world!');"
-            ],
-            "exercises": [
-                "Write a program that prints 'Hello, world!' to the console."
-            ]
-        },
-        {
-            "id": "2",
-            "courseId": "1",
-            "title": "Lesson 2: Variables and Data Types",
-            "content": "In this lesson, we will learn about variables and data types in programming.",
-            "attachedFiles": [
-                "https://example.com/files/file2.pdf"
-            ],
-            "courseImages": [
-                "https://example.com/images/lesson2.jpg"
-            ],
-            "courseVideos": [
-                "https://example.com/videos/lesson2.mp4"
-            ],
-            "codeSnippets": [
-                "let x = 10;\nconsole.log(x);"
-            ],
-            "exercises": [
-                "Create a variable and assign a value to it. Then print the value of the variable to the console."
-            ]
-        }
-    ],
+    
     "instructors": [
         {
             "id": "1",
