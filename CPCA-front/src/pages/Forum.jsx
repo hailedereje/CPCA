@@ -11,12 +11,13 @@ import { useEffect, useState } from "react";
 import LikeDislikeComponent from "../icons/LikeDislike";
 import { useContext } from "react";
 import SocketContext from "../context/SocketContext";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 
 const Forum = () => {
   const user = useSelector((state) => state.userState.user);
   const socket = useContext(SocketContext);
+  const dispatch = useDispatch();
   const { topic } = useParams();
   const [openId, setOpenId] = useState([]);
   const [questions, setQuestions] = useState([]);
@@ -41,13 +42,11 @@ const Forum = () => {
 
   useEffect(() => {
     socket.emit("join-room", { room: "discussion", user });
-    console.log("joined-user", user);
-
     socket.on('receive-question', ({ question, user, room }) => {
       console.log(`Received question from ${user._id} in room ${room}: ${JSON.stringify(question)}`);
       setQuestions((prevQuestions) => [...prevQuestions, question]);
     });
-  },[socket, user]);
+  },[socket, user, dispatch]);
 
 
   if (isLoading) return <Loading />;

@@ -26,6 +26,8 @@ const startServer = async () => {
       credentials: true,
     },
   });
+
+  let userRooms = {};
   
   io.on("connection", (socket) => {
     console.log("socket connected", socket.id);
@@ -35,22 +37,22 @@ const startServer = async () => {
       if (socket.handshake.auth._id)
         users.push({
           ...socket.handshake.auth,
-          socketId: socket.handshake.auth._id,
+          socketId: socket.id,
         });
     }
 
-    console.log("users", users);
-    io.emit("user-connected", users);
+    console.log("connected-users", users);
   
     socket.on("join-room", ({ room, user }) => {
-      users[user._id] = user;
       socket.join(room);
-      socket.broadcast.to(room).emit("user-connected", users);
+      socket.broadcast.to(room).emit("user-joined", user);
+      userRooms[socket.id] = room;
+      console.log("user-rooms", userRooms);
     });
   
-    socket.on("ask-question", ({ question, room, user }) => {
+    socket.on("send-question", ({ question, room, user }) => {
       console.log("question", question, room, user);
-      io.to(room).emit("receive-question", { question, user, room });
+      socket.broadcast.to(room).emit("receive-question", { question, user, room });
     });
 
     socket.on('send-notification', ({ notification, userId }) => {

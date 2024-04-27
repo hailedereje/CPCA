@@ -23,17 +23,14 @@ const Askquestion = () => {
 
     console.log(question);
 
-    socket.emit("ask-question", {question, room: "discussion", user});
-
     const res = await newRequests.post(
       "/discussion/ask-question",
       question
     );
     if (res.status === 201) {
+      socket.emit("send-question", {question, room: "discussion", user});
       toast.success("Question added successfully");
-      setTimeout(() => {
-        navigate("/dashboard/forum/content");
-      }, 2000);
+      navigate("/dashboard/forum/content");
     }
   };
 
