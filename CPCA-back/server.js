@@ -28,7 +28,7 @@ const startServer = async () => {
   });
   
   io.on("connection", (socket) => {
-    console.log("socket connected");
+    console.log("socket connected", socket.id);
     const users = [];
   
     for (let [id, socket] of io.of("/").sockets) {
@@ -38,7 +38,7 @@ const startServer = async () => {
           socketId: socket.handshake.auth._id,
         });
     }
-  
+
     console.log("users", users);
     io.emit("user-connected", users);
   
@@ -48,9 +48,14 @@ const startServer = async () => {
       socket.broadcast.to(room).emit("user-connected", users);
     });
   
-    socket.on("send-message", ({ message, room, user }) => {
-      console.log("message", message, room, user);
-      io.to(room).emit("receive-message", { message, user, room });
+    socket.on("ask-question", ({ question, room, user }) => {
+      console.log("question", question, room, user);
+      io.to(room).emit("receive-question", { question, user, room });
+    });
+
+    socket.on('send-notification', ({ notification, userId }) => {
+      // Send the notification to the specified user
+      socket.to(userId).emit('receive-notification', notification);
     });
   
     socket.on("disconnect", () => {

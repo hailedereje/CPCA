@@ -101,15 +101,15 @@ function App() {
           // loader: EnrolledCourses(store),
         },
         {
-          path: "ask",
-          element: <Askquestion />,
-        },
-        {
           path: "forum",
           element: <ForumLayout />,
           children: [
             { path: "content", element: <Forum /> },
             { path: "myqns", element: <MyQuestions /> },
+            {
+              path: "ask",
+              element: <Askquestion />,
+            },
             // other child routes...
           ]
         },

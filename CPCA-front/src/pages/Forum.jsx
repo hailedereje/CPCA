@@ -7,42 +7,20 @@ import { useParams } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Loading from "../components/Loading";
 import NothingHere from "../components/NothingHere";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LikeDislikeComponent from "../icons/LikeDislike";
-import { useEffect } from "react";
-import { io } from "socket.io-client";
-import { useDispatch, useSelector } from "react-redux";
-import { addUsers } from "@/onlineSlice";
+import { useContext } from "react";
+import SocketContext from "../context/SocketContext";
+import { useSelector } from "react-redux";
 
-export const socket = io("http://localhost:5000", {
-  withCredentials: true,
-  secure: true,
-});
 
 const Forum = () => {
+  const user = useSelector((state) => state.userState.user);
+  const socket = useContext(SocketContext);
   const { topic } = useParams();
   const [openId, setOpenId] = useState([]);
+  const [questions, setQuestions] = useState([]);
   const [answer, setAnswer] = useState("");
-  const user = useSelector((state) => state.userState.user);
-  console.log("user", user)
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    socket.connect();
-    socket.on("connect", () => {
-      console.log("socket connected");
-    });
-    socket.auth = user;
-    socket.on("user-connected", (users) => {
-      dispatch(addUsers(users));
-      console.log("users", users);
-    });
-
-    socket.on("user-disconnected", (users) => {
-      console.log("users", users);
-      dispatch(addUsers(users));
-    });
-  },[dispatch, user]);
 
   const { isLoading, data } = useQuery("getAllQuestions", async () => {
     if (topic) {
@@ -55,6 +33,23 @@ const Forum = () => {
     }
   });
 
+  useEffect(() => {
+    if (data) {
+      setQuestions(data);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    socket.emit("join-room", { room: "discussion", user });
+    console.log("joined-user", user);
+
+    socket.on('receive-question', ({ question, user, room }) => {
+      console.log(`Received question from ${user._id} in room ${room}: ${JSON.stringify(question)}`);
+      setQuestions((prevQuestions) => [...prevQuestions, question]);
+    });
+  },[socket, user]);
+
+
   if (isLoading) return <Loading />;
 
   return (
@@ -63,8 +58,8 @@ const Forum = () => {
     md:gap-8 my-8 "
     >
       <Toaster />
-      {data.length > 0 &&
-        data.map((question, index) => {
+      {questions.length > 0 &&
+        questions.map((question, index) => {
           console.log("question", question);
           return (
             <div

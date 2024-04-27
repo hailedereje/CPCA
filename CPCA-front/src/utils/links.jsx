@@ -23,7 +23,7 @@ export const StudentLinks = [
   { id: 5, text: "Files", path: "Files", icon: <BsFiles /> },
   { id: 6, text: "Forum", path: "forum/content", icon: <FaWpforms /> },
   { id: 7, text: "My Questions", path: "forum/myqns", icon: <ImProfile /> },
-  { id: 8, text: "Ask New Question", path: "ask", icon: <BsFiles /> },
+  { id: 8, text: "Ask New Question", path: "forum/ask", icon: <BsFiles /> },
 ];
 
 export const AdminLinks = [
