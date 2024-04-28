@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from "react-query";
 import newRequests from "../utils/newRequest";
+import { useSelector } from "react-redux";
 
 // eslint-disable-next-line react/prop-types
 const Send = ({ answer, questionId, setAnswer }) => {
+  const user = useSelector((state) => state.userState.user)
   const queryClient = useQueryClient();
 
   const handleSubmit = async (e) => {
@@ -17,7 +19,7 @@ const Send = ({ answer, questionId, setAnswer }) => {
         `/discussion/answer/${id}`,
         {
           answer,
-          userId: JSON.parse(localStorage.getItem("user"))._id,
+          userId: user._id,
         }
       );
     },

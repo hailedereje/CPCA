@@ -42,6 +42,7 @@ const startServer = async () => {
     }
 
     console.log("connected-users", users);
+    io.emit('user-connected', users)
   
     socket.on("join-room", ({ room, user }) => {
       socket.join(room);

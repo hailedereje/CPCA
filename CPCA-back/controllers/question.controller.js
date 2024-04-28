@@ -9,6 +9,7 @@ export const askQuestion = async (req, res) => {
         description,
         author: userId,
         tags,
+        seen: [userId],
       });
       return res.status(201).json(newQuestion);
     } catch (error) {
@@ -165,3 +166,60 @@ export const findQuestionsByTopic = async (req, res) => {
       res.status(500).json({ message: "Server Error" });
     }
   }
+
+// seen questions
+export const seenQuestion = async (req, res) => {
+  const { id: questionId } = req.params;
+  const { userId } = req.body;
+  try {
+    const findQuestion = await Question.findById(questionId);
+    const seen = await findQuestion.updateOne({
+      $push: { seen: userId },
+    });
+    return res.status(200).json(seen);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+}
+
+// seen reply
+export const seenReply = async (req, res) => {
+  const { id: replyId } = req.params;
+  try {
+    const reply = await Reply.findById(replyId);
+    if(reply.seen === false){
+      reply.seen = true;
+      await reply.save();
+    };
+    return res.status(200).json({message: "Reply marked as seen"});
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: "Server Error" });
+  }
+}
+
+// send notification
+export const receiveNotification= async (req, res) => {
+  const { userId } = req.body;
+  try {
+    let unseen = {questions: [], replies: []};
+    const AllQuestions = await Question.find({});
+    AllQuestions.forEach((question) => {
+      if(!question.seen.includes(userId)){
+        unseen.questions.push(question);
+      }
+    });
+
+    const MyQuestions = await Question.find({ author: userId });
+    MyQuestions.forEach((question) => {
+      question.replies.forEach((reply) => {
+        if(!reply.seen){
+          unseen.replies.push(reply);
+        }
+      });
+    });
+    return res.status(200).json(unseen);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+}

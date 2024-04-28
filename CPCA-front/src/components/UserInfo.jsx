@@ -1,10 +1,22 @@
 /* eslint-disable react/prop-types */
+import newRequests from "@/utils/newRequest";
 import Comment from "../icons/Comment";
 import moment from "moment";
 import {useSelector} from 'react-redux'
+import { useEffect } from "react";
 
-const UserInfo = ({ openId, index, setOpenId, question, answer }) => {
+const UserInfo = ({ openId, index, setOpenId, question, answer, currentUserEmail }) => {
   const currentUser = useSelector((state) => state.userState.user);
+  console.log("user Info is called")
+  useEffect(() => {
+    const seenRequest = async () => {
+      await newRequests.post(`/discussion/seen-reply/${answer._id}`)
+    }
+    if (answer && currentUserEmail === currentUser.email && !answer.seen){
+      console.log("it has entered the function")
+      seenRequest();
+    }
+  })
   return (
     <div className="w-full  flex items-center justify-between">
       <div className="w-[48%] md:max-w-screen-md posted-by flex items-center gap-2 md:gap-3">
@@ -42,7 +54,7 @@ const UserInfo = ({ openId, index, setOpenId, question, answer }) => {
       {openId && (
         <div
           className="comment flex gap-1 ml-auto p-1 cursor-pointer"
-          onClick={() => {
+          onClick={async () => {
             if (!openId.find((ele) => ele === index)) {
               setOpenId([...openId, index]);
             }
