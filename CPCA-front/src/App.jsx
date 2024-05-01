@@ -22,7 +22,7 @@ import {
   AddCourse,
   AddInstructor,
   AllCourses,
-  CreateCourse,
+  // CreateCourse,
   // CreateCourse,
   EnrolledCourses,
   InstructorsList,
@@ -41,6 +41,8 @@ import MyQuestions from "./pages/MyQuestions";
 import { CodeEditor } from "./components/CodeEditor";
 import RichTextExample from "./components/textEditor/textEditor";
 import LessonDetails from "./pages/LessonDetails";
+import { CreateCourse } from "./components/createCourse/createCourse";
+import { Editor } from "./components/textEditor/test";
 
 // eslint-disable-next-line react-refresh/only-export-components
 // export const socket = io("http://localhost:5000", {
@@ -191,9 +193,17 @@ function App() {
       element: <CodeEditor />,
     },
 
+    // {
+    //   path: "test",
+    //   element: <RichTextExample/>
+    // },
     {
       path: "test",
-      element: <RichTextExample/>
+      element: <Editor/>
+    },
+    {
+      path:'create',
+      element: <CreateCourse/>
     }
     
   ]);

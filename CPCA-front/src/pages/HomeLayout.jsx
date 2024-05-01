@@ -1,5 +1,4 @@
-import React from "react";
-import { Header, Navbar, About, ContactSection, Courses } from "../components";
+import { Header, Navbar, About, ContactSection } from "../components";
 
 import { Outlet } from "react-router-dom";
 

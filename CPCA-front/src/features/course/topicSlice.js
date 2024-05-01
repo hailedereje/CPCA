@@ -43,6 +43,7 @@ export const topicSlice = createSlice({
         addImage: (state,action) => {
             const {image,idx} = action.payload
             state.topics.splice(idx+1,0,{ id:nanoid(),order:0,name:"image", content:image,show:false });
+            
         },
         toggleShow: (state, action) => {
             const {id} = action.payload;

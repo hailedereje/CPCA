@@ -1,7 +1,5 @@
 // Desc: Auth service to handle login, logout and register
 
-import { data } from "autoprefixer";
-
 export const authService = (builder) => ({
     loginUser: builder.mutation({
         query: (credentials) => ({

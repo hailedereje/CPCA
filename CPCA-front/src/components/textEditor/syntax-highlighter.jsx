@@ -22,13 +22,13 @@ export const SyntaxHighlighter = ({ code }) => {
     }, [code.code]);
 
     return (
-        <pre className="relative  w-3/4">
+        <pre className="relative w-full">
             <CopyToClipboard text={code.code} onCopy={handleCopy}>
             <button className="absolute right-0 top-0 p-2">
                 {copied ? <BsFileEarmarkCheck className="text-white"/>:<MdContentCopy className="text-white" />}
             </button>
             </CopyToClipboard>
-            <code ref={codeRef} className={`${code.language} w-full  max-h-[300px] p-5 rounded-md`}>
+            <code ref={codeRef} className={`${code.language} w-full h-fit max-h-[300px] p-5 rounded-md overflow-auto z-0`}>
                 {code.code || "// add some code"}
             </code>
             
