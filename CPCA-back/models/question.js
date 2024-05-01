@@ -25,12 +25,17 @@ const questionSchema = mongoose.Schema(
     },
     upvote: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "DiscussionUser",
+      ref: "User",
       default: [],
     },
     downvote: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "DiscussionUser",
+      ref: "User",
+      default: [],
+    },
+    seen: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "User",
       default: [],
     },
   },

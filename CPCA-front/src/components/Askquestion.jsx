@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import newRequests from "../utils/newRequest";
 import { useSelector } from "react-redux";
+import { useContext } from "react";
+import SocketContext from "../context/SocketContext";
 
 const Askquestion = () => {
+  const socket = useContext(SocketContext);
   const user = useSelector((state) => state.userState.user);
   const navigate = useNavigate();
   console.log(user._id);
@@ -25,10 +28,9 @@ const Askquestion = () => {
       question
     );
     if (res.status === 201) {
+      socket.emit("send-question", {question, room: "discussion", user});
       toast.success("Question added successfully");
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+      navigate("/dashboard/forum/content");
     }
   };
 

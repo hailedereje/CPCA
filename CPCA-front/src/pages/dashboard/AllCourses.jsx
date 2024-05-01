@@ -8,7 +8,7 @@ export const loader = (store) => async () => {
     const response = await store
       .dispatch(api.endpoints.getAllCourses.initiate())
       .unwrap();
-    // console.log(response);
+    console.log(response);
     return response;
   } catch (error) {
     console.log(error);

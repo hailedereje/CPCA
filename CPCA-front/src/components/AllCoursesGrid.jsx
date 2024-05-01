@@ -3,11 +3,14 @@ import SectionTitle from "./SectionTitle";
 import { useLoaderData, Link } from "react-router-dom";
 import ProgressIndicator from "./ProgressIndicator";
 import { useDispatch } from "react-redux";
-import { useGetCourseQuery } from "../api";
+import { useGetAllCoursesQuery } from "../api";
 import { setSelectedCourse } from "../features/course/courseSlice";
+import { toggleSidebar } from "@/features/user/userSlice";
+import { Loading } from ".";
 
 const AllCoursesGrid = () => {
-  const courses = useLoaderData();
+  const { data: courses, isLoading: isCoursesLoading } =
+    useGetAllCoursesQuery();
   const dispatch = useDispatch();
 
   // const [isLoading, setIsLoading] = useState(true);
@@ -21,8 +24,12 @@ const AllCoursesGrid = () => {
   // if (isLoading) {
   //    return <div>Loading...</div>
   // }
+  if (isCoursesLoading) {
+    return <Loading />;
+  }
   const handleClick = (id) => {
     dispatch(setSelectedCourse(id));
+    dispatch(toggleSidebar());
   };
   return (
     <>

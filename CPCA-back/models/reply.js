@@ -11,6 +11,10 @@ const replySchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    seen: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

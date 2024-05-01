@@ -15,7 +15,7 @@ export const api = createApi({
   endpoints: (builder) => ({
     ...authService(builder),
     ...courseService(builder),
-    ...lessonService(builder),
+    // ...lessonService(builder),
     ...profileService(builder)
   }),
 });
@@ -29,5 +29,9 @@ export const {
   useCreateCourseMutation,
   useUpdateCourseMutation,
   useDeleteCourseMutation,
+  useGetLessonsQuery,
+  useGetLessonQuery,
+  useUpdateLessonMutation,
+  useDeleteLessonMutation,
 } = api;
 console.log(api);
