@@ -4,6 +4,7 @@ import courseReducer from './features/course/courseSlice';
 import { api } from "./api";
 import topicReducer from './features/course/topicSlice';
 import createCourseReducer from "./features/course/createCourse";
+import editorReducer from "./features/editor/editorSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
     userState: userReducer,
     courseState: courseReducer,
     topicState: topicReducer,
-    createCourseState: createCourseReducer
+    createCourseState: createCourseReducer,
+    editorState: editorReducer
   },
   devTools: true, 
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware) 

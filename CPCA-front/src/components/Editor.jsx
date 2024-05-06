@@ -1,5 +1,7 @@
+import { setCode } from "@/features/editor/editorSlice";
 import { Editor } from "@monaco-editor/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 
 
 const screens = {
@@ -10,9 +12,10 @@ const screens = {
   'lg': '1024px', // Large devices (desktops)
   'xl': '1280px', // Extra large devices (large desktops)
 }
-export const EditorModal = ({ language, onMount, setValue, value }) => {
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-    const [screenHeight, setScreenHeight] = useState(window.innerHeight);
+export const EditorModal = ({ language, value }) => {
+  const dispatch = useDispatch();
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [screenHeight, setScreenHeight] = useState(window.innerHeight);
 
   useEffect(() => {
     const handleResize = () => {
@@ -25,15 +28,22 @@ export const EditorModal = ({ language, onMount, setValue, value }) => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  const editorRef = useRef()
+  const onMount = (editor) => {
+    editorRef.current = editor
+    editor.focus()
+}
+  
     return (
         <Editor
+            line={1}
             theme="vs-dark"
-            line={10}
-            height={screenHeight - 56}
+            height={screenHeight -56}
             language={language}
             value={value}
             onMount={onMount}
-            onChange={(value) => setValue(value)}
+            onChange={(code) => dispatch(setCode({code}))}
             loading={<div>loading ...</div>}
         />
     )

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import * as Icons from "../assets/icons"
-import { LANGUAGES } from "../assets/constants"
+import { getCode } from "@/features/editor/editorSlice"
+import { useDispatch, useSelector } from "react-redux"
 
 export const MobileSidebar = ({isOpen,close,languages,onSelect}) => {
     return (
@@ -14,106 +15,50 @@ export const MobileSidebar = ({isOpen,close,languages,onSelect}) => {
 }
 
 
-export const Languages = ({isMobile,onSelect}) => {
-    const [active,setActive] = useState(1)
-    const languages = LANGUAGES
+export const Languages = ({ isMobile }) => {
+    const { languages,editorContent } = useSelector(x => x.editorState)
+    const [activeLanguage, setActiveLanguage] = useState(editorContent.language);
+
+    const languageList = [
+        { name: languages.javascript.name, icon: <Icons.JavascriptIcon /> },
+        { name: languages.typescript.name, icon: <Icons.TypeScriptIcon /> },
+        { name: languages["c++"].name, icon: <Icons.CPPIcon /> },
+        { name: languages.c.name, icon: <Icons.CIcon /> },
+        { name: languages.java.name, icon: <Icons.JavaIcon /> },
+        { name: languages.python.name, icon: <Icons.PythonIcon /> },
+        { name: languages.csharp.name, icon: <Icons.CsharpIcon /> },
+        { name: languages.php.name, icon: <Icons.PhpIcon /> }
+    ];
+
     return (
         <div className="fixed inset-x-0 top-14 z-20 flex flex-col gap-4 h-full p-2 bg-gray-600 border border-gray-500 w-fit text-white">
-            <button onClick={() => {
-                onSelect(languages['c'].name)
-                setActive(1)
-                }} className={`flex items-center justify-center  p-1 rounded gap-3 border-gray-400 border ${active === 1 ? "bg-blue-500 border-none":""}`}>
-                <span className="text-white">
-                    <Icons.CIcon />
-                </span>
-                {
-                    isMobile && <p className="text-white">{languages['c'].name}</p>
-                }
-            </button>
-            <button onClick={() => {
-                    onSelect(languages['c++'].name)
-                    setActive(2)
-                }} 
-                className={`flex items-center justify-center  p-1 rounded gap-3 border-gray-400 border ${active === 2 ? "bg-blue-500 border-none":""}`}>
-                <span className="text-white">
-                    <Icons.CPPIcon />
-                </span>
-                {
-                    isMobile && <p className="">{languages['c++'].name}</p>
-                }
-            </button>
-            <button onClick={() => {
-                    onSelect(languages['java'].name)
-                    setActive(3)
-                }} 
-                className={`flex items-center justify-center  p-1 rounded gap-3 border-gray-400 border ${active === 3 ? "bg-blue-500 border-none":""}`}>
-                <span className="text-white">
-                    <Icons.JavaIcon />
-                </span>
-                {
-                    isMobile && <p className="">{languages['java'].name}</p>
-                }
-            </button>
-            <button onClick={() => {
-                    onSelect(languages['javascript'].name)
-                    setActive(4)
-                }} 
-                className={`flex items-center justify-center  p-1 rounded gap-3 border-gray-400 border ${active === 4 ? "bg-blue-500 border-none":""}`}>
-                <span className="text-white">
-                    <Icons.JavascriptIcon />
-                </span>
-                {
-                    isMobile && <p className="">{languages['javascript'].name} </p>
-                }
-            </button>
-            <button onClick={() => {
-                    onSelect(languages['python'].name)
-                    setActive(5)
-                }} 
-                className={`flex items-center justify-center  p-1 rounded gap-3 border-gray-400 border ${active === 5 ? "bg-blue-500 border-none":""}`}>
-                <span className="text-white">
-                    <Icons.PythonIcon />
-                </span>
-                {
-                    isMobile && <p className="">{languages['python'].name}</p>
-                }
-            </button>
-            <button onClick={() => {
-                    onSelect(languages['typescript'].name)
-                    setActive(6)
-                }} 
-                className={`flex items-center justify-center  p-1 rounded gap-3 border-gray-400 border ${active === 6 ? "bg-blue-500 border-none":""}`}>
-                <span className="text-white">
-                    <Icons.TypeScriptIcon />
-                </span>
-                {
-                    isMobile && <p className="">{languages['typescript'].name}</p>
-                }
-            </button>
-            <button onClick={() => {
-                    onSelect(languages['php'].name)
-                    setActive(7)
-                }} 
-                className={`flex items-center justify-center  p-1 rounded gap-3 border-gray-400 border ${active === 7 ? "bg-blue-500 border-none":""}`}>
-                <span className="text-white">
-                    <Icons.PhpIcon />
-                </span>
-                {
-                    isMobile && <p className="">{languages['php'].name}</p>
-                }
-            </button>
-            <button onClick={() => {
-                    onSelect(languages['csharp'].name)
-                    setActive(8)
-                }} 
-                className={`flex items-center justify-center  p-1 rounded gap-3 border-gray-400 border ${active === 8 ? "bg-blue-500 border-none":""}`}>
-                <span className="text-white">
-                    <Icons.CsharpIcon />
-                </span>
-                {
-                    isMobile && <p className="">{languages['csharp'].name}</p>
-                }
-            </button>
+            {languageList.map(lang => (
+                <LanguageButton
+                    key={lang.name}
+                    language={lang.name}
+                    icon={lang.icon}
+                    isActive={lang.name === activeLanguage}
+                    setActiveLanguage={setActiveLanguage}
+                />
+            ))}
         </div>
-    )
-}
+    );
+};
+
+const LanguageButton = ({ language, icon, isActive, setActiveLanguage }) => {
+    const dispatch = useDispatch();
+
+    const handleClick = () => {
+        dispatch(getCode({ language }));
+        setActiveLanguage(language);
+    };
+
+    return (
+        <button
+            onClick={handleClick}
+            className={`flex items-center justify-center p-1 rounded gap-3 border-gray-400 border ${isActive ? "bg-blue-500 border-none" : ""}`}
+        >
+            <span className="text-white">{icon}</span>
+        </button>
+    );
+};
