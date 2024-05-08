@@ -7,7 +7,7 @@ import { RiDeleteBin6Line, RiQuestionAnswerLine } from "react-icons/ri"
 import { SlOptions } from "react-icons/sl"
 import { useDispatch, useSelector } from "react-redux"
 import { ActionTypes } from "./action.Types";
-import { addChapter, addLesson, removeChapter, renameChapter, renameLesson, setActiveLesson } from "@/features/course/createCourse";
+import { addChapter, addLesson, removeChapter, removeLesson, renameChapter, renameLesson, setActiveLesson } from "@/features/course/createCourse";
 import { IoMdAddCircleOutline, IoMdList } from "react-icons/io";
 
 
@@ -36,12 +36,12 @@ export const CreateCourseSideBar = ({ course, activeLesson }) => {
         { name: "Add lesson", icon: <IoMdAddCircleOutline />, action: (idx) => setShow({ ...show, addLesson: true, index: idx.chapterId }) },
         { name: "create test", icon: <RiQuestionAnswerLine />, action: () => { } },
         { name: "view tests", icon: <IoMdList />, action: () => { } },
-        { name: "Delete chapter", icon: <RiDeleteBin6Line className="text-red-400" />, action: (id) => dispatch(removeChapter({ chapterId: id.chapterId })) },
+        { name: "Delete", icon: <RiDeleteBin6Line className="text-red-400" />, action: (id) => dispatch(removeChapter({ chapterId: id.chapterId })) },
     ]
 
     const lessonMenuItems = [
         { name: "Rename", icon: <MdModeEditOutline />, action: (id) => setShow({ ...show, renameLesson: true, index: id.lessonId }) },
-        { name: "Delete", icon: <RiDeleteBin6Line className="text-red-400" />, action: () => { } }
+        { name: "Delete", icon: <RiDeleteBin6Line className="text-red-400" />, action: (id) => dispatch(removeLesson({...id})) }
     ]
 
     return (
@@ -50,8 +50,8 @@ export const CreateCourseSideBar = ({ course, activeLesson }) => {
                 <div key={chapter.id} className="">
                     <div className="flex flex-col gap-2 border-b border-gray-600 pb-2">
                         {!(show.renameChapter && show.index === chapter.id) &&
-                            <div className={`flex w-full justify-between items-center gap-3 p-3 group ${chapter.id === chapterId ? "bg-[#304057]" : ""}`}>
-                                <button className="flex w-3/4 gap-4 p-2">
+                            <div className={`flex w-full justify-between items-center p-3 gap-3 group ${chapter.id === chapterId ? "bg-[#304057]" : ""}`}>
+                                <button className="flex w-3/4 gap-4 p-1">
                                     <span>
                                         <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                                             <path fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M12 8h15m-15 8h9m-9 8h15M7 24a1 1 0 1 1-2 0a1 1 0 0 1 2 0Zm0-8a1 1 0 1 1-2 0a1 1 0 0 1 2 0Zm0-8a1 1 0 1 1-2 0a1 1 0 0 1 2 0Z" />
@@ -59,9 +59,7 @@ export const CreateCourseSideBar = ({ course, activeLesson }) => {
                                     </span>
                                     <span className="text-md text-gray-200 line-clamp-2 capitalize text-left">{chapter.name}</span>
                                 </button>
-                                <div className="group-hover:visible invisible">
                                     <Menu menuItems={chapterMenuItems} id={{ chapterId: chapter.id, lessonId: '' }} />
-                                </div>
 
                             </div>
                         }
@@ -212,7 +210,7 @@ const Menu = ({ menuItems, id }) => {
                         toggleMenu()
                     }} className="flex items-center gap-2 p-2 capitalize text-gray-800 hover:bg-gray-200  w-full text-left">
                         {item.icon}
-                        <span className="text-xs font-medium">{item.name}</span>
+                        <span className="text-sm font-medium">{item.name}</span>
                     </button>
                 ))}
             </div>

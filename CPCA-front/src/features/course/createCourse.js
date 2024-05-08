@@ -31,6 +31,27 @@ export const createCourseSlice = createSlice({
             const lesson = { id: nanoid(), name: name, topics:[]}
             state.course.chapters.find(chapter => chapter.id === id).lessons.push(lesson)
         },
+        removeLesson: (state, action) => {
+            const { chapterId, lessonId } = action.payload;
+            const updatedChapters = state.course.chapters.map(chapter => {
+                if (chapter.id === chapterId) {
+                    const updatedLessons = chapter.lessons.filter(lesson => lesson.id !== lessonId);
+                    return { ...chapter, lessons: updatedLessons };
+                }
+                return chapter;
+            });
+        
+            state.course.chapters = updatedChapters;
+        
+            if (state.activeLesson.lessonId === lessonId) {
+                state.activeLesson = {
+                    lesson: {},
+                    chapterId: "",
+                    lessonId: ""
+                };
+            }
+        },
+        
         renameChapter: (state, action) => {
             var { name, id } = action.payload
             state.course.chapters.find(chapter => chapter.id === id).name = name
@@ -101,5 +122,8 @@ export const createCourseSlice = createSlice({
     }
 })
 
-export const { addChapter, removeChapter, updateChapter, renameChapter, renameLesson, addLesson ,addTopic,removeTopic,toggleShow,updateTopic,setActiveLesson} = createCourseSlice.actions;
+export const { addChapter, removeChapter, updateChapter, 
+                renameChapter, renameLesson, addLesson ,
+                addTopic,removeTopic,toggleShow,updateTopic
+                ,setActiveLesson, removeLesson} = createCourseSlice.actions;
 export default createCourseSlice.reducer;

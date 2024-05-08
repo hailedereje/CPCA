@@ -18,7 +18,7 @@ function RichTextExample({lesson,chapterId,lessonId}) {
   const [image, setImage] = useState(null)
  
   return (
-    <div className="flex flex-col items-center w-full py-10 max-w-[900px] ">
+    <div className="flex flex-col items-center w-full py-10 max-w-[1024px] ">
       {(lesson && chapterId && lesson.topics.length ===0) && 
         <div className="group flex justify-between items-end  gap-4">
           <EditLinks idx={0} setImage={setImage} setIndex={setIndex} chapterId={chapterId} lessonId={lessonId}/>
