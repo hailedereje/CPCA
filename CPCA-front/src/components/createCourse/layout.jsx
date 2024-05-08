@@ -4,16 +4,19 @@ import { CreateCourseSideBar } from "./createCourseSidebar"
 import { TextEditor } from "../textEditor/fraolaEditor"
 
 export const Layout = () => {
-    const course = useSelector(x => x.createCourseState.chapters)
-    console.log(course[0].lessons[0])
+    const { activeLesson, course } = useSelector(x => x.createCourseState)
+    const { name } = course;
+    
     return (
-        <div className="flex w-full">
-            <div className="w-1/5 relative min-w-[300px] max-w-[350px]">
-                <CreateCourseSideBar/>
+        <div className="flex flex-col w-full">
+            <div className="flex items-center fixed z-10 left-0 top-0 h-16 w-full p-4 bg-[#1c2839] text-white">
+                <span>{name}</span>
             </div>
-            <div className="flex flex-col w-4/5 border p-5">
-                <RichTextExample topic={course[0].lessons}/>
-                {/* <TextEditor topicItem={{show:true}}/> */}
+            <div className="flex">
+                <CreateCourseSideBar course={course} activeLesson={ activeLesson }/>
+                <div className="ml-[28%] w-full pt-16">
+                    <RichTextExample {...activeLesson}/>
+                </div>
             </div>
         </div>
     )

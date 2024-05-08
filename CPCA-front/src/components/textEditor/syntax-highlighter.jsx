@@ -28,7 +28,8 @@ export const SyntaxHighlighter = ({ code }) => {
                 {copied ? <BsFileEarmarkCheck className="text-white"/>:<MdContentCopy className="text-white" />}
             </button>
             </CopyToClipboard>
-            <code ref={codeRef} className={`${code.language} w-full h-fit max-h-[300px] p-5 rounded-md overflow-auto z-0`}>
+            <span className="absolute left-0 -top-2 rounded p-1 text-xs bg-gray-600 text-white">{code.language}</span>
+            <code ref={codeRef} className={`${code.language} w-full flex-grow-0 overflow-scroll h-fit max-h-[300px] p-5 rounded-md editor`}>
                 {code.code || "// add some code"}
             </code>
             

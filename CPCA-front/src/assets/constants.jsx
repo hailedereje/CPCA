@@ -27,7 +27,7 @@ export const LANGUAGES = {
   php: {name: "php",version: "8.2.3"},
   "c++": {name: "cpp", version:"10.2.0"},
   c: {name: "c",version: "10.2.0"},
-  csharp: {name: "csharp" ,version: ""}
+  csharp: {name: "csharp" ,version: "5.0.201"}
 }
 
 export const SNIPTS = {

@@ -37,9 +37,11 @@ export const EditorModal = ({ language, value }) => {
   
     return (
         <Editor
+            className="overflow-hidden border"
             line={1}
             theme="vs-dark"
             height={screenHeight -56}
+            width={screenWidth - 56}
             language={language}
             value={value}
             onMount={onMount}

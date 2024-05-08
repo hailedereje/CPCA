@@ -9,7 +9,6 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 export const UploadImage = ({image,setImage,idx}) => {
   const [isPending, startTransition] = useTransition();
   const dispatch = useDispatch()
- console.log(isPending)
   const handleUpload = (e, idx) => {
     e.preventDefault();
 
@@ -17,7 +16,7 @@ export const UploadImage = ({image,setImage,idx}) => {
     formData.append("file", image);
     formData.append("upload_preset", "dgyt48cy");
 
-    startTransition(async () => await axios.post("https://api.cloudinary.com/v1_1/dygzy1vri/image/upload",  formData)
+    async () => await axios.post("https://api.cloudinary.com/v1_1/dygzy1vri/image/upload",  formData)
       .then((response) => {
         const topic = { id:nanoid(),order:0,name:"image", content:response.data.secure_url,show:false }
         dispatch(addTopic({ idx, topic }))
@@ -25,7 +24,7 @@ export const UploadImage = ({image,setImage,idx}) => {
       .catch((error) => {
         console.log(error);
       })
-    )
+    
   };
 // console.log(isPending)
   return (
@@ -36,8 +35,7 @@ export const UploadImage = ({image,setImage,idx}) => {
             <img src={URL.createObjectURL(image)} className="max-w-[200px]" alt="" />
             <div className="flex gap-5">
               <button onClick={(e) => handleUpload(e,idx)} type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                {!isPending ? <span>upload</span> : <AiOutlineLoading3Quarters/>}
-                
+              <span>upload</span>
               </button>
               <button onClick={() => setImage('')} type="button" className="text-red-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-2 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:border-gray-600 dark:hover:bg-white-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                 cancel

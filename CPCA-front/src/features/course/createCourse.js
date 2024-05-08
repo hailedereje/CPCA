@@ -2,28 +2,18 @@ import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 const ITEM_NAME = 'topic_content';
 
-const chapters = [
-    {
-        id: nanoid(), name: "chapter-1", lessons: [
-            {
-                id: nanoid(), name: "lesson-1", content:
-                [
-                    { id: nanoid(), type: "text", content: "code snipet", show: false },
-                ]
-            },
-            {
-                id: nanoid(), name: "lesson-2", content: 
-                [
-                    { id: nanoid(), type: "code", content: "code snipet", show: false },
-                ]
-            }
-        ]
-    }
-]
-
 
 const initialState = {
-    chapters,
+    course: {
+        id:nanoid(),
+        name:"courseName",
+        chapters: []
+    },
+    activeLesson:{
+        lesson: {},
+        chapterId: "",
+        lessonId: ""
+    }
 }
 
 export const createCourseSlice = createSlice({
@@ -33,39 +23,83 @@ export const createCourseSlice = createSlice({
         addChapter: (state, action) => {
             const { name } = action.payload;
             const chapter = { id: nanoid(), name: name, lessons: [] }
-            state.chapters.push(chapter)
+            state.course.chapters.push(chapter)
 
         },
         addLesson: (state, action) => {
             const { name,id } = action.payload
-            const lesson = { id: nanoid(), name: name, content: [] }
-            state.chapters.find(chapter => chapter.id === id).lessons.push(lesson)
+            const lesson = { id: nanoid(), name: name, topics:[]}
+            state.course.chapters.find(chapter => chapter.id === id).lessons.push(lesson)
         },
         renameChapter: (state, action) => {
             var { name, id } = action.payload
-            state.chapters.find(chapter => chapter.id === id).name = name
+            state.course.chapters.find(chapter => chapter.id === id).name = name
         },
         renameLesson: (state, action) => {
             var { name, id, lessonId } = action.payload
-            state.chapters.find(chapter => chapter.id === id).lessons.find(lesson => lesson.id === lessonId).name = name
+            state.course.chapters.find(chapter => chapter.id === id).lessons.find(lesson => lesson.id === lessonId).name = name
         },
         removeChapter: (state, action) => {
-            state.chapters = state.chapters.length === 1
-                ? chapters
-                : state.chapters.filter(chapter => chapter.id !== action.payload);
-            // localStorage.setItem(ITEM_NAME, JSON.stringify(state.chapters));
+            const { chapterId } = action.payload
+            console.log(chapterId)
+            state.course.chapters = state.course.chapters.filter(chapter => chapter.id !== chapterId);
         },
         updateChapter: (state, action) => {
             const { id, content } = action.payload;
-            const chapter = state.chapters.find(chapter => chapter.id === id);
+            const chapter = state.course.chapters.find(chapter => chapter.id === id);
             if (chapter) {
                 chapter.name = content;
-                // localStorage.setItem(ITEM_NAME, JSON.stringify(state.chapters.map(topic => topic.id === id ? {...topic,show:false} : topic)));
+            }
+        },
+
+        addTopic: (state, action) => {
+            const {chapterId,lessonId,idx,topic} = action.payload;
+            const topics = state.course.chapters.find(chapter => chapter.id === chapterId)
+                .lessons.find(lesson => lesson.id === lessonId)
+            if(topics) {
+                topics.topics.splice(idx+1,0,topic)
+                state.activeLesson.lesson = topics
+            }
+            
+        },
+        removeTopic: (state, action) => {
+            const { chapterId, lessonId, topicId } = action.payload;
+            const chapter = state.course.chapters.find(chapter => chapter.id === chapterId);
+            if (chapter) {
+                const lesson = chapter.lessons.find(lesson => lesson.id === lessonId);
+                if (lesson) {
+                    lesson.topics = lesson.topics.filter(topic => topic.id !== topicId);
+                    state.activeLesson.lesson = lesson
+                }
+            }
+        },
+        updateTopic: (state, action) => {
+            const { chapterId,lessonId,topicId,content } = action.payload;
+            const topic = state.course.chapters.find(chapter => chapter.id === chapterId).lessons
+                .find(lesson => lesson.id === lessonId).topics.find(topic => topic.id === topicId)
+            
+            if(topic) {
+                topic.content = content
+                state.activeLesson.lesson.topics.find(topic => topic.id === topicId).content = content
+            }
+        },
+        setActiveLesson: (state,action) => {
+            const { chapterId,lessonId } = action.payload;
+            const lesson = state.course.chapters.find(chapter => chapter.id === chapterId).lessons
+                .find(lesson => lesson.id === lessonId)
+            state.activeLesson = {lesson,chapterId,lessonId}
+        },
+        toggleShow: (state, action) => { 
+            const { chapterId,lessonId,topicId } = action.payload;
+            const topic = state.activeLesson.lesson.topics.find(topic => topic.id === topicId)
+    
+            if(topic) {
+                topic.show = !topic.show
             }
         },
 
     }
 })
 
-export const { addChapter, removeChapter, updateChapter, renameChapter, renameLesson, addLesson } = createCourseSlice.actions;
+export const { addChapter, removeChapter, updateChapter, renameChapter, renameLesson, addLesson ,addTopic,removeTopic,toggleShow,updateTopic,setActiveLesson} = createCourseSlice.actions;
 export default createCourseSlice.reducer;
