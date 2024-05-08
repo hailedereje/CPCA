@@ -5,12 +5,48 @@ import 'froala-editor/css/themes/gray.min.css';
 import { useDispatch } from "react-redux";
 import { toggleShow, updateTopic } from "../../features/course/createCourse";
 import { Editor } from "@monaco-editor/react";
-import { useRef, useState } from "react";
-import {  LANGUAGE_List } from '../../assets/constants';
+import { useEffect, useRef, useState } from "react";
+import {  LANGUAGES, LANGUAGE_List } from '../../assets/constants';
+import { IoLogoJavascript } from 'react-icons/io';
+import { SlOptions } from 'react-icons/sl';
 
+const CodeMenu = ({ setcode,code }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const menuRef = useRef(null);
+    const languages = LANGUAGE_List
+    const toggleMenu = () => setIsOpen(!isOpen);
+    const handleClickOutside = (event) => { if (menuRef.current && !menuRef.current.contains(event.target)) setIsOpen(false) }
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    return (
+        <div className="relative" ref={menuRef}>
+            <button onClick={toggleMenu} className="focus:outline-none bg-[#2B3C42] text-white flex items-center py-2 px-4 rounded" >
+                <span className='text-sm capitalize'>{code.language}</span>
+            </button>
+
+            <div className={`absolute left-0 mt-3 z-10 w-36 h-44 overflow-scroll editor bg-[#2B3C42] rounded-sm shadow-lg ${isOpen ? "" : "hidden"}`}>
+                {languages.map((item, idx) => (
+                    <button key={idx} onClick={() => {
+                        setcode(prev => ({...prev,language:item.name}))
+                        toggleMenu()
+                    }} className={`flex items-center gap-2 p-2 capitalize  hover:bg-[#32bc6e] text-white w-full text-left ${code.language === item.name ? "bg-[#32bc6e]": ""}`}>
+                        {item.icon}
+                        <span className="text-xs font-medium">{item.name}</span>
+                    </button>
+                ))}
+            </div>
+        </div>
+    )
+}
 export const CodeContentEditor = ({ topicItem,chapterId,lessonId }) => {
+    
     const { show, id, content, name } = topicItem;
-    // console.log(content)
     const dispatch = useDispatch();
     const [code, setCode] = useState(content);
 
@@ -25,16 +61,7 @@ export const CodeContentEditor = ({ topicItem,chapterId,lessonId }) => {
            
             <div className="flex flex-col items-start justify-between z-10 gap-4 w-fit duration-300 bg-white p-3 rounded-md">
                 <div className="dropdown">
-                    <div tabIndex={0} role="button" className="btn m-1 px-4 ">{code.language}</div>
-                    <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 h-52 overflow-scroll">
-                        { LANGUAGE_List.map((lang,idx) => (
-                            <li key={idx} onClick={() => setCode({...code,language:lang})}>
-                                <button>
-                                {lang}
-                                </button>
-                            </li>
-                        ))  } 
-                    </ul>
+                    <CodeMenu setcode={setCode} code={code}/>
                 </div>
 
                 <Editor

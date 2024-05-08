@@ -1,3 +1,7 @@
+import { FaCuttlefish, FaJava, FaPython } from "react-icons/fa";
+import { IoLogoJavascript } from "react-icons/io"
+import { SiPhp, SiTypescript } from "react-icons/si";
+import { TbBrandCSharp, TbBrandCpp } from "react-icons/tb";
 
 export const LANGUAGE_VERSIONS = {
     javascript: "18.15.0",
@@ -10,24 +14,24 @@ export const LANGUAGE_VERSIONS = {
 }
 
 export const LANGUAGE_List = [
-    "javascript",
-    "typescript",
-    "python",
-    "java",
-    "php",
-    "cpp",
-    "c",
-    "csharp"
+    {name: "javascript",icon:<IoLogoJavascript />},
+    {name: "typescript",icon:<SiTypescript />},
+    {name: "python",icon: <FaPython />},
+    {name: "java", icon:<FaJava />},
+    {name: "php", icon:<SiPhp />},
+    {name: "cpp", icon:<TbBrandCpp /> },
+    {name: "c",icon: <FaCuttlefish /> },
+    {name: "csharp", icon:<TbBrandCSharp />}
 ]
 export const LANGUAGES = {
   javascript: {name:"javascript",version: "18.15.0"},
-  typescript: {name:"typescript",version:"5.0.3"},
-  python: {name:"python",version: "3.10.0"},
-  java: {name:"java",version: "15.0.2"},
-  php: {name: "php",version: "8.2.3"},
+  typescript: {name:"typescript",version:"5.0.3" },
+  python: {name:"python",version: "3.10.0", },
+  java: {name:"java",version: "15.0.2" },
+  php: {name: "php",version: "8.2.3" },
   "c++": {name: "cpp", version:"10.2.0"},
-  c: {name: "c",version: "10.2.0"},
-  csharp: {name: "csharp" ,version: "5.0.201"}
+  c: {name: "c",version: "10.2.0" },
+  csharp: {name: "csharp" ,version: "5.0.201" }
 }
 
 export const SNIPTS = {
