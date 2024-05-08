@@ -43,7 +43,7 @@ export const CreateCourseSideBar = ({ course, activeLesson }) => {
         { name: "Rename", icon: <MdModeEditOutline />, action: (id) => setShow({ ...show, renameLesson: true, index: id.lessonId }) },
         { name: "Delete", icon: <RiDeleteBin6Line className="text-red-400" />, action: () => { } }
     ]
-    
+
     return (
         <div className="w-[28%] max-w-[400px] h-screen  overflow-scroll max-h-[1024px] py-16 fixed  top-0 left-0 flex flex-col gap-2 bg-[#2B3C42] text-white">
             {chapters.map(chapter => (
@@ -76,7 +76,7 @@ export const CreateCourseSideBar = ({ course, activeLesson }) => {
                                     lesson => (
                                         <div key={lesson.id} className={`w-full flex items-end justify-between p-2 rounded-sm ${lesson.id === lessonId ? "bg-[#65B789]" : ""}`}>
                                             {!(show.renameLesson && show.index === lesson.id) && <>
-                                                <button onClick={() => dispatch(setActiveLesson({ chapterId: chapter.id, lessonId: lesson.id }))} className="flex gap-3">
+                                                <button onClick={() => dispatch(setActiveLesson({ chapterId: chapter.id, lessonId: lesson.id }))} className="flex gap-3 w-3/4">
                                                     <span>
                                                         <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                                             <path fill="currentColor" d="M3 6a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3zm3-2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
