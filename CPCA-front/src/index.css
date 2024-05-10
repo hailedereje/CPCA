@@ -41,12 +41,11 @@ body::-webkit-scrollbar-track {
 }
 
 .editor::-webkit-scrollbar {
-  width: 4px; /* Thin scrollbar */
+  width: 4px; 
   height: 0px;
-  background-color: #F5F5F5; /* Light gray background */
+  background-color: #F5F5F5; 
 }
 
 .editor::-webkit-scrollbar-thumb {
-  background-color: #29ABCA; /* Dark green thumb */
-  border-radius: 6px; /* Rounded corners */
+  background-color: #636364; 
 }

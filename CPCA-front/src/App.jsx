@@ -38,8 +38,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUsers } from "@/features/forum/socketSlice";
 import SocketContext from "@/context/SocketContext";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { CreateCourse } from "./components/createCourse/createCourse";
+import {  EditCourse } from "./components/createCourse/editCourse";
 import { Editor } from "./components/textEditor/test";
+import { CreateCourse } from "./components/createCourse/createCourse";
 
 // export const socket = io("http://localhost:5000", {
 //   withCredentials: true,
@@ -192,9 +193,13 @@ function App() {
       element: <Editor/>
     },
     {
-      path:'create',
-      element: <CreateCourse/>
-    }
+      path:'course/create',
+      element: <CreateCourse/>,
+    },
+    {
+      path:'course/edit/:id',
+      element: <EditCourse/>,
+    },
     
   ]);
   return(

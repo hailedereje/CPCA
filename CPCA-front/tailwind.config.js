@@ -3,6 +3,9 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      screens: {
+        xxl: "2048"
+      },
       animation: {
         bounce: 'bounce 2s ease-in-out infinite',
       },
