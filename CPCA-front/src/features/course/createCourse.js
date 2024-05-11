@@ -7,14 +7,13 @@ const initialState = {
     course:{
         id:nanoid(),
         name:"computer Programming",
-        chapters: []
+        chapters: [],
     },
     activeLesson:{
         lesson: {},
         chapterId: "",
         lessonId: ""
     },
-    isCourse:false
 }
 
 export const createCourseSlice = createSlice({
@@ -23,7 +22,7 @@ export const createCourseSlice = createSlice({
     reducers: {
         addChapter: (state, action) => {
             const { name } = action.payload;
-            const chapter = { id: nanoid(), name: name, lessons: [] }
+            const chapter = { id: nanoid(), name: name, lessons: [],test:{} }
             state.course.chapters.push(chapter)
 
         },
@@ -96,7 +95,12 @@ export const createCourseSlice = createSlice({
                 chapter.name = content;
             }
         },
-
+        addTest: (state,action) => {
+            const { name,id } = action.payload
+            const test = {id:nanoid(),chapterId:id,name,questions:[]}
+            // state.test = {...test}
+            state.course.chapters.find(chapter => chapter.id === id).test = {...test}
+        },
         addTopic: (state, action) => {
             const {chapterId,lessonId,idx,topic} = action.payload;
             const topics = state.course.chapters.find(chapter => chapter.id === chapterId)
@@ -149,5 +153,5 @@ export const createCourseSlice = createSlice({
 export const { addChapter, removeChapter, updateChapter, 
                 renameChapter, renameLesson, addLesson ,
                 addTopic,removeTopic,toggleShow,updateTopic
-                ,setActiveLesson, removeLesson} = createCourseSlice.actions;
+                ,setActiveLesson, removeLesson,addTest} = createCourseSlice.actions;
 export default createCourseSlice.reducer;

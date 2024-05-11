@@ -4,8 +4,6 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { createCourse } from '@/features/course/newCourseSlice';
-import { useGetAllCoursesQuery } from "@/api";
-import { InputList } from "./components/input-list";
 
 const courseSchema = yup.object({
     name: yup.string().trim().min(6, "Use a descriptive name with more than 6 characters").max(20, "Maximum characters reached"),
@@ -15,8 +13,6 @@ const courseSchema = yup.object({
 })
 
 export const CreateCourse = () => {
-    // const {data, isLoading,error } = useGetAllCoursesQuery()
-    // console.log(data)
     const dispatch = useDispatch();
     const { register, handleSubmit, formState } = useForm({ resolver: yupResolver(courseSchema) })
     

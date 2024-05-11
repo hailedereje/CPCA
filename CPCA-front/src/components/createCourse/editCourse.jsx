@@ -1,9 +1,9 @@
-import { Layout } from "./layout"
+import { CourseLayout } from "./layout"
 
 export const EditCourse = () => {
     return (
         <div>
-            <Layout/>
+            <CourseLayout/>
         </div>
     )
 }

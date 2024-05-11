@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ActionTypes } from "../action.Types";
-import { addChapter, addLesson, renameChapter, renameLesson } from "@/features/course/createCourse";
+import { addChapter, addLesson, addTest, renameChapter, renameLesson } from "@/features/course/createCourse";
 import { MdOutlineDownloadDone } from "react-icons/md";
 import * as yup from 'yup'
 
@@ -38,8 +38,12 @@ export const Input = ({ close, id, lessonId, type, title, icon }) => {
                 case ActionTypes.RENAME_LESSON:
                     dispatch(renameLesson({ name, id, lessonId }))
                     break;
+                case ActionTypes.ADD_TEST:
+                    dispatch(addTest({name,id}))
+                    break;
             }
             close()
+            setName('')
         }).catch(err => setError(err.message))
     }
 
