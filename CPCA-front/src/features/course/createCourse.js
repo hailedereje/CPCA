@@ -4,7 +4,11 @@ const ITEM_NAME = 'topic_content';
 
 
 const initialState = {
-    course:{},
+    course:{
+        id:nanoid(),
+        name:"computer Programming",
+        chapters: []
+    },
     activeLesson:{
         lesson: {},
         chapterId: "",

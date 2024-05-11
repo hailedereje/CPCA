@@ -41,6 +41,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import {  EditCourse } from "./components/createCourse/editCourse";
 import { Editor } from "./components/textEditor/test";
 import { CreateCourse } from "./components/createCourse/createCourse";
+import { UpdataCourse } from "./components/createCourse/updateCourse";
 
 // export const socket = io("http://localhost:5000", {
 //   withCredentials: true,
@@ -195,6 +196,10 @@ function App() {
     {
       path:'course/create',
       element: <CreateCourse/>,
+    },
+    {
+      path: 'course/update/:id',
+      element: <UpdataCourse/>
     },
     {
       path:'course/edit/:id',

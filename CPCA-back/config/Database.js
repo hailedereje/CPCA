@@ -5,11 +5,10 @@ import User from "../models/user.js";
 const connectToDB = async () => {
   try {
     console.log(dbURI)
-    await mongoose.connect(dbURI);
+    await mongoose.connect(dbURI)
     console.log("DB connected succesffully...");
   } catch (error) {
-    console.error(error);
-    throw new Error("error connecting to db");
+    console.error(error)
   }
 };
 

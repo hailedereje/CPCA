@@ -12,7 +12,7 @@ export const Layout = () => {
     const noContent = Object.keys(activeLesson.lesson).length === 0
     return (
         <div className="flex flex-col w-full max-w-[2048px]">
-           {isCourse ? <>
+           {true ? <>
                 <div className="flex items-center gap-6 fixed z-10 left-0 top-0 h-16 w-full max-w-[2048px] p-4 bg-[#1c2839] text-white">
                     <button onClick={() => setShow(prev => !prev)}>
                         <MdMenu size={30} />

@@ -1,14 +1,16 @@
 import { BadRequestError, NotFoundError } from "../errors/index.js";
 import { Progress } from "../models/index.js";
 import Course from "../models/course.js";
+import { CreateCourseValidator } from "../validation/createCourseValidation.js";
+import * as CourseService from "../services/courseService.js"
 
 const createCourse = async (req, res) => {
-  const { title, description, objectives, templateImg } = req.body;
-  if (!title && !description && !templateImg && !objectives) {
-    throw new BadRequestError("provide all course infos ");
-  }
+  // const { title, description, objectives, templateImg } = req.body;
+  await CreateCourseValidator.validate(req.body).then( async() => {
+
+  })
+
   const newCourse = await Course.create({
-    
     title,
     description,
     objectives,
@@ -22,18 +24,22 @@ const createCourse = async (req, res) => {
 };
 
 const getAllCourses = async (req, res) => {
-  const courses = await Course.find().populate("instructor");
-  if (courses) {
-    return res.json(courses);
-  }
-  throw new NotFoundError("courses not found");
-};
+  // const {page, name,level,tag } = req.query;
+  console.log(req.query)
+   getAllCourses().then(courses => {
+    return res.status(200).send({courses})
+  }).catch(err =>  {
+    res.status(500).send({message: "something went wrong",title:"internal server error"})
+    console.log(err)
+  })
+}
 
 const getCourseById = async (req, res) => {
   const { courseId } = req.params;
   const course = await Course.findById(courseId).populate("instructor");
   if (!course) {
-    throw new NotFoundError("Course not found");
+    // throw new NotFoundError("Course not found");
+    console.log("course not found")
   }
   return res.json(course);
 };
