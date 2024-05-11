@@ -5,3 +5,4 @@ export { default as Course } from "./course.js";
 export { default as Question } from "./question.js";
 export { default as Reply } from "./reply.js";
 export {default as Chapter} from "./chapter.js";
+export {default as Quiz} from "./quiz.js"
