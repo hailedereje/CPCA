@@ -38,6 +38,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUsers } from "@/features/forum/socketSlice";
 import SocketContext from "@/context/SocketContext";
 import { QueryClient, QueryClientProvider } from "react-query";
+import {  EditCourse } from "./components/createCourse/editCourse";
+import { Editor } from "./components/textEditor/test";
+import { CreateCourse } from "./components/createCourse/createCourse";
+import { UpdataCourse } from "./components/createCourse/updateCourse";
 
 export const socket = io("http://localhost:5000", {
   withCredentials: true,
@@ -182,8 +186,20 @@ function App() {
 
     {
       path: "test",
-      element: <RichTextExample/>
-    }
+      element: <Editor/>
+    },
+    {
+      path:'course/create',
+      element: <CreateCourse/>,
+    },
+    {
+      path: 'course/update/:id',
+      element: <UpdataCourse/>
+    },
+    {
+      path:'course/edit/:id',
+      element: <EditCourse/>,
+    },
     
   ]);
   return(

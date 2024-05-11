@@ -26,18 +26,18 @@ const CodeMenu = ({ setcode,code }) => {
 
     return (
         <div className="relative" ref={menuRef}>
-            <button onClick={toggleMenu} className="focus:outline-none bg-[#2B3C42] text-white flex items-center py-2 px-4 rounded" >
+            <button onClick={toggleMenu} className="focus:outline-none flex items-center bg-gray-100 py-2 px-4 rounded" >
                 <span className='text-sm capitalize'>{code.language}</span>
             </button>
 
-            <div className={`absolute left-0 mt-3 z-10 w-36 h-44 overflow-scroll editor bg-[#2B3C42] rounded-sm shadow-lg ${isOpen ? "" : "hidden"}`}>
+            <div className={`absolute left-0 mt-3 z-10 w-36 h-44 overflow-scroll bg-white editor  rounded-sm shadow-lg ${isOpen ? "" : "hidden"}`}>
                 {languages.map((item, idx) => (
                     <button key={idx} onClick={() => {
                         setcode(prev => ({...prev,language:item.name}))
                         toggleMenu()
-                    }} className={`flex items-center gap-2 p-2 capitalize  hover:bg-[#32bc6e] text-white w-full text-left ${code.language === item.name ? "bg-[#32bc6e]": ""}`}>
+                    }} className={`flex items-center gap-2 p-2 capitalize  hover:bg-gray-200 text-white w-full text-left ${code.language === item.name ? "bg-[#32bc6e]": ""}`}>
                         {item.icon}
-                        <span className="text-xs font-medium">{item.name}</span>
+                        <span className="text-xs font-medium text-black">{item.name}</span>
                     </button>
                 ))}
             </div>

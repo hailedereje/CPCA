@@ -22,10 +22,10 @@ function RichTextExample({lesson,chapterId,lessonId}) {
       {(lesson && chapterId && lesson.topics.length ===0) && 
         <div className="group flex justify-between items-end  gap-4">
           <EditLinks idx={0} setImage={setImage} setIndex={setIndex} chapterId={chapterId} lessonId={lessonId}/>
-          <span className="text-xl font-medium capitalize">start adding contents to your lesson</span>
+          <span className="text-xl font-medium uppercase">click here and start adding contents to your <span className="text-red-400">lesson</span></span>
         </div>}
       {lesson.topics && lesson.topics.map((topicItem,idx) => (
-        <div className="group w-full h-full flex gap-3" key={idx}>
+        <div className="group w-full h-full flex items-end  gap-3" key={idx}>
           <div className="invisible group-hover:visible">
             <EditLinks idx={idx} setImage={setImage} setIndex={setIndex} chapterId={chapterId} lessonId={lessonId}/>
           </div>

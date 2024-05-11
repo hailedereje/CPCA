@@ -7,7 +7,7 @@ import 'froala-editor/js/plugins/table.min.js'
 import FroalaEditor from 'react-froala-wysiwyg';
 import { toggleShow, updateTopic } from '../../features/course/createCourse';
 import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DOMPurify from "dompurify"
 
  
@@ -20,7 +20,7 @@ export const TextEditor = ({chapterId,lessonId,topicItem}) => {
   
   const defaultConfig = {
     documentReady: true,
-    heightMax: 200,
+    heightMax: 400,
     widthMax: 200,
     placeholderText: 'Edit Your Content Here!',
     attribution: false,

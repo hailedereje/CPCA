@@ -32,21 +32,20 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-thumb {
-  background-color: #010c0f; /* Dark green thumb */
+  background-color: #17dd91; /* Dark green thumb */
    /* Rounded corners */
 }
 
 body::-webkit-scrollbar-track {
-  background-color: rgb(165, 162, 162);
+  background-color: rgb(234, 240, 243);
 }
 
 .editor::-webkit-scrollbar {
-  width: 4px; /* Thin scrollbar */
+  width: 4px; 
   height: 0px;
-  background-color: #F5F5F5; /* Light gray background */
+  background-color: white; 
 }
 
 .editor::-webkit-scrollbar-thumb {
-  background-color: #29ABCA; /* Dark green thumb */
-  border-radius: 6px; /* Rounded corners */
+  background-color: #636364; 
 }

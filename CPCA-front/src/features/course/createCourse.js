@@ -4,22 +4,27 @@ const ITEM_NAME = 'topic_content';
 
 
 const initialState = {
-    course: {
+    course:{
         id:nanoid(),
-        name:"courseName",
+        name:"computer Programming",
         chapters: []
     },
     activeLesson:{
         lesson: {},
         chapterId: "",
         lessonId: ""
-    }
+    },
+    isCourse:false
 }
 
 export const createCourseSlice = createSlice({
     name: "createCourse",
     initialState,
     reducers: {
+        createCourse: (state,action)=> {
+            const { id,name } = action.payload
+            console.log(name)
+        },
         addChapter: (state, action) => {
             const { name } = action.payload;
             const chapter = { id: nanoid(), name: name, lessons: [] }
@@ -32,25 +37,51 @@ export const createCourseSlice = createSlice({
             state.course.chapters.find(chapter => chapter.id === id).lessons.push(lesson)
         },
         removeLesson: (state, action) => {
-            const { chapterId, lessonId } = action.payload;
+            const { chapterId, lessonId, index } = action.payload;
+            let newActiveLesson = state.activeLesson;
+        
+            const chapter = state.course.chapters.find(chapter => chapter.id === chapterId);
+            if (!chapter) return;
+        
+            const updatedLessons = chapter.lessons.filter((lesson, i) => i !== index);
+        
             const updatedChapters = state.course.chapters.map(chapter => {
                 if (chapter.id === chapterId) {
-                    const updatedLessons = chapter.lessons.filter(lesson => lesson.id !== lessonId);
                     return { ...chapter, lessons: updatedLessons };
                 }
                 return chapter;
             });
-        
+            
             state.course.chapters = updatedChapters;
         
-            if (state.activeLesson.lessonId === lessonId) {
-                state.activeLesson = {
-                    lesson: {},
-                    chapterId: "",
-                    lessonId: ""
-                };
+            if (newActiveLesson.lessonId === lessonId) {
+                let nextLessonIndex = index;
+                if (nextLessonIndex < updatedLessons.length) {
+                    newActiveLesson = {
+                        lesson: updatedLessons[nextLessonIndex],
+                        chapterId: chapterId,
+                        lessonId: updatedLessons[nextLessonIndex].id
+                    };
+                } else if (nextLessonIndex > 0) { 
+                    nextLessonIndex -= 1;
+                    newActiveLesson = {
+                        lesson: updatedLessons[nextLessonIndex],
+                        chapterId: chapterId,
+                        lessonId: updatedLessons[nextLessonIndex].id
+                    };
+                } else { 
+                    newActiveLesson = {
+                        lesson: {},
+                        chapterId: "",
+                        lessonId: ""
+                    };
+                }
             }
+        
+            state.activeLesson = newActiveLesson;
         },
+        
+        
         
         renameChapter: (state, action) => {
             var { name, id } = action.payload
