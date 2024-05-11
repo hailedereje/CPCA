@@ -87,7 +87,6 @@ export const CreateCourse = () => {
                         <p className='text-red-500 text-xs'>{errors.level?.message || ""}</p>
                     </div>
                 </div>
-                <InputList items={tagList}/>
                 <button
                     type="submit"
                     disabled={isLoading}
