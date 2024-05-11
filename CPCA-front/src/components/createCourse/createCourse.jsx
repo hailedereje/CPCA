@@ -1,48 +1,45 @@
-import React, { useState } from 'react';
-import { InputList } from './components/input-list';
+import * as yup from "yup"
+import { useForm } from 'react-hook-form';
+import { yupResolver } from "@hookform/resolvers/yup"
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { useDispatch } from 'react-redux';
+import { createCourse } from '@/features/course/newCourseSlice';
+import { useGetAllCoursesQuery } from "@/api";
+import { InputList } from "./components/input-list";
+
+const courseSchema = yup.object({
+    name: yup.string().trim().min(6, "Use a descriptive name with more than 6 characters").max(20, "Maximum characters reached"),
+    author: yup.string().min(5, 'Author name should be at least 3 characters long').max(20, 'Author name should not exceed 50 characters'),
+    duration: yup.string().min(5, 'Duration should be at least 2 characters long').max(10, 'Duration should not exceed 10 characters'),
+    level: yup.string().required('Level is required')
+})
 
 export const CreateCourse = () => {
-    const [courseData, setCourseData] = useState({
-        title: '',
-        description: '',
-        author: '',
-        duration: '',
-        level: '',
-        prerequisites: '',
-        tags: ''
-    });
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setCourseData(prevData => ({
-            ...prevData,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Handle form submission logic here
-        console.log('Course data:', courseData);
-    };
+    // const {data, isLoading,error } = useGetAllCoursesQuery()
+    // console.log(data)
+    const dispatch = useDispatch();
+    const { register, handleSubmit, formState } = useForm({ resolver: yupResolver(courseSchema) })
+    
+    const onSubmite = async (data) =>{
+        dispatch(createCourse(data))
+    }
+    const { isLoading, errors } = formState
 
     return (
-        <div className="w-full max-w-2xl mx-auto bg-white rounded-lg overflow-hidden shadow-md p-6">
+        <form onSubmit={handleSubmit(onSubmite)} className="w-full h-full max-w-2xl max-h-xl   rounded-lg p-6 mb-20">
             <h2 className="text-4xl font-semibold mb-6">Create a New Course</h2>
-            <InputList/>
-            {false &&<form onSubmit={handleSubmit} className="space-y-4">
-                <div className="w-full flex items-center justify-between gap-3">
+            <div  className="space-y-4 flex flex-col h-full w-full">
+                <div className="flex items-start justify-between gap-3">
                     <div className='basis-1/2'>
-                        <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
+                        <label htmlFor="title" className="block text-sm font-medium text-gray-700">name</label>
                         <input
                             type="text"
-                            name="title"
+                            name="name"
                             id="title"
-                            value={courseData.title}
-                            onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
-                            required
+                            {...register('name')}
+                            className="mt-1 p-2 w-full text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
                         />
+                        <p className='text-red-500 text-xs'>{errors.name?.message || ""}</p>
                     </div>
                     <div className='basis-1/2'>
                         <label htmlFor="author" className="block text-sm font-medium text-gray-700">Author</label>
@@ -50,85 +47,81 @@ export const CreateCourse = () => {
                             type="text"
                             name="author"
                             id="author"
-                            value={courseData.author}
-                            onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
-                            required
+                            {...register("author")}
+                            className="mt-1 p-2 w-full text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
                         />
+                        <p className='text-red-500 text-xs'>{errors.author?.message || ""}</p>
                     </div>
                 </div>
 
-                <div>
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description:</label>
-                    <textarea
-                        name="description"
-                        id="description"
-                        value={courseData.description}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
-                        required
-                    ></textarea>
-                </div>
-                <div className="w-full flex items-center justify-between gap-3">
+                <div className="w-full flex items-start justify-between gap-3">
                     <div className='basis-1/2'>
-                        <label htmlFor="duration" className="block text-sm font-medium text-gray-700">Duration:</label>
-                        <input
-                            type="text"
+                        <label htmlFor="duration" className="block text-sm font-medium text-gray-700">Duration</label>
+                        <select
                             name="duration"
                             id="duration"
-                            value={courseData.duration}
-                            onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
-                            required
-                        />
+                            {...register("duration")}
+                            className="mt-1 p-2 w-full text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
+                        >
+                        <option value="">Select duration</option>
+                            <option value="beginner">1 month</option>
+                            <option value="intermediate">2 month </option>
+                            <option value="advanced">3 month</option>
+                            <option value="advanced">4 month</option>
+                        </select>
+                        <p className='text-red-500 text-xs'>{errors.duration?.message || ""}</p>
                     </div>
                     <div className='basis-1/2'>
-                        <label htmlFor="level" className="block text-sm font-medium text-gray-700">Level:</label>
+                        <label htmlFor="level" className="block text-sm font-medium text-gray-700">Level</label>
                         <select
                             name="level"
                             id="level"
-                            value={courseData.level}
-                            onChange={handleChange}
-                            className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
-                            required
+                            {...register("level")}
+                            className="mt-1 p-2 w-full text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
                         >
                             <option value="">Select Level</option>
                             <option value="beginner">Beginner</option>
                             <option value="intermediate">Intermediate</option>
                             <option value="advanced">Advanced</option>
                         </select>
+                        <p className='text-red-500 text-xs'>{errors.level?.message || ""}</p>
                     </div>
-                </div>
-                <div>
-                    <label htmlFor="prerequisites" className="block text-sm font-medium text-gray-700">Prerequisites:</label>
-                    <input
-                        type="text"
-                        name="prerequisites"
-                        id="prerequisites"
-                        value={courseData.prerequisites}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
-                    />
-                </div>
-                <div className='relative'>
-                    <label htmlFor="tags" className="block text-sm font-medium text-gray-700">Tags:</label>
-                    <input
-                        type="text"
-                        name="tags"
-                        id="tags"
-                        value={courseData.tags}
-                        onChange={handleChange}
-                        className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
-                    />
                 </div>
                 <button
                     type="submit"
-                    className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    disabled={isLoading}
+                    className="w-full max-w-xs py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                    Create Course
+                    {isLoading ? <AiOutlineLoading3Quarters className='animate-spin' /> : <span>Create Course</span>}
                 </button>
-            </form>}
-        </div>
+            </div>
+        </form>
     );
 };
 
+
+const tagList = [
+    { id: "tag1", name: "Programming" },
+    { id: "tag2", name: "Web Development" },
+    { id: "tag3", name: "Data Science" },
+    { id: "tag4", name: "Machine Learning" },
+    { id: "tag5", name: "Cybersecurity" },
+    { id: "tag6", name: "Database Management" },
+    { id: "tag7", name: "Software Engineering" },
+    { id: "tag8", name: "Mobile Development" },
+    { id: "tag9", name: "Artificial Intelligence" },
+    { id: "tag10", name: "Cloud Computing" }
+  ];
+
+  const courseList = [
+    { id: "course1", name: "Advanced Programming Course" },
+    { id: "course2", name: "Introductory Web Development Course" },
+    { id: "course3", name: "Intermediate Data Science Course" },
+    { id: "course4", name: "Fundamental Machine Learning Course" },
+    { id: "course5", name: "Practical Cybersecurity Course" },
+    { id: "course6", name: "Theoretical Database Management Course" },
+    { id: "course7", name: "Applied Programming Course" },
+    { id: "course8", name: "Advanced Web Development Course" },
+    { id: "course9", name: "Introductory Data Science Course" },
+    { id: "course10", name: "Intermediate Machine Learning Course" }
+];

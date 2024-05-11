@@ -23,10 +23,6 @@ export const createCourseSlice = createSlice({
     name: "createCourse",
     initialState,
     reducers: {
-        createCourse: (state,action)=> {
-            const { id,name } = action.payload
-            console.log(name)
-        },
         addChapter: (state, action) => {
             const { name } = action.payload;
             const chapter = { id: nanoid(), name: name, lessons: [] }
@@ -81,10 +77,7 @@ export const createCourseSlice = createSlice({
             }
         
             state.activeLesson = newActiveLesson;
-        },
-        
-        
-        
+        }, 
         renameChapter: (state, action) => {
             var { name, id } = action.payload
             state.course.chapters.find(chapter => chapter.id === id).name = name
