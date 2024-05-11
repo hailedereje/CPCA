@@ -177,6 +177,7 @@ function App() {
     {
       path: "/dashboard",
       element: <Dashboard />,
+      errorElement: <ErrorPage />,
       children: [...getDashboardRoutes()],
     },
     {

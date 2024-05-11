@@ -1,15 +1,21 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
+// import NavbarSection from "react-daisyui/dist/Navbar/NavbarSection";
 
 const ITEM_NAME = 'topic_content';
 
 
 const initialState = {
-    course:{},
+    course:{
+        id: nanoid(),
+        name: "New coures",
+        chapters: []
+    },
     activeLesson:{
         lesson: {},
         chapterId: "",
         lessonId: ""
     },
+
     isCourse:false
 }
 
