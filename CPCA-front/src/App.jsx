@@ -38,14 +38,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUsers } from "@/features/forum/socketSlice";
 import SocketContext from "@/context/SocketContext";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { CreateCourse } from "./components/createCourse/createCourse";
-import { Editor } from "./components/textEditor/test";
 
-// export const socket = io("http://localhost:5000", {
-//   withCredentials: true,
-//   secure: true,
-// });
-export const socket = () =>{}
+export const socket = io("http://localhost:5000", {
+  withCredentials: true,
+  secure: true,
+});
 
 const queryClient = new QueryClient();
 
@@ -53,25 +50,25 @@ function App() {
   const user = useSelector((state) => state.userState.user);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   socket.connect();
-  //   socket.on("connect", () => {
-  //     console.log("socket connected", socket.id);
-  //   });
-  //   socket.auth = user;
-  //   socket.on("user-connected", (users) => {
-  //     dispatch(addUsers(users));
-  //     console.log("users", users);
-  //   });
-  //   socket.on("user-disconnected", (users) => {
-  //     console.log("users", users);
-  //     dispatch(addUsers(users));
-  //   });
+  useEffect(() => {
+    socket.connect();
+    socket.on("connect", () => {
+      console.log("socket connected", socket.id);
+    });
+    socket.auth = user;
+    socket.on("user-connected", (users) => {
+      dispatch(addUsers(users));
+      console.log("users", users);
+    });
+    socket.on("user-disconnected", (users) => {
+      console.log("users", users);
+      dispatch(addUsers(users));
+    });
 
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // },[dispatch, user]);
+    return () => {
+      socket.disconnect();
+    };
+  },[dispatch, user]);
   const getDashboardRoutes = () => {
     if (!user) return [];
 
@@ -183,17 +180,9 @@ function App() {
       element: <CodeEditor />,
     },
 
-    // {
-    //   path: "test",
-    //   element: <RichTextExample/>
-    // },
     {
       path: "test",
-      element: <Editor/>
-    },
-    {
-      path:'create',
-      element: <CreateCourse/>
+      element: <RichTextExample/>
     }
     
   ]);
