@@ -1,10 +1,10 @@
-import mongoose from 'mongoose'; 
-import Lesson from './lesson.js';
-const {Schema}  = mongoose; 
+import mongoose, { Schema } from 'mongoose'; 
+
 
 const chapterSchema = new Schema({
     title: {type: String, required: true}, 
-    lessons: [Lesson.schema]
+    lessons: [{ type: Schema.Types.ObjectId, ref: "Lesson" }],
+    quiz: {type: Schema.Types.ObjectId, ref: "Quiz" }
 }); 
 
 const Chapter = mongoose.model('Chapter', chapterSchema);

@@ -4,7 +4,7 @@ const courseSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   objectives: [{ type: String }], // Array of objectives
-  lessons: [{ type: Schema.Types.ObjectId, ref: "Lesson" }], // Array of lesson references
+  chapters: [{ type: Schema.Types.ObjectId, ref: "Chapter" }], // Array of chapters references
   instructor: { type: Schema.Types.ObjectId, ref: "User", required: true },
   // requests: [{ type: Schema.Types.ObjectId, ref: 'Request' }],
 });
