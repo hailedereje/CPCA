@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { AiOutlinePlus } from 'react-icons/ai';
 import { useDispatch, useSelector } from "react-redux";
 import { postQuizObj, quizSuccess } from "../../Redux/action.js";
@@ -59,7 +59,7 @@ export const QuizForm = () => {
   const handleCancel = () => {}
 
   return (
-    <div classname="">
+    <div className="">
       <button
       className="flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded mt-4"
       onClick={() => setPopupOpen(!isPopupOpen)}
@@ -142,7 +142,6 @@ export const QuizForm = () => {
                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   name="isCorrect"
                   id=""
-                  v-model="allowMultiple"
                   value={x.boolean}
                   onChange={(e) => {
                     handleType(x.id)(e);
