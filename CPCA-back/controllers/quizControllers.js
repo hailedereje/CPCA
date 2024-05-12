@@ -80,3 +80,24 @@ export const userResult = async (req, res) => {
       res.status(400).json(err);
     }
   }
+
+  export const userResult = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { quizId, quizResult } = req.body;
+  
+      const data = await User.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            [`quizAttempted.${quizId}.attempts`]: quizResult,
+          },
+        },
+        { new: true }
+      );
+  
+      res.status(200).json(data);
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  };
