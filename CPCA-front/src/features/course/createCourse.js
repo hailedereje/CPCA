@@ -1,4 +1,5 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
+// import NavbarSection from "react-daisyui/dist/Navbar/NavbarSection";
 
 const ITEM_NAME = 'topic_content';
 
@@ -7,27 +8,22 @@ const initialState = {
     course:{
         id:nanoid(),
         name:"computer Programming",
-        chapters: []
+        chapters: [],
     },
     activeLesson:{
         lesson: {},
         chapterId: "",
         lessonId: ""
     },
-    isCourse:false
 }
 
 export const createCourseSlice = createSlice({
     name: "createCourse",
     initialState,
     reducers: {
-        createCourse: (state,action)=> {
-            const { id,name } = action.payload
-            console.log(name)
-        },
         addChapter: (state, action) => {
             const { name } = action.payload;
-            const chapter = { id: nanoid(), name: name, lessons: [] }
+            const chapter = { id: nanoid(), name: name, lessons: [],test:{} }
             state.course.chapters.push(chapter)
 
         },
@@ -79,10 +75,7 @@ export const createCourseSlice = createSlice({
             }
         
             state.activeLesson = newActiveLesson;
-        },
-        
-        
-        
+        }, 
         renameChapter: (state, action) => {
             var { name, id } = action.payload
             state.course.chapters.find(chapter => chapter.id === id).name = name
@@ -103,7 +96,12 @@ export const createCourseSlice = createSlice({
                 chapter.name = content;
             }
         },
-
+        addTest: (state,action) => {
+            const { name,id } = action.payload
+            const test = {id:nanoid(),chapterId:id,name,questions:[]}
+            // state.test = {...test}
+            state.course.chapters.find(chapter => chapter.id === id).test = {...test}
+        },
         addTopic: (state, action) => {
             const {chapterId,lessonId,idx,topic} = action.payload;
             const topics = state.course.chapters.find(chapter => chapter.id === chapterId)
@@ -156,5 +154,5 @@ export const createCourseSlice = createSlice({
 export const { addChapter, removeChapter, updateChapter, 
                 renameChapter, renameLesson, addLesson ,
                 addTopic,removeTopic,toggleShow,updateTopic
-                ,setActiveLesson, removeLesson} = createCourseSlice.actions;
+                ,setActiveLesson, removeLesson,addTest} = createCourseSlice.actions;
 export default createCourseSlice.reducer;

@@ -13,7 +13,7 @@ function ErrorPage() {
             Page Not Found
           </p>
           <p class="text-lg md:text-xl lg:text-2xl text-gray-500 my-12">
-            Sorry, the page you are looking for could not be found.
+            Sorry, the page you are looking for could not be found OR You are not authorized
           </p>
           <a
             href="#"

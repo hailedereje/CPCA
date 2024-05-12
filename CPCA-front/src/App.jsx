@@ -42,6 +42,8 @@ import {  EditCourse } from "./components/createCourse/editCourse";
 import { Editor } from "./components/textEditor/test";
 import { CreateCourse } from "./components/createCourse/createCourse";
 import { UpdataCourse } from "./components/createCourse/updateCourse";
+import { CourseLayout } from "./components/createCourse/layout";
+import { QuizBoard } from "./components/createCourse/QuizBoard";
 
 export const socket = io("http://localhost:5000", {
   withCredentials: true,
@@ -177,6 +179,7 @@ function App() {
     {
       path: "/dashboard",
       element: <Dashboard />,
+      errorElement: <ErrorPage />,
       children: [...getDashboardRoutes()],
     },
     {
@@ -189,7 +192,7 @@ function App() {
       element: <Editor/>
     },
     {
-      path:'course/create',
+      path:'course',
       element: <CreateCourse/>,
     },
     {
@@ -198,7 +201,11 @@ function App() {
     },
     {
       path:'course/edit/:id',
-      element: <EditCourse/>,
+      element: <CourseLayout/>,
+      children: [
+       { index: true, element: <RichTextExample/>},
+       { path: "add-test",element:<QuizBoard/>}
+      ]
     },
     
   ]);
