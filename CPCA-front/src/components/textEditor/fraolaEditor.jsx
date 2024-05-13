@@ -7,7 +7,7 @@ import 'froala-editor/js/plugins/table.min.js'
 import FroalaEditor from 'react-froala-wysiwyg';
 import { toggleShow, updateTopic } from '../../features/course/createCourse';
 import { useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DOMPurify from "dompurify"
 
  
@@ -18,10 +18,25 @@ export const TextEditor = ({chapterId,lessonId,topicItem}) => {
   const [value,setValue] = useState(content);
   const dispatch = useDispatch();
   
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      setWindowHeight(window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []); 
+
   const defaultConfig = {
     documentReady: true,
-    heightMax: 400,
-    widthMax: 200,
+    heightMax: windowHeight ,
+    widthMax: windowWidth,
     placeholderText: 'Edit Your Content Here!',
     attribution: false,
     wordCounterCount: false,
@@ -35,49 +50,38 @@ export const TextEditor = ({chapterId,lessonId,topicItem}) => {
         imageUploadURL: "https://api.cloudinary.com/v1_1/dygzy1vri/image/upload",
         events: {
             'image.beforeUpload': function (files) {
-                console.log('Before Upload:', files);
+                console.log('Before Upload:');
             },
             'image.uploaded': function (response) {
                     console.log(this)
                     const responseData = JSON.parse(response);
                     const secureUrl = responseData.secure_url;
                     const image = `<img src=${secureUrl} alt='image style={{object-fit: cover}}'>`
-                    setValue(prev => `${prev + image}`)
-                    
-                    // this.image.insert(secureUrl,null,null,this.image.get(0)); 
-                
+                    setValue(prev => `${prev + image}`)                
             },
             'image.inserted': function ($img, response) {
-                console.log($img)
-                console.log('Inserted:', $img, response);
+    
             },
             'image.replaced': function ($newImg, $oldImg) {
-                console.log('Replaced:', $newImg, $oldImg);
+               
             },
             'image.error': function (error, response) {
                 // Error occurred during image upload
-                console.error('Image Error:', error, response);
+                // console.error('Image Error:', error, response);
             }
         },
     
-    // toolbarButtons: [
-    //   'insertImage','fullscreen', 'undo', 'redo', 'bold', 'italic', 'underline', 'backgroundColor', 'textColor', 'fontFamily', 'fontSize', 'align', 'formatBlock',
-    //   'formatUL', 'formatOL', 'insertLink', 'indent', 'clearFormatting'
-    // ],
     toolbarButtons: {
         'moreMisc': {
-            // Buttons for miscellaneous actions
             buttons: ['fullscreen', 'undo', 'redo', 'print', 'spellChecker', 'codeView', 'html'],
           },
         'moreText': {
-          // Buttons related to text formatting
           buttons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting'],
         },
         'moreParagraph': {
           buttons: ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'],
         },
         'moreRich': {
-          // Buttons related to rich content elements
           buttons: ['insertImage', 'insertLink', 'insertVideo', 'insertTable', 'insertHR', 'embedly', 'specialCharacters'],
         },
         
@@ -93,25 +97,27 @@ export const TextEditor = ({chapterId,lessonId,topicItem}) => {
       <>
         {  <div className={`fixed z-20 flex items-center justify-center top-0 left-0 w-screen h-screen  transform transition-all duration-500 ${show ? 'scale-100 ' : 'scale-40 hidden'}`}>
             <div onClick={() => dispatch(toggleShow({chapterId,lessonId,topicId:topicItem.id}))} className="absolute top-0 left-0 w-full h-full bg-black/90" />
-            <div className="flex z-10 flex-col gap-4  h-fit bg-white rounded-xl editor">
+            <div className="flex z-10 flex-col items-start gap-4 h-full  bg-white editor relative ">
                 <FroalaEditor tag='textarea'
                     model={value}
                     config={defaultConfig}
                     onModelChange={handleModel}
                 />
                  
-                <div className="flex z-10 items-center justify-center gap-6">
+                <div className="absolute bottom-3 right-0 flex z-10 items-center justify-center gap-6">
                     <button onClick={() => {
                       const content = DOMPurify.sanitize(value)
                       dispatch(updateTopic({chapterId,lessonId,topicId:topicItem.id,content}))
                       dispatch(toggleShow({chapterId,lessonId,topicId:topicItem.id}));
-                    }} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-1 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                    }} className="bg-blue-500 hover:bg-blue-700 text-white text-sm py-1 px-2 rounded mr-2"
+                    >
                         save
                     </button>
                     <button onClick={() => {
                         dispatch(toggleShow({chapterId,lessonId,topicId:topicItem.id}))
                         setValue(content)
-                        }}  className="text-red-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-2 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2   dark:border-gray-600 dark:hover:bg-white-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                        }}  className="border hover:border-red-400 text-red-500 text-sm py-1 px-3 rounded mr-2"
+                        >
                         cancel
                     </button>
                 </div>
