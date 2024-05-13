@@ -64,18 +64,22 @@ export const deleteQuiz = async (req, res) => {
 // user result
 export const userResult = async (req, res) => {
     try {
-      const data = await User.findByIdAndUpdate(
-        req.params.id,
-        {
-          $addToSet: {
-            quizAttempted: {
-              $each: [{ quizId: req.body.quizId, quizResult: req.body.quizResult }],
-            },
-          },
-        },
-        { new: true }
+      const user = await User.findById(req.params.id);
+      const quizIndex = user.quizAttempted.findIndex(
+        (quiz) => quiz.quizId.toString() === req.body.quizId
       );
-      res.status(200).json(data);
+    
+      if (quizIndex !== -1) {
+        user.quizAttempted[quizIndex].results.push({ attempt: req.body.quizResult });
+      } else {
+        user.quizAttempted.push({
+          quizId: req.body.quizId,
+          results: [{ result: req.body.quizResult }],
+        });
+      }
+    
+      await user.save();
+      res.status(200).json(user);
     } catch (err) {
       res.status(400).json(err);
     }

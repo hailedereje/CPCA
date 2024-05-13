@@ -4,7 +4,6 @@ import User from "../models/user.js";
 
 const connectToDB = async () => {
   try {
-    console.log(dbURI)
     await mongoose.connect(dbURI)
     console.log("DB connected succesffully...");
   } catch (error) {
