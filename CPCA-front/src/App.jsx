@@ -5,6 +5,7 @@ import {
   ErrorPage,
   ForumLayout,
   HomeLayout,
+  Landing,
   Lessons,
   Login,
   Register,
@@ -158,7 +159,7 @@ function App() {
       element: <HomeLayout />,
       errorElement: <ErrorPage />,
       children: [
-        { index: true, element: <HeroSection /> },
+        { index: true, element: <Landing /> },
 
         {
           path: "register",

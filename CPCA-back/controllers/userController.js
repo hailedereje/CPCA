@@ -40,7 +40,7 @@ const userLogin = async (req, res) => {
   const user = await User.findOne({ email });
   if (user && (await user.matchPasswords(password))) {
     const jwt = await GenerateJWT(res, { _id: user._id });
-    console.log(user);
+    console.log(user.role);
     return res.json({ userId:user._id, user, jwt });
   }
   throw new NotFoundError("Invalid email or password");

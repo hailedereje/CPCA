@@ -1,84 +1,61 @@
 import { BadRequestError, NotFoundError } from "../errors/index.js";
 import { Progress } from "../models/index.js";
 import Course from "../models/course.js";
-import { CreateCourseValidator } from "../validation/createCourseValidation.js";
-import * as CourseService from "../services/courseService.js"
+import courseSchema from "../validation/courseValidation.js";
 
 const createCourse = async (req, res) => {
-  // const { title, description, objectives, templateImg } = req.body;
-  await CreateCourseValidator.validate(req.body).then( async() => {
+  const courseData = {
+    title: "Introduction to JavaScript",
+    description: "Learn the basics of JavaScript",
+    author: "John Doe",
+    level: "Beginner",
+    duration: "6 weeks",
+    templateImg: "https://example.com/template.jpg",
+    instructor: "betsegawlemma@gmail.com",
+  };
 
-  })
-
-  const newCourse = await Course.create({
-    title,
-    description,
-    objectives,
-    templateImg, // Assuming the template image is provided
-    instructor: req.user._id, // Assuming the instructor is the logged-in user
-  });
-  if (newCourse) {
-    return res.status(201).json(newCourse);
+  const { error } = courseSchema.validate(courseData);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+    console.log(error);
+    // throw new BadRequestError(error);
   }
-  throw new BadRequestError("Invalid course data");
+
+  const course = new Course(courseData);
+  await course.save();
+  console.log("Course saved:", course);
 };
 
 const getAllCourses = async (req, res) => {
-  // const {page, name,level,tag } = req.query;
-  console.log(req.query)
-   getAllCourses().then(courses => {
-    return res.status(200).send({courses})
-  }).catch(err =>  {
-    res.status(500).send({message: "something went wrong",title:"internal server error"})
-    console.log(err)
-  })
-}
+  const courses = await Course.find();
+  if (courses) {
+    return res.send(courses);
+  }
+  throw new NotFoundError("Courses not found");
+};
 
 const getCourseById = async (req, res) => {
-  const { courseId } = req.params;
-  const course = await Course.findById(courseId).populate("instructor");
-  if (!course) {
-    // throw new NotFoundError("Course not found");
-    console.log("course not found")
-  }
-  return res.json(course);
-};
-
-const enrollCourse = async (req, res) => {
-  const { courseId } = req.params;
-  const course = await Course.findById(courseId);
-  if (!course) {
-    throw new NotFoundError("Course Not found");
-  }
-  const progress = new Progress({
-    user: req.user._id, // Assuming the user is the logged-in user
-    course: courseId,
-    currentLesson: null, // Initially, no lesson is set as current
-    completedLessons: [], // Initially, no lessons are completed
-    currentPosition: 0, // Initial position
-    lastAccessedAt: new Date(), // Record the time of enrollment
-  });
-
-  if (progress) {
-    await progress.save();
-    return res.status(201).json(progress);
-  }
-
-  throw new BadRequestError("Enrollment failed");
-};
-
-const approveEnrollment = async (req, res) => {
-  res.send("approve enrollement");
+  const course = await Course.findById(req.params.id);
+  if (!course) return NotFoundError("Course not found");
+  res.send(course);
 };
 
 const updateCourse = async (req, res) => {
-  res.send("update course");
+  const { error } = courseSchema.validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const course = await Course.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
+  if (!course) return NotFoundError("Course not found");
+  res.send(course);
 };
 
 const deleteCourse = async (req, res) => {
-  res.send("delete course");
+  const course = await Course.findByIdAndRemove(req.params.id);
+  if (!course) return res.status(404).send("Course not found");
+  res.send(course);
 };
-
 
 export {
   createCourse,

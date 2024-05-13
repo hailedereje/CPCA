@@ -15,7 +15,7 @@ const initialState = {
         chapterId: "",
         lessonId: ""
     },
-
+    
     isCourse:false
 }
 
