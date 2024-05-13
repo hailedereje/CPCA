@@ -10,7 +10,7 @@ const CourseSchema = new Schema(
       unique: true,
     },
 
-    description: { type: String, required: true },
+    description: { type: String,},
     chapters: { type: [Schema.Types.ObjectId], ref: "Chapter" },
 
     author: {
@@ -22,12 +22,12 @@ const CourseSchema = new Schema(
 
     level: {
       type: String,
-      enum: ["Beginner", "Intermediate", "Advanced"],
+      enum: ["BEGINER", "INTERMEDIATE", "ADVANCED"],
       required: [true, "Level is required"],
     },
 
     duration: {
-      type: String,
+      type: Number,
       required: [true, "Duration is required"],
       minlength: [5, "Duration must be at least 5 characters long"],
       maxlength: [20, "Duration must be at most 20 characters long"],
@@ -35,7 +35,7 @@ const CourseSchema = new Schema(
 
     templateImg: {
       type: String,
-      required: [true, "Enter a template Image"],
+      // required: [true, "Enter a template Image"],
     },
 
     objective: { type: String },

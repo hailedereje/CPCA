@@ -4,26 +4,19 @@ import Course from "../models/course.js";
 import courseSchema from "../validation/courseValidation.js";
 
 const createCourse = async (req, res) => {
-  const courseData = {
-    title: "Introduction to JavaScript",
-    description: "Learn the basics of JavaScript",
-    author: "John Doe",
-    level: "Beginner",
-    duration: "6 weeks",
-    templateImg: "https://example.com/template.jpg",
-    instructor: "betsegawlemma@gmail.com",
-  };
-
-  const { error } = courseSchema.validate(courseData);
+  // const {name,author,duration, level } = req.body
+  console.log(req.body)
+  const { error } = courseSchema.validate(req.body);
   if (error) {
-    return res.status(400).send(error.details[0].message);
+    return res.status(400).send({msg:error.details[0].message});
     console.log(error);
     // throw new BadRequestError(error);
   }
 
-  const course = new Course(courseData);
+  const course = new Course(req.body);
   await course.save();
-  console.log("Course saved:", course);
+  return res.status(200).send(course)
+  // console.log("Course saved:", course);
 };
 
 const getAllCourses = async (req, res) => {
@@ -57,6 +50,8 @@ const deleteCourse = async (req, res) => {
   res.send(course);
 };
 
+const enrollCourse = async() => {}
+const approveEnrollment =  async() => {}
 export {
   createCourse,
   getAllCourses,
