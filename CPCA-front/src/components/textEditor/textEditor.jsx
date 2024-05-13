@@ -27,9 +27,9 @@ function RichTextExample() {
           <p className="text-lg text-gray-400">Add Lessons after creating a chapter. Click on a lesson to view and edit its content.</p>
         </div>
       }
-      <div className="flex flex-col items-center w-full py-10 max-w-[1024px] " hidden={!noContent}>
+      <div className="flex flex-col w-full py-10 max-w-[1024px] " hidden={!noContent}>
         {(lesson && chapterId && lesson.topics.length === 0) &&
-          <div className="group flex justify-between items-end  gap-4">
+          <div className="group flex items-end  gap-4">
             <EditLinks idx={0} setImage={setImage} setIndex={setIndex} chapterId={chapterId} lessonId={lessonId} />
             <span className="text-xl font-medium uppercase">click here and start adding contents to your <span className="text-red-400">lesson</span></span>
           </div>}
@@ -63,30 +63,7 @@ function RichTextExample() {
                 <TextEditor topicItem={topicItem} chapterId={chapterId} lessonId={lessonId} />
               </>
             }
-            {
-              topicItem.name === 'image' &&
-              <>
-                <div className="w-full group flex flex-col-reverse items-center rounded-lg relative">
-                  <div className="absolute bottom-0 right-0 flex items-center justify-end gap-5 p-3 invisible group-hover:visible">
-                    <button onClick={() => dispatch(toggleShow({ chapterId, LessonId, topicId: topicItem.id }))} className="">
-                      <svg className="w-6 text-blue-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m3.1 5.07c.14 0 .28.05.4.16l1.27 1.27c.23.22.23.57 0 .78l-1 1l-2.05-2.05l1-1c.1-.11.24-.16.38-.16m-1.97 1.74l2.06 2.06l-6.06 6.06H7.07v-2.06z" />
-                      </svg>
-                    </button>
-                    <button onClick={() => dispatch(removeTopic(topicItem.id))} className="">
-                      <svg className="w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" />
-                      </svg>
-                    </button>
-                  </div>
-                  <div className="p-3 w-1/2">
-                    <img src={topicItem.content} className="w-fit" alt="" />
-                  </div>
-                </div>
-
-              </>
-            }
-            <UploadImage idx={index} image={image} setImage={setImage} />
+            
             {topicItem.name === 'code' &&
               <>
                 <CodeContentEditor topicItem={topicItem} chapterId={chapterId} lessonId={lessonId} />

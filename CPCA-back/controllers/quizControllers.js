@@ -1,4 +1,4 @@
-import { Quiz, User } from '../models';
+import { Quiz, User } from '../models/index.js';
 
 // create quiz
 export const createQuiz = async (req, res) => {

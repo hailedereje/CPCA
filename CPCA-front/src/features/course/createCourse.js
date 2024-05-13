@@ -1,29 +1,20 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
-// import NavbarSection from "react-daisyui/dist/Navbar/NavbarSection";
-
-const ITEM_NAME = 'topic_content';
-
 
 const initialState = {
-    course:{
-        id:nanoid(),
-        name:"computer Programming",
-        chapters: [],
-    },
-    activeLesson:{
-        lesson: {},
-        chapterId: "",
-        lessonId: ""
-    },
+    course:{},
+    activeLesson:{},
 }
 
 export const createCourseSlice = createSlice({
     name: "createCourse",
     initialState,
     reducers: {
+        createCourse: (state,action) => {
+            state.course = action.payload
+        },
         addChapter: (state, action) => {
             const { name } = action.payload;
-            const chapter = { id: nanoid(), name: name, lessons: [],test:{} }
+            const chapter = { id: nanoid(), name: name, lessons: [],quiz:{} }
             state.course.chapters.push(chapter)
 
         },
@@ -79,14 +70,19 @@ export const createCourseSlice = createSlice({
         renameChapter: (state, action) => {
             var { name, id } = action.payload
             state.course.chapters.find(chapter => chapter.id === id).name = name
+            if (state.activeLesson.chapterId === id) {
+                state.activeLesson.chapterName = name
+            }
         },
         renameLesson: (state, action) => {
             var { name, id, lessonId } = action.payload
             state.course.chapters.find(chapter => chapter.id === id).lessons.find(lesson => lesson.id === lessonId).name = name
+            if(state.activeLesson.lessonId === lessonId) {
+                state.activeLesson.lesson.name = name
+            }
         },
         removeChapter: (state, action) => {
             const { chapterId } = action.payload
-            console.log(chapterId)
             state.course.chapters = state.course.chapters.filter(chapter => chapter.id !== chapterId);
         },
         updateChapter: (state, action) => {
@@ -96,11 +92,16 @@ export const createCourseSlice = createSlice({
                 chapter.name = content;
             }
         },
-        addTest: (state,action) => {
+        addQuiz: (state,action) => {
             const { name,id } = action.payload
-            const test = {id:nanoid(),chapterId:id,name,questions:[]}
-            // state.test = {...test}
-            state.course.chapters.find(chapter => chapter.id === id).test = {...test}
+            const quiz = { 
+                id:nanoid(),
+                chapterId:id,
+                name,duration:0,
+                instruction:"",
+                questions:[]
+            }
+            state.course.chapters.find(chapter => chapter.id === id).quiz = {...quiz}
         },
         addTopic: (state, action) => {
             const {chapterId,lessonId,idx,topic} = action.payload;
@@ -135,14 +136,13 @@ export const createCourseSlice = createSlice({
         },
         setActiveLesson: (state,action) => {
             const { chapterId,lessonId } = action.payload;
-            const lesson = state.course.chapters.find(chapter => chapter.id === chapterId).lessons
-                .find(lesson => lesson.id === lessonId)
-            state.activeLesson = {lesson,chapterId,lessonId}
+            const chapter = state.course.chapters.find(chapter => chapter.id === chapterId)
+            const lesson = chapter.lessons.find(lesson => lesson.id === lessonId)
+            state.activeLesson = {chapterName:chapter.name,lesson,chapterId,lessonId}
         },
         toggleShow: (state, action) => { 
             const { chapterId,lessonId,topicId } = action.payload;
             const topic = state.activeLesson.lesson.topics.find(topic => topic.id === topicId)
-    
             if(topic) {
                 topic.show = !topic.show
             }
@@ -154,5 +154,5 @@ export const createCourseSlice = createSlice({
 export const { addChapter, removeChapter, updateChapter, 
                 renameChapter, renameLesson, addLesson ,
                 addTopic,removeTopic,toggleShow,updateTopic
-                ,setActiveLesson, removeLesson,addTest} = createCourseSlice.actions;
+                ,setActiveLesson, removeLesson,addQuiz } = createCourseSlice.actions;
 export default createCourseSlice.reducer;

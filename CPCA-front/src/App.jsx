@@ -45,36 +45,37 @@ import { UpdataCourse } from "./components/createCourse/updateCourse";
 import { CourseLayout } from "./components/createCourse/layout";
 import { QuizBoard } from "./components/createCourse/QuizBoard";
 
-export const socket = io("http://localhost:5000", {
-  withCredentials: true,
-  secure: true,
-});
-
+// export const socket = io("http://localhost:5000", {
+//   withCredentials: true,
+//   secure: true,
+// });
+export const socket = ""
 const queryClient = new QueryClient();
 
 function App() {
   const user = useSelector((state) => state.userState.user);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    socket.connect();
-    socket.on("connect", () => {
-      console.log("socket connected", socket.id);
-    });
-    socket.auth = user;
-    socket.on("user-connected", (users) => {
-      dispatch(addUsers(users));
-      console.log("users", users);
-    });
-    socket.on("user-disconnected", (users) => {
-      console.log("users", users);
-      dispatch(addUsers(users));
-    });
+  // useEffect(() => {
+  //   socket.connect();
+  //   socket.on("connect", () => {
+  //     console.log("socket connected", socket.id);
+  //   });
+  //   socket.auth = user;
+  //   socket.on("user-connected", (users) => {
+  //     dispatch(addUsers(users));
+  //     console.log("users", users);
+  //   });
+  //   socket.on("user-disconnected", (users) => {
+  //     console.log("users", users);
+  //     dispatch(addUsers(users));
+  //   });
 
-    return () => {
-      socket.disconnect();
-    };
-  },[dispatch, user]);
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // },[dispatch, user]);
+
   const getDashboardRoutes = () => {
     if (!user) return [];
 
@@ -91,7 +92,6 @@ function App() {
         { path: "instructors", element: <InstructorsList /> },
       ];
     } else if (user.isInstructor) {
-      // Define routes for instructor dashboard
       dashboardRoutes = [
         { index: true, element: <Activities /> },
         {

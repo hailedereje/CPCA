@@ -45,7 +45,6 @@ export const EditCourseSidebar = ({ course, activeLesson }) => {
         { name: "Add lesson", icon: <IoMdAddCircleOutline />, action: (idx) => setShow({ ...show, addLesson: true, index: idx.chapterId }) },
         {
             name: "create test", icon: <RiQuestionAnswerLine />, action: (id) => {
-                // navigate("/course/edit/2/add-quiz")
                 setShow({ ...show, addTest: true, index: id.chapterId })
             }
         },
@@ -58,26 +57,30 @@ export const EditCourseSidebar = ({ course, activeLesson }) => {
         { name: "Delete", icon: <RiDeleteBin6Line className="text-red-400" />, action: (id) => dispatch(removeLesson({ ...id })) }
     ]
     return (
-        <div className="w-[28%] max-w-[400px] h-full max-h-[1024px]  overflow-scroll mt-16 pb-16 fixed editor  top-0 left-0 flex flex-col gap-2 bg-[#2B3C42] text-white">
+        <div className="xl:w-[28%] sm:w-[60%] md:w-[40%] max-w-[400px] h-full max-h-[1024px]  overflow-scroll mt-16 pb-16 fixed editor  top-0 left-0 flex flex-col gap-2 bg-gray-50 text-black">
             <div className="relative">
                 {chapters.map((chapter, idx) => (
                     <div key={chapter.id} className="">
-                        <div className="flex flex-col gap-2 border-b border-gray-600 pb-2">
-                            <div className={`flex w-full justify-between items-center p-3 gap-3 group ${chapter.id === chapterId ? "bg-[#304057]" : ""} ${!(show.renameChapter && show.index === chapter.id) ? "" : "hidden"}`}>
+                        <div className="flex flex-col gap-2 border-b border-gray-200 pb-2">
+                            <div className={`flex w-full justify-between items-center p-3 gap-3 group ${chapter.id === chapterId ? "bg-slate-100" : ""} ${!(show.renameChapter && show.index === chapter.id) ? "" : "hidden"}`}>
                                 <button className="flex w-3/4 gap-4 p-1">
                                     <span>
-                                        <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-                                            <path fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M12 8h15m-15 8h9m-9 8h15M7 24a1 1 0 1 1-2 0a1 1 0 0 1 2 0Zm0-8a1 1 0 1 1-2 0a1 1 0 0 1 2 0Zm0-8a1 1 0 1 1-2 0a1 1 0 0 1 2 0Z" />
+                                        <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M19 20H5V4h2v3h10V4h2m-7-2a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m7 0h-4.18C14.4.84 13.3 0 12 0S9.6.84 9.18 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2" />
                                         </svg>
                                     </span>
-                                    <span className="text-md text-gray-200 line-clamp-2 capitalize text-left">{chapter.name}</span>
+                                    <span className="text-md text-gray-700 font-medium line-clamp-2 capitalize text-left">{chapter.name}</span>
                                 </button>
                                 <Menu menuItems={chapterMenuItems} id={{ chapterId: chapter.id, lessonId: '', index: idx }} />
                             </div>
 
                             <div className={`${show.renameChapter && show.index === chapter.id ? "" : "hidden"}`}>
                                 <Input close={() => setShow({ ...show, renameChapter: false, index: '' })}
-                                    id={show.index} icon={<AiOutlineBars size={20} />}
+                                    id={show.index} icon={<span>
+                                        <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M19 20H5V4h2v3h10V4h2m-7-2a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m7 0h-4.18C14.4.84 13.3 0 12 0S9.6.84 9.18 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2" />
+                                        </svg>
+                                    </span>}
                                     title={chapter.name} type={ActionTypes.RENAME_CHAPTER} lessonId={''} />
                             </div>
 
@@ -85,29 +88,30 @@ export const EditCourseSidebar = ({ course, activeLesson }) => {
                                 {
                                     chapter.lessons.map(
                                         (lesson, idx) => (
-                                            <div key={idx} className={`w-full flex items-start justify-between p-2 rounded-sm ${lesson.id === lessonId && route !== "add-test" ? "bg-[#65B789]" : ""} ${!(show.renameLesson && show.index === lesson.id) ? "" : "hidden"}`}>
-                                                <button
-                                                    onClick={() => {
-                                                        dispatch(setActiveLesson({ chapterId: chapter.id, lessonId: lesson.id }))
-                                                        navigate("/course/edit/2")
-                                                    }}
-                                                    className="flex gap-3 w-3/4">
-                                                    <span>
-                                                        <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                            <path fill="currentColor" d="M3 6a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3zm3-2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
-                                                        </svg>
-                                                    </span>
-                                                    <span className="text-sm capitalize text-left">{lesson.name}</span>
-                                                </button>
-                                                <Menu menuItems={lessonMenuItems} id={{ chapterId: chapter.id, lessonId: lesson.id, index: idx }} />
-
+                                            <div key={idx} className={`w-full  rounded-sm ${lesson.id === lessonId && route !== "add-test" ? "bg-slate-200" : ""}`}>
+                                                <div className={`flex items-start justify-between p-2 ${!(show.renameLesson && show.index === lesson.id) ? "" : "hidden"}`}>
+                                                    <button
+                                                        onClick={() => {
+                                                            dispatch(setActiveLesson({ chapterId: chapter.id, lessonId: lesson.id }))
+                                                            navigate("/course/edit/2")
+                                                        }}
+                                                        className="flex gap-3 w-3/4">
+                                                        <span>
+                                                            <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                                <path fill="currentColor" d="M4 21V3h14v8.735q-.22-.031-.5-.031t-.5.03V4h-5.5v6.192L9.5 9l-2 1.192V4H5v16h6.992q.073.27.201.528q.128.259.288.472zm13.5.692q-1.671 0-2.835-1.164q-1.165-1.164-1.165-2.836q0-1.67 1.165-2.835q1.164-1.165 2.835-1.165t2.836 1.165t1.164 2.835t-1.164 2.836t-2.836 1.164m-.865-2.115l2.73-1.923l-2.73-1.923zM7.5 4h4zM5 4h12h-5.5h.492z" />
+                                                            </svg>
+                                                        </span>
+                                                        <span className="text-sm capitalize text-left">{lesson.name}</span>
+                                                    </button>
+                                                    <Menu menuItems={lessonMenuItems} id={{ chapterId: chapter.id, lessonId: lesson.id, index: idx }} />
+                                                </div>
                                                 <div className={`${show.renameLesson && show.index === lesson.id ? "" : "hidden"}`}>
                                                     <Input close={() => setShow({ ...show, renameLesson: false, index: '' })}
                                                         id={chapter.id}
                                                         icon={
                                                             <span>
-                                                                <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                    <path fill="currentColor" d="M3 6a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3zm3-2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
+                                                                <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                                    <path fill="currentColor" d="M4 21V3h14v8.735q-.22-.031-.5-.031t-.5.03V4h-5.5v6.192L9.5 9l-2 1.192V4H5v16h6.992q.073.27.201.528q.128.259.288.472zm13.5.692q-1.671 0-2.835-1.164q-1.165-1.164-1.165-2.836q0-1.67 1.165-2.835q1.164-1.165 2.835-1.165t2.836 1.165t1.164 2.835t-1.164 2.836t-2.836 1.164m-.865-2.115l2.73-1.923l-2.73-1.923zM7.5 4h4zM5 4h12h-5.5h.492z" />
                                                                 </svg>
                                                             </span>
                                                         }
@@ -122,30 +126,42 @@ export const EditCourseSidebar = ({ course, activeLesson }) => {
                                     <Input close={() => setShow({ ...show, addLesson: false, index: '' })}
                                         id={show.index} icon={
                                             <span>
-                                                <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                    <path fill="currentColor" d="M3 6a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3zm3-2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
+                                                <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                    <path fill="currentColor" d="M4 21V3h14v8.735q-.22-.031-.5-.031t-.5.03V4h-5.5v6.192L9.5 9l-2 1.192V4H5v16h6.992q.073.27.201.528q.128.259.288.472zm13.5.692q-1.671 0-2.835-1.164q-1.165-1.164-1.165-2.836q0-1.67 1.165-2.835q1.164-1.165 2.835-1.165t2.836 1.165t1.164 2.835t-1.164 2.836t-2.836 1.164m-.865-2.115l2.73-1.923l-2.73-1.923zM7.5 4h4zM5 4h12h-5.5h.492z" />
                                                 </svg>
                                             </span>}
                                         title={''} type={ActionTypes.ADD_LESSON} lessonId={''} />
                                 </div>
                                 {/* test */}
-                                <div className={`flex w-full justify-between items-center p-1 rounded-sm group ${Object.keys(chapter.test).length === 0 ? "hidden" : ""} ${route === "add-test" ? "bg-green-600" : ""}`}>
+                                <div className={`flex w-full justify-between items-center p-1 rounded-sm group ${Object.keys(chapter.quiz).length === 0 ? "hidden" : ""} ${route === "add-test" ? "bg-gray-200" : ""}`}>
                                     <button className="flex w-3/4 gap-3 p-1" onClick={() => navigate(`/course/edit/${chapter.id}/add-test`)}>
                                         <span>
-                                            <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <path fill="currentColor" d="M13.5 14.539q.31 0 .545-.236t.236-.545t-.236-.545t-.545-.236t-.545.236t-.236.545t.236.545t.545.235m-.442-2.815h.884q.039-.629.199-.947q.159-.318.767-.888q.634-.576.884-1.03q.25-.452.25-1.039q0-1.01-.72-1.683q-.72-.674-1.822-.674q-.833 0-1.48.45t-.985 1.227l.811.357q.283-.586.69-.88t.964-.293q.716 0 1.187.424q.47.424.47 1.095q0 .408-.228.759q-.229.351-.787.845q-.632.552-.858 1.013t-.226 1.264M8.116 17q-.691 0-1.153-.462T6.5 15.385V4.615q0-.69.463-1.153T8.116 3h10.769q.69 0 1.153.462t.462 1.153v10.77q0 .69-.462 1.152T18.884 17zm0-1h10.769q.23 0 .423-.192t.192-.423V4.615q0-.23-.192-.423T18.884 4H8.116q-.231 0-.424.192t-.192.423v10.77q0 .23.192.423t.423.192m-3 4q-.69 0-1.153-.462T3.5 18.385V6.615h1v11.77q0 .23.192.423t.423.192h11.77v1zM7.5 4v12z" />
+                                            <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                                                <g fill="currentColor">
+                                                    <path d="M20 15a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2h-8a1 1 0 0 1-1-1m1 3a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2zm-1 10a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2h-8a1 1 0 0 1-1-1m1 3a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2z" />
+                                                    <path fill-rule="evenodd" d="M10 27a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1zm2 1v3h3v-3z" clip-rule="evenodd" />
+                                                    <path d="M17.707 15.707a1 1 0 0 0-1.414-1.414L13 17.586l-1.293-1.293a1 1 0 0 0-1.414 1.414L13 20.414z" />
+                                                    <path fill-rule="evenodd" d="M10 6a4 4 0 0 0-4 4v28a4 4 0 0 0 4 4h20a4 4 0 0 0 4-4V10a4 4 0 0 0-4-4zm-2 4a2 2 0 0 1 2-2h20a2 2 0 0 1 2 2v28a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2zm28 6a3 3 0 1 1 6 0v20.303l-3 4.5l-3-4.5zm3-1a1 1 0 0 0-1 1v2h2v-2a1 1 0 0 0-1-1m0 22.197l-1-1.5V20h2v15.697z" clip-rule="evenodd" />
+                                                </g>
                                             </svg>
                                         </span>
-                                        <span className="text-md text-gray-200 line-clamp-2 capitalize text-left">{chapter.test?.name}</span>
+                                        <span className="text-md line-clamp-2 capitalize text-left">{chapter.quiz?.name}</span>
                                     </button>
                                 </div>
 
                                 <div className={`${show.addTest && show.index === chapter.id ? "" : "hidden"}`}>
                                     <Input close={() => setShow({ ...show, addTest: false, index: '' })} id={chapter.id} title={''} type={ActionTypes.ADD_TEST} lessonId={''}
                                         icon={
-                                            <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <path fill="currentColor" d="M13.5 14.539q.31 0 .545-.236t.236-.545t-.236-.545t-.545-.236t-.545.236t-.236.545t.236.545t.545.235m-.442-2.815h.884q.039-.629.199-.947q.159-.318.767-.888q.634-.576.884-1.03q.25-.452.25-1.039q0-1.01-.72-1.683q-.72-.674-1.822-.674q-.833 0-1.48.45t-.985 1.227l.811.357q.283-.586.69-.88t.964-.293q.716 0 1.187.424q.47.424.47 1.095q0 .408-.228.759q-.229.351-.787.845q-.632.552-.858 1.013t-.226 1.264M8.116 17q-.691 0-1.153-.462T6.5 15.385V4.615q0-.69.463-1.153T8.116 3h10.769q.69 0 1.153.462t.462 1.153v10.77q0 .69-.462 1.152T18.884 17zm0-1h10.769q.23 0 .423-.192t.192-.423V4.615q0-.23-.192-.423T18.884 4H8.116q-.231 0-.424.192t-.192.423v10.77q0 .23.192.423t.423.192m-3 4q-.69 0-1.153-.462T3.5 18.385V6.615h1v11.77q0 .23.192.423t.423.192h11.77v1zM7.5 4v12z" />
-                                            </svg>
+                                            <span>
+                                                <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                                                    <g fill="currentColor">
+                                                        <path d="M20 15a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2h-8a1 1 0 0 1-1-1m1 3a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2zm-1 10a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2h-8a1 1 0 0 1-1-1m1 3a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2z" />
+                                                        <path fill-rule="evenodd" d="M10 27a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1zm2 1v3h3v-3z" clip-rule="evenodd" />
+                                                        <path d="M17.707 15.707a1 1 0 0 0-1.414-1.414L13 17.586l-1.293-1.293a1 1 0 0 0-1.414 1.414L13 20.414z" />
+                                                        <path fill-rule="evenodd" d="M10 6a4 4 0 0 0-4 4v28a4 4 0 0 0 4 4h20a4 4 0 0 0 4-4V10a4 4 0 0 0-4-4zm-2 4a2 2 0 0 1 2-2h20a2 2 0 0 1 2 2v28a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2zm28 6a3 3 0 1 1 6 0v20.303l-3 4.5l-3-4.5zm3-1a1 1 0 0 0-1 1v2h2v-2a1 1 0 0 0-1-1m0 22.197l-1-1.5V20h2v15.697z" clip-rule="evenodd" />
+                                                    </g>
+                                                </svg>
+                                            </span>
                                         } />
                                 </div>
                             </div>
@@ -156,7 +172,11 @@ export const EditCourseSidebar = ({ course, activeLesson }) => {
 
                 <div className={`${show.addChapter && show.index === '' ? "" : "hidden"}`}>
                     <Input close={() => setShow({ ...show, addChapter: false, index: '' })}
-                        id={show.index} icon={<AiOutlineBars size={20} />}
+                        id={show.index} icon={<span>
+                            <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M19 20H5V4h2v3h10V4h2m-7-2a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m7 0h-4.18C14.4.84 13.3 0 12 0S9.6.84 9.18 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2" />
+                            </svg>
+                        </span>}
                         title={''} type={ActionTypes.ADD_CHAPTER} lessonId={''} />
                 </div>
 

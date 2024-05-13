@@ -4,11 +4,12 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { createCourse } from '@/features/course/newCourseSlice';
+import { createCourseAction } from "@/actions/courseAction";
 
 const courseSchema = yup.object({
     name: yup.string().trim().min(6, "Use a descriptive name with more than 6 characters").max(20, "Maximum characters reached"),
     author: yup.string().min(5, 'Author name should be at least 3 characters long').max(20, 'Author name should not exceed 50 characters'),
-    duration: yup.string().min(5, 'Duration should be at least 2 characters long').max(10, 'Duration should not exceed 10 characters'),
+    duration: yup.number().required("expected course duration expected"),
     level: yup.string().required('Level is required')
 })
 
@@ -17,12 +18,18 @@ export const CreateCourse = () => {
     const { register, handleSubmit, formState } = useForm({ resolver: yupResolver(courseSchema) })
     
     const onSubmite = async (data) =>{
-        dispatch(createCourse(data))
+        try {
+            await createCourseAction(data)
+            dispatch(createCourse({data}))
+        }catch(err) {
+            console.error(err?.message)
+        }
+        
     }
     const { isLoading, errors } = formState
 
     return (
-        <form onSubmit={handleSubmit(onSubmite)} className="w-full h-full max-w-2xl max-h-xl   rounded-lg p-6 mb-20">
+        <form onSubmit={handleSubmit(onSubmite)} className="w-full h-full max-w-2xl max-h-xl border rounded-lg p-6 mb-20">
             <h2 className="text-4xl font-semibold mb-6">Create a New Course</h2>
             <div  className="space-y-4 flex flex-col h-full w-full">
                 <div className="flex items-start justify-between gap-3">
@@ -60,10 +67,10 @@ export const CreateCourse = () => {
                             className="mt-1 p-2 w-full text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
                         >
                         <option value="">Select duration</option>
-                            <option value="beginner">1 month</option>
-                            <option value="intermediate">2 month </option>
-                            <option value="advanced">3 month</option>
-                            <option value="advanced">4 month</option>
+                            <option value={1}>1 month</option>
+                            <option value={2}>2 month </option>
+                            <option value={3}>3 month</option>
+                            <option value={4}>4 month</option>
                         </select>
                         <p className='text-red-500 text-xs'>{errors.duration?.message || ""}</p>
                     </div>

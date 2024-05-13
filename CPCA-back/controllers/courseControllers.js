@@ -6,21 +6,22 @@ import * as CourseService from "../services/courseService.js"
 
 const createCourse = async (req, res) => {
   // const { title, description, objectives, templateImg } = req.body;
-  await CreateCourseValidator.validate(req.body).then( async() => {
+  return res.status(200).json(req.body)
+  // await CreateCourseValidator.validate(req.body).then( async() => {
 
-  })
+  // })
 
-  const newCourse = await Course.create({
-    title,
-    description,
-    objectives,
-    templateImg, // Assuming the template image is provided
-    instructor: req.user._id, // Assuming the instructor is the logged-in user
-  });
-  if (newCourse) {
-    return res.status(201).json(newCourse);
-  }
-  throw new BadRequestError("Invalid course data");
+  // const newCourse = await Course.create({
+  //   title,
+  //   description,
+  //   objectives,
+  //   templateImg, // Assuming the template image is provided
+  //   instructor: req.user._id, // Assuming the instructor is the logged-in user
+  // });
+  // if (newCourse) {
+  //   return res.status(201).json(newCourse);
+  // }
+  // throw new BadRequestError("Invalid course data");
 };
 
 const getAllCourses = async (req, res) => {

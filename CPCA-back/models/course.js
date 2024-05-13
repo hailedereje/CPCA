@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 const CourseSchema = new Schema({
-  name: { type: String, required: true, unique: true }, 
+  name: { type: String, required: true }, 
   description: { type: String, required: true },
   author: { type: String, required: true },
   level: { type: String, enum: ['Beginner', 'Intermediate', 'Advanced'] },

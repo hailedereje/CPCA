@@ -1,6 +1,6 @@
 import express from 'express'
-import { authenticate, isInstructor, studentCheck } from '../middlewares/authenticate';
-import { addQuestionToQuiz, createQuiz, deleteQuiz, getQuizById, updateQuiz, userResult } from '../controllers';
+import { authenticate, isInstructor, studentCheck } from '../middlewares/authenticate.js';
+import { addQuestionToQuiz, createQuiz, deleteQuiz, getQuizById, updateQuiz, userResult } from '../controllers/index.js';
 
 const router = express.Router();
 
