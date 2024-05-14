@@ -1,3 +1,4 @@
+import { defaultFroalaConfig } from '@/constants';
 import { addInstruction } from '@/features/course/quizSlice';
 import newRequests from '@/utils/newRequest';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,51 +10,38 @@ import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from "yup"
-const defaultConfig = {
-  documentReady: true,
-  heightMax: 200,
-  widthMax: 20,
-  placeholderText: 'Edit Your Content Here!',
-  attribution: false,
-  wordCounterCount: false,
-  lineBreakerOffset: 0, 
-  lineBreakerOffsetMD: 10,
-  lineBreakerOffsetSM: 5, 
-  lineBreakerOffsetXS: 5,
-  toolbarButtons: {
-    'moreMisc': {
-      buttons: ['fullscreen'],
-    },
-    'moreText': {
-      buttons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting'],
-    },
-    'moreParagraph': {
-      buttons: ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'],
-    },
 
-  },
 
-};
 
 const InstructionEditor = () => {
   const { instruction } = useSelector(x => x.quizState)
-  const [value,setValue] = useState(instruction)
-  const dispatch = useDispatch()  
-  const handleModel = (content) => {
-    setValue(content)
-  }
-  console.log(instruction)
+  const [value, setValue] = useState(instruction)
+  const dispatch = useDispatch()
+  const isChanged = instruction !== value
+
   return (
     <div className="flex flex-col w-fit editor gap-3">
-      <div className={`w-full relative max-w-[500px]`}>
+      <div className={`w-full relative`}>
         <FroalaEditor tag='div'
           model={value}
-          config={defaultConfig}
-          onModelChange={(content) =>{ 
-            setValue(content)
-            dispatch(addInstruction({instruction:value}))}
+          config={defaultFroalaConfig}
+          onModelChange={(content) => setValue(content)
           }
         />
+        <div className="absolute top-3 right-0 flex z-10 items-center justify-center gap-6">
+          {isChanged && 
+          <button 
+            type='button'
+            className="bg-blue-500 hover:bg-blue-700 text-white text-sm py-1 px-2 rounded mr-2"
+            onClick={() => {
+              const content = DOMPurify.sanitize(value)
+              dispatch(addInstruction({instruction:content}))
+              setValue(content)
+            }}
+          >
+            save
+          </button>}
+        </div>
       </div>
     </div>
   )
@@ -80,17 +68,17 @@ export const QuizBoard = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const onSubmit = async(e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     console.log("jdddddd")
-    await newRequests.post("/new",{title,duration,instruction}).then(() => {
+    await newRequests.post("/new", { title, duration, instruction }).then(() => {
       console.log("success")
     }).catch(() => {
       console.log("error")
     })
     // console.log('Form submitted:', formData);
   };
-  
+
   return (
     <div className="w-full  p-6">
       <h2 className="text-3xl font-semibold mb-4">Create Quiz</h2>

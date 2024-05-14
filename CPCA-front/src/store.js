@@ -6,7 +6,6 @@ import topicReducer from './features/course/topicSlice';
 import createCourseReducer from "./features/course/createCourse";
 import quizReducer from './features/course/quizSlice'
 import editorReducer from "./features/editor/editorSlice";
-import newCourseReducer from "./features/course/newCourseSlice"
 
 export const store = configureStore({
   reducer: {
@@ -16,7 +15,6 @@ export const store = configureStore({
     topicState: topicReducer,
     createCourseState: createCourseReducer,
     quizState: quizReducer,
-    newCourseState: newCourseReducer,
     editorState: editorReducer
   },
   devTools: true, 

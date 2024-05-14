@@ -1,16 +1,45 @@
+import { db } from "@/db/db";
 import { createSlice, nanoid } from "@reduxjs/toolkit";
+
+const table = "courses"
 
 const initialState = {
     course:{},
+    draftCourses: await db.table(table).toArray().then(data => data),
     activeLesson:{},
+    prerequisites:[],
+    tags:[]
 }
+
 
 export const createCourseSlice = createSlice({
     name: "createCourse",
     initialState,
     reducers: {
-        createCourse: (state,action) => {
-            state.course = action.payload
+        createCourse: (state,action) =>  {
+            const { course } = action.payload
+            state.course = {...course,id:course._id}
+            state.draftCourses.push(state.course)
+            db.table(table).add(state.course)
+        },
+        setCourse: (state,action) => {
+            
+        },
+        addPrerequistes: (state,action) => {
+            const { prerequisite } = action.payload
+            state.prerequisites.push(prerequisite)
+        },
+        addTags: (state,action) => {
+            const { tag } = action.payload
+            state.tags.push(tag)
+        },
+        deleteTag: (state,action) => {
+            const {id} = action.payload
+            state.tags= state.tags.filter(tag => tag.id !== id)
+        },
+        deletePrerequisite: (state,action) => {
+            const {id} = action.payload
+            state.prerequisites = state.prerequisites.filter(tag => tag.id !== id)
         },
         addChapter: (state, action) => {
             const { name } = action.payload;
@@ -154,5 +183,5 @@ export const createCourseSlice = createSlice({
 export const { addChapter, removeChapter, updateChapter, 
                 renameChapter, renameLesson, addLesson ,
                 addTopic,removeTopic,toggleShow,updateTopic
-                ,setActiveLesson, removeLesson,addQuiz } = createCourseSlice.actions;
+                ,setActiveLesson, removeLesson,addQuiz,createCourse,addPrerequistes,addTags ,deletePrerequisite,deleteTag} = createCourseSlice.actions;
 export default createCourseSlice.reducer;

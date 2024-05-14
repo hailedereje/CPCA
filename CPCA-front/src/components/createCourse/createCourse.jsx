@@ -2,14 +2,14 @@ import * as yup from "yup"
 import { useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup"
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import { useDispatch } from 'react-redux';
-import { createCourse } from '@/features/course/newCourseSlice';
-import { createCourseAction } from "@/actions/courseAction";
-import { Form } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 import { store } from "@/store";
 import { toast } from "react-toastify";
 import { api } from "@/api";
-import { AddCourse } from "@/pages/dashboard";
+import { useState } from "react";
+import {createCourse} from "@/features/course/createCourse";
+import { Link, useNavigate } from "react-router-dom";
+import { FaAngleDoubleRight } from "react-icons/fa";
 
 const courseSchema = yup.object({
     title: yup.string().trim().min(6, "Use a descriptive name with more than 6 characters").max(20, "Maximum characters reached"),
@@ -20,16 +20,18 @@ const courseSchema = yup.object({
 
 export const CreateCourse = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { course,draftCourses } = useSelector(x => x.createCourseState)
+
     const { register, handleSubmit, formState } = useForm({ resolver: yupResolver(courseSchema) })
     
     const onSubmite = async (data) =>{
         try {
-            const result = await store.dispatch(api.endpoints.createCourse.initiate(data))
-            .unwrap();
+            const result = await store.dispatch(api.endpoints.createCourse.initiate(data)).unwrap();
             if(result) {
-                toast.success("course created success fully")
-                store.dispatch(AddCourse({course: result}))
-                console.log(result)
+                toast.success("course created successfully")
+                dispatch(createCourse({course: result}))
+                navigate(`update/${course.id}`)
             }
         }catch (err) {
             console.log(err)
@@ -37,14 +39,14 @@ export const CreateCourse = () => {
             toast.error(errMessage)
         } 
     }
-    const { isLoading, errors ,isSubmitting} = formState
+    const { errors ,isSubmitting ,} = formState
 
     return (
         <form 
             onSubmit={handleSubmit(onSubmite)} 
-            className="w-full h-full max-w-2xl max-h-xl border rounded-lg p-6 mb-20">
+            className="w-full h-full max-w-2xl max-h-xl border rounded-lg p-5">
             <h2 className="text-4xl font-semibold mb-6">Create a New Course</h2>
-            <div  className="space-y-4 flex flex-col h-full w-full">
+            <div  className="space-y-4 flex flex-col">
                 <div className="flex items-start justify-between gap-3">
                     <div className='basis-1/2'>
                         <label htmlFor="title" className="block text-sm font-medium text-gray-700">name</label>
@@ -116,28 +118,3 @@ export const CreateCourse = () => {
 };
 
 
-const tagList = [
-    { id: "tag1", name: "Programming" },
-    { id: "tag2", name: "Web Development" },
-    { id: "tag3", name: "Data Science" },
-    { id: "tag4", name: "Machine Learning" },
-    { id: "tag5", name: "Cybersecurity" },
-    { id: "tag6", name: "Database Management" },
-    { id: "tag7", name: "Software Engineering" },
-    { id: "tag8", name: "Mobile Development" },
-    { id: "tag9", name: "Artificial Intelligence" },
-    { id: "tag10", name: "Cloud Computing" }
-  ];
-
-  const courseList = [
-    { id: "course1", name: "Advanced Programming Course" },
-    { id: "course2", name: "Introductory Web Development Course" },
-    { id: "course3", name: "Intermediate Data Science Course" },
-    { id: "course4", name: "Fundamental Machine Learning Course" },
-    { id: "course5", name: "Practical Cybersecurity Course" },
-    { id: "course6", name: "Theoretical Database Management Course" },
-    { id: "course7", name: "Applied Programming Course" },
-    { id: "course8", name: "Advanced Web Development Course" },
-    { id: "course9", name: "Introductory Data Science Course" },
-    { id: "course10", name: "Intermediate Machine Learning Course" }
-];

@@ -17,16 +17,19 @@ function RichTextExample() {
   const [index, setIndex] = useState()
   const dispatch = useDispatch()
   const [image, setImage] = useState(null)
-  const noContent = Object.keys(lesson).length === 0
-
-  return (
-    <>
-      {noContent &&
+  const noContent = Object.keys(activeLesson).length === 0 || Object.keys(lesson).length === 0
+  if(noContent) {
+    return (
+    
         <div className="flex flex-col items-center justify-center h-full p-4">
           <p className="text-3xl font-bold text-gray-600 mb-2 uppercase">Instruction</p>
           <p className="text-lg text-gray-400">Add Lessons after creating a chapter. Click on a lesson to view and edit its content.</p>
         </div>
-      }
+      
+    )
+  }
+  return (
+    <>
       <div className="flex flex-col w-full py-10 max-w-[1024px] " hidden={!noContent}>
         {(lesson && chapterId && lesson.topics.length === 0) &&
           <div className="group flex items-end  gap-4">

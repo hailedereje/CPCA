@@ -9,7 +9,7 @@ import { ActionTypes } from "./action.Types";
 import { addChapter, addLesson, removeChapter, removeLesson, renameChapter, renameLesson, setActiveLesson } from "@/features/course/createCourse";
 import { IoMdAddCircleOutline, IoMdList } from "react-icons/io";
 import { Input } from "./components/input-field";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useNavigation } from "react-router-dom";
 
 
 export const EditCourseSidebar = ({ course, activeLesson }) => {
@@ -20,7 +20,7 @@ export const EditCourseSidebar = ({ course, activeLesson }) => {
     const location = useLocation();
     const pathSegments = location.pathname.split('/').filter(segment => segment !== '');
     const route = pathSegments[pathSegments.length - 1]
-    const navigate = useNavigate()
+    const navigate = useNavigation()
 
     const initialState = {
         renameLesson: false,
@@ -31,7 +31,6 @@ export const EditCourseSidebar = ({ course, activeLesson }) => {
         index: ''
     }
     const [show, setShow] = useState(initialState)
-    // const [ route,setRoute ] = useState(pathSegments)
 
     const dispatch = useDispatch()
 
@@ -56,6 +55,7 @@ export const EditCourseSidebar = ({ course, activeLesson }) => {
         { name: "Rename", icon: <MdModeEditOutline />, action: (id) => setShow({ ...show, renameLesson: true, index: id.lessonId }) },
         { name: "Delete", icon: <RiDeleteBin6Line className="text-red-400" />, action: (id) => dispatch(removeLesson({ ...id })) }
     ]
+
     return (
         <div className="xl:w-[28%] sm:w-[60%] md:w-[40%] max-w-[400px] h-full max-h-[1024px]  overflow-scroll mt-16 pb-16 fixed editor  top-0 left-0 flex flex-col gap-2 bg-gray-50 text-black">
             <div className="relative">
