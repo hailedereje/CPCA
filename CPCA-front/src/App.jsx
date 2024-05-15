@@ -23,6 +23,7 @@ import {
   // CreateCourse,
   EnrolledCourses,
   InstructorsList,
+  StudentsList,
   Profile,
   Status,
 } from "./pages/dashboard/index";
@@ -90,7 +91,8 @@ function App() {
           action: EditProfileAction(store),
         },
         { path: "add-instructor", element: <AddInstructor /> },
-        { path: "instructors", element: <InstructorsList /> },
+        { path: "all-instructors", element: <InstructorsList /> },
+        { path: "all-students", element: <StudentsList /> },
       ];
     } else if (user.isInstructor) {
       dashboardRoutes = [

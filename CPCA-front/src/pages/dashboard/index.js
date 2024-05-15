@@ -7,3 +7,4 @@ export {default as InstructorsList} from './InstructorsList';
 export {default as CreateCourse} from './CreateCourse';
 export {default as EnrolledCourses} from './EnrolledCourses';
 export {default as Activities} from './Activities';
+export {default as StudentsList} from './StudentsList';

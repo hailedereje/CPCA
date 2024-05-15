@@ -54,6 +54,30 @@ const userLogout = async (req, res) => {
   return res.json({ msg: "User LoggedOut" });
 };
 
+// get all users
+const getAllInstructors = async (req, res) => {
+  try {
+    const users = await User.find({ role: "instructor" })
+      .sort({ createdAt: -1 })
+      .lean();
+    return res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error in get all instructors controller" });
+  }
+}
+
+const getAllStudents = async (req, res) => {
+  try {
+    const users = await User.find({ role: "student" })
+      .sort({ createdAt: -1 })
+      .lean();
+    return res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error in get all students controller" });
+  }
+}
+
+
 const getUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
@@ -128,4 +152,6 @@ export {
   editUserProfile,
   createInstructor,
   userLogout,
+  getAllInstructors,
+  getAllStudents
 };

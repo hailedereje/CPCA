@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import UserDetails from './UserDetails';
 
-const InstructorsList = () => {
+const StudentsList = () => {
   const [users, setUsers] = useState([])
-  const { isLoading, data } = useQuery("getAllInstructors", async () => {
-    const res = await newRequests.get("/user/instructors");
+  const { isLoading, data } = useQuery("getAllStudents", async () => {
+    const res = await newRequests.get("/user/students");
     console.log(res.data)
     return res.data;
   });
@@ -28,4 +28,4 @@ const InstructorsList = () => {
     <UserDetails users={users} />
 )}
 
-export default InstructorsList
+export default StudentsList

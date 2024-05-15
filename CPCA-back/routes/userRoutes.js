@@ -9,6 +9,8 @@ import {
   userLogin,
   userLogout,
   userRegister,
+  getAllInstructors,
+  getAllStudents
 } from "../controllers/userController.js";
 import { imageStorage } from "../config/multerConfig.js";
 const router = express.Router();
@@ -19,6 +21,8 @@ const upload = multer({ storage: imageStorage });
 router.route("/register").post(userRegister);
 router.route("/login").post(userLogin);
 router.use(authenticate);
+router.route("/instructors").get(getAllInstructors);
+router.route("/students").get(getAllStudents);
 router
   .route("/profile")
   .get(getUserProfile)
