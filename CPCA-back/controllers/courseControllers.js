@@ -4,10 +4,9 @@ import Course from "../models/course.js";
 import courseSchema from "../validation/courseValidation.js";
 
 const createCourse = async (req, res) => {
-
   const { error } = courseSchema.validate(req.body);
   if (error) {
-    return res.status(400).send(error.details[0].message);
+    return res.status(400).send({msg:error.details[0].message});
     console.log(error);
     // throw new BadRequestError(error);
   }
@@ -48,6 +47,8 @@ const deleteCourse = async (req, res) => {
   res.send(course);
 };
 
+const enrollCourse = async() => {}
+const approveEnrollment =  async() => {}
 export {
   createCourse,
   getAllCourses,

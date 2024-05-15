@@ -14,7 +14,7 @@ function Dashboard() {
           <div className="  ">
             <DashboardNavbar />
           </div>
-          <div className="bg-base-200 m-1 flex-grow p-5  shadow-sm">
+          <div className=" m-1 flex-grow p-5">
             <Outlet />
           </div>
         </div>

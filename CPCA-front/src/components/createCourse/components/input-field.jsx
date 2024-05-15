@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ActionTypes } from "../action.Types";
-import { addChapter, addLesson, addTest, renameChapter, renameLesson } from "@/features/course/createCourse";
+import { addChapter, addLesson, addQuiz, renameChapter, renameLesson } from "@/features/course/createCourse";
 import { MdOutlineDownloadDone } from "react-icons/md";
 import * as yup from 'yup'
 
@@ -24,7 +24,6 @@ export const Input = ({ close, id, lessonId, type, title, icon }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         await nameSchema.validate({ name }).then(() => {
-            setError("")
             switch (type) {
                 case ActionTypes.ADD_CHAPTER:
                     dispatch(addChapter({ name }))
@@ -39,16 +38,19 @@ export const Input = ({ close, id, lessonId, type, title, icon }) => {
                     dispatch(renameLesson({ name, id, lessonId }))
                     break;
                 case ActionTypes.ADD_TEST:
-                    dispatch(addTest({name,id}))
+                    dispatch(addQuiz({name,id}))
                     break;
             }
             close()
             setName('')
-        }).catch(err => setError(err.message))
+        }).catch(err => setError(err.message)).finally(() => setError(""))
     }
 
     const handleClickOutside = (event) => {
-        if (outsideRef.current && !outsideRef.current.contains(event.target)) close()
+        if (outsideRef.current && !outsideRef.current.contains(event.target)){
+            close()
+            setName('')
+        }
     }
 
     useEffect(() => {
@@ -77,7 +79,7 @@ export const Input = ({ close, id, lessonId, type, title, icon }) => {
                         type="text" id="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="border border-gray-300 text-gray-900 text-sm rounded-sm focus:outline-none focus:border-blue-500 block w-full pe-10 p-1  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                        className="border border-gray-300 text-gray-900 text-sm rounded-sm focus:outline-none focus:border-blue-500 block w-full pe-10 p-1 " />
                     <p className='text-red-500 text-xs animate-pulse'>{error}</p>
                 </div>
 

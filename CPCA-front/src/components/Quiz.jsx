@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postQuizResult, postUserResult } from "../../Redux/action.js";
@@ -8,12 +9,36 @@ export const Quiz = (props) => {
   const data = useSelector((state) => state?.mernQuize?.QuizData);
   const userID = useSelector((state) => state?.mernQuize?.userId);
   const quizID = data[0]._id;
+  const allowdTime = useSelector((state) => state?.mernQuize?.allowdTime);
+  const [timeLeft, setTimeLeft] = useState(60 * 90);
   const dispatch = useDispatch();
 
   const [num, setNum] = useState(0);
   const [ans, setAns] = useState([]);
   const [showSubmitBtn, setShowSubmitBtn] = useState(false);
   const [showPrevBtn, setShowPrevBtn] = useState(false);
+
+  const handleSubmit = () => {
+    dispatch(postUserResult(ans));
+    const obj = {
+      quizId: quizID,
+      userId: userID,
+      quizResult: ans,
+    };
+    dispatch(postQuizResult(obj));
+  }
+
+  useEffect(() => {
+    if (!timeLeft) {
+      handleSubmit();
+    }
+
+    const timerId = setInterval(() => {
+      setTimeLeft(timeLeft - 1);
+    }, 1000);
+
+    return () => clearInterval(timerId);
+  }, [timeLeft]);
 
   return (
     <div className=" w-11/12 h-96 pt-5 mt-16 bg-white">
@@ -28,9 +53,12 @@ export const Quiz = (props) => {
               {questionArr[num]?.questions}
             </h1>
           </div>
-          <div className="border-teal-500 rounded-2xl absolute  right-24 top-32 border-2 mb-8 p-1 pl-2  pr-2 ">
-            <h1 className="text-xl font-bold">
+          <div className="flex gap-2 items-center text-xl font-bold absolute right-24 top-32 mb-8 ">
+            <h1 className=" border-teal-500 rounded-2xl border-2 p-1 pl-2  pr-2">
               Attempted : {num + "/" + questionArr.length}
+            </h1>
+            <h1 className="border-teal-500 rounded-2xl border-2 p-1 pl-2  pr-2">
+              Time left: {Math.floor(timeLeft / 3600)}:{(Math.floor(timeLeft / 60) % 60).toString().padStart(2, '0')}:{(timeLeft % 60).toString().padStart(2, '0')}
             </h1>
           </div>
         </div>
@@ -44,6 +72,7 @@ export const Quiz = (props) => {
                   : `bg-white border border-gray-300 text-center cursor-pointer m-2 p-2 rounded-lg`
               }
               onClick={(e) => {
+                console.log(questionArr[num]._id)
                 const newArray = [...ans];
                 newArray[num] = answer.option;
                 setAns(newArray);
@@ -75,15 +104,7 @@ export const Quiz = (props) => {
               {" "}
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded mr-1"
-                onClick={() => {
-                  dispatch(postUserResult(ans));
-                  const obj = {
-                    quizId: quizID,
-                    userId: userID,
-                    quizResult: ans,
-                  };
-                  dispatch(postQuizResult(obj));
-                }}
+                onClick={handleSubmit}
               >
                 Submit
               </button>

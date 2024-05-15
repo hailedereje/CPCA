@@ -17,30 +17,18 @@ export const TextEditor = ({chapterId,lessonId,topicItem}) => {
   const { id,content,show } = topicItem;
   const [value,setValue] = useState(content);
   const dispatch = useDispatch();
-  
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-      setWindowHeight(window.innerHeight);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []); 
 
   const defaultConfig = {
     documentReady: true,
-    heightMax: windowHeight ,
-    widthMax: windowWidth,
     placeholderText: 'Edit Your Content Here!',
+    maxHeight:200,
     attribution: false,
     wordCounterCount: false,
     spellcheck: true,
+    // lineBreakerOffset: 10, // Default offset
+    // lineBreakerOffsetMD: 20, // Offset for medium screens
+    // lineBreakerOffsetSM: 15, // Offset for small screens
+    // lineBreakerOffsetXS: 5,
     imageUpload: true,
         imageUploadParams:{
             upload_preset: "dgyt48cy"
@@ -82,7 +70,7 @@ export const TextEditor = ({chapterId,lessonId,topicItem}) => {
           buttons: ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'],
         },
         'moreRich': {
-          buttons: ['insertImage', 'insertLink', 'insertVideo', 'insertTable', 'insertHR', 'embedly', 'specialCharacters'],
+          buttons: ['insertImage', 'insertLink', 'insertTable', 'insertHR', 'embedly', 'specialCharacters'],
         },
         
       },
@@ -95,10 +83,10 @@ export const TextEditor = ({chapterId,lessonId,topicItem}) => {
   }
     return (
       <>
-        {  <div className={`fixed z-20 flex items-center justify-center top-0 left-0 w-screen h-screen  transform transition-all duration-500 ${show ? 'scale-100 ' : 'scale-40 hidden'}`}>
+        {  <div className={`fixed z-30 flex items-center justify-center top-0 left-0 w-screen h-screen  transform transition-all duration-500 ${show ? 'scale-100 ' : 'scale-40 hidden'}`}>
             <div onClick={() => dispatch(toggleShow({chapterId,lessonId,topicId:topicItem.id}))} className="absolute top-0 left-0 w-full h-full bg-black/90" />
             <div className="flex z-10 flex-col items-start gap-4 h-full  bg-white editor relative ">
-                <FroalaEditor tag='textarea'
+                <FroalaEditor tag='div'
                     model={value}
                     config={defaultConfig}
                     onModelChange={handleModel}

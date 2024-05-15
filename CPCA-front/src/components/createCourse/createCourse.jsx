@@ -2,40 +2,62 @@ import * as yup from "yup"
 import { useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup"
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import { useDispatch } from 'react-redux';
-import { createCourse } from '@/features/course/newCourseSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { store } from "@/store";
+import { toast } from "react-toastify";
+import { api } from "@/api";
+import { useState } from "react";
+import {createCourse} from "@/features/course/createCourse";
+import { Link, useNavigate } from "react-router-dom";
+import { FaAngleDoubleRight } from "react-icons/fa";
 
 const courseSchema = yup.object({
-    name: yup.string().trim().min(6, "Use a descriptive name with more than 6 characters").max(20, "Maximum characters reached"),
+    title: yup.string().trim().min(6, "Use a descriptive name with more than 6 characters").max(20, "Maximum characters reached"),
     author: yup.string().min(5, 'Author name should be at least 3 characters long').max(20, 'Author name should not exceed 50 characters'),
-    duration: yup.string().min(5, 'Duration should be at least 2 characters long').max(10, 'Duration should not exceed 10 characters'),
+    duration: yup.number().required("expected course duration expected"),
     level: yup.string().required('Level is required')
 })
 
 export const CreateCourse = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { course,draftCourses } = useSelector(x => x.createCourseState)
+
     const { register, handleSubmit, formState } = useForm({ resolver: yupResolver(courseSchema) })
     
     const onSubmite = async (data) =>{
-        dispatch(createCourse(data))
+        try {
+            const result = await store.dispatch(api.endpoints.createCourse.initiate(data)).unwrap();
+            if(result) {
+                toast.success("course created successfully")
+                dispatch(createCourse({course: result}))
+                navigate(`update/${course.id}`)
+            }
+        }catch (err) {
+            console.log(err)
+            const errMessage = err?.data?.msg || "server Error . please try again"
+            toast.error(errMessage)
+        } 
     }
-    const { isLoading, errors } = formState
+    const { errors ,isSubmitting ,} = formState
 
     return (
-        <form onSubmit={handleSubmit(onSubmite)} className="w-full h-full max-w-2xl max-h-xl   rounded-lg p-6 mb-20">
+        <form 
+            onSubmit={handleSubmit(onSubmite)} 
+            className="w-full h-full max-w-2xl max-h-xl border rounded-lg p-5">
             <h2 className="text-4xl font-semibold mb-6">Create a New Course</h2>
-            <div  className="space-y-4 flex flex-col h-full w-full">
+            <div  className="space-y-4 flex flex-col">
                 <div className="flex items-start justify-between gap-3">
                     <div className='basis-1/2'>
                         <label htmlFor="title" className="block text-sm font-medium text-gray-700">name</label>
                         <input
                             type="text"
-                            name="name"
+                            name="title"
                             id="title"
-                            {...register('name')}
+                            {...register('title')}
                             className="mt-1 p-2 w-full text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
                         />
-                        <p className='text-red-500 text-xs'>{errors.name?.message || ""}</p>
+                        <p className='text-red-500 text-xs'>{errors.title?.message || ""}</p>
                     </div>
                     <div className='basis-1/2'>
                         <label htmlFor="author" className="block text-sm font-medium text-gray-700">Author</label>
@@ -60,10 +82,10 @@ export const CreateCourse = () => {
                             className="mt-1 p-2 w-full text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
                         >
                         <option value="">Select duration</option>
-                            <option value="beginner">1 month</option>
-                            <option value="intermediate">2 month </option>
-                            <option value="advanced">3 month</option>
-                            <option value="advanced">4 month</option>
+                            <option value={1}>1 month</option>
+                            <option value={2}>2 month </option>
+                            <option value={3}>3 month</option>
+                            <option value={4}>4 month</option>
                         </select>
                         <p className='text-red-500 text-xs'>{errors.duration?.message || ""}</p>
                     </div>
@@ -76,19 +98,19 @@ export const CreateCourse = () => {
                             className="mt-1 p-2 w-full text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
                         >
                             <option value="">Select Level</option>
-                            <option value="beginner">Beginner</option>
-                            <option value="intermediate">Intermediate</option>
-                            <option value="advanced">Advanced</option>
+                            <option value="BEGINER">Beginner</option>
+                            <option value="INTERMEDIATE">Intermediate</option>
+                            <option value="ADVANCED">Advanced</option>
                         </select>
                         <p className='text-red-500 text-xs'>{errors.level?.message || ""}</p>
                     </div>
                 </div>
                 <button
                     type="submit"
-                    disabled={isLoading}
+                    disabled={isSubmitting}
                     className="w-full max-w-xs py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                    {isLoading ? <AiOutlineLoading3Quarters className='animate-spin' /> : <span>Create Course</span>}
+                    {isSubmitting ? <AiOutlineLoading3Quarters className='animate-spin' /> : <span>Create Course</span>}
                 </button>
             </div>
         </form>
@@ -96,28 +118,3 @@ export const CreateCourse = () => {
 };
 
 
-const tagList = [
-    { id: "tag1", name: "Programming" },
-    { id: "tag2", name: "Web Development" },
-    { id: "tag3", name: "Data Science" },
-    { id: "tag4", name: "Machine Learning" },
-    { id: "tag5", name: "Cybersecurity" },
-    { id: "tag6", name: "Database Management" },
-    { id: "tag7", name: "Software Engineering" },
-    { id: "tag8", name: "Mobile Development" },
-    { id: "tag9", name: "Artificial Intelligence" },
-    { id: "tag10", name: "Cloud Computing" }
-  ];
-
-  const courseList = [
-    { id: "course1", name: "Advanced Programming Course" },
-    { id: "course2", name: "Introductory Web Development Course" },
-    { id: "course3", name: "Intermediate Data Science Course" },
-    { id: "course4", name: "Fundamental Machine Learning Course" },
-    { id: "course5", name: "Practical Cybersecurity Course" },
-    { id: "course6", name: "Theoretical Database Management Course" },
-    { id: "course7", name: "Applied Programming Course" },
-    { id: "course8", name: "Advanced Web Development Course" },
-    { id: "course9", name: "Introductory Data Science Course" },
-    { id: "course10", name: "Intermediate Machine Learning Course" }
-];

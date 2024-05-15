@@ -6,7 +6,7 @@ import { BsFiles } from "react-icons/bs";
 import { BsPersonFillAdd } from "react-icons/bs";
 import { FaUsers } from "react-icons/fa";
 import { LiaChalkboardTeacherSolid } from "react-icons/lia";
-import { RiLogoutBoxFill } from "react-icons/ri";
+import { RiDraftLine, RiLogoutBoxFill, RiSoundModuleLine } from "react-icons/ri";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { BiBookAdd } from "react-icons/bi";
 import { FaChalkboardTeacher } from "react-icons/fa";
@@ -48,6 +48,8 @@ export const AdminLinks = [
     icon: <BsPersonFillAdd />,
   },
   { id: 5, text: "All Students", path: "all-students", icon: <FaUsers /> },
+  { id: 6, text: "Create course",path: "course",icon: <RiSoundModuleLine />},
+  { id: 7, text: "Draft courses", path: "courses/draft",icon: <RiDraftLine/>}
 ];
 
 

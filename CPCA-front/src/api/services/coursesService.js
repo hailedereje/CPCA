@@ -17,7 +17,7 @@ export const courseService = (builder) => {
     }),
     createCourse: builder.mutation({
       query: (data) => ({
-        url: "/courses",
+        url: "/courses/new",
         method: "post",
         body: data,
       }),
