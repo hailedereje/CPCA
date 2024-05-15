@@ -5,7 +5,7 @@ const getUserFromLocalStorage = () => {
 };
 
 const getThemeFromLocalStorage = () => {
-  const theme = localStorage.getItem("theme") || "light";
+  const theme = localStorage.getItem("theme") || "dracula";
   document.documentElement.setAttribute("data-theme", theme);
   return theme;
 };

@@ -15,6 +15,4 @@ const courseSchema = Joi.object({
 });
 
 export default courseSchema;
-￼
-1
  

@@ -2,12 +2,9 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { store } from "../../store";
 import { ProfileInputElt } from "../../components";
-import { HiOutlineMail as EmailIcon} from "react-icons/hi";
-import { FaPhoneAlt as PhoneIcon} from "react-icons/fa";
+import { HiOutlineMail as EmailIcon } from "react-icons/hi";
+import { FaPhoneAlt as PhoneIcon } from "react-icons/fa";
 import { FaRegUser as NameIcon } from "react-icons/fa";
-
-
-
 
 export const action = (store) => {
   return async ({ request }) => {
@@ -20,15 +17,7 @@ export const action = (store) => {
 function Profile() {
   const user = useSelector((state) => state.userState.user);
   const dispatch = useDispatch();
-  // {
-  //   username: "Abebe";
-  //   email: "abebe@gmail.com";
-  //   isAdmin: false;
-  //   isInstructor: false;
-  //   profileImg: "https://res.cloudinary.com/ddc2e1mzy/image/upload/v1710829762/your_folder_name/logo.jpg";
-  //   role: "student";
-  //   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWY4MjEzODZlNTM3MWJkZWU1YzBiZmIiLCJpYXQiOjE3MTE0ODk4MTEsImV4cCI6MTcxNDA4MTgxMX0.Fz1PN4Pw0fwkqsZj3cSGww1KN0n4ABqqAke2cFYnGT4";
-  // }
+
   console.log(user);
   // return (
   //   <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -68,14 +57,12 @@ function Profile() {
             <form action="#">
               <div className="mb-5  flex flex-col gap-[5.5] sm:flex-row">
                 <div className="w-full sm:w-1/2 mr-3">
-                 
                   <ProfileInputElt
                     type={"text"}
                     name="fullName"
                     label="Full Name"
-                    defaultValue={"David Abrham"}
+                    defaultValue={user.username}
                     icon={<NameIcon />}
-
                   />
                 </div>
 
@@ -85,17 +72,18 @@ function Profile() {
                     name="phoneNumber"
                     label="Phone Number"
                     defaultValue={"0945664412"}
+                    icon={<PhoneIcon />}
                   />
                 </div>
               </div>
 
               <div className="mb-5">
-               
                 <ProfileInputElt
                   name={"emailAddress"}
                   type={"email"}
                   label={"Email Address"}
-                  defaultValue={"david@gmail.com"}
+                  defaultValue={user.email}
+                  icon = {<EmailIcon/>}
                 />
               </div>
 
@@ -103,11 +91,12 @@ function Profile() {
                 type="text"
                 label={"Username"}
                 name={"username"}
-                defaultValue={"david@123"}
+                defaultValue={user.username}
+                icon = {<NameIcon/>}
               />
 
               <div className="mb-5">
-                <ProfileInputElt type = 'text-area' label={'Bio'}/>
+                <ProfileInputElt type="text-area" label={"Bio"} />
                 {/* <label
                   className="mb-3  block text-sm font-medium "
                   htmlFor="Username"
