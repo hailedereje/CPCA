@@ -79,8 +79,6 @@ export {
   createCourse,
   getAllCourses,
   getCourseById,
-  enrollCourse,
-  approveEnrollment,
   updateCourse,
   deleteCourse,
   addPrerequistes

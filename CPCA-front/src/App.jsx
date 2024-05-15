@@ -11,7 +11,7 @@ import {
   Register,
 } from "./pages";
 import { loader as CoursesLoader } from "./pages/dashboard/AllCourses";
-import { loader as SingleCourseLoader } from "./pages/Lessons";
+// import { loader as SingleCourseLoader } from "./pages/Lessons";
 import { action as loginAction } from "./pages/Login";
 import { action as registerAction } from "./pages/Register";
 import { action as EditProfileAction } from "./pages/dashboard/Profile";
@@ -135,7 +135,6 @@ function App() {
         {
           path: "courses/:id",
           element: <Lessons />,
-          loader: SingleCourseLoader(store),
         },
         { path: "courses/:id/lessons/:id", element: <LessonDetails/> },
 
@@ -166,7 +165,7 @@ function App() {
     {
       path: "/",
       element: <HomeLayout />,
-      errorElement: <ErrorPage />,
+      // errorElement: <ErrorPage />,
       children: [
         { index: true, element: <Landing /> },
 
