@@ -1,5 +1,5 @@
 import UserInfo from "../components/UserInfo";
-import { useQuery } from "react-query";
+// import { useQuery } from "react-query";
 import newRequests from "../utils/newRequest";
 import { Toaster } from "react-hot-toast";
 import Loading from "../components/Loading";
@@ -7,6 +7,7 @@ import NothingHere from "../components/NothingHere";
 import { useState } from "react";
 import LikeDislikeComponent from "../icons/LikeDislike";
 import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
 
 const Content = () => {
   const user = useSelector((state) => state.userState.user);

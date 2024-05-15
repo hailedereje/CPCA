@@ -22,6 +22,13 @@ export const courseService = (builder) => {
         body: data,
       }),
     }),
+    addPrerequistes: builder.mutation({
+      query: (data) => ({
+        url: "/courses/add-prerequisites",
+        method: "post",
+        body: data,
+      }),
+    }),
     updateCourse: builder.mutation({
       query: (data) => ({
         url: "/courses",

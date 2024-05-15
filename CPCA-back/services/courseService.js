@@ -40,3 +40,6 @@ export async function getAllCoursesService({page = 1, name='',level='',tag=''}) 
   }
 }
 
+export const createCourseService = async(courseData) => {
+    return await Course.create(courseData) 
+}

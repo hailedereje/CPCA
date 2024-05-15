@@ -1,7 +1,7 @@
 import React from "react";
 import { BigSidebar, DashboardNavbar, SubmitBtn } from "../components";
 import { Outlet } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "react-query";
+// import { QueryClient, QueryClientProvider } from "react-query";
 
 function Dashboard() {
   return (

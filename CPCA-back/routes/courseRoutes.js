@@ -2,6 +2,7 @@ import express from "express";
 import { authenticate, isAdmin, isInstructor, studentCheck } from "../middlewares/authenticate.js";
 
 import {
+  addPrerequistes,
   approveEnrollment,
   createCourse,
   deleteCourse,
@@ -21,7 +22,9 @@ router.use(authenticate);
 
 // For instructors
 router.use(isAdmin);
+router.get("/all",getAllCourses)
 router.post("/new", createCourse);
+router.post("/add-prerequisites",addPrerequistes)
 router.patch("/:id", updateCourse);
 router.delete("/:id", deleteCourse);
 

@@ -38,20 +38,27 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addUsers } from "@/features/forum/socketSlice";
 import SocketContext from "@/context/SocketContext";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { Editor } from "./components/textEditor/test";
 import { CreateCourse } from "./components/createCourse/createCourse";
 import { UpdataCourse } from "./components/createCourse/updateCourse";
 import { CourseLayout } from "./components/createCourse/layout";
 import { QuizBoard } from "./components/createCourse/QuizBoard";
 import DraftCourses from "./components/createCourse/draftCourses";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { draftCourseLoader } from "./loader/draftCourseLoader";
 
 // export const socket = io("http://localhost:5000", {
 //   withCredentials: true,
 //   secure: true,
 // });
 export const socket = ""
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+    },
+  },
+});
 
 function App() {
   const user = useSelector((state) => state.userState.user);
@@ -189,7 +196,8 @@ function App() {
         },
         {
           path: 'course/update/:id',
-          element: <UpdataCourse/>
+          element: <UpdataCourse/>,
+          loader: draftCourseLoader(queryClient)
         },
       
         {
