@@ -12,16 +12,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaAngleDoubleRight } from "react-icons/fa";
 
 const courseSchema = yup.object({
-    title: yup.string().trim().min(6, "Use a descriptive name with more than 6 characters").max(20, "Maximum characters reached"),
+    title: yup.string().trim().min(6, "Use a descriptive name with more than 6 characters").max(30, "Maximum characters reached"),
     author: yup.string().min(5, 'Author name should be at least 3 characters long').max(20, 'Author name should not exceed 50 characters'),
     duration: yup.number().required("expected course duration expected"),
-    level: yup.string().required('Level is required')
+    level: yup.string().required().oneOf(["BEGINER", "INTERMEDIATE", "ADVANCED"]),
 })
 
 export const CreateCourse = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { course,draftCourses } = useSelector(x => x.createCourseState)
+    // const { course,draftCourses } = useSelector(x => x.createCourseState)
 
     const { register, handleSubmit, formState } = useForm({ resolver: yupResolver(courseSchema) })
     
@@ -29,9 +29,10 @@ export const CreateCourse = () => {
         try {
             const result = await store.dispatch(api.endpoints.createCourse.initiate(data)).unwrap();
             if(result) {
+                const {course} = result
                 toast.success("course created successfully")
-                dispatch(createCourse({course: result}))
-                navigate(`update/${course.id}`)
+                dispatch(createCourse({course}))
+                navigate(`update/${course._id}`)
             }
         }catch (err) {
             console.log(err)

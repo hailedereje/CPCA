@@ -15,8 +15,8 @@ const DraftCourses = () => {
         {draftCourses.length !== 0 && draftCourses?.map(course => (
           <Link to={`/course/${course.id}`} key={course.id} className='flex gap-3 p-2 text-blue-400 items-center'>
             <RiDraftLine size={20}/>
-            <span className="text-lg font-medium line-clamp-1">
-                {course.title}
+            <span className="text-lg font-medium ">
+                {JSON.stringify(course)}
             </span>   
           </Link>
         ))}

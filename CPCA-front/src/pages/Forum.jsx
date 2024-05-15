@@ -1,7 +1,7 @@
 import UserInfo from "../components/UserInfo";
 import Write from "../icons/Write";
 import Send from "../icons/Send";
-import { useQuery } from "react-query";
+// import { useQuery } from "react-query";
 import newRequests from "../utils/newRequest";
 import { useParams } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
@@ -12,6 +12,7 @@ import LikeDislikeComponent from "../icons/LikeDislike";
 import { useContext } from "react";
 import SocketContext from "../context/SocketContext";
 import { useSelector, useDispatch } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
 
 
 const Forum = () => {

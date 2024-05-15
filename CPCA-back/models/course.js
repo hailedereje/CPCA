@@ -6,7 +6,7 @@ const CourseSchema = new Schema(
       type: String,
       required: [true, "Name is required"],
       minlength: [5, "Name must be at least 5 characters long"],
-      maxlength: [100, "Name must be at most 20 characters long"],
+      maxlength: [100, "Name must be at most 100 characters long"],
       unique: true,
     },
 
@@ -40,8 +40,13 @@ const CourseSchema = new Schema(
 
     objective: { type: String },
     tags: { type: [String] },
-    prerequisites: { type: [String] },
-    instructor: { type: String },
+    prerequisites: [
+      {
+        courseId: { type: Schema.Types.ObjectId, ref: "Course" , required:true ,unique:true},
+        courseName: { type: String, required: true ,unique:true }
+      }
+    ],
+    instructor: { type: Schema.Types.ObjectId,ref:"User" },
 
   },
   { timestamps: true }

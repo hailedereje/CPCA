@@ -26,6 +26,7 @@ export const {
   useGetAllCoursesQuery,
   useGetCourseQuery,
   useCreateCourseMutation,
+  useAddPrerequistesMutation,
   useUpdateCourseMutation,
   useDeleteCourseMutation,
   useGetLessonsQuery,

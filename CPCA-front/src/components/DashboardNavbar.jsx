@@ -1,17 +1,40 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { logoutUser, toggleSidebar } from "../features/user/userSlice";
-import {useNavigate} from 'react-router-dom'; 
+import { logoutUser, toggleSidebar, toggleTheme } from "../features/user/userSlice";
+import { useNavigate } from "react-router-dom";
+import { BsCart3, BsMoonFill, BsSunFill } from "react-icons/bs";
 
 function DashboardNavbar() {
   const [showLogout, setShowLogout] = useState(false);
   const { user } = useSelector((state) => state.userState);
   const dispatch = useDispatch();
-  const navigate = useNavigate();; 
+  const navigate = useNavigate();
+
+  const handleTheme = () => {
+    dispatch(toggleTheme());
+  };
+
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      message: "Betsegaw invited you to take the course",
+      time: "5 minutes ago",
+      read: false,
+    },
+    {
+      id: 2,
+      message: "Congratulations you completed advanced js course",
+      time: "5 minutes ago",
+      read: false,
+    },
+  ]);
   const toggle = () => {
     // console.log('toggled')
     dispatch(toggleSidebar());
   };
+  const theme = useSelector((state) => state.userState.theme);
+  const isDarkTheme = theme === "dracula";
+
   const handleLogout = () => {
     navigate("/");
     dispatch(logoutUser());
@@ -44,17 +67,7 @@ function DashboardNavbar() {
         <a className="btn btn-ghost text-xl">Dashboard</a>
       </div>
       <div className="navbar-end">
-        <button className="" onClick={() => setShowLogout(!showLogout)}>
-          <img
-            className=" object-contain mask mask-circle btn"
-            src={user.profileImg}
-            alt="profileImg"
-          />
-        </button>
-        {showLogout && (<div>
-          <button className="btn btn-ghost" onClick={handleLogout}>Logout</button>
-        </div>)}
-        {/* <button className="btn btn-ghost btn-circle">
+        <button className="btn btn-ghost btn-circle">
           <div className="indicator">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +85,34 @@ function DashboardNavbar() {
             </svg>
             <span className="badge badge-xs badge-primary indicator-item"></span>
           </div>
-        </button> */}
+        </button>
+        <button className="btn ml-3 btn-ghost btn-circle">
+        <label className="swap swap-rotate">
+            <input
+              type="checkbox"
+              onChange={handleTheme}
+              defaultChecked={isDarkTheme}
+            />
+            {/* sun icon*/}
+            <BsSunFill className="swap-on h-4 w-4" />
+            {/* moon icon*/}
+            <BsMoonFill className="swap-off h-4 w-4" />
+          </label>
+        </button>
+        <button className="" onClick={() => setShowLogout(!showLogout)}>
+          <img
+            className=" object-contain mask mask-circle btn"
+            src={user.profileImg}
+            alt="profileImg"
+          />
+        </button>
+        {showLogout && (
+          <div>
+            <button className="btn btn-ghost" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

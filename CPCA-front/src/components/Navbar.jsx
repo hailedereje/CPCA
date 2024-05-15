@@ -1,50 +1,113 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { BsCart3, BsMoonFill, BsSunFill } from "react-icons/bs";
-import { FaBarsStaggered } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { toggleTheme } from "../features/user/userSlice";
 
-function Navbar() {
-  const theme = useSelector((state) => state.userState.theme);
-  console.log(theme);
-  const dispatch = useDispatch();
-  const isDarkTheme = theme === "dracula";
-
-  const handleTheme = () => {
-    dispatch(toggleTheme());
-  };
+export default function Navbar(props) {
+  const [navbarOpen, setNavbarOpen] = React.useState(false);
   return (
-    <nav className="bg-base-200 mt-10">
-      <div className="navbar align-element">
-        <div className="navbar-start">
-          {/* TITLE */}
-          <NavLink
-            to="/login"
-            className="hidden text-white lg:flex btn bg-green-1 text-3xl items-center"
-          >
-            Learn with us
-          </NavLink>
-          {/* DROPDOWN */}
-          <NavLink className="dropdown" to="/login">
-            <label tabIndex={0} className="btn btn-ghost lg:hidden">
-              <FaBarsStaggered className="h-6 w-6" />
-            </label>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52"
-            >
-              {/* <NavLinks /> */}
-            </ul>
-          </NavLink>
-        </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal">{/* <NavLinks /> */}</ul>
+    <nav
+      className={
+        (props.transparent
+          ? "top-0 absolute z-50 w-full"
+          : "relative bg-white shadow-lg") +
+        " flex flex-wrap items-center justify-between px-2 py-3 "
+      }
+    >
+      <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
+        
+        <div
+          className={
+            "lg:flex flex-grow items-center bg-white lg:bg-transparent lg:shadow-none" +
+            (navbarOpen ? " block rounded shadow-lg" : " hidden")
+          }
+          id="example-navbar-warning"
+        >
+          <ul className="flex flex-col lg:flex-row list-none mr-auto">
+        
+          </ul>
+          <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+            <li className="flex items-center">
+              <a
+                className={
+                  (props.transparent
+                    ? "lg:text-white lg:hover:text-gray-300 text-gray-800"
+                    : "text-gray-800 hover:text-gray-600") +
+                  " px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                }
+                href="#pablo"
+              >
+                <i
+                  className={
+                    (props.transparent
+                      ? "lg:text-gray-300 text-gray-500"
+                      : "text-gray-500") +
+                    " fab fa-facebook text-lg leading-lg "
+                  }
+                />
+                <span className="lg:hidden inline-block ml-2">Share</span>
+              </a>
+            </li>
+
+            <li className="flex items-center">
+              <a
+                className={
+                  (props.transparent
+                    ? "lg:text-white lg:hover:text-gray-300 text-gray-800"
+                    : "text-gray-800 hover:text-gray-600") +
+                  " px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                }
+                href="#pablo"
+              >
+                <i
+                  className={
+                    (props.transparent
+                      ? "lg:text-gray-300 text-gray-500"
+                      : "text-gray-500") +
+                    " fab fa-twitter text-lg leading-lg "
+                  }
+                />
+                <span className="lg:hidden inline-block ml-2">Tweet</span>
+              </a>
+            </li>
+
+            <li className="flex items-center">
+              <a
+                className={
+                  (props.transparent
+                    ? "lg:text-white lg:hover:text-gray-300 text-gray-800"
+                    : "text-gray-800 hover:text-gray-600") +
+                  " px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                }
+                href="#pablo"
+              >
+                <i
+                  className={
+                    (props.transparent
+                      ? "lg:text-gray-300 text-gray-500"
+                      : "text-gray-500") +
+                    " fab fa-github text-lg leading-lg "
+                  }
+                />
+                <span className="lg:hidden inline-block ml-2">Star</span>
+              </a>
+            </li>
+
+            <li className="flex items-center">
+              <NavLink to = '/login'
+                className={
+                  (props.transparent
+                    ? "bg-white text-gray-800 active:bg-gray-100"
+                    : "bg-pink-500 text-white active:bg-pink-600") +
+                  " text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3"
+                }
+                type="button"
+                style={{ transition: "all .15s ease" }}
+              >
+                Login/Register
+              </NavLink>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>
   );
 }
-
-export default Navbar;

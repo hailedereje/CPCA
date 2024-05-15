@@ -11,7 +11,7 @@ import {
   Register,
 } from "./pages";
 import { loader as CoursesLoader } from "./pages/dashboard/AllCourses";
-import { loader as SingleCourseLoader } from "./pages/Lessons";
+// import { loader as SingleCourseLoader } from "./pages/Lessons";
 import { action as loginAction } from "./pages/Login";
 import { action as registerAction } from "./pages/Register";
 import { action as EditProfileAction } from "./pages/dashboard/Profile";
@@ -39,20 +39,27 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addUsers } from "@/features/forum/socketSlice";
 import SocketContext from "@/context/SocketContext";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { Editor } from "./components/textEditor/test";
 import { CreateCourse } from "./components/createCourse/createCourse";
 import { UpdataCourse } from "./components/createCourse/updateCourse";
 import { CourseLayout } from "./components/createCourse/layout";
 import { QuizBoard } from "./components/createCourse/QuizBoard";
 import DraftCourses from "./components/createCourse/draftCourses";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { draftCourseLoader } from "./loader/draftCourseLoader";
 
 // export const socket = io("http://localhost:5000", {
 //   withCredentials: true,
 //   secure: true,
 // });
 export const socket = ""
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+    },
+  },
+});
 
 function App() {
   const user = useSelector((state) => state.userState.user);
@@ -130,7 +137,6 @@ function App() {
         {
           path: "courses/:id",
           element: <Lessons />,
-          loader: SingleCourseLoader(store),
         },
         { path: "courses/:id/lessons/:id", element: <LessonDetails/> },
 
@@ -161,7 +167,7 @@ function App() {
     {
       path: "/",
       element: <HomeLayout />,
-      errorElement: <ErrorPage />,
+      // errorElement: <ErrorPage />,
       children: [
         { index: true, element: <Landing /> },
 
@@ -191,7 +197,8 @@ function App() {
         },
         {
           path: 'course/update/:id',
-          element: <UpdataCourse/>
+          element: <UpdataCourse/>,
+          loader: draftCourseLoader(queryClient)
         },
       
         {

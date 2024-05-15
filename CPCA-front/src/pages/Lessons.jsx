@@ -5,22 +5,22 @@ import { api } from "../api";
 import { useLoaderData } from "react-router-dom";
 import { SectionTitle, Tabs } from "../components";
 
-export const loader =
-  (store) =>
-  async ({ params }) => {
-    // console.log(params.id);
+// export const loader =
+//   (store) =>
+//   async ({ params }) => {
+//     // console.log(params.id);
 
-    console.log(params);
-    const response = await store
-      .dispatch(api.endpoints.getCourse.initiate(params.id))
-      .unwrap();
-    return response;
-  };
+//     console.log(params);
+//     const response = await store
+//       .dispatch(api.endpoints.getCourse.initiate(params.id))
+//       .unwrap();
+//     return response;
+//   };
 
 function Lessons() {
   return (
     <div>
-      <BreadCrumb />
+      {/* <BreadCrumb /> */}
 
       <div className="flex  gap-x-1 ">
         <div className="flex flex-auto  ">
