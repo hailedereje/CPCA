@@ -179,28 +179,8 @@ function App() {
     {
       path: "/dashboard",
       element: <Dashboard />,
-<<<<<<< HEAD
       // errorElement: <ErrorPage />,
       children: [...getDashboardRoutes()],
-=======
-      errorElement: <ErrorPage />,
-      children: [
-        ...getDashboardRoutes(),
-        {
-          path:'course',
-          element: <CreateCourse/>,
-        },
-        {
-          path: 'course/update/:id',
-          element: <UpdataCourse/>
-        },
-      
-        {
-          path: "courses/draft",
-          element: <DraftCourses/>
-        },
-      ],
->>>>>>> af89fd80422d832a60526b16dfc933979d88a967
     },
     {
       path: "code-editor",
