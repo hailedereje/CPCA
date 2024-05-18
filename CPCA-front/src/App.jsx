@@ -27,18 +27,13 @@ import {
   Profile,
   Status,
 } from "./pages/dashboard/index";
-import { HeroSection } from "./components";
 import Askquestion from "./components/Askquestion";
 import Forum from "./pages/Forum";
 import MyQuestions from "./pages/MyQuestions";
 import { CodeEditor } from "./components/CodeEditor";
 import RichTextExample from "./components/textEditor/textEditor";
 import LessonDetails from "./pages/LessonDetails";
-import { io } from "socket.io-client";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addUsers } from "@/features/forum/socketSlice";
-import SocketContext from "@/context/SocketContext";
+import { useSelector } from "react-redux";
 import { Editor } from "./components/textEditor/test";
 import { CreateCourse } from "./components/createCourse/createCourse";
 import { UpdataCourse } from "./components/createCourse/updateCourse";
@@ -48,11 +43,7 @@ import DraftCourses from "./components/createCourse/draftCourses";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { draftCourseLoader } from "./loader/draftCourseLoader";
 
-// export const socket = io("http://localhost:5000", {
-//   withCredentials: true,
-//   secure: true,
-// });
-export const socket = ""
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -63,27 +54,6 @@ const queryClient = new QueryClient({
 
 function App() {
   const user = useSelector((state) => state.userState.user);
-  const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   socket.connect();
-  //   socket.on("connect", () => {
-  //     console.log("socket connected", socket.id);
-  //   });
-  //   socket.auth = user;
-  //   socket.on("user-connected", (users) => {
-  //     dispatch(addUsers(users));
-  //     console.log("users", users);
-  //   });
-  //   socket.on("user-disconnected", (users) => {
-  //     console.log("users", users);
-  //     dispatch(addUsers(users));
-  //   });
-
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // },[dispatch, user]);
 
   const getDashboardRoutes = () => {
     if (!user) return [];
@@ -229,9 +199,7 @@ function App() {
   ]);
   return(
     <QueryClientProvider client={queryClient} contextSharing={true}>
-      <SocketContext.Provider value={socket}>
-        <RouterProvider router={router} />
-      </SocketContext.Provider>
+      <RouterProvider router={router} />
     </QueryClientProvider>
   );
 }

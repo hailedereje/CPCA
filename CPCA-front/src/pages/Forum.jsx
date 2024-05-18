@@ -1,19 +1,17 @@
+/* eslint-disable react/prop-types */
 import UserInfo from "../components/UserInfo";
 import Write from "../icons/Write";
 import Send from "../icons/Send";
-// import { useQuery } from "react-query";
 import newRequests from "../utils/newRequest";
 import { useParams } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Loading from "../components/Loading";
 import NothingHere from "../components/NothingHere";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LikeDislikeComponent from "../icons/LikeDislike";
-import { useContext } from "react";
-import SocketContext from "../context/SocketContext";
 import { useSelector, useDispatch } from "react-redux";
-import { useQuery } from "@tanstack/react-query";
-
+import { useQuery } from "react-query";
+import SocketContext from "@/context/SocketContext";
 
 const Forum = () => {
   const user = useSelector((state) => state.userState.user);
@@ -34,6 +32,7 @@ const Forum = () => {
       return res.data;
     }
   });
+  
 
   useEffect(() => {
     if (data) {
@@ -54,13 +53,13 @@ const Forum = () => {
     return () => {
       socket.off('receive-question', handleReceiveQuestion);
     };
-  }, [socket, user, dispatch]);
+  }, [user, dispatch, socket]);
 
   if (isLoading) return <Loading />;
 
   return (
     <div
-      className="flex flex-col items-center gap-y-5 
+      className="md:w-[60%] flex flex-col items-center gap-y-5 
     md:gap-8 my-8 "
     >
       <Toaster />
@@ -72,11 +71,12 @@ const Forum = () => {
               key={index}
               className="w-[96%] md:w-[80%] mx-12 flex flex-col 
               items-end  p-3 md:p-4 rounded-md bg-purple-100
-              dark:bg-slate-400"
+               dark:bg-slate-400"
             >
               <div
                 className="w-full bg-white dark:bg-[#1E212A]
-                p-4 md:p-5 rounded-lg shadow-md flex items-start gap-5"
+              
+              p-4 md:p-5 rounded-lg shadow-md flex items-start gap-5"
               >
                 <div className="left-section space-y-1 text-center">
                   <LikeDislikeComponent question={question} />
@@ -100,8 +100,8 @@ const Forum = () => {
               {/* nested comment       */}
               {openId.find((ele) => ele === index + 1) && (
                 <>
-                  {question.replies?.map((answer) => {
-                    console.log("answer", answer)
+                  {question?.replies?.map((answer) => {
+                    console.log("answer", answer);
                     return (
                       <div key={answer._id} className="flex items-center gap-4">
                         {/* fix this */}
@@ -112,28 +112,30 @@ const Forum = () => {
                         />
                         <div className="bg-white dark:bg-[#32353F] dark:text-white max-w-xl p-5 rounded-lg shadow-md flex flex-col items-start gap-5 mt-2">
                           <p className="text-inherit">{answer?.reply}</p>
-                          <UserInfo answer={answer} currentUserEmail={question.author.email}/>
+                          <UserInfo answer={answer} />
                         </div>
                       </div>
                     );
                   })}
                   {/* nested comment       */}
-                  {user && (
-                    <div 
-                      className="w-full bg-white dark:bg-slate-900 flex items-center gap-4
-                      px-5 py-2 rounded-lg shadow-md  mt-2"
-                    >
-                      <Write />
-                      <input
-                        onChange={(e) => setAnswer(e.target.value)}
-                        className="w-full h-10 border-none outline-none rounded-md py-1 px-2"
-                        type="text"
-                        value={answer}
-                        placeholder="Write a comment"
-                      />
-                      <Send questionId={question._id} answer={answer} setAnswer={setAnswer} />
-                    </div>
-                  )}
+                  <div
+                    className="w-full bg-white dark:bg-slate-900 flex items-center gap-4
+       px-5 py-2 rounded-lg shadow-md  mt-2"
+                  >
+                    <Write />
+                    <input
+                      onChange={(e) => setAnswer(e.target.value)}
+                      className="w-full h-10 border-none outline-none rounded-md py-1 px-2 "
+                      type="text"
+                      value={answer}
+                      placeholder="Write a comment"
+                    />
+                    <Send
+                      questionId={question._id}
+                      answer={answer}
+                      setAnswer={setAnswer}
+                    />
+                  </div>
                 </>
               )}
             </div>

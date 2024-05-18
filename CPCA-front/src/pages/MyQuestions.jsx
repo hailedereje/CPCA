@@ -1,13 +1,11 @@
 import UserInfo from "../components/UserInfo";
-// import { useQuery } from "react-query";
+import { useQuery } from "react-query";
 import newRequests from "../utils/newRequest";
-import { Toaster } from "react-hot-toast";
 import Loading from "../components/Loading";
 import NothingHere from "../components/NothingHere";
 import { useState } from "react";
 import LikeDislikeComponent from "../icons/LikeDislike";
 import { useSelector } from "react-redux";
-import { useQuery } from "@tanstack/react-query";
 
 const Content = () => {
   const user = useSelector((state) => state.userState.user);
@@ -23,20 +21,20 @@ const Content = () => {
 
   return (
     <div
-      className="flex flex-col items-center gap-y-5 
-    md:gap-8 my-8 "
+    className="h-full w-full md:w-[60%] flex flex-col items-center 
+    gap-8 "
     >
-      <Toaster />
       {data.length > 0 &&
         data.map((question, index) => {
           console.log("question", question);
           return (
             <div
               key={index}
-              className="w-[96%] md:w-[80%] mx-12 flex flex-col 
-              items-end  p-3 md:p-4 rounded-md bg-purple-100
-               dark:bg-slate-400"
-            >
+              className="w-full my-8 md:w-[80%] md:mx-12 flex flex-col items-end border 
+          
+          p-2
+          md:p-4 rounded-md bg-purple-100 dark:bg-slate-400" 
+          >
               <div
                 className="w-full bg-white dark:bg-[#1E212A]
               

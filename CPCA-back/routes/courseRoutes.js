@@ -3,7 +3,6 @@ import { authenticate, isAdmin, isInstructor, studentCheck } from "../middleware
 
 import {
   addPrerequistes,
-  approveEnrollment,
   createCourse,
   deleteCourse,
   getAllCourses,
