@@ -1,10 +1,10 @@
-import Share from "../icons/Share";
+import Share from "../../icons/Share";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import newRequests from "../utils/newRequest";
+import newRequests from "../../utils/newRequest";
 import { useSelector } from "react-redux";
 import { useContext } from "react";
-import SocketContext from "../context/SocketContext";
+import SocketContext from "../../context/SocketContext";
 
 const Askquestion = () => {
   const socket = useContext(SocketContext);
@@ -35,10 +35,10 @@ const Askquestion = () => {
   };
 
   return (
-    <div className="h-full w-full">
+    <div className="">
       <Toaster />
       <div
-        className="md:mx-12 flex flex-col items-center 
+        className="flex flex-col items-center 
       gap-4 mb-12 border p-4 pb-6 rounded-md bg-purple-300 
       dark:bg-[#1E212A]  mt-12"
       >

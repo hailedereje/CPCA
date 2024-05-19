@@ -27,9 +27,9 @@ import {
   Profile,
   Status,
 } from "./pages/dashboard/index";
-import Askquestion from "./components/Askquestion";
-import Forum from "./pages/Forum";
-import MyQuestions from "./pages/MyQuestions";
+import Askquestion from "./pages/forum/Askquestion";
+import Forum from "./pages/forum/Forum";
+import MyQuestions from "./pages/forum/MyQuestions";
 import { CodeEditor } from "./components/CodeEditor";
 import RichTextExample from "./components/textEditor/textEditor";
 import LessonDetails from "./pages/LessonDetails";
@@ -42,6 +42,7 @@ import { QuizBoard } from "./components/createCourse/QuizBoard";
 import DraftCourses from "./components/createCourse/draftCourses";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { draftCourseLoader } from "./loader/draftCourseLoader";
+import Home from "./pages/course/Home";
 
 
 const queryClient = new QueryClient({
@@ -115,19 +116,6 @@ function App() {
           element: <EnrolledCourses />,
           // loader: EnrolledCourses(store),
         },
-        {
-          path: "forum",
-          element: <ForumLayout />,
-          children: [
-            { path: "content", element: <Forum /> },
-            { path: "myqns", element: <MyQuestions /> },
-            {
-              path: "ask",
-              element: <Askquestion />,
-            },
-            // other child routes...
-          ]
-        },
       ];
     }
 
@@ -146,11 +134,26 @@ function App() {
           element: <Register />,
           action: registerAction(store),
         },
-
         {
           path: "login",
           element: <Login />,
           action: loginAction(store),
+        },
+        {
+          path: "courses",
+          element: <Home />,
+        },
+        {
+          path: "forum",
+          element: <ForumLayout />,
+          children: [
+            { path: "content", element: <Forum /> },
+            { path: "myqns", element: <MyQuestions /> },
+            {
+              path: "ask",
+              element: <Askquestion />,
+            },
+          ]
         },
       ],
     },

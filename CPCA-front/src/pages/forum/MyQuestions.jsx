@@ -1,10 +1,10 @@
-import UserInfo from "../components/UserInfo";
+import UserInfo from "../../components/forum/UserInfo";
 import { useQuery } from "react-query";
-import newRequests from "../utils/newRequest";
-import Loading from "../components/Loading";
-import NothingHere from "../components/NothingHere";
+import newRequests from "../../utils/newRequest";
+import Loading from "../../components/Loading";
+import NothingHere from "../../components/NothingHere";
 import { useState } from "react";
-import LikeDislikeComponent from "../icons/LikeDislike";
+import LikeDislikeComponent from "../../icons/LikeDislike";
 import { useSelector } from "react-redux";
 
 const Content = () => {
@@ -21,7 +21,7 @@ const Content = () => {
 
   return (
     <div
-    className="h-full w-full md:w-[60%] flex flex-col items-center 
+    className="h-full w-full mt-12 md:w-[60%] flex flex-col items-center 
     gap-8 "
     >
       {data.length > 0 &&
@@ -30,7 +30,7 @@ const Content = () => {
           return (
             <div
               key={index}
-              className="w-full my-8 md:w-[80%] md:mx-12 flex flex-col items-end border 
+              className="w-full md:w-[80%] md:mx-12 flex flex-col items-end border 
           
           p-2
           md:p-4 rounded-md bg-purple-100 dark:bg-slate-400" 

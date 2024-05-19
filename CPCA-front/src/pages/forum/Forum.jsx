@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
-import UserInfo from "../components/UserInfo";
-import Write from "../icons/Write";
-import Send from "../icons/Send";
-import newRequests from "../utils/newRequest";
+import UserInfo from "../../components/forum/UserInfo";
+import Write from "../../icons/Write";
+import Send from "../../icons/Send";
+import newRequests from "../../utils/newRequest";
 import { useParams } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import Loading from "../components/Loading";
-import NothingHere from "../components/NothingHere";
+import Loading from "../../components/Loading";
+import NothingHere from "../../components/NothingHere";
 import { useContext, useEffect, useState } from "react";
-import LikeDislikeComponent from "../icons/LikeDislike";
+import LikeDislikeComponent from "../../icons/LikeDislike";
 import { useSelector, useDispatch } from "react-redux";
 import { useQuery } from "react-query";
 import SocketContext from "@/context/SocketContext";
@@ -60,7 +60,7 @@ const Forum = () => {
   return (
     <div
       className="md:w-[60%] flex flex-col items-center gap-y-5 
-    md:gap-8 my-8 "
+    md:gap-8 mt-12 "
     >
       <Toaster />
       {questions.length > 0 &&
