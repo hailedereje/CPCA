@@ -1,5 +1,5 @@
 import express from "express";
-import { authenticate } from "../middlewares/authenticate.js";
+import { authenticate, studentCheck } from "../middlewares/authenticate.js";
 import {
   answerQuestion,
   askQuestion,
@@ -16,6 +16,7 @@ import {
 const router = express.Router();
 
 router.use(authenticate);
+router.use(studentCheck)
 router.post("/ask-question", askQuestion);
 router.post("/answer/:id", answerQuestion);
 router.post("/upvote/:id", likeQuestion);

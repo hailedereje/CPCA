@@ -39,6 +39,16 @@ export const updateQuiz = async (req, res) => {
     }
 };
 
+// get a all quizes
+export const getAllQuizes = async (req, res) => {
+  try {
+      const quiz = await Quiz.find({});
+      res.status(200).json(quiz);
+  } catch (err) {
+      res.status(400).json(err);
+  }
+};
+
 // get a quiz by ID
 export const getQuizById = async (req, res) => {
     try {
