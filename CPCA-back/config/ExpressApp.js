@@ -2,7 +2,8 @@ import "express-async-errors";
 import express from "express";
 import morgan from "morgan";
 import { errorHandler, notFound } from "../middlewares/index.js";
-import { userRoutes, courseRoutes, lessonRoutes, questionRoutes, quizRoutes } from "../routes/index.js";
+import { userRoutes, courseRoutes, lessonRoutes, questionRoutes, 
+  quizRoutes, practiceQuestionRoutes } from "../routes/index.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -25,6 +26,7 @@ const App = async (app) => {
   app.use("/api/v1/courses", lessonRoutes);
   app.use("/api/v1/discussion", questionRoutes);
   app.use("/api/v1/quiz", quizRoutes)
+  app.use("/api/v1/practice_question", practiceQuestionRoutes)
 
   app.use(notFound);
   app.use(errorHandler);
