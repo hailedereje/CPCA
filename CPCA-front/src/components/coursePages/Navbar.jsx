@@ -37,7 +37,7 @@ const Navbar = () => {
             to="/courses"
             className="hover:text-gray-400 dark:hover:text-gray-300"
           >
-            Home
+            Courses
           </NavLink>
           <NavLink
             to="/courses"
@@ -46,22 +46,10 @@ const Navbar = () => {
             Category
           </NavLink>
           <NavLink
-            to="/courses"
-            className="hover:text-gray-400 dark:hover:text-gray-300"
-          >
-            Your Course
-          </NavLink>
-          <NavLink
             to="/forum/content"
             className="hover:text-gray-400 dark:hover:text-gray-300"
           >
             Discussion
-          </NavLink>
-          <NavLink
-            to="/forum/content"
-            className="hover:text-gray-400 dark:hover:text-gray-300"
-          >
-            Reviews
           </NavLink>
         </nav>
         <div className="relative">

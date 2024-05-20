@@ -1,10 +1,12 @@
+import { Link } from "react-router-dom";
+
 /* eslint-disable react/prop-types */
 const CourseItem = ({ course }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg">
-        <div className="rounded-lg overflow-hidden">
+        <Link to={'/course/detail'} className="rounded-lg overflow-hidden">
             <img src={course.image} alt={course.title} className="w-full h-40 object-cover" />
-        </div>
+        </Link>
       <div className="mt-2">
         <div className="w-full overflow-hidden">
           <h3 className="text-xl font-bold mb-2 whitespace-nowrap overflow-hidden overflow-ellipsis">{course.title}</h3>

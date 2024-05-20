@@ -1,3 +1,4 @@
+import ContinueLearning from "@/components/coursePages/ContinueLearning";
 import CourseList from "@/components/coursePages/CourseList";
 import Features from "@/components/coursePages/Features";
 import HeroSection from "@/components/coursePages/HeroSection";
@@ -13,6 +14,7 @@ function Home () {
       <HeroSection />
       <SearchBar />
       <CourseList />
+      <ContinueLearning />
       <Features />
       <Footer />
     </div>

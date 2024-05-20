@@ -42,7 +42,8 @@ import { QuizBoard } from "./components/createCourse/QuizBoard";
 import DraftCourses from "./components/createCourse/draftCourses";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { draftCourseLoader } from "./loader/draftCourseLoader";
-import Home from "./pages/course/Home";
+import Home from "./pages/course/Courses";
+import AboutCourse from "./pages/course/AboutCourse";
 
 
 const queryClient = new QueryClient({
@@ -142,6 +143,10 @@ function App() {
         {
           path: "courses",
           element: <Home />,
+        },
+        {
+          path: "course/detail",
+          element: <AboutCourse />,
         },
         {
           path: "forum",
