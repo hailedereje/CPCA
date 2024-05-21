@@ -1,27 +1,26 @@
 // User Detail Page
-import { useState } from 'react'
-import { BiSearch } from 'react-icons/bi';
+import { useState } from "react";
+import { BiSearch } from "react-icons/bi";
 
 // eslint-disable-next-line react/prop-types
-const UserDetails = ({users}) => {
+const UserDetails = ({ users }) => {
   // States
   const [selectedUser, setSelectedUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage, setUsersPerPage] = useState(10);
 
-  // function to handle click on buttons 
+  // function to handle click on buttons
   const handleRowClick = (user) => {
     setSelectedUser(user);
     setShowModal(true);
   };
-  
-  const handleDelete = (id) => {
-    console.log('Deleting user with id:', id);
-    alert('are you sure you want to delete this user?');
 
-  }
+  const handleDelete = (id) => {
+    console.log("Deleting user with id:", id);
+    alert("are you sure you want to delete this user?");
+  };
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -78,49 +77,53 @@ const UserDetails = ({users}) => {
       </div>
       {/* table  */}
       <div className="w-full mt-4 overflow-x-auto">
-  <table className="w-full bg-white border border-gray-200 divide-y divide-gray-200">
-    <thead className="bg-gray-100">
-      <tr>
-        <th className="pt-2 pb-3">NO.</th> 
-        <th className="pt-2 pb-3">Username</th>
-        <th className="pt-2 pb-3">Email</th>
-        <th className="pt-2 pb-3">Creation Date</th>
-        <th className="pt-2 pb-3">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {currentUsers.map((user, index) => (
-        <tr
-          className={`${
-            index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
-          } hover:bg-gray-100`}
-          key={index}
-        >
-          <td className="pt-2 pb-2 pl-16">{index + 1}</td>
-          <td className="pt-2 pb-2 pl-16">{user.username}</td>
-          <td className="pt-2 pb-2 pl-16">{user.email}</td>
-          <td className="pt-2 pb-2 pl-16">{user.creationDate}</td>
-          <td className="pt-2 pb-2 pl-16 flex gap-2">
-            <button
-              className="block rounded-lg bg-gradient-to-tr from-blue-800 to-blue-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              onClick={() => handleRowClick(user)}
-            >
-              Details
-            </button>
-            <button
-              className="block rounded-lg bg-gradient-to-tr from-red-800 to-red-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              onClick={() => handleDelete(user._id)} 
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-
-
+        <table className="w-full bg-white border border-gray-200 divide-y divide-gray-200">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="w-1/5 pt-2 pb-3 text-center">NO.</th>
+              <th className="w-1/5 pt-2 pb-3 text-left">Username</th>
+              <th className="w-1/5 pt-2 pb-3 text-left">Email</th>
+              <th className="w-1/5 pt-2 pb-3 text-left">Creation Date</th>
+              <th className="w-1/5 pt-2 pb-3 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentUsers.map((user, index) => (
+              <tr
+                className={`${
+                  index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                } hover:bg-gray-100`}
+                key={index}
+              >
+                <td className="w-1/5 pt-2 pb-2 pl-16 text-left">{index + 1}</td>
+                <td className="w-1/5 pt-2 pb-2 pl-16 text-left">
+                  {user.username}
+                </td>
+                <td className="w-1/5 pt-2 pb-2 pl-16 text-left">
+                  {user.email}
+                </td>
+                <td className="w-1/5 pt-2 pb-2 pl-16 text-left">
+                  {user.creationDate}
+                </td>
+                <td className="w-1/5 pt-2 pb-2 pl-16 flex gap-2 text-left">
+                  <button
+                    className="block rounded-lg bg-gradient-to-tr from-blue-800 to-blue-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    onClick={() => handleRowClick(user)}
+                  >
+                    Details
+                  </button>
+                  <button
+                    className="block rounded-lg bg-gradient-to-tr from-red-800 to-red-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    onClick={() => handleDelete(user._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <div className="pagination flex flex-row mt-5">
         <button
           className="block rounded-lg bg-gradient-to-tr from-gray-800 to-gray-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
@@ -145,18 +148,18 @@ const UserDetails = ({users}) => {
           <div className="modal-overlay fixed inset-0 bg-black opacity-80 "></div>
           <div className="modal-content relative bg-white w-96 pl-6 pb-6 pr-8 rounded-lg shadow-lg">
             <span
-              className="close cursor-pointer relative text-3xl top-[1px] left-full text-red-500"
+              className="btn btn-ghost btn-circle cursor-pointer absolute text-3xl top-0 right-0 text-red-500"
               onClick={handleCloseModal}
             >
               &times;
             </span>
-            <h3 className="text-xl relative inset-0 text-black font-bold mb-4">
+            <h3 className="text-xl relative inset-0 text-black font-bold my-4">
               User Details
             </h3>
             {selectedUser && (
               <div className="relative">
                 <p className="mb-2">
-                  <span className="font-bold">Username:</span>{' '}
+                  <span className="font-bold">Username:</span>{" "}
                   {selectedUser.username}
                 </p>
                 <p className="mb-2">

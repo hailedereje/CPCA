@@ -25,15 +25,28 @@ export const updatePracticeQuestion = async (req, res) => {
     }
 };
 
-// Get a specific practiceQuestion by ID
+// Get a all practiceQuestion
 export const getAllPracticeQuestions = async (req, res) => {
+    console.log(req.query);
+    const { page = 1, search = '', difficulty = '' } = req.query;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+  
+    const query = {
+      title: { $regex: search, $options: 'i' },
+      ...(difficulty && { difficulty }),
+    };
+  
     try {
-        const practiceQuestion = await PracticeQuestion.find({});
-        res.json(practiceQuestion);
+      const questions = await PracticeQuestion.find(query).skip(skip).limit(limit)
+      const totalQuestions = await PracticeQuestion.countDocuments(query);
+      const totalPages = Math.ceil(totalQuestions / limit);
+  
+      res.json({ questions, totalPages });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to get practiceQuestion' });
+      res.status(500).json({ error: 'Error fetching questions' });
     }
-};
+  };
 
 // Get a specific practiceQuestion by ID
 export const getPracticeQuestion = async (req, res) => {

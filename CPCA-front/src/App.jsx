@@ -44,6 +44,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { draftCourseLoader } from "./loader/draftCourseLoader";
 import Home from "./pages/course/Courses";
 import AboutCourse from "./pages/course/AboutCourse";
+import QuestionsList from "./pages/question/QuestionList";
+import AddQuestionForm from "./pages/question/PracticeQuestionForm";
+import PracticeQuestionPage from "./pages/question/Practice";
 
 
 const queryClient = new QueryClient({
@@ -147,6 +150,18 @@ function App() {
         {
           path: "course/detail",
           element: <AboutCourse />,
+        },
+        {
+          path: "practice_question/add",
+          element: <AddQuestionForm />,
+        },
+        {
+          path: "practice_question",
+          element: <QuestionsList />,
+        },
+        {
+          path: "practice_question/:id",
+          element: <PracticeQuestionPage />,
         },
         {
           path: "forum",

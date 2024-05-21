@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getQuiz } from "../../Redux/action.js";
-import { Quiz } from "./Quiz";
+import { Quiz } from "@/components/Quiz.jsx";
 
 export const Quizes = () => {
   const singleQuiz = useSelector((state) => state?.mernQuize.QuizData);
