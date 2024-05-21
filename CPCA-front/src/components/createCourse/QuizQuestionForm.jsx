@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { postQuizObj, quizSuccess } from "../../Redux/action.js";
+import add from "../../assets/add.gif";
 
 export const QuizQuestionForm = () => {
   const [isPopupOpen, setPopupOpen] = useState(false);
@@ -61,7 +62,7 @@ export const QuizQuestionForm = () => {
   };
 
   return (
-    <div classname="relative">
+    <div className="relative">
       <button
         className="flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded mt-4"
         onClick={() => setPopupOpen(!isPopupOpen)}
@@ -83,7 +84,7 @@ export const QuizQuestionForm = () => {
                 <div className="flex text-yellow-500 w-96 font-bold font-serif mb-2 ml-12">
                   <h1 className="text-2xl ">ADD QUESTIONS </h1>
                   <img
-                    src="./add.gif"
+                    src={add}
                     alt="add icon"
                     className="w-1/3 h-20 -mt-6"
                   />
@@ -157,7 +158,6 @@ export const QuizQuestionForm = () => {
                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                             name="isCorrect"
                             id=""
-                            v-model="allowMultiple"
                             value={x.boolean}
                             onChange={(e) => {
                               handleType(x.id)(e);

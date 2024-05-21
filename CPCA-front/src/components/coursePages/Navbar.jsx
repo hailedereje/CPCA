@@ -46,6 +46,12 @@ const Navbar = () => {
             Category
           </NavLink>
           <NavLink
+            to="/practice_question"
+            className="hover:text-gray-400 dark:hover:text-gray-300"
+          >
+            Practice Questions
+          </NavLink>
+          <NavLink
             to="/forum/content"
             className="hover:text-gray-400 dark:hover:text-gray-300"
           >
