@@ -16,7 +16,6 @@ import {
 const router = express.Router();
 
 router.use(authenticate);
-router.use(studentCheck)
 router.post("/ask-question", askQuestion);
 router.post("/answer/:id", answerQuestion);
 router.post("/upvote/:id", likeQuestion);

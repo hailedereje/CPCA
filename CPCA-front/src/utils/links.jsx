@@ -3,12 +3,8 @@ import { MdQueryStats } from "react-icons/md";
 import { FaWpforms } from "react-icons/fa";
 import { ImProfile } from "react-icons/im";
 import { BsFiles } from "react-icons/bs";
-import { BsPersonFillAdd } from "react-icons/bs";
 import { FaUsers } from "react-icons/fa";
-import { LiaChalkboardTeacherSolid } from "react-icons/lia";
-import { RiDraftLine, RiLogoutBoxFill, RiSoundModuleLine } from "react-icons/ri";
-import { IoMdAddCircleOutline } from "react-icons/io";
-import { BiBookAdd } from "react-icons/bi";
+import { RiDraftLine, RiSoundModuleLine } from "react-icons/ri";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { AiOutlineFileAdd } from "react-icons/ai";
 import { BsFillPeopleFill } from "react-icons/bs";
@@ -32,21 +28,9 @@ export const StudentLinks = [
 export const AdminLinks = [
   { id: 1, text: "status", path: "/dashboard", icon: <IoBarChartSharp /> },
   { id: 2, text: "profile", path: "profile", icon: <ImProfile /> },
-  {
-    id: 3,
-    text: "All Instructors",
-    path: "all-instructors",
-    icon: <LiaChalkboardTeacherSolid />,
-  },
-  {
-    id: 4,
-    text: "Add Instructor",
-    path: "add-instructor",
-    icon: <BsPersonFillAdd />,
-  },
-  { id: 5, text: "All Students", path: "all-students", icon: <FaUsers /> },
-  { id: 6, text: "Create course",path: "course",icon: <RiSoundModuleLine />},
-  { id: 7, text: "Draft courses", path: "courses/draft",icon: <RiDraftLine/>}
+  { id: 3, text: "Users", path: "users", icon: <FaUsers /> },
+  { id: 4, text: "Create course",path: "course",icon: <RiSoundModuleLine />},
+  { id: 5, text: "Draft courses", path: "courses/draft",icon: <RiDraftLine/>}
 ];
 
 

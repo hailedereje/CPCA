@@ -18,12 +18,9 @@ import { action as EditProfileAction } from "./pages/dashboard/Profile";
 import { store } from "./store";
 import {
   Activities,
-  AddInstructor,
   AllCourses,
   // CreateCourse,
   EnrolledCourses,
-  InstructorsList,
-  StudentsList,
   Profile,
   Status,
 } from "./pages/dashboard/index";
@@ -47,6 +44,7 @@ import AboutCourse from "./pages/course/AboutCourse";
 import QuestionsList from "./pages/question/QuestionList";
 import AddQuestionForm from "./pages/question/PracticeQuestionForm";
 import PracticeQuestionPage from "./pages/question/Practice";
+import UsersList from "./pages/dashboard/UsersList";
 
 
 const queryClient = new QueryClient({
@@ -72,9 +70,7 @@ function App() {
           element: <Profile />,
           action: EditProfileAction(store),
         },
-        { path: "add-instructor", element: <AddInstructor /> },
-        { path: "all-instructors", element: <InstructorsList /> },
-        { path: "all-students", element: <StudentsList /> },
+        { path: "users", element: <UsersList /> },
       ];
     } else if (user.isInstructor) {
       dashboardRoutes = [

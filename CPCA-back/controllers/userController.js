@@ -54,29 +54,31 @@ const userLogout = async (req, res) => {
   return res.json({ msg: "User LoggedOut" });
 };
 
-// get all users
-const getAllInstructors = async (req, res) => {
-  try {
-    const users = await User.find({ role: "instructor" })
-      .sort({ createdAt: -1 })
-      .lean();
-    return res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({ message: "Server Error in get all instructors controller" });
-  }
-}
+// Get a all users
+const getAllUsers = async (req, res) => {
+  console.log(req.query);
+  const { page = 1, search = '', role = '' } = req.query;
+  const limit = 5;
+  const skip = (page - 1) * limit;
 
-const getAllStudents = async (req, res) => {
-  try {
-    const users = await User.find({ role: "student" })
-      .sort({ createdAt: -1 })
-      .lean();
-    return res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({ message: "Server Error in get all students controller" });
-  }
-}
+  const query = {
+    $or: [
+      { username: { $regex: search, $options: 'i' } },
+      { email: { $regex: search, $options: 'i' } }
+    ],
+    ...(role && { role }),
+  };
 
+  try {
+    const users = await User.find(query).skip(skip).limit(limit)
+    const totalUsers = await User.countDocuments(query);
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    res.json({ users, totalPages });
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching questions' });
+  }
+};
 
 const getUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
@@ -152,6 +154,5 @@ export {
   editUserProfile,
   createInstructor,
   userLogout,
-  getAllInstructors,
-  getAllStudents
+  getAllUsers
 };
