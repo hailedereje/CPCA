@@ -1,32 +1,32 @@
-import { Question, Reply } from "../models/index.js";
+import { DiscussionQuestion, Reply } from "../models/index.js";
 
 // ask questions
-export const askQuestion = async (req, res) => {
+export const askDiscussionQuestion = async (req, res) => {
     const { question, description, userId, tags } = req.body;
     try {
-      const newQuestion = await Question.create({
+      const newDiscussionQuestion = await DiscussionQuestion.create({
         question,
         description,
         author: userId,
         tags,
         seen: [userId],
       });
-      return res.status(201).json(newQuestion);
+      return res.status(201).json(newDiscussionQuestion);
     } catch (error) {
       res.status(500).json({ message: "Server Error" });
     }
   }
 
 //   reply questions
-export const answerQuestion = async (req, res) => {
+export const answerDiscussionQuestion = async (req, res) => {
     const { answer, userId } = req.body;
   
     const { id: questionId } = req.params;
     try {
       const reply = await Reply.create({ reply: answer, author: userId });
-      const findQuestion = await Question.findById(questionId);
-      console.log("find", findQuestion);
-      const addReply = await findQuestion.updateOne({
+      const findDiscussionQuestion = await DiscussionQuestion.findById(questionId);
+      console.log("find", findDiscussionQuestion);
+      const addReply = await findDiscussionQuestion.updateOne({
         $push: { replies: reply._id },
       });
       return res.status(201).json(reply);
@@ -36,9 +36,9 @@ export const answerQuestion = async (req, res) => {
   }
 
 // get all questions
-export const getAllQuestions = async (req, res) => {
+export const getAllDiscussionQuestions = async (req, res) => {
     try {
-      const questions = await Question.find({})
+      const questions = await DiscussionQuestion.find({})
         .populate("replies")
         .populate({
           path: "replies",
@@ -56,10 +56,10 @@ export const getAllQuestions = async (req, res) => {
   }
 
 // get my questions
-export const getMyQuestions = async (req, res) => {
+export const getMyDiscussionQuestions = async (req, res) => {
     const { id: userId } = req.params;
     try {
-      const replies = await Question.find({ author: userId })
+      const replies = await DiscussionQuestion.find({ author: userId })
         .populate("replies")
         .populate({
           path: "replies",
@@ -79,29 +79,29 @@ export const getMyQuestions = async (req, res) => {
   }
 
 // like questions
-export const likeQuestion = async (req, res) => {
+export const likeDiscussionQuestion = async (req, res) => {
     const { id: questionId } = req.params;
     const { userId } = req.body;
     try {
-      const findQuestion = await Question.findById(questionId);
-      if (findQuestion.upvote.includes(userId)) {
-        const reverse = await findQuestion.updateOne({
+      const findDiscussionQuestion = await DiscussionQuestion.findById(questionId);
+      if (findDiscussionQuestion.upvote.includes(userId)) {
+        const reverse = await findDiscussionQuestion.updateOne({
           $pull: { upvote: userId },
         });
         return res.status(201).json({ message: "You have reversed upvoting" });
       }
   
-      if (findQuestion.downvote.includes(userId)) {
-        const downvote = await findQuestion.updateOne({
+      if (findDiscussionQuestion.downvote.includes(userId)) {
+        const downvote = await findDiscussionQuestion.updateOne({
           $pull: { downvote: userId },
         });
-        const upvote = await findQuestion.updateOne({
+        const upvote = await findDiscussionQuestion.updateOne({
           $push: { upvote: userId },
         });
         return res.status(200).json({ message: "Response updated successfully" });
       }
   
-      const upvote = await findQuestion.updateOne({
+      const upvote = await findDiscussionQuestion.updateOne({
         $push: { upvote: userId },
       });
       return res.status(200).json(upvote);
@@ -111,29 +111,29 @@ export const likeQuestion = async (req, res) => {
   }
 
 //  dislike questions
-export const dislikeQuestion = async (req, res) => {
+export const dislikeDiscussionQuestion = async (req, res) => {
     const { id: questionId } = req.params;
     const { userId } = req.body;
     try {
-      const findQuestion = await Question.findById(questionId);
-      if (findQuestion.downvote.includes(userId)) {
-        const reverse = await findQuestion.updateOne({
+      const findDiscussionQuestion = await DiscussionQuestion.findById(questionId);
+      if (findDiscussionQuestion.downvote.includes(userId)) {
+        const reverse = await findDiscussionQuestion.updateOne({
           $pull: { downvote: userId },
         });
         return res.status(201).json({ message: "You have reversed downvoting" });
       }
   
-      if (findQuestion.upvote.includes(userId)) {
-        const upvote = await findQuestion.updateOne({
+      if (findDiscussionQuestion.upvote.includes(userId)) {
+        const upvote = await findDiscussionQuestion.updateOne({
           $pull: { upvote: userId },
         });
-        const downvote = await findQuestion.updateOne({
+        const downvote = await findDiscussionQuestion.updateOne({
           $push: { downvote: userId },
         });
         return res.status(200).json({ message: "Response updated successfully" });
       }
   
-      const downvote = await findQuestion.updateOne({
+      const downvote = await findDiscussionQuestion.updateOne({
         $push: { downvote: userId },
       });
       return res.status(200).json(downvote);
@@ -143,10 +143,10 @@ export const dislikeQuestion = async (req, res) => {
   }
 
 // find questions by topic
-export const findQuestionsByTopic = async (req, res) => {
+export const findDiscussionQuestionsByTopic = async (req, res) => {
     const { topic } = req.params;
     try {
-      const questions = await Question.find({
+      const questions = await DiscussionQuestion.find({
         tags: {
           $in: [topic],
         },
@@ -168,12 +168,12 @@ export const findQuestionsByTopic = async (req, res) => {
   }
 
 // seen questions
-export const seenQuestion = async (req, res) => {
+export const seenDiscussionQuestion = async (req, res) => {
   const { id: questionId } = req.params;
   const { userId } = req.body;
   try {
-    const findQuestion = await Question.findById(questionId);
-    const seen = await findQuestion.updateOne({
+    const findDiscussionQuestion = await DiscussionQuestion.findById(questionId);
+    const seen = await findDiscussionQuestion.updateOne({
       $push: { seen: userId },
     });
     return res.status(200).json(seen);
@@ -203,15 +203,15 @@ export const receiveNotification= async (req, res) => {
   const { userId } = req.body;
   try {
     let unseen = {questions: [], replies: []};
-    const AllQuestions = await Question.find({});
-    AllQuestions.forEach((question) => {
+    const AllDiscussionQuestions = await DiscussionQuestion.find({});
+    AllDiscussionQuestions.forEach((question) => {
       if(!question.seen.includes(userId)){
         unseen.questions.push(question);
       }
     });
 
-    const MyQuestions = await Question.find({ author: userId });
-    MyQuestions.forEach((question) => {
+    const MyDiscussionQuestions = await DiscussionQuestion.find({ author: userId });
+    MyDiscussionQuestions.forEach((question) => {
       question.replies.forEach((reply) => {
         if(!reply.seen){
           unseen.replies.push(reply);
