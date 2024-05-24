@@ -38,7 +38,9 @@ import { CourseLayout } from "./components/createCourse/layout";
 import { QuizBoard } from "./components/createCourse/QuizBoard";
 import DraftCourses from "./components/createCourse/draftCourses";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { draftCourseLoader } from "./loader/draftCourseLoader";
+// import { draftCourseLoader } from "./loader/draftCourseLoader";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "react-hot-toast";
 import Home from "./pages/course/Courses";
 import AboutCourse from "./pages/course/AboutCourse";
 import QuestionsList from "./pages/question/QuestionList";
@@ -48,13 +50,8 @@ import UsersList from "./pages/dashboard/UsersList";
 import QuizQuestionsList from "./pages/quiz/QuizQuestionsList";
 
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5,
-    },
-  },
-});
+
+const queryClient = new QueryClient();
 
 function App() {
   const user = useSelector((state) => state.userState.user);
@@ -192,12 +189,25 @@ function App() {
         {
           path: 'course/update/:id',
           element: <UpdataCourse/>,
-          loader: draftCourseLoader(queryClient)
+          // loader: draftCourseLoader(queryClient)
         },
       
         {
           path: "courses/draft",
           element: <DraftCourses/>
+        },
+
+        {
+          path:'course/update/:id/chapters',
+          element: <CourseLayout/>,
+          children: [
+           { index: true, element: <div className="flex flex-col items-center justify-center h-full p-4">
+           <p className="text-3xl font-bold text-gray-600 mb-2 uppercase">Instruction</p>
+           <p className="text-lg text-gray-400">Add Lessons after creating a chapter. Click on a lesson to view and edit its content.</p>
+         </div>},
+           {path: ":chapterId/lessons/:lessonId",element:<RichTextExample/>},
+           { path: "add-test",element:<QuizBoard/>}
+          ]
         },
       ],
     },
@@ -211,19 +221,13 @@ function App() {
       element: <Editor/>
     },
     
-    {
-      path:'course/edit/:id',
-      element: <CourseLayout/>,
-      children: [
-       { index: true, element: <RichTextExample/>},
-       { path: "add-test",element:<QuizBoard/>}
-      ]
-    },
     
   ]);
   return(
     <QueryClientProvider client={queryClient} contextSharing={true}>
       <RouterProvider router={router} />
+        <Toaster position="top-center" reverseOrder={false} />
+      <ReactQueryDevtools/>
     </QueryClientProvider>
   );
 }

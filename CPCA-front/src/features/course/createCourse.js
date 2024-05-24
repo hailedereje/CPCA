@@ -4,7 +4,11 @@ import { createSlice, nanoid } from "@reduxjs/toolkit";
 const table = "courses"
 
 const initialState = {
-    course:{},
+    course:{
+        id:nanoid(),
+        name:"course-1",
+        chapters:[]
+    },
     draftCourses: await db.table(table).toArray().then(data => data),
     activeLesson:{},
     prerequisites:[],
@@ -25,13 +29,14 @@ export const createCourseSlice = createSlice({
         setCourse: (state,action) => {
             
         },
-        addPrerequistes: (state,action) => {
-            const { prerequisite } = action.payload
-            state.prerequisites.push(prerequisite)
+        setPrerequistes: (state,action) => {
+            const { prerequisites } = action.payload
+            state.prerequisites = prerequisites
         },
-        addTags: (state,action) => {
-            const { tag } = action.payload
-            state.tags.push(tag)
+
+        setTags: (state,action) => {
+            const { tags } = action.payload
+            state.tags = tags
         },
         deleteTag: (state,action) => {
             const {id} = action.payload
@@ -183,5 +188,5 @@ export const createCourseSlice = createSlice({
 export const { addChapter, removeChapter, updateChapter, 
                 renameChapter, renameLesson, addLesson ,
                 addTopic,removeTopic,toggleShow,updateTopic
-                ,setActiveLesson, removeLesson,addQuiz,createCourse,addPrerequistes,addTags ,deletePrerequisite,deleteTag} = createCourseSlice.actions;
+                ,setActiveLesson, removeLesson,addQuiz,createCourse,setPrerequistes,setTags ,deletePrerequisite,deleteTag} = createCourseSlice.actions;
 export default createCourseSlice.reducer;

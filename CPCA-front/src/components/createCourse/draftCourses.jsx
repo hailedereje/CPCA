@@ -1,26 +1,35 @@
+import newRequests from '@/utils/newRequest';
+import { useQuery } from '@tanstack/react-query';
 import React, { useState, useEffect } from 'react';
 import { RiDraftLine } from 'react-icons/ri';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Loading } from './components/loader';
 
 const DraftCourses = () => {
-    const { draftCourses } = useSelector(x => x.createCourseState)
-    console.log(draftCourses)
+  const navigate = useNavigate()
+    const {data: draftCourses,isLoading,isError} = useQuery({
+      queryKey: ['draftCourses'],
+      queryFn: () => newRequests.get("/courses/all/drafts"),
+      staleTime: 1000*6*100
+    })
+
+    if(isError) {
+      return <div>Error Loading Draft Courses....</div>
+    }
 
   return (
     <div className="container mx-auto mt-8">
       <h1 className="text-5xl font-bold mb-4">Draft Courses</h1>
-      <div className="flex flex-col gap-1">
-        {/* Mapping over the list of courses */}
-        {draftCourses.length !== 0 && draftCourses?.map(course => (
-          <Link to={`/course/${course.id}`} key={course.id} className='flex gap-3 p-2 text-blue-400 items-center'>
+      {isLoading ? <Loading/> : <div className="flex flex-col gap-1">
+        {draftCourses.length !== 0 && draftCourses.data?.map(course => (
+          <button onClick={() => navigate(`/dashboard/course/update/${course._id}`)} key={course._id} className='flex gap-3 p-2 text-blue-400 items-center'>
             <RiDraftLine size={20}/>
             <span className="text-lg font-medium ">
-                {JSON.stringify(course)}
+                {course.title}
             </span>   
-          </Link>
+          </button>
         ))}
-      </div>
+      </div>}
     </div>
   );
 };

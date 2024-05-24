@@ -1,6 +1,11 @@
-import Dexie from "dexie";
-export const db = new Dexie("courseDatabase")
+// src/db.js
+import Dexie from 'dexie';
 
-db.version(1).stores({
-    courses: '++id, name, author, duration, level, prerequisites, tags, chapters'
+export const db = new Dexie('coursesDB');
+db.version(2).stores({
+    courses: '++id, title',
+    chapters: '++id, courseId, title',
+    lessons: '++id, chapterId, title',
+    contents: '++id, lessonId,type,content'
 });
+
