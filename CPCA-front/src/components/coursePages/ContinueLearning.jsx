@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import CustomProgressBar from "./ProgressBar";
+import CustomProgressBar from "../progress/ProgressBar";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 
 const ContinueLearning = () => {

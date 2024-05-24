@@ -1,16 +1,20 @@
 import mongoose from "mongoose";
 
-const question = mongoose.Schema({
-  title: { type: String },
-  questions: { type: String },
-  options: [{ option: String, isCorrect: Boolean, id: Number }],
-  correctAnswer: { type: String },
-});
-
 const QuizSchema = mongoose.Schema({
+  courseId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Course",
+  },
+  chapterId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Chapter",
+  },
   title: { type: String, required: true },
   instruction: {type: String},
-  questions: [question],
+  questions: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "quizQuestion",
+  }],
   duration: { type: Number }, // Add duration field
   createdAt: {
     type: Date,
