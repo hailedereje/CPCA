@@ -1,4 +1,4 @@
-import Progress from "../models/index.js";
+import { Progress } from "../models/index.js";
 
 // Endpoint to submit lesson progress
 export const lessonProgress =  async (req, res) => {
