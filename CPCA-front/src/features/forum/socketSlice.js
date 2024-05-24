@@ -2,12 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   onlineUsers: [],
+  socket: null
 };
 
 export const socketSlice = createSlice({
   name: "socketSlice",
   initialState,
   reducers: {
+    setSocket(state, action) {
+      state.socket = action.payload;
+    },
     addUsers(state, action) {
       state.onlineUsers = action.payload;
       console.log("state", state.onlineUsers);
@@ -22,6 +26,6 @@ export const socketSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { addUsers, removeUsers } = socketSlice.actions;
+export const { setSocket, addUsers, removeUsers } = socketSlice.actions;
 
 export default socketSlice.reducer;

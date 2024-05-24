@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import newRequests from "@/utils/newRequest";
-import Comment from "../icons/Comment";
+import Comment from "../../icons/Comment";
 import moment from "moment";
 import {useSelector} from 'react-redux'
 import { useEffect } from "react";

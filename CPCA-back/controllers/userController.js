@@ -60,6 +60,32 @@ const userLogout = async (req, res) => {
   return res.json({ msg: "User LoggedOut" });
 };
 
+// Get a all users
+const getAllUsers = async (req, res) => {
+  console.log(req.query);
+  const { page = 1, search = '', role = '' } = req.query;
+  const limit = 5;
+  const skip = (page - 1) * limit;
+
+  const query = {
+    $or: [
+      { username: { $regex: search, $options: 'i' } },
+      { email: { $regex: search, $options: 'i' } }
+    ],
+    ...(role && { role }),
+  };
+
+  try {
+    const users = await User.find(query).skip(skip).limit(limit)
+    const totalUsers = await User.countDocuments(query);
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    res.json({ users, totalPages });
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching questions' });
+  }
+};
+
 const getUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
@@ -134,4 +160,5 @@ export {
   editUserProfile,
   createInstructor,
   userLogout,
+  getAllUsers
 };

@@ -1,5 +1,5 @@
 import express from "express";
-import { authenticate } from "../middlewares/authenticate.js";
+import { authenticate, studentCheck } from "../middlewares/authenticate.js";
 import {
   answerQuestion,
   askQuestion,

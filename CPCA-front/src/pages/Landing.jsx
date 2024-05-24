@@ -568,6 +568,7 @@ export default function Landing() {
             </div>
           </div>
         </section>
+        <Footer />
       </main>
     </>
   );
