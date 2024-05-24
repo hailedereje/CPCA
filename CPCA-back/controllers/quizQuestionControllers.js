@@ -4,16 +4,17 @@ import Quiz from "../models/quiz.js";
 // Create a new quiz question
 const createQuizQuestion = async (req, res) => {
   try {
-    const { question, options, correctAnswer, quizId } = req.body;
-    const quiz = await Quiz.findById(quizId);
-    if (!quiz) {
-      return res.status(404).json({ message: "Quiz not found" });
-    }
+    const { title, question, options, correctAnswer } = req.body;
+    // const quiz = await Quiz.findById(quizId);
+    // if (!quiz) {
+    //   return res.status(404).json({ message: "Quiz not found" });
+    // }
     const newQuizQuestion = new QuizQuestion({
+      title,
       question,
       options,
       correctAnswer,
-      quizId,
+      // quizId,
     });
     await newQuizQuestion.save();
     res.status(201).json(newQuizQuestion);
@@ -24,13 +25,29 @@ const createQuizQuestion = async (req, res) => {
 
 // get all quiz questions
 const getAllQuizQuestions = async (req, res) => {
+  console.log(req.query);
+  const { page = 1, search = '' } = req.query;
+  const limit = 10;
+  const skip = (page - 1) * limit;
+
+  const query = {
+    $or: [
+      { title: { $regex: search, $options: 'i' } },
+      { question: { $regex: search, $options: 'i' } }
+    ],
+  };
+
   try {
-    const quizQuestions = await QuizQuestion.find();
-    res.json(quizQuestions);
+    const questions = await QuizQuestion.find(query).skip(skip).limit(limit)
+    const totalQuestions = await QuizQuestion.countDocuments(query);
+    const totalPages = Math.ceil(totalQuestions / limit);
+
+    res.json({ questions, totalPages });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: 'Error fetching questions' });
   }
 };
+
 
 // Get a single quiz question by ID
 const getQuizQuestionById = async (req, res) => {

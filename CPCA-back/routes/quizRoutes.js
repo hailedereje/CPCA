@@ -1,8 +1,17 @@
-import express from 'express';
-import { createQuiz, deleteQuiz, getAllQuizes, getQuizById, updateQuiz } from '../controllers/quizControllers.js';
-// Repeat for each controller file
+import express from "express";
+import {
+  createQuiz,
+  deleteQuizById,
+  getAllQuizzes,
+  getQuizById,
+  updateQuizById,
+} from "../controllers/index.js";
 
-import { authenticate, isInstructor, studentCheck } from '../middlewares/authenticate.js';
+import {
+  authenticate,
+  isInstructor,
+  studentCheck,
+} from "../middlewares/authenticate.js";
 
 const router = express.Router();
 
@@ -10,10 +19,10 @@ router.use(authenticate);
 
 router.use(isInstructor);
 router.post("/new", createQuiz);
-router.get("/all", getAllQuizes);
-router.post("/update/:id", updateQuiz);
+router.get("/all", getAllQuizzes);
+router.post("/update/:id", updateQuizById);
 router.get("/:id", getQuizById);
-router.post("/delete/:id", deleteQuiz);
+router.post("/delete/:id", deleteQuizById);
 
 router.use(studentCheck);
 router.get("/:id", getQuizById);

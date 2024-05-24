@@ -45,6 +45,7 @@ import QuestionsList from "./pages/question/QuestionList";
 import AddQuestionForm from "./pages/question/PracticeQuestionForm";
 import PracticeQuestionPage from "./pages/question/Practice";
 import UsersList from "./pages/dashboard/UsersList";
+import QuizQuestionsList from "./pages/quiz/QuizQuestionsList";
 
 
 const queryClient = new QueryClient({
@@ -158,6 +159,10 @@ function App() {
         {
           path: "practice_question/:id",
           element: <PracticeQuestionPage />,
+        },
+        {
+          path: "quiz_question",
+          element: <QuizQuestionsList />,
         },
         {
           path: "forum",

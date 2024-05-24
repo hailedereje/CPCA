@@ -1,7 +1,7 @@
 import { Quiz, Chapter, Course } from '../models/index.js';
 
 // Create a new quiz
-const createQuiz = async (req, res) => {
+export const createQuiz = async (req, res) => {
   try {
     const { title, instruction, duration, courseId, chapterId } = req.body;
     if (!title || !courseId || !chapterId) {
@@ -23,7 +23,7 @@ const createQuiz = async (req, res) => {
   }
 };
 // Get all quizzes
-const getAllQuizzes = async (req, res) => {
+export const getAllQuizzes = async (req, res) => {
   try {
     const quizzes = await Quiz.find();
     res.status(200).json(quizzes);
@@ -33,7 +33,7 @@ const getAllQuizzes = async (req, res) => {
 };
 
 // Get a quiz by ID
-const getQuizById = async (req, res) => {
+export const getQuizById = async (req, res) => {
   try {
     const { id } = req.params;
     const quiz = await Quiz.findById(id);
@@ -47,7 +47,7 @@ const getQuizById = async (req, res) => {
 };
 
 // Update a quiz by ID
-const updateQuizById = async (req, res) => {
+export const updateQuizById = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, instruction, duration, courseId, chapterId } = req.body;
@@ -66,7 +66,7 @@ const updateQuizById = async (req, res) => {
 };
 
 // Delete a quiz by ID
-const deleteQuizById = async (req, res) => {
+export const deleteQuizById = async (req, res) => {
   try {
     const { id } = req.params;
     const deletedQuiz = await Quiz.findByIdAndDelete(id);
@@ -77,14 +77,4 @@ const deleteQuizById = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete quiz' });
   }
-};
-
-
-// Export the controller functions
-module.exports = {
-  createQuiz,
-  getAllQuizzes,
-  getQuizById,
-  updateQuizById,
-  deleteQuizById,
 };
