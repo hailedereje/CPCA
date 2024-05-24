@@ -29,6 +29,8 @@ import { createLessonController } from "../controllers/lesson/createLessonContro
 import { getLessonController } from "../controllers/lesson/getLessonController.js";
 import { addLessonItemSchema } from "../validation/lesson/addLessonItemValidator.js";
 import { addLessonItemController } from "../controllers/lesson/addLessonItemController.js";
+import { deleteLessonItemController } from "../controllers/lesson/deleteLessonItemController.js";
+import { updateLessonItemController } from "../controllers/lesson/updateLessonItemController.js";
 
 const router = express.Router();
 
@@ -59,4 +61,6 @@ router.post("/course/chapters/chapter/rename",renameChapterController)
 router.get("/course/chapters/chapter/lessons/lesson",getLessonController)
 router.post("/course/chapters/chapter/lessons",validateRequest(createLessonSchema),createLessonController)
 router.post("/course/chapters/chapter/lessons/lesson/add-lesson-item",validateRequest(addLessonItemSchema),addLessonItemController)
+router.post("/course/chapters/chapter/lessons/lesson/update-lesson-item",updateLessonItemController)
+router.delete("/course/chapters/chapter/lessons/lesson/lessonitem",validateRequest(),deleteLessonItemController)
 export default router;

@@ -37,4 +37,7 @@ export const fetchLesson = (lessonId) => newRequests.get(`/courses/course/chapte
 
 export const createLesson = (data) => newRequests.post(`/courses/course/chapters/chapter/lessons`, data);
 export const addLessonItem = (data) => newRequests.post("/courses/course/chapters/chapter/lessons/lesson/add-lesson-item",data)
-export const updateLessonItem = (lessonId,data) => newRequests.put("/courses/course/chapters/chapter/lessons/lesson",data,{ params: { lessonId }})
+export const updateLessonItem = (data) => {
+    console.log(data)
+    return newRequests.post(`/courses/course/chapters/chapter/lessons/lesson/update-lesson-item`,data)
+}
