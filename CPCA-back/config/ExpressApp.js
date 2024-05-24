@@ -5,7 +5,8 @@ import { errorHandler, notFound } from "../middlewares/index.js";
 import { userRoutes, courseRoutes, lessonRoutes, 
   quizRoutes, practiceQuestionRoutes, 
   quizQuestionRoutes,
-  discussionQuestionRoutes} from "../routes/index.js";
+  discussionQuestionRoutes,
+  progressRoutes} from "../routes/index.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -30,6 +31,7 @@ const App = async (app) => {
   app.use("/api/v1/quiz", quizRoutes)
   app.use("/api/v1/quiz_question", quizQuestionRoutes)
   app.use("/api/v1/practice_question", practiceQuestionRoutes)
+  app.use("/api/v1/progress", progressRoutes)
 
   app.use(notFound);
   app.use(errorHandler);

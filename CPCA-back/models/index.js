@@ -8,3 +8,4 @@ export { default as Chapter} from "./chapter.js";
 export { default as Quiz} from "./quiz.js"
 export { default as PracticeQuestion} from "./practiceQuestion.js"
 export { default as QuizQuestion} from "./quizQuestion.js"
+export { default as Lesson } from "./lesson.js"
