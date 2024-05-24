@@ -1,26 +1,30 @@
 import { useEffect, useRef, useState } from "react"
-import { AiOutlineBars } from "react-icons/ai"
 import { MdAdd, MdModeEditOutline } from "react-icons/md"
 
 import { RiDeleteBin6Line, RiQuestionAnswerLine } from "react-icons/ri"
 import { SlOptions } from "react-icons/sl"
 import { useDispatch } from "react-redux"
 import { ActionTypes } from "./action.Types";
-import { addChapter, addLesson, removeChapter, removeLesson, renameChapter, renameLesson, setActiveLesson } from "@/features/course/createCourse";
+import {  removeChapter, removeLesson, renameChapter, renameLesson, setActiveLesson } from "@/features/course/createCourse";
 import { IoMdAddCircleOutline, IoMdList } from "react-icons/io";
 import { Input } from "./components/input-field";
-import { useLocation, useNavigate, useNavigation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import newRequests from "@/utils/newRequest"
 
 
-export const EditCourseSidebar = ({ course, activeLesson }) => {
+export const EditCourseSidebar = ({course, activeLesson,courseId }) => {
+    const client = useQueryClient()
+    // const data = client.getQueryData(['course',courseId]).data.course
+    // const {_id: id,chapters} = data
 
     const { chapterId, lessonId } = activeLesson
+    
     const { chapters } = course
-
     const location = useLocation();
     const pathSegments = location.pathname.split('/').filter(segment => segment !== '');
     const route = pathSegments[pathSegments.length - 1]
-    const navigate = useNavigation()
+    const navigate = useNavigate()
 
     const initialState = {
         renameLesson: false,
@@ -57,7 +61,7 @@ export const EditCourseSidebar = ({ course, activeLesson }) => {
     ]
 
     return (
-        <div className="xl:w-[28%] sm:w-[60%] md:w-[40%] max-w-[400px] h-full max-h-[1024px]  overflow-scroll mt-16 pb-16 fixed editor  top-0 left-0 flex flex-col gap-2 bg-gray-50 text-black">
+        <div className="w-64 max-w-[400px] h-full max-h-[1024px]  overflow-scroll mt-16 pb-16 fixed editor  top-0 left-0 flex flex-col gap-2 bg-gray-50 text-black">
             <div className="relative">
                 {chapters.map((chapter, idx) => (
                     <div key={chapter.id} className="">
@@ -194,37 +198,72 @@ export const EditCourseSidebar = ({ course, activeLesson }) => {
 
 
 
-const Menu = ({ menuItems, id }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const menuRef = useRef(null);
+// const Menu = ({ menuItems, id }) => {
+//     const [isOpen, setIsOpen] = useState(false);
+//     const menuRef = useRef(null);
 
-    const toggleMenu = () => setIsOpen(!isOpen);
-    const handleClickOutside = (event) => { if (menuRef.current && !menuRef.current.contains(event.target)) setIsOpen(false) }
+//     const toggleMenu = () => setIsOpen(!isOpen);
+//     const handleClickOutside = (event) => { if (menuRef.current && !menuRef.current.contains(event.target)) setIsOpen(false) }
 
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+//     useEffect(() => {
+//         document.addEventListener('mousedown', handleClickOutside);
+//         return () => {
+//             document.removeEventListener('mousedown', handleClickOutside);
+//         };
+//     }, []);
 
+    
+//     return (
+//         <div className="dropdown" ref={menuRef}>
+//             <button onClick={toggleMenu} className="btn focus:outline-none peer" >
+//                 <SlOptions size={20} />
+//             </button>
+
+//             <div className={`dropdown-content menu w-52 z-`}>
+//                 {menuItems.map((item, idx) => (
+//                     <button key={idx} onClick={() => {
+//                         item.action(id)
+//                         // toggleMenu()
+//                     }} className="flex items-center gap-2 p-2 capitalize text-gray-800 hover:bg-gray-200  w-full text-left">
+//                         {item.icon}
+//                         <span className="text-sm font-medium">{item.name}</span>
+//                     </button>
+//                 ))}
+//             </div>
+//         </div>
+//     )
+// }
+
+const Menu = ({menuItems,id}) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
     return (
-        <div className="relative" ref={menuRef}>
-            <button onClick={toggleMenu} className=" focus:outline-none peer" >
-                <SlOptions size={20} />
-            </button>
-
-            <div className={`absolute z-20 right-0 mt-3  w-36 bg-white rounded-sm shadow-lg ${isOpen ? "" : "hidden"}`}>
-                {menuItems.map((item, idx) => (
-                    <button key={idx} onClick={() => {
-                        item.action(id)
-                        toggleMenu()
-                    }} className="flex items-center gap-2 p-2 capitalize text-gray-800 hover:bg-gray-200  w-full text-left">
-                        {item.icon}
-                        <span className="text-sm font-medium">{item.name}</span>
-                    </button>
-                ))}
-            </div>
-        </div>
-    )
-}
+      <div className="relative inline-block">
+        <button className="" onClick={() => setIsMenuOpen(prev => !prev)}>
+            <SlOptions size={20} />     
+        </button>
+        {isMenuOpen && (
+          <div className="fixed inset-0 z-40" onClick={() => setIsMenuOpen(false)}></div>
+        )}
+        {isMenuOpen && (
+          <div className="absolute top-10 left-0 w-48 bg-white border border-gray-200 rounded shadow-lg z-50 dark:bg-gray-600 dark:text-white dark:border-black">
+            <ul className="list-none p-0 m-0">
+            {menuItems.map(item => (
+                <li
+                  key={item.name}
+                  className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
+                  onClick={() => {
+                    item.action(id)
+                  }} 
+                >
+                  <span className="mr-2">{item.icon}</span>
+                  {item.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
+  };
+  

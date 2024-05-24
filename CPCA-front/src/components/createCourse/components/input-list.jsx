@@ -1,25 +1,27 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import Fuse from "fuse.js";
 import { ActionTypes } from "../action.Types";
-import { useDispatch, useSelector } from "react-redux";
-import { addPrerequistes, addTags, deletePrerequisite, deleteTag } from "@/features/course/createCourse";
-import { useLiveQuery } from "dexie-react-hooks";
-import { db } from "@/db/db";
+import { useDispatch } from "react-redux";
+import { setPrerequistes, setTags } from "@/features/course/createCourse";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useClickOutside } from "@/hooks/useClickOutside";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const InputList = ({ items, type, courseId }) => {
-    const { prerequisites, tags } = useSelector(x => x.createCourseState);
-    const data = useLiveQuery(() => db.courses.get(courseId)) ?? {};
 
+    const client = useQueryClient();
+    const course = client.getQueryData(['course', courseId]).data.course;
     const dispatch = useDispatch();
+    
+    const { prerequisites,tags } = course
+    const [contents, setContents] = useState(type === ActionTypes.ADD_PREREQUISITES ? prerequisites : tags);
     const [content, setContent] = useState("");
-    const contents = type === ActionTypes.ADD_PREREQUISITES ? prerequisites : tags;
+
     const [toggle, setToggle] = useState(false);
     const [filteredCourses, setFilteredCourses] = useState(items);
 
     const fuse = useMemo(() => new Fuse(items, {
-        keys: ['name'],
+        keys: ['title'],
         includeScore: true,
         findAllMatches: true,
         threshold: 0.6
@@ -45,11 +47,15 @@ export const InputList = ({ items, type, courseId }) => {
     }, [debouncedContent, fuse, items]);
 
     const action = useCallback((value) => {
-        if (type === ActionTypes.ADD_PREREQUISITES) {
-            dispatch(addPrerequistes({ prerequisite: value }));
-        } else if (type === ActionTypes.ADD_TAGS) {
-            dispatch(addTags({ tag: value }));
-        }
+        setContents(prevContents => {
+            const newContents = [...prevContents, value];
+            if (type === ActionTypes.ADD_PREREQUISITES) {
+                dispatch(setPrerequistes({ prerequisites: newContents }));
+            } else if (type === ActionTypes.ADD_TAGS) {
+                dispatch(setTags({ tags: newContents }));
+            }
+            return newContents;
+        });
     }, [dispatch, type]);
 
     const onSubmit = (e) => {
@@ -74,11 +80,15 @@ export const InputList = ({ items, type, courseId }) => {
     };
 
     const deleteContent = (id) => {
-        if (type === ActionTypes.ADD_PREREQUISITES) {
-            dispatch(deletePrerequisite({ id }));
-        } else if (type === ActionTypes.ADD_TAGS) {
-            dispatch(deleteTag({ id }));
-        }
+        setContents(prevContents => {
+            const newContents = prevContents.filter(content => content.id !== id);
+            if (type === ActionTypes.ADD_PREREQUISITES) {
+                dispatch(setPrerequistes({ prerequisites: newContents }));
+            } else if (type === ActionTypes.ADD_TAGS) {
+                dispatch(setTags({ tags: newContents }));
+            }
+            return newContents;
+        });
     };
 
     const formRef = useRef(null);
@@ -87,13 +97,13 @@ export const InputList = ({ items, type, courseId }) => {
     useClickOutside(formRef, () => setToggle(false));
 
     return (
-        <form onSubmit={onSubmit} className="flex gap-2 items-end" ref={formRef}>
+        <form onSubmit={onSubmit} className="flex gap-2 items-end dark:bg-gray-600 z-10 dark:text-black" ref={formRef}>
             <div className="relative w-full">
-                <div className="w-full flex gap-1 items-center border border-blue-300 p-1 flex-wrap max-h-32 overflow-scroll editor">
+                <div className="w-full flex gap-1 items-center border border-blue-300 p-1 flex-wrap max-h-32 overflow-auto editor">
                     <div className="flex items-center gap-2 flex-wrap">
-                        {contents.map((cont, idx) => (
+                        {contents.length > 0 && contents.map((cont, idx) => (
                             <div key={idx} className="flex gap-1 bg-green-300 p-2 rounded-md">
-                                <span className="text-xs text-left">{cont.name}</span>
+                                <span className="text-xs text-left">{cont.title}</span>
                                 <button type="button" onClick={() => deleteContent(cont.id)}>
                                     <svg className="text-gray-500" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                         <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M6.758 17.243L12.001 12m5.243-5.243L12 12m0 0L6.758 6.757M12.001 12l5.243 5.243" />
@@ -108,19 +118,19 @@ export const InputList = ({ items, type, courseId }) => {
                         value={content}
                         onChange={handleFilterChange}
                         onFocus={() => setToggle(true)}
-                        className="text-xs p-2 w-full rounded-md focus:outline-none appearance-none"
+                        className="text-xs p-2 w-full rounded-md focus:outline-none appearance-none dark:text-white dark:bg-transparent dark:placeholder:text-white"
                         ref={inputRef}
                     />
                 </div>
-                <div className={`absolute bg-white z-30 top-full left-0 mt-2 flex flex-col max-h-32 overflow-scroll editor p-1 gap-y-1 items-center w-full border border-gray-300 shadow-md ${toggle && filteredCourses.length ? "" : "hidden"}`}>
+                <div className={`absolute bg-white dark:bg-gray-500 text-white z-30 top-full left-0 mt-2 flex flex-col max-h-32 overflow-auto editor p-1 gap-y-1 items-center w-full shadow-md ${toggle && filteredCourses.length ? "" : "hidden"}`} hidden={filteredCourses.length === 0}>
                     {filteredCourses.map((course, idx) => (
                         <button
                             key={course.id}
                             type="button"
                             onClick={() => addContent(course)}
-                            className="flex p-2 hover:bg-blue-200 w-full rounded-sm"
+                            className="flex p-2 hover:bg-blue-200 dark:hover:bg-gray-600 w-full rounded-sm"
                         >
-                            <span className="text-sm text-left">{course.name}</span>
+                            <span className="text-sm text-left">{course.title}</span>
                         </button>
                     ))}
                 </div>

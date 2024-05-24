@@ -36,15 +36,21 @@ const userRegister = async (req, res) => {
   throw new BadRequestError("Invalid user data");
 };
 const userLogin = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (user && (await user.matchPasswords(password))) {
-    const jwt = await GenerateJWT(res, { _id: user._id });
-    console.log(user.role);
-    return res.json({ userId:user._id, user, jwt });
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (user && (await user.matchPasswords(password))) {
+      const jwt = await GenerateJWT(res, { _id: user._id });
+      console.log(user.role);
+      return res.json({ userId: user._id, user, jwt });
+    }
+    throw new NotFoundError("Invalid email or password");
+  } catch (err) {
+    console.error(err)
+    return res.status(500).send({ message: "something went wrong", title: "internal server error", err })
   }
-  throw new NotFoundError("Invalid email or password");
-};
+}
+
 
 const userLogout = async (req, res) => {
   res.cookie("jwt", "", {
@@ -68,7 +74,7 @@ const getUserProfile = async (req, res) => {
 const editUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   // console.log(req.body);
-  const {username, email, profileImg} = req.body; 
+  const { username, email, profileImg } = req.body;
   if (user) {
     const { username, email, password } = req.body;
 

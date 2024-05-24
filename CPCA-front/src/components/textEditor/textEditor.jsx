@@ -8,83 +8,94 @@ import { CodeContentEditor } from "./code-content";
 import { SyntaxHighlighter } from "./syntax-highlighter";
 import { UploadImage } from "./uploadImage";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
+import { useQueryClient } from "@tanstack/react-query";
+import { addLessonItem, createLessonItem, updateLessonItem } from "@/features/course/coursSidebarSlice";
+import { useLesson } from "../createCourse/hooks/course-hooks";
+import { Loading } from "../createCourse/components/loader";
+import { useParams } from "react-router-dom";
+import { ActionTypes } from "../createCourse/action.Types";
 
 
 
 function RichTextExample() {
-  const { activeLesson } = useSelector(x => x.createCourseState)
-  const { lesson, chapterId, lessonId } = activeLesson
-  const [index, setIndex] = useState()
+  const param = useParams()
   const dispatch = useDispatch()
-  const [image, setImage] = useState(null)
-  const noContent = Object.keys(activeLesson).length === 0 || Object.keys(lesson).length === 0
-  if(noContent) {
+  const  {showCodeEditor,lessonItem}  = useSelector(x => x.courseInputState)
+  const { actionType,lessonItemId,value,type } = lessonItem
+  const { data, isLoading, isError,error } = useLesson(param.lessonId)
+
+  if(isError) {
+    console.log(error)
     return (
-    
-        <div className="flex flex-col items-center justify-center h-full p-4">
-          <p className="text-3xl font-bold text-gray-600 mb-2 uppercase">Instruction</p>
-          <p className="text-lg text-gray-400">Add Lessons after creating a chapter. Click on a lesson to view and edit its content.</p>
-        </div>
-      
+      <div className="flex flex-col items-center justify-center h-full p-4 text-center">
+        <p className="text-2xl font-bold dark:text-white mb-4">Failed to Load Lesson</p>
+        <p className="text-lg text-gray-600 mb-4">Check your connection and try again.</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Retry
+        </button>
+      </div>
     )
   }
+
   return (
     <>
-      <div className="flex flex-col w-full py-10 max-w-[1024px] " hidden={!noContent}>
-        {(lesson && chapterId && lesson.topics.length === 0) &&
-          <div className="group flex items-end  gap-4">
-            <EditLinks idx={0} setImage={setImage} setIndex={setIndex} chapterId={chapterId} lessonId={lessonId} />
-            <span className="text-xl font-medium uppercase">click here and start adding contents to your <span className="text-red-400">lesson</span></span>
-          </div>}
-        {lesson.topics && lesson.topics.map((topicItem, idx) => (
+      {isLoading ? <Loading/>: <div className="flex flex-col items-center justify-center w-full py-10 max-w-[1024px] ">
+        <div className={`group flex items-end  gap-4 ${data.data.lesson.content.length === 0 ? "":"hidden"}`}>
+          <EditLinks />
+          <span className="text-xl font-medium uppercase">click here and start adding contents to your <span className="text-red-400">lesson</span></span>
+        </div>
+        <CodeContentEditor lessonId={param.lessonId} value={value}/>
+        <TextEditor lessonId={param.lessonId}/>
+        {data.data.lesson.content.map((item, idx) => (
           <div className="group w-full h-full flex items-end  gap-3" key={idx}>
             <div className="invisible group-hover:visible">
-              <EditLinks idx={idx} setImage={setImage} setIndex={setIndex} chapterId={chapterId} lessonId={lessonId} />
+              <EditLinks />
             </div>
-
-            {topicItem.name === "text" &&
+            {item.type === "text" &&
               <>
                 <div className="w-4/5 group  flex flex-col-reverse gap-y-4  rounded-lg  p-3 relative">
                   <div className="absolute bottom-0 right-5 flex items-center justify-end gap-5 p-3 invisible group-hover:visible">
-                    <button onClick={() => dispatch(toggleShow({ chapterId, lessonId, topicId: topicItem.id }))} className="">
+                    <button onClick={() => dispatch(updateLessonItem({ ...item, }))} className="">
                       <svg className="w-6 text-blue-700" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m3.1 5.07c.14 0 .28.05.4.16l1.27 1.27c.23.22.23.57 0 .78l-1 1l-2.05-2.05l1-1c.1-.11.24-.16.38-.16m-1.97 1.74l2.06 2.06l-6.06 6.06H7.07v-2.06z" />
                       </svg>
                     </button>
-                    <button onClick={() => dispatch(removeTopic(({ chapterId, lessonId, topicId: topicItem.id })))} className="">
+                    <button  className="">
                       <svg className="w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" />
                       </svg>
                     </button>
                   </div>
-                  <div className="flex rounded-md border border-gray-100 p-4 w-full h-full max-h-[300px] overflow-scroll editor">
+                  <div className="flex rounded-md shadow-sm p-4 w-full h-full max-h-[300px] overflow-auto editor">
                     <FroalaEditorView
-                      model={topicItem.content}
+                      model={item.value.content}
                     />
                   </div>
                 </div>
-                <TextEditor topicItem={topicItem} chapterId={chapterId} lessonId={lessonId} />
+                
               </>
             }
             
-            {topicItem.name === 'code' &&
+            {item.type === 'code' &&
               <>
-                <CodeContentEditor topicItem={topicItem} chapterId={chapterId} lessonId={lessonId} />
                 <div className="w-4/5 group  flex flex-col-reverse gap-y-4 rounded-lg relative">
                   <div className="absolute bottom-0 right-0 z-10 flex items-center justify-end gap-5 p-3 invisible group-hover:visible">
-                    <button onClick={() => dispatch(toggleShow(({ chapterId, lessonId, topicId: topicItem.id })))} className="">
+                    <button onClick={() => dispatch(updateLessonItem({ ...item}))}>
                       <svg className="w-6 text-[#32bc6e]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m3.1 5.07c.14 0 .28.05.4.16l1.27 1.27c.23.22.23.57 0 .78l-1 1l-2.05-2.05l1-1c.1-.11.24-.16.38-.16m-1.97 1.74l2.06 2.06l-6.06 6.06H7.07v-2.06z" />
                       </svg>
                     </button>
-                    <button onClick={() => dispatch(removeTopic(({ chapterId, lessonId, topicId: topicItem.id })))}>
+                    <button >
                       <svg className="w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" />
                       </svg>
                     </button>
                   </div>
-                  <div className="flex items-center justify-center p-3 h-full max-w-[screen]">
-                    <SyntaxHighlighter code={topicItem.content} />
+                  <div className="flex items-center justify-center p-3 h-full  max-w-[screen]">
+                    <SyntaxHighlighter code={item.value} />
                   </div>
                 </div>
 
@@ -93,16 +104,18 @@ function RichTextExample() {
 
           </div>
         ))}
-      </div>
+      </div>}
     </>
   );
 }
+
+
 
 export default RichTextExample;
 
 const EditLinks = ({ idx, setImage, setIndex, chapterId, lessonId }) => {
   const dispatch = useDispatch()
-
+  const param  = useParams()
   const [buttonsVisible, setButtonsVisible] = useState(false);
 
   const toggleButtonsVisibility = () => {
@@ -121,13 +134,13 @@ const EditLinks = ({ idx, setImage, setIndex, chapterId, lessonId }) => {
         </svg>
       </button>
       <div className={`peer-focus:opacity-100 opacity-0  flex justify-between gap-4 transition-opacity duration-300 `}>
-        <button onClick={() => dispatch(addTopic({ chapterId, lessonId, idx, topic: { ...initialTopic, name: 'code', content: { code: "//javascript", language: "javascript" } } }))}>
+        <button onClick={() => dispatch(createLessonItem({ type: 'code',lessonId:param.lessonId }))}>
           <svg className="w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path fill="currentColor" d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2M4 19V7h16l.002 12z" />
             <path fill="currentColor" d="M9.293 9.293L5.586 13l3.707 3.707l1.414-1.414L8.414 13l2.293-2.293zm5.414 0l-1.414 1.414L15.586 13l-2.293 2.293l1.414 1.414L18.414 13z" />
           </svg>
         </button>
-        <button onClick={() => dispatch(addTopic({ chapterId, lessonId, idx, topic: initialTopic }))}>
+        <button onClick={() => dispatch(createLessonItem({ type: 'text',lessonId:param.lessonId }))}>
           <svg className="w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path fill="currentColor" d="M1 2v3h2V4h2v5H3.5v2h5V9H7V4h2v1h2V2zm20 1h-7v2h6v14H4v-5H2v6a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1" />
           </svg>
@@ -144,6 +157,3 @@ const EditLinks = ({ idx, setImage, setIndex, chapterId, lessonId }) => {
     </div>
   )
 }
-
-
-  ;

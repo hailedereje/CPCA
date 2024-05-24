@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const CourseSchema = new Schema(
+export const CourseSchema = new Schema(
   {
     title: {
       type: String,
@@ -11,7 +11,11 @@ const CourseSchema = new Schema(
     },
 
     description: { type: String,},
-    chapters: { type: [Schema.Types.ObjectId], ref: "Chapter" },
+    chapters: { 
+      type: [Schema.Types.ObjectId], 
+      ref: "Chapter" ,
+      default: []
+    },
 
     author: {
       type: String,
@@ -29,26 +33,42 @@ const CourseSchema = new Schema(
     duration: {
       type: Number,
       required: [true, "Duration is required"],
-      minlength: [5, "Duration must be at least 5 characters long"],
-      maxlength: [20, "Duration must be at most 20 characters long"],
     },
 
     templateImg: {
       type: String,
+      default:''
       // required: [true, "Enter a template Image"],
     },
 
-    objective: { type: String },
-    tags: { type: [String] },
-    prerequisites: [
-      {
-        courseId: { type: Schema.Types.ObjectId, ref: "Course" , required:true ,unique:true},
-        courseName: { type: String, required: true ,unique:true }
-      }
-    ],
-    instructor: { type: Schema.Types.ObjectId,ref:"User" },
+    objective: { 
+      type: String,
+      default: '' 
+    },
 
+    tags: {
+      type : [
+        {
+          id: { type: String },
+          title: { type: String}
+        }
+      ],
+      default: []
+    },
+
+    prerequisites: {
+      type: [
+        {
+          id: {type: Schema.Types.ObjectId, ref: "Course"},
+          title: String
+        }
+      ],
+      default: []
+    },
+    instructor: { type: Schema.Types.ObjectId,ref:"User" },
+    isPublished: {type: Boolean,default:false},
   },
+  
   { timestamps: true }
 );
 
