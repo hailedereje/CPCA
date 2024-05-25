@@ -28,7 +28,7 @@ const addTags = async (data) => {
       }).catch(err => console.error(err))
     }
     return (
-      <div className="flex flex-col items-start w-full gap-4 bg-slate-50 dark:bg-gray-600 p-4 rounded-md">
+      <div className="flex flex-col items-start  gap-4 bg-slate-50 dark:bg-gray-600 p-4 rounded-md">
           <span className="flex flex-col gap-2">
             <span className="text-xl capitalize font-medium flex gap-4 items-center">
               <span>
@@ -36,7 +36,8 @@ const addTags = async (data) => {
               </span>
               <span >tags</span>
             </span>
-            <span className="text-xs lowercase line-clamp-2 text-gray-500 ">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+            <span className="text-xs lowercase line-clamp-2 text-gray-500 dark:text-gray-200">
+            Assign relevant tags to categorize and identify the course easily. Use descriptive keywords to enhance searchability and organization              </span>
           </span>
           <div className="w-full bg-white">
             <InputList items={tagList} type={ActionTypes.ADD_TAGS} courseId={courseId} />

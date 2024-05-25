@@ -30,7 +30,7 @@ export const CreateCourse = () => {
     const {mutateAsync:postCourse,isPending } = useMutation({
         mutationFn: addCourse,
         onSuccess: () => {
-          client.invalidateQueries({ queryKey: ['course']})
+          client.invalidateQueries({ queryKey: ['draftCourses']})
         }
       })
 

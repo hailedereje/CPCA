@@ -39,7 +39,8 @@ const addPrerequistes = async(data) => {
             </span>
             <span >prerequisites</span>
           </span>
-          <span className="text-xs lowercase line-clamp-2 text-gray-500 dark:text-white">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+          <span className="text-xs lowercase line-clamp-2 text-gray-500 dark:text-gray-200">
+          Specify any prerequisites needed for this course. Provide a clear list of requirements to ensure students are adequately prepareda            </span>
         </span>
         {<div className="w-full bg-white">
           <InputList items={courseList.data} type={ActionTypes.ADD_PREREQUISITES} courseId={courseId}/>

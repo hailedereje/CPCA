@@ -1,5 +1,5 @@
 import express from 'express'
-import { getProgress, requestUnlockChapter, requestUnlockLesson, submitLessonProgress, submitPracticeProgress, submitQuizProgress } from '../controllers/progressControllers';
+import { getProgress, requestUnlockChapter, requestUnlockLesson, submitLessonProgress, submitPracticeProgress, submitQuizProgress } from '../controllers/progressControllers.js';
 
 const router = express.Router();
 

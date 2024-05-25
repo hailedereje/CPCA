@@ -31,7 +31,7 @@ export const AddDescription = ({ courseId }) => {
 
   }
   return (
-    <div className=" flex flex-col gap-4 mt-4">
+    <div className=" flex flex-col gap-4 mt-4 w-fit dark:bg-gray-600 p-4 rounded-md bg-slate-50">
       <span className="flex flex-col gap-2">
         <span className="text-xl capitalize font-medium flex gap-4 items-center">
           <span>

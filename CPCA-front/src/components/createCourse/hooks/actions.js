@@ -24,9 +24,9 @@ export const updateChapter = (courseId, chapterId, data) => newRequests.put(`/co
         chapterId
     }
 });
-export const deleteChapter = (courseId, chapterId) => newRequests.delete(`/courses/course/chapters/`);
+export const deleteChapter = ({courseId, chapterId}) => newRequests.delete(`/courses/course/chapters/chapter`,{params: {courseId,chapterId}});
 
-export const fetchLessons = (courseId, chapterId) => newRequests.get(`/courses/${courseId}/chapters/${chapterId}/lessons`);
+export const fetchLessons = (chapterId) => newRequests.get(`/courses/course/chapters/chapter/lessons`,{params: {chapterId}});
 
 export const fetchLesson = (lessonId) => newRequests.get(`/courses/course/chapters/chapter/lessons/lesson`,{
     params: {
@@ -34,10 +34,18 @@ export const fetchLesson = (lessonId) => newRequests.get(`/courses/course/chapte
     }
 });
 
+export const deleteLesson = ({chapterId,lessonId}) => newRequests.delete(`/courses/course/chapters/chapter/lessons/lesson`,{
+    params: {
+        lessonId,
+        chapterId
+    }
+});
 
 export const createLesson = (data) => newRequests.post(`/courses/course/chapters/chapter/lessons`, data);
 export const addLessonItem = (data) => newRequests.post("/courses/course/chapters/chapter/lessons/lesson/add-lesson-item",data)
 export const updateLessonItem = (data) => {
-    console.log(data)
     return newRequests.post(`/courses/course/chapters/chapter/lessons/lesson/update-lesson-item`,data)
+}
+export const deleteLessonItem = ({lessonId,lessonItemId}) => {
+    return newRequests.delete(`/courses/course/chapters/chapter/lessons/${lessonId}/delete-lesson-item/${lessonItemId}`)
 }

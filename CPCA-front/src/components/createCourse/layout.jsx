@@ -13,6 +13,7 @@ import { Drawer } from "./components/courseDrawer"
 
 export const CourseLayout = () => {
     const param = useParams()
+    
     const { data,isLoading } = useQuery({
         queryKey: ['course', param.id],
         queryFn: () => newRequests.get(`/courses/course`, {

@@ -9,24 +9,24 @@ import { SyntaxHighlighter } from "./syntax-highlighter";
 import { UploadImage } from "./uploadImage";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 import { useQueryClient } from "@tanstack/react-query";
-import { addLessonItem, createLessonItem, updateLessonItem } from "@/features/course/coursSidebarSlice";
-import { useLesson } from "../createCourse/hooks/course-hooks";
+import { addLessonItem, createLessonItem, openConfirmationDialog, updateLessonItem } from "@/features/course/coursSidebarSlice";
+import { useLesson, useLessons } from "../createCourse/hooks/course-hooks";
 import { Loading } from "../createCourse/components/loader";
 import { useParams } from "react-router-dom";
 import { ActionTypes } from "../createCourse/action.Types";
 
-
+const deleteLessonItemMessage = "Warning: You are about to delete a lesson item. This action cannot be undone"
 
 function RichTextExample() {
   const param = useParams()
   const dispatch = useDispatch()
-
   const { data, isSuccess, isError,error } = useLesson(param.lessonId)
+  // const {data,isSuccess,isError,error} = useLessons(param.)
 
   if(isError) {
     console.log(error)
     return (
-      <div className="flex flex-col items-center justify-center h-full p-4 text-center">
+      <div className="flex flex-col items-center justify-center h</svg>-full p-4 text-center">
         <p className="text-2xl font-bold dark:text-white mb-4">Failed to Load Lesson</p>
         <p className="text-lg text-gray-600 mb-4">Check your connection and try again.</p>
         <button
@@ -41,6 +41,7 @@ function RichTextExample() {
 
   return (
     <>
+
       {!isSuccess ? <Loading/>: <div className="flex flex-col items-center justify-center w-full py-10 max-w-[1024px] ">
         <div className={`group flex items-end  gap-4 ${data.data.lesson.content.length === 0 ? "":"hidden"}`}>
           <EditLinks />
@@ -62,7 +63,7 @@ function RichTextExample() {
                         <path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m3.1 5.07c.14 0 .28.05.4.16l1.27 1.27c.23.22.23.57 0 .78l-1 1l-2.05-2.05l1-1c.1-.11.24-.16.38-.16m-1.97 1.74l2.06 2.06l-6.06 6.06H7.07v-2.06z" />
                       </svg>
                     </button>
-                    <button  className="">
+                    <button onClick={() => dispatch(openConfirmationDialog({lessonId:param.lessonId,lessonItemId:item._id,actionType:ActionTypes.DELETE_LESSON_ITEM,message:deleteLessonItemMessage}))}  className="">
                       <svg className="w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" />
                       </svg>
@@ -87,7 +88,7 @@ function RichTextExample() {
                         <path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m3.1 5.07c.14 0 .28.05.4.16l1.27 1.27c.23.22.23.57 0 .78l-1 1l-2.05-2.05l1-1c.1-.11.24-.16.38-.16m-1.97 1.74l2.06 2.06l-6.06 6.06H7.07v-2.06z" />
                       </svg>
                     </button>
-                    <button >
+                    <button onClick={() => dispatch(openConfirmationDialog({lessonId:param.lessonId,lessonItemId:item._id,actionType:ActionTypes.DELETE_LESSON_ITEM,message:deleteLessonItemMessage}))}>
                       <svg className="w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" />
                       </svg>

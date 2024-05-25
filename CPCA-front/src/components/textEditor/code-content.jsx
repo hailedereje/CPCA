@@ -30,7 +30,7 @@ const CodeMenu = ({code}) => {
                 <div className="fixed h-screen w-screen inset-0 z-30 cursor-default" onClick={() => setIsMenuOpen(false)}></div>
             )}
             {isMenuOpen && (
-                <div className="absolute top-10 right-0 w-48 bg-white border-gray-200 z-30 rounded shadow-lg dark:bg-gray-700 dark:text-white">
+                <div className="absolute top-10 right-0 w-48 h-48 overflow-auto editor bg-white border-gray-200 z-30 rounded shadow-lg dark:bg-gray-700 dark:text-white">
                     {languages.map((item, idx) => (
                     <button key={idx} onClick={() => {
                         dispatch(setLessonItemValue({language:item.name,content:code.content}))

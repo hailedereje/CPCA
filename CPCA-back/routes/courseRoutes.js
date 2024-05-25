@@ -31,6 +31,8 @@ import { addLessonItemSchema } from "../validation/lesson/addLessonItemValidator
 import { addLessonItemController } from "../controllers/lesson/addLessonItemController.js";
 import { deleteLessonItemController } from "../controllers/lesson/deleteLessonItemController.js";
 import { updateLessonItemController } from "../controllers/lesson/updateLessonItemController.js";
+import { deleteLessonController } from "../controllers/lesson/deleteLessonController.js";
+import { deletChapterController } from "../controllers/chapter/deleteChapterController.js";
 
 const router = express.Router();
 
@@ -56,11 +58,14 @@ router.get("/course/chapters",getChaptersController)
 router.get("/course/chapters/chapter")
 router.post("/course/chapters",createChapterController)
 router.post("/course/chapters/chapter/rename",renameChapterController)
-
-
+router.delete("/course/chapters/chapter",deletChapterController) 
+//lesson
 router.get("/course/chapters/chapter/lessons/lesson",getLessonController)
 router.post("/course/chapters/chapter/lessons",validateRequest(createLessonSchema),createLessonController)
+router.delete("/course/chapters/chapter/lessons/lesson",deleteLessonController)
+
+//lesson item
 router.post("/course/chapters/chapter/lessons/lesson/add-lesson-item",validateRequest(addLessonItemSchema),addLessonItemController)
 router.post("/course/chapters/chapter/lessons/lesson/update-lesson-item",updateLessonItemController)
-router.delete("/course/chapters/chapter/lessons/lesson/lessonitem",validateRequest(),deleteLessonItemController)
+router.delete("/course/chapters/chapter/lessons/:lessonId/delete-lesson-item/:lessonItemId",deleteLessonItemController)
 export default router;

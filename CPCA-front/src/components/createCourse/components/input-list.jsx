@@ -99,7 +99,7 @@ export const InputList = ({ items, type, courseId }) => {
     return (
         <form onSubmit={onSubmit} className="flex gap-2 items-end dark:bg-gray-600 z-10 dark:text-black" ref={formRef}>
             <div className="relative w-full">
-                <div className="w-full flex gap-1 items-center border border-blue-300 p-1 flex-wrap max-h-32 overflow-auto editor">
+                <div className="w-full flex gap-1 items-center border border-gray-400 rounded-md p-1 flex-wrap max-h-32 overflow-auto editor">
                     <div className="flex items-center gap-2 flex-wrap">
                         {contents.length > 0 && contents.map((cont, idx) => (
                             <div key={idx} className="flex gap-1 bg-green-300 p-2 rounded-md">

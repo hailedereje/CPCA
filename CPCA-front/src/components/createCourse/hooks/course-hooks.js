@@ -5,12 +5,26 @@ import {
     createLesson,
     fetchLesson,
     addLessonItem,
-    updateLessonItem
+    updateLessonItem,
+    deleteLessonItem,
+    deleteLesson
   } from './actions';
 import { showErrorToast, showSuccessToast } from '@/toasts/toast';
+import toast from 'react-hot-toast';
   
 
-
+export const useCourse = (courseId) => {
+  return  useQuery({
+    queryKey: ['course', courseId],
+    queryFn: () => newRequests.get(`/courses/course`, {
+      params: {
+        id: courseId
+      }
+    }),
+    staleTime: 1000 * 6 * 500,
+    retry:3
+  })
+}
 
 export const useChapters = (courseId) => {
   return useQuery({
@@ -57,13 +71,18 @@ export const useUpdateChapter = (courseId, chapterId) => {
 };
 
 export const useDeleteChapter = (courseId) => {
-  const queryClient = useQueryClient();
-  return useMutation((chapterId) => deleteChapter(courseId, chapterId), {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: deleteChapter,
     onSuccess: () => {
-      queryClient.invalidateQueries(['chapters', courseId]);
+      queryClient.invalidateQueries({queryKey: ['course',courseId]})
+      toast.success("chapter deleted successfully")
     },
-  });
-};
+    onError: () => {
+      showErrorToast("failed to delete chapter")
+    }
+  })
+}
 
 export const useCreateLesson = (chapterId,courseId) => {
   const queryClient = useQueryClient()
@@ -85,7 +104,30 @@ export const useLesson = (lessonId) => {
     refetchInterval:false
   })
 }
+export const useLessons = (chapterId) => {
+  return useQuery({
+    queryKey: ['lessons', chapterId],
+    queryFn: () => fetchLessons(chapterId),
+    staleTime: 1000 * 6 * 300,
+    retry: 3,
+    refetchInterval: false
+  });
+};
 
+export const useDeleteLesson = (courseId, lessonId,chapterId) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteLesson, 
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['course', courseId] });
+      queryClient.removeQueries(['lesson', lessonId]);
+      showSuccessToast("lesson deleted successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to delete lesson")
+    }
+  });
+}
 export const useAddLessonItem = (lessonId) => {
   const queryClient = useQueryClient()
   return useMutation({
@@ -107,6 +149,20 @@ export const useUpdateLessonItem = (lessonId) => {
     },
     onError: () => {
       showErrorToast("failed to update lessonItem")
+    }
+  })
+}
+
+export const useDeleteLessonItem = (lessonId) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: deleteLessonItem,
+    onSuccess:() => {
+      queryClient.invalidateQueries({queryKey: ['lesson',lessonId]})
+      showSuccessToast("lessonItem deleted successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to delete lessonItem")
     }
   })
 }

@@ -12,13 +12,15 @@ import { courseRoutes } from "@/routes";
 import { AddDescription } from "./components/addDescription";
 import { AddObjective } from "./components/addObjective";
 import { Loading } from "./components/loader";
+import { RiAddLine } from "react-icons/ri";
+import { CourseName } from "./components/courseName";
 
 
 
 export const UpdataCourse = () => {
- 
+  const [courseName,setCourseName] = useState("")
   const param = useParams()
-  const { isLoading } = useQuery({
+  const {data, isLoading } = useQuery({
     queryKey: ['course', param.id],
     queryFn: () => newRequests.get(`/courses/course`, {
       params: {
@@ -28,17 +30,22 @@ export const UpdataCourse = () => {
     staleTime: 1000 * 6 * 500
   })
 
-
   return (
     <>
-      {isLoading ? <Loading/> : <div className="w-full max-w-2xl dark:text-white flex flex-col gap-6 p-2 ">
+      {isLoading ? <Loading /> : <div className="w-full max-w-2xl dark:text-white flex flex-col gap-6 p-2 ">
+        <CourseName courseId={param.id} />
         <Prerequisites courseId={param.id} />
         <Tags courseId={param.id} />
-        <AddDescription courseId={param.id}/>
-        <Link to={"chapters"} className="bg-blue-500 hover:bg-blue-700 text-white text-md py-2 px-2 rounded mr-2">
-          add chapters
+        <AddDescription courseId={param.id} />
+        <Link 
+          to="chapters" 
+          className="flex items-center bg-blue-500 hover:bg-blue-700 text-white text-md py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg hover:shadow-xl w-max mx-auto"
+        >
+          <RiAddLine size={20} className="mr-2" />
+            Edit Course Content
         </Link>
-      </div>}
+      </div>
+      }
     </>
 
   )

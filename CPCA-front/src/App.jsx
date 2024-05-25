@@ -48,6 +48,8 @@ import AddQuestionForm from "./pages/question/PracticeQuestionForm";
 import PracticeQuestionPage from "./pages/question/Practice";
 import UsersList from "./pages/dashboard/UsersList";
 import QuizQuestionsList from "./pages/quiz/QuizQuestionsList";
+import { EditCourseError } from "./components/createCourse/error/editCourseError";
+import { StarterPage } from "./components/createCourse/components/starterPage";
 
 
 
@@ -200,11 +202,9 @@ function App() {
         {
           path:'course/update/:id/chapters',
           element: <CourseLayout/>,
+          errorElement:<EditCourseError/>,
           children: [
-           { index: true, element: <div className="flex flex-col items-center justify-center h-full p-4">
-           <p className="text-3xl font-bold text-gray-600 mb-2 uppercase">Instruction</p>
-           <p className="text-lg text-gray-400">Add Lessons after creating a chapter. Click on a lesson to view and edit its content.</p>
-         </div>},
+           { index: true, element: <StarterPage/>},
            {path: ":chapterId/lessons/:lessonId",element:<RichTextExample/>},
            { path: "add-test",element:<QuizBoard/>}
           ]

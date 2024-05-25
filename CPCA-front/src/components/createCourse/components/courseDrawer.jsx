@@ -1,4 +1,4 @@
-import { addChapter, addLesson, close, deleteChapterConfirmation, renameChapter,setActiveLesson, setTitle } from '@/features/course/coursSidebarSlice';
+import { addChapter, addLesson, close, deleteChapterConfirmation, openConfirmationDialog, renameChapter, setActiveLesson, setTitle } from '@/features/course/coursSidebarSlice';
 import React, { useState } from 'react';
 
 import { FaBook, FaBookOpen, FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
@@ -12,6 +12,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from "yup"
 import { ActionTypes } from '../action.Types';
 import { useCreateChapter, useCreateLesson, useRenameChapter } from '../hooks/course-hooks';
+import { Confirmation } from './confirmationDialog';
 
 const deleteMessage = "The chapter and its corresponding lessons will be removed.This means that both the main section of the material (the chapter) and all the associated lessons that explain or expand on that chapter will no longer be available."
 
@@ -36,7 +37,7 @@ export const Drawer = ({ data }) => {
     return (
         <div className="">
             <PopupForm />
-            <Confirmation/>
+            <Confirmation />
             <div
                 className={`fixed inset-0 z-10 ${isOpen ? "" : "hidden"}`}
                 onClick={toggleDrawer}
@@ -45,29 +46,38 @@ export const Drawer = ({ data }) => {
                 className={` fixed top-12 h-full left-0 bg-white dark:bg-gray-600 dark:text-white w-80 z-20 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
                 <div className="w-full">
                     <div className="bg-white h-screen max-h-[1024px] dark:bg-gray-600 shadow-lg overflow-auto editor">
-                        <div className="flex justify-between items-center p-4 bg-blue-500 text-white">
+                        <div className="flex justify-between gap-2 items-center p-4 bg-blue-500 text-white">
                             <h2 className="text-md flex items-center line-clamp-1 gap-2">
-                                <FaBook className="text-md" /> {course.title}
+                                <span><FaBook className="text-md" /> </span>
+                                <p className='text-left line-clamp-2'>{course.title}</p>
                             </h2>
-                            <button onClick={() => dispatch(addChapter({ courseId: course._id, label: "create Chapter", actionType: ActionTypes.ADD_CHAPTER }))}>
-                                <svg className='w-5' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                    <path fill="currentColor" d="M5 19V5h7v7h7v1c.7 0 1.37.13 2 .35V9l-6-6H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h8.35c-.22-.63-.35-1.3-.35-2zm9-14.5l5.5 5.5H14zM23 18v2h-3v3h-2v-3h-3v-2h3v-3h2v3z" />
-                                </svg>
-                            </button>
+                            <div className="relative group w-max mx-auto">
+                                        <button 
+                                            onClick={() => dispatch(addChapter({ courseId: course._id, label: "create Chapter", actionType: ActionTypes.ADD_CHAPTER }))}
+                                            className="focus:outline-none"
+                                        >
+                                            <svg className='w-5' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M5 19V5h7v7h7v1c.7 0 1.37.13 2 .35V9l-6-6H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h8.35c-.22-.63-.35-1.3-.35-2zm9-14.5l5.5 5.5H14zM23 18v2h-3v3h-2v-3h-3v-2h3v-3h2v3z" />
+                                            </svg>
+                                        </button>
+                                        <span className="absolute left-1/2 transform -translate-x-1/2 top-full mb-2 w-max bg-gray-800 text-white text-sm py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            Add Chapter
+                                        </span>
+                                        </div>
                         </div>
                         <div className="p-4 mb-10">
                             {course.chapters.map((chapter, index) => (
                                 <div key={chapter._id} className="flex flex-col gap-1">
-                                    <div className="flex justify-between items-center p-2 bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-700 cursor-pointer hover:bg-gray-200 transition duration-300" >
-                                        <div className="flex items-center gap-2" onClick={() => toggleChapter(index)}>
-                                            <FaBookOpen className="text-lg " />
-                                            <span className="text-sm dark:text-white  capitalize">{chapter.title}</span>
+                                    <div className="flex justify-between items-center gap-2 p-2 bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-700 cursor-pointer hover:bg-gray-200 transition duration-300" >
+                                        <div className="flex items-center gap-2 peer" onClick={() => toggleChapter(index)}>
+                                            <span><FaBookOpen className="text-md" /></span>
+                                            <span className="text-sm dark:text-white  capitalize line-clamp-2">{chapter.title}</span>
                                         </div>
                                         <Menu ids={{ courseId: course._id, chapterId: chapter._id }} value={chapter.title} />
                                     </div>
-                                    {openChapterIndex === index && (
+                                    <div className={`${openChapterIndex === index ? "" : "hidden"}`}>
                                         <Lessons courseId={course._id} chapterId={chapter._id} lessons={chapter.lessons} />
-                                    )}
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -81,7 +91,7 @@ export const Drawer = ({ data }) => {
     );
 };
 
-const Lessons = ({courseId, lessons, chapterId }) => {
+const Lessons = ({ courseId, lessons, chapterId }) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     return (
@@ -89,7 +99,7 @@ const Lessons = ({courseId, lessons, chapterId }) => {
             {lessons.map((lesson) => (
                 <div
                     onClick={() => {
-                        dispatch(setActiveLesson({courseId,chapterId,lessonId:lesson._id,content:lesson.content}))
+                        dispatch(setActiveLesson({ courseId, chapterId, lessonId: lesson._id, content: lesson.content }))
                         navigate(`${chapterId}/lessons/${lesson._id}`)
                     }}
                     key={lesson._id}
@@ -144,7 +154,6 @@ const Menu = ({ ids, value }) => {
                             <span className="mr-2"><IoMdAddCircleOutline /></span>
                             <span className='text-sm capitalize'>add lesson </span>
                         </li>
-
                         <li
                             className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
                             onClick={() => setIsMenuOpen(false)}
@@ -164,7 +173,7 @@ const Menu = ({ ids, value }) => {
                         <li
                             className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
                             onClick={() => {
-                                dispatch(deleteChapterConfirmation({ ...ids, message: deleteMessage, actionType: ActionTypes.DELETE_CHAPTER, value }))
+                                dispatch(openConfirmationDialog({...ids, message: deleteMessage, actionType: ActionTypes.DELETE_CHAPTER, value }))
                                 setIsMenuOpen(false)
                             }}
                         >
@@ -285,45 +294,6 @@ const PopupForm = () => {
     );
 };
 
-const Confirmation = () => {
-    const dispatch = useDispatch();
-    const { actionType, courseId, chapterId,showConfirmation, lessonId, message } = useSelector(x => x.courseInputState.formState);
-    const onSubmit = async() => {
-        await action()
-    }
 
-    return (
-        <div className={`fixed inset-0 flex items-center justify-center z-50 ${showConfirmation ? "" : "hidden"}`}>
-            <div className="absolute inset-0 w-screen h-screen bg-black/25" />
-            <div className="bg-white rounded-lg shadow-lg transform transition-all duration-300 scale-100 sm:scale-105 md:scale-100">
-                    <div class="relative  w-full max-w-xl max-h-full">
-                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                                <span class="flex gap-2 items-end text-xl font-semibold capitalize text-red-500">
-                                    <TiWarningOutline size={30}/>
-                                    <h1>warning</h1>
-                                </span>
-                                <button onClick={() => dispatch(close())} type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
-                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                    </svg>
-                                    <span class="sr-only">Close modal</span>
-                                </button>
-                            </div>
-                            <div class="p-4 md:p-5 space-y-4">
-                                <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                                    {message}
-                                </p>
-                            </div>
-                            <div class="flex gap-3 items-center p-4 border-t border-gray-200 rounded-b dark:border-gray-600">
-                                <button onClick={onSubmit}  type="button" class="text-white capitalize bg-blue-700 hover:bg-blue-800 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">delete</button>
-                                <button onClick={() => dispatch(close())}  type="button" class="py-2.5 px-5 capitalize ms-3 text-sm font-medium text-red-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-1 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-red-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
-    )
-}
 
 

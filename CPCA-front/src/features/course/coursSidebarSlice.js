@@ -5,6 +5,7 @@ const initialValue = {
   courseId: '',
   chapterId: '',
   lessonId: '',
+  lessonItemId:'',
   actionType: '',
   message: '',
   showConfirmation: false,
@@ -58,6 +59,10 @@ const uiSlice = createSlice({
     deleteChapterConfirmation:(state,action) => {
       const {courseId,chapterId,message } = action.payload
       state.formState = {...state.formState,courseId,chapterId,message,showConfirmation:true}
+    },
+    openConfirmationDialog: (state,action) => {
+      const { courseId = '',chapterId = '',lessonId = '',lessonItemId = '',actionType,message } = action.payload
+      state.formState = { ...state.formState,courseId,chapterId,lessonId,lessonItemId,actionType,message,showConfirmation:true }
     },
     deleteLesson: (state,action) => {
 
@@ -117,7 +122,7 @@ const uiSlice = createSlice({
 
 export const {
   addChapter,close,renameChapter,
-  setTitle,addLesson,deleteChapterConfirmation,
+  setTitle,addLesson,deleteChapterConfirmation,openConfirmationDialog,
   addLessonItem,closeEditor,createLessonItem,updateLessonItem,setLessonItemValue,setActiveLesson
   
 } = uiSlice.actions;
