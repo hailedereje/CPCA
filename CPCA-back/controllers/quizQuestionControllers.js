@@ -9,16 +9,11 @@ const createQuizQuestion = async (req, res) => {
     // if (!quiz) {
     //   return res.status(404).json({ message: "Quiz not found" });
     // }
-    const newQuizQuestion = new QuizQuestion({
-      title,
-      question,
-      options,
-      correctAnswer,
-      // quizId,
-    });
+    const newQuizQuestion = new QuizQuestion(req.body);
     await newQuizQuestion.save();
     res.status(201).json(newQuizQuestion);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -65,11 +60,12 @@ const getQuizQuestionById = async (req, res) => {
 // Update a quiz question by ID
 const updateQuizQuestionById = async (req, res) => {
   try {
-    const { question, options, correctAnswer } = req.body;
+    const { title, question, options, correctAnswer } = req.body;
     const quizQuestion = await QuizQuestion.findById(req.params.id);
     if (!quizQuestion) {
       return res.status(404).json({ message: "Quiz question not found" });
     }
+    quizQuestion.title = title;
     quizQuestion.question = question;
     quizQuestion.options = options;
     quizQuestion.correctAnswer = correctAnswer;

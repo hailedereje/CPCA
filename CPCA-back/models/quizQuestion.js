@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const quizQuestionSchema = mongoose.Schema({
+    title: { type: String, required: true },
     question: { type: String, required: true },
     options: [
         {
@@ -8,6 +9,7 @@ const quizQuestionSchema = mongoose.Schema({
         isCorrect: { type: Boolean, required: true },
         },
     ],
+    correctAnswer: { type: String, required: true },
     quizId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Quiz",

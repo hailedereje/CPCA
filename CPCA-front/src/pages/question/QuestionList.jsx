@@ -45,6 +45,26 @@ const QuestionsList = () => {
     setSelectedQuestion(question);
   };
 
+  const handleDelete = (id) => {
+    newRequests
+      .delete(`/quiz_question/${id}`)
+      .then((response) => {
+        console.log(response.data);
+        setQuestions(questions.filter((question) => question._id !== id));
+      })
+      .catch((error) => {
+        console.error("Error deleting question:", error);
+      });
+  };
+
+  const handleUpdateQuestion = (updatedQuestion) => {
+    setQuestions((prevQuestions) =>
+      prevQuestions.map((question) =>
+        question.id === updatedQuestion.id ? updatedQuestion : question
+      )
+    );
+  };
+
   const handleCloseModal = () => {
     setShowDetails(false);
     setSelectedQuestion("");
@@ -123,15 +143,21 @@ const QuestionsList = () => {
                   <td className="w-2/10 pt-2 pb-2 flex gap-2">
                     <button
                       className="block rounded-lg bg-gradient-to-tr from-blue-800 to-blue-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                      onClick={() => handelDetails(question)}
+                    >
+                      Details
+                    </button>
+                    <button
+                      className="block rounded-lg bg-gradient-to-tr bg-blue-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                       onClick={() => handlePractice(question._id)}
                     >
                       Practice
                     </button>
                     <button
                       className="block rounded-lg bg-gradient-to-tr from-red-800 to-red-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                      onClick={() => handelDetails(question)}
+                      onClick={() => handleDelete(question._id)}
                     >
-                      Details
+                      Delete
                     </button>
                   </td>
                 </tr>
@@ -161,72 +187,12 @@ const QuestionsList = () => {
           </button>
         </div>
       </div>
-      {showDetails && (
-        <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center">
-          <div className="modal-overlay fixed inset-0 bg-black opacity-80 "></div>
-          <div className="modal-content relative bg-white pl-6 pb-6 pr-8 rounded-lg shadow-lg">
-            <span
-              className="btn btn-ghost btn-circle cursor-pointer absolute text-3xl top-0 right-0 text-red-500"
-              onClick={handleCloseModal}
-            >
-              &times;
-            </span>
-            <h3 className="text-xl relative inset-0 text-black font-bold my-4">
-              Question Details
-            </h3>
-            {selectedQuestion && (
-              <div className="flex-1">
-                <div className="w-full">
-                  <h2 className="text-2xl font-bold mb-2">
-                    {selectedQuestion.title}
-                  </h2>
-                  <p className="mb-4">{selectedQuestion.description}</p>
-                  <div className="mb-4">
-                    <strong>Difficulty:</strong> {selectedQuestion.difficulty}
-                  </div>
-                  <div className="mb-4">
-                    <strong>Constraints:</strong>
-                    <pre className="bg-gray-100 p-2 rounded">
-                      {selectedQuestion.constraints}
-                    </pre>
-                  </div>
-                  <div className="mb-4">
-                    <strong>Sample Input:</strong>
-                    <pre className="bg-gray-100 p-2 rounded">
-                      {selectedQuestion.sampleInput}
-                    </pre>
-                  </div>
-                  <div className="mb-4">
-                    <strong>Sample Output:</strong>
-                    <pre className="bg-gray-100 p-2 rounded">
-                      {selectedQuestion.sampleOutput}
-                    </pre>
-                  </div>
-                  <div className="mb-4">
-                    <strong>Examples:</strong>
-                    <pre className="bg-gray-100 p-2 rounded">
-                      {selectedQuestion.examples}
-                    </pre>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    className="block rounded-lg bg-gradient-to-tr from-blue-800 to-blue-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    onClick={() => handlePractice(selectedQuestion._id)}
-                  >
-                    Practice
-                  </button>
-                  <button
-                    className="block rounded-lg bg-gradient-to-tr from-red-800 to-red-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    onClick={handleCloseModal}
-                  >
-                    Back
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+      {showDetails && selectedQuestion && (
+        <AddQuestionForm
+          selectedQuestion={selectedQuestion}
+          handleCloseModal={handleCloseModal}
+          handleUpdateQuestion={handleUpdateQuestion}
+        />
       )}
     </div>
   );

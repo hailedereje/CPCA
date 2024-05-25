@@ -1,12 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { api } from "../../api";
+
+
 const getUserFromLocalStorage = () => {
   return JSON.parse(localStorage.getItem("user")) || null;
 };
 
+
+
 const getThemeFromLocalStorage = () => {
-  const theme = localStorage.getItem("theme") || "dracula";
-  document.documentElement.setAttribute("data-theme", theme);
+  const theme = localStorage.getItem('theme') || 'dracula';
+  document.documentElement.setAttribute('data-theme', theme);
   return theme;
 };
 
@@ -20,10 +24,10 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    toggleTheme: (state) => {
-      state.theme = state.theme === "light" ? "dracula" : "light";
-      document.documentElement.setAttribute("data-theme", state.theme);
-      localStorage.setItem("theme", JSON.stringify(state.theme));
+   toggleTheme: (state) => {
+      state.theme = state.theme === 'dracula' ? 'light' : 'dracula';
+      document.documentElement.setAttribute('data-theme', state.theme);
+      localStorage.setItem('theme', state.theme);
     },
     toggleSidebar: (state) => {
       state.isSidebarOpen = !state.isSidebarOpen;

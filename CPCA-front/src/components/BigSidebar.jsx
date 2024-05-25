@@ -17,7 +17,7 @@ const BigSidebar = () => {
       : StudentLinks;
   return (
     <div
-      className={`bg-gray-50 shadow-md w-[250px] transition-all duration-300 ease-in-out h-screen ${
+      className={`bg-base-300 shadow-md w-[250px] transition-all duration-300 ease-in-out h-screen ${
         isSidebarOpen ? "ml-0" : "-ml-[250px]"
       }`}
     >
