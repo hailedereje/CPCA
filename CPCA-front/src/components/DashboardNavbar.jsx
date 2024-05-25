@@ -89,7 +89,7 @@ function DashboardNavbar() {
           </div>
         </button>
         <button className="btn ml-3 btn-ghost btn-circle">
-        <label className="swap swap-rotate">
+          <label className="swap swap-rotate">
             <input
               type="checkbox"
               onChange={handleTheme}

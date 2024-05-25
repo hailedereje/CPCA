@@ -2,25 +2,11 @@ import { BadRequestError, NotFoundError } from "../errors/index.js";
 import { Progress } from "../models/index.js";
 import Course from "../models/course.js";
 import courseSchema from "../validation/courseValidation.js";
-import { createCourseSchema } from "../validation/createCourseValidator.js";
-import { createCourseService } from "../services/courseService.js";
+import { createCourseService } from "../services/course/createCourseService.js";
 
-const createCourse = async (req, res) => {
-  try {
-    await createCourseSchema.validate(req.body)
-      .then(async () => {
-        await createCourseService(req.body)
-          .then(course => res.status(201).send({ course }))
-          .catch((err) => res.status(500).send({ message: "something went wrong", title: "internal server error", ...err }))
-      })
-      .catch(err => res.status(400).send({ message: err.message, title: err.path }))
-  } catch (err) {
-      console.error(...err)
-      return res.status(500).send({ message: "something went wrong", title: "internal server error", ...err })
-  }
-}
 
 const addPrerequistes = async (req,res) => {
+  
   const { prerequisites, courseId } =  req.body
   console.log(req.body)
   return res.json("ok")
@@ -37,6 +23,23 @@ const addPrerequistes = async (req,res) => {
   //   console.error(error);
   //   return res.status(500).json({ error: 'Failed to add prerequisites to course' });
   // }
+}
+
+export const getCourseListFilter = async (req,res) => {
+  try{
+    const courseFilter = await Course.aggregate([
+      {
+        $project: {
+          id: "$_id",
+          title: 1,
+          _id: 0
+        }
+      }
+    ]) ?? []
+    return res.status(200).json(courseFilter);
+  }catch(err) {
+    return res.status(500).send("internal server error")
+  }
 }
 
 const getAllCourses = async (req, res) => {
@@ -76,7 +79,7 @@ const deleteCourse = async (req, res) => {
 const enrollCourse = async () => { }
 const approveEnrollment = async () => { }
 export {
-  createCourse,
+  // createCourse,
   getAllCourses,
   getCourseById,
   updateCourse,

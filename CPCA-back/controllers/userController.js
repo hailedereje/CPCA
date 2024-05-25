@@ -36,15 +36,21 @@ const userRegister = async (req, res) => {
   throw new BadRequestError("Invalid user data");
 };
 const userLogin = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (user && (await user.matchPasswords(password))) {
-    const jwt = await GenerateJWT(res, { _id: user._id });
-    console.log(user.role);
-    return res.json({ userId:user._id, user, jwt });
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (user && (await user.matchPasswords(password))) {
+      const jwt = await GenerateJWT(res, { _id: user._id });
+      console.log(user.role);
+      return res.json({ userId: user._id, user, jwt });
+    }
+    throw new NotFoundError("Invalid email or password");
+  } catch (err) {
+    console.error(err)
+    return res.status(500).send({ message: "something went wrong", title: "internal server error", err })
   }
-  throw new NotFoundError("Invalid email or password");
-};
+}
+
 
 const userLogout = async (req, res) => {
   res.cookie("jwt", "", {
@@ -52,6 +58,32 @@ const userLogout = async (req, res) => {
     expires: new Date(0), //expires right away
   });
   return res.json({ msg: "User LoggedOut" });
+};
+
+// Get a all users
+const getAllUsers = async (req, res) => {
+  console.log(req.query);
+  const { page = 1, search = '', role = '' } = req.query;
+  const limit = 5;
+  const skip = (page - 1) * limit;
+
+  const query = {
+    $or: [
+      { username: { $regex: search, $options: 'i' } },
+      { email: { $regex: search, $options: 'i' } }
+    ],
+    ...(role && { role }),
+  };
+
+  try {
+    const users = await User.find(query).skip(skip).limit(limit)
+    const totalUsers = await User.countDocuments(query);
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    res.json({ users, totalPages });
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching questions' });
+  }
 };
 
 const getUserProfile = async (req, res) => {
@@ -68,7 +100,7 @@ const getUserProfile = async (req, res) => {
 const editUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   // console.log(req.body);
-  const {username, email, profileImg} = req.body; 
+  const { username, email, profileImg } = req.body;
   if (user) {
     const { username, email, password } = req.body;
 
@@ -128,4 +160,5 @@ export {
   editUserProfile,
   createInstructor,
   userLogout,
+  getAllUsers
 };

@@ -70,7 +70,6 @@ export const QuizBoard = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log("jdddddd")
     await newRequests.post("/new", { title, duration, instruction }).then(() => {
       console.log("success")
     }).catch(() => {

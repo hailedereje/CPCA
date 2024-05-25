@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useDispatch, useSelector } from "react-redux";
-import { postQuizObj, quizSuccess } from "../../Redux/action.js";
+import add from "../../assets/add.gif";
+import newRequests from "@/utils/newRequest";
 
 export const QuizQuestionForm = () => {
   const [isPopupOpen, setPopupOpen] = useState(false);
-  const data = useSelector((state) => state.mernQuize.questions);
-  const dispatch = useDispatch();
 
   const [ans, setAns] = useState([
     { option: "", isCorrect: false, id: 0 },
@@ -15,34 +13,26 @@ export const QuizQuestionForm = () => {
     { option: "", isCorrect: false, id: 3 },
   ]);
 
-  const [quiz, setQuiz] = useState({
+  const initialState = {
     title: "",
-    questions: "",
+    question: "",
     options: ans,
-    correctAnswer: "",
-  });
+    correctAnswer: ""
+}
 
-  const handleQuiz = (event) => {
+  const [quiz, setQuiz] = useState(initialState);
+
+  const handleQuiz = async (event) => {
     event.preventDefault();
-    const findCorrectAnswer = () => {
-      const correctOption = ans.find((option) => option.isCorrect);
-      if (correctOption) {
-        setQuiz({ ...quiz, correctAnswer: correctOption.option });
-      }
-    };
-
-    findCorrectAnswer();
-    dispatch(quizSuccess(quiz));
+    try {
+      const response = await newRequests.post('/quiz_question', quiz);
+      console.log(response.data)
+      setQuiz(initialState)
+    } catch (error) {
+      console.error('Error adding question:', error);
+    }
   };
-  const handleUploadnew = (event) => {
-    event.preventDefault();
-    const obj = {
-      title: data[0].title,
-      questionArray: data,
-    };
 
-    dispatch(postQuizObj(obj));
-  };
   const handleType = (id) => (event) => {
     const { name, value } = event.target;
     setAns(() =>
@@ -61,7 +51,7 @@ export const QuizQuestionForm = () => {
   };
 
   return (
-    <div classname="relative">
+    <div className="relative">
       <button
         className="flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded mt-4"
         onClick={() => setPopupOpen(!isPopupOpen)}
@@ -70,7 +60,7 @@ export const QuizQuestionForm = () => {
         Add Questions
       </button>
       {isPopupOpen && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
+        <div className="fixed z-50 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div
               className="fixed inset-0 transition-opacity"
@@ -83,7 +73,7 @@ export const QuizQuestionForm = () => {
                 <div className="flex text-yellow-500 w-96 font-bold font-serif mb-2 ml-12">
                   <h1 className="text-2xl ">ADD QUESTIONS </h1>
                   <img
-                    src="./add.gif"
+                    src={add}
                     alt="add icon"
                     className="w-1/3 h-20 -mt-6"
                   />
@@ -116,7 +106,7 @@ export const QuizQuestionForm = () => {
                     type="text"
                     placeholder="Question"
                     onChange={(event) =>
-                      setQuiz({ ...quiz, questions: event.target.value })
+                      setQuiz({ ...quiz, question: event.target.value })
                     }
                   />
                   <label
@@ -157,7 +147,6 @@ export const QuizQuestionForm = () => {
                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                             name="isCorrect"
                             id=""
-                            v-model="allowMultiple"
                             value={x.boolean}
                             onChange={(e) => {
                               handleType(x.id)(e);
@@ -183,12 +172,6 @@ export const QuizQuestionForm = () => {
                         className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded "
                       >
                         Add
-                      </button>
-                      <button
-                        onClick={handleUploadnew}
-                        className=" bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded  ml-4 "
-                      >
-                        Upload
                       </button>
                     </div>
                   </div>
