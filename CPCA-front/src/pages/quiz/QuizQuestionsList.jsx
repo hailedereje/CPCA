@@ -44,13 +44,17 @@ const QuizQuestionsList = () => {
       });
   };
 
-  const handleUpdate = (id) => {
-    console.log("Update question with id:", id);
-  };
-
   const handelDetails = (question) => {
     setShowDetails(true);
     setSelectedQuestion(question);
+  };
+
+  const handleUpdateQuestion = (updatedQuestion) => {
+    setQuestions((prevQuestions) =>
+      prevQuestions.map((question) =>
+        question.id === updatedQuestion.id ? updatedQuestion : question
+      )
+    );
   };
 
   const handleCloseModal = () => {
@@ -152,49 +156,8 @@ const QuizQuestionsList = () => {
           </button>
         </div>
       </div>
-      {showDetails && (
-        <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center">
-          <div className="modal-overlay fixed inset-0 bg-black opacity-80 "></div>
-          <div className="modal-content relative bg-white pl-6 pb-6 pr-8 rounded-lg shadow-lg">
-            <span
-              className="btn btn-ghost btn-circle cursor-pointer absolute text-3xl top-0 right-0 text-red-500"
-              onClick={handleCloseModal}
-            >
-              &times;
-            </span>
-            <h3 className="text-xl relative inset-0 text-black font-bold my-4">
-              Question Details
-            </h3>
-            {selectedQuestion && (
-              <div className="flex-1">
-                <div className="w-full">
-                  <h2 className="text-2xl font-bold mb-2">
-                    {selectedQuestion.title}
-                  </h2>
-                  <p className="mb-4">{selectedQuestion.question}</p>
-                  <div className="mb-4">
-                    <strong>Correct Answer:</strong>{" "}
-                    {selectedQuestion.correctAnswer}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    className="block rounded-lg bg-gradient-to-tr from-blue-800 to-blue-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    onClick={() => handleUpdate(selectedQuestion._id)}
-                  >
-                    Update
-                  </button>
-                  <button
-                    className="block rounded-lg bg-gradient-to-tr from-red-800 to-red-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    onClick={handleCloseModal}
-                  >
-                    Back
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+      {showDetails && selectedQuestion && (
+        <QuizQuestionForm selectedQuestion={selectedQuestion} handleCloseModal={handleCloseModal} handleUpdateQuestion={handleUpdateQuestion}/>
       )}
     </div>
   );
