@@ -5,34 +5,49 @@ import 'froala-editor/js/plugins/image.min.js'
 import 'froala-editor/js/plugins/table.min.js'
 
 import FroalaEditor from 'react-froala-wysiwyg';
-import { toggleShow, updateTopic } from '../../features/course/createCourse';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import DOMPurify from "dompurify"
-import { closeEditor } from '@/features/course/coursSidebarSlice';
-import { useAddLessonItem } from '../createCourse/hooks/course-hooks';
+import { closeEditor, setLessonItemValue } from '@/features/course/coursSidebarSlice';
+import { useAddLessonItem, useUpdateLessonItem } from '../createCourse/hooks/course-hooks';
+import { ActionTypes } from '../createCourse/action.Types';
 
- 
-
-
-export const TextEditor = () => {
+export const TextEditor = ({lessonId}) => {
   const  {showTextEditor,lessonItem}  = useSelector(x => x.courseInputState)
-  const { lessonId } = lessonItem
-
-  const { mutateAsync: postLessonItem,isPending } = useAddLessonItem(lessonId)
+  const { lessonItemId,actionType,idx } = lessonItem
+  const value = lessonItem.value.content
   
-  const data  = lessonItem.value.content
-  const [value,setValue] = useState(data);
-
+  const [loading,setLoading] = useState(false)
   const dispatch = useDispatch();
 
-  const onSubmit = async() => {
-    await postLessonItem({lessonId,type:'text',value:{language: "english",content:value}})
-        .then(() => {
-          dispatch(closeEditor())
-          console.log("lessonItem added")
-        })
-        .catch((err) => console.log(err))
+  const { mutateAsync: postLessonItem,isPending } = useAddLessonItem(lessonId)
+  const { mutateAsync: updateLessonItem, } = useUpdateLessonItem(lessonId)
+
+  // const [value,setValue] = useState(lessonItem.value.content);
+
+  const actions = {
+    addLessonItem: async(data) => await postLessonItem(data),
+    editLessonItem: async(data) => await updateLessonItem(data)
+}
+const onSubmit = async() => {
+    try {
+        setLoading(true)
+        switch (actionType) {
+            case ActionTypes.ADD_LESSON_ITEM:
+                await actions.addLessonItem({lessonId,type:'text',value: {language:'english',content:value},idx})
+                break
+            case ActionTypes.UPDATE_LESSON_ITEM:
+                await actions.editLessonItem({lessonId,lessonItemId,type:'text',value: {language:'english',content:value},idx})
+                break
+        }
+        setLoading(false)
+        dispatch(closeEditor())
+    } catch (error) {
+        console.log(error)
+    }finally{
+        setLoading(false)
+    }
+      
 }
 
   const defaultConfig = {
@@ -97,22 +112,20 @@ export const TextEditor = () => {
     
 
   };
-  const handleModel = (content) =>{
-    setValue(content)
-  }
+
     return (
       <>
-        {  <div className={`fixed z-30 flex items-center justify-center top-0 left-0 w-screen h-screen  transform transition-all duration-500 ${showTextEditor ? 'scale-100 ' : 'scale-40 hidden'}`}>
+        {showTextEditor &&  <div className={`fixed z-30 flex items-center justify-center top-0 left-0 w-screen h-screen  transform transition-all duration-500 ${showTextEditor ? 'scale-100 ' : 'scale-40 hidden'}`}>
             <div  className="absolute top-0 left-0 w-full h-full bg-black/30" />
-            <div className="flex items-center justify-center gap-4 w-2/3 relative ">
+            <div className="flex items-center justify-center gap-4 w-1/2  bg-red-400 relative ">
                 <FroalaEditor tag='div'
                     model={value}
                     config={defaultConfig}
-                    onModelChange={handleModel}
+                    onModelChange={(editorValue) => dispatch(setLessonItemValue(({language:'english',content:editorValue})) ) }
                 />
                 <div className="absolute bottom-3 right-0 flex z-10 items-center justify-center gap-6">
                     <button onClick={onSubmit} className="bg-blue-500 hover:bg-blue-700 text-white text-sm py-1 px-2 rounded mr-2 min-w-16" >
-                        {isPending ? "saving...":"save"}
+                        {loading ? "saving...":"save"}
                     </button>
                     <button onClick={() => dispatch(closeEditor())} className="border hover:border-red-400 text-red-500 text-sm py-1 px-3 rounded mr-2"
                         >

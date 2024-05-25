@@ -32,9 +32,11 @@ function DashboardNavbar() {
     // console.log('toggled')
     dispatch(toggleSidebar());
   };
+
   const theme = useSelector((state) => state.userState.theme);
   const isDarkTheme = theme === "dracula";
 
+  console.log(theme);
   const handleLogout = () => {
     navigate("/");
     dispatch(logoutUser());

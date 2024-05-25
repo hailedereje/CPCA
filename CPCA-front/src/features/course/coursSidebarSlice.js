@@ -17,6 +17,7 @@ const lessonItem = {
   actionType:'',
   lessonId:'',
   lessonItemId:'',
+  idx:'',
   value:{
     language:'javascript',
     content:''
@@ -61,42 +62,39 @@ const uiSlice = createSlice({
     deleteLesson: (state,action) => {
 
     },
-    setActiveLesson: (state,action) => {
-      const {courseId,chapterId,lessonId,content} = action.payload
-      state.activeLesson = {courseId, chapterId,lessonId,content,isEmpty:false }
-    },
 
     createLessonItem: (state,action) => {
-      const { type,lessonId } = action.payload
+      const { type,lessonId,actionType,idx } = action.payload
       switch (type) {
         case 'code':
+          state.lessonItem = {...state.lessonItem,lessonId,type,actionType,idx,value:lessonItem.value}
           state.showCodeEditor = true
-          state.lessonItem.lessonId = lessonId
-          state.lessonItem.value = lessonItem.value
           break
         case 'text':
+          state.lessonItem = {...state.lessonItem,lessonId,type,actionType,idx,value:lessonItem.value}
           state.showTextEditor = true
-          state.lessonItem.lessonId = lessonId
-          state.lessonItem.value = lessonItem.value
           break
       }
     },
     updateLessonItem: (state,action) => {
-      const { type,_id ,value } = action.payload
+      const {lessonId, lessonItemId, type, value } = action.payload
       switch (type) {
         case 'code':
+          state.lessonItem = {lessonItemId,value,actionType:ActionTypes.UPDATE_LESSON_ITEM,value}
           state.showCodeEditor = true
-          state.lessonItem = {lessonItemId:_id,value,actionType:ActionTypes.UPDATE_LESSON_ITEM,}
           break
         case 'text':
+          state.lessonItem = {lessonItemId,value,actionType:ActionTypes.UPDATE_LESSON_ITEM,value}
           state.showTextEditor = true
-          state.lessonItem = {lessonItemId:_id,value,actionType:ActionTypes.UPDATE_LESSON_ITEM,}
           break
       }
     },
+    setActiveLesson: (state,action) => {
+      const {courseId,chapterId,lessonId,content} = action.payload
+      state.activeLesson = {courseId, chapterId,lessonId,content,isEmpty:false }
+    },
     setLessonItemValue: (state,action) => {
-      const { value } = action.payload
-      state.lessonItem.value = value
+      state.lessonItem.value = action.payload
     },
 
     addLessonItem: (state,action) => {
@@ -120,7 +118,7 @@ const uiSlice = createSlice({
 export const {
   addChapter,close,renameChapter,
   setTitle,addLesson,deleteChapterConfirmation,
-  setActiveLesson,addLessonItem,closeEditor,createLessonItem,updateLessonItem,setLessonItemValue
+  addLessonItem,closeEditor,createLessonItem,updateLessonItem,setLessonItemValue,setActiveLesson
   
 } = uiSlice.actions;
 export default uiSlice.reducer;

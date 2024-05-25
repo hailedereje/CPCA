@@ -1,4 +1,4 @@
-import { addChapter, addLesson, close, deleteChapterConfirmation, renameChapter, setActiveLesson, setTitle } from '@/features/course/coursSidebarSlice';
+import { addChapter, addLesson, close, deleteChapterConfirmation, renameChapter,setActiveLesson, setTitle } from '@/features/course/coursSidebarSlice';
 import React, { useState } from 'react';
 
 import { FaBook, FaBookOpen, FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';

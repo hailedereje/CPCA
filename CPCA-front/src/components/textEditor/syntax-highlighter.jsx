@@ -10,7 +10,7 @@ import { Button } from "../ui/button";
 
 export const SyntaxHighlighter = ({ code }) => {
     const codeRef = useRef(null);
-  
+    // console.log(code)
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
@@ -20,7 +20,7 @@ export const SyntaxHighlighter = ({ code }) => {
 
     useEffect(() => {
         hljs.highlightElement(codeRef.current);
-    }, [code.code]);
+    }, [code.content, code.language]);
 
     return (
         <pre className="relative w-full">
