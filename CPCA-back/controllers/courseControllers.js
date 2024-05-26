@@ -76,13 +76,62 @@ const deleteCourse = async (req, res) => {
   res.send(course);
 };
 
-const enrollCourse = async () => { }
-const approveEnrollment = async () => { }
+
+const enrollCourse = async (req, res) => {
+  const { courseId, studentId } = req.body;
+
+  try {
+    const course = await Course.findById(courseId);
+    if (!course) return NotFoundError("Course not found");
+
+    // Check if the student is already enrolled in the course
+    const isEnrolled = course.students.includes(studentId);
+    if (isEnrolled) return BadRequestError("Student is already enrolled in the course");
+
+    // Add the student to the course's students array
+    course.students.push(studentId);
+    await course.save();
+
+    return res.status(200).json({ message: "Enrollment request successful" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to enroll in the course" });
+  }
+};
+
+const approveEnrollment = async (req, res) => {
+  const { courseId, studentId } = req.body;
+
+  try {
+    const course = await Course.findById(courseId);
+    if (!course) return NotFoundError("Course not found");
+
+    // Check if the student is in the unapprovedStudents array
+    const isUnapproved = course.unapprovedStudents.includes(studentId);
+    if (!isUnapproved) return BadRequestError("Student is not in the unapproved students list");
+
+    // Remove the student from the unapprovedStudents array
+    course.unapprovedStudents = course.unapprovedStudents.filter((id) => id !== studentId);
+
+    // Add the student to the enrolledStudents array
+    course.enrolledStudents.push(studentId);
+
+    await course.save();
+
+    return res.status(200).json({ message: "Enrollment approved" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to approve enrollment" });
+  }
+};
+
 export {
   // createCourse,
   getAllCourses,
   getCourseById,
   updateCourse,
   deleteCourse,
-  addPrerequistes
+  addPrerequistes,
+  enrollCourse,
+  approveEnrollment,
 };
