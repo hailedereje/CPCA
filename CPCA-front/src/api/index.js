@@ -44,4 +44,5 @@ export const {
   useInviteStudentsMutation,
   useJoinClassroomMutation,
   useEnrollStudentMutation,
+  useGetClassroomByIdQuery,
 } = api;

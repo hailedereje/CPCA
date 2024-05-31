@@ -20,7 +20,7 @@ export const createClassroomAction =
         .unwrap(); // send a request to the server
       if (result) {
         toast.success("Classroom created successfully");
-        return redirect("classrooms");
+        return redirect("/dashboard/classrooms");
       }
     } catch (err) {
       console.log('error', err);

@@ -56,6 +56,8 @@ import Stats from "./pages/classroom/Stats";
 import Classrooms from "./pages/classroom/Classrooms";
 import { JoinClass } from "./components";
 import { AddQuestion } from "./components/createCourse/quiz/add-questions";
+import ClassroomDetails from "./pages/classroom/ClassroomDetails";
+import Students from "./pages/classroom/Students";
 
 
 
@@ -94,12 +96,26 @@ function App() {
           loader: CoursesLoader(store),
         },
         {
-          path: 'classroom',
+          path: 'classrooms',
           element: <ClassroomLayout />,
           children: [
-            { index: true, element: <CreateClassroom/>, action: createClassroomAction(store)},
-            // { path: "create", element: <CreateClassroom/>}
-            {path: 'classrooms', element: <Classrooms />}
+            { index: true, element: <Classrooms/>},
+            { path: "create", element: <CreateClassroom/>, action: createClassroomAction(store)}, 
+            {
+              path: ":id",
+              element: <ClassroomDetails />,
+              children: [
+                { index: true, element: <div>Details Page</div> },
+                { path: "students", element: <Students />},
+                { path: "invitations", element: <div>Invitations Page</div> },
+                { path: "status", element: <div>Status Page</div> },
+                { path: "discussion", element: <ForumLayout />, children: [
+                  {path: "content", element: <Forum />},
+                  {path: "myqns", element: <MyQuestions />},
+                  {path: "ask", element: <Askquestion />},
+                ]},
+              ]
+            }            // {path: 'classrooms', element: <Classrooms />}
            
           ]
         }

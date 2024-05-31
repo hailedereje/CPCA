@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useOutletContext } from "react-router-dom";
 import CreateButton from "@/components/forum/CreateButton";
 import Sidebar from "@/components/forum/ForumSidebar";
 import { io } from "socket.io-client";
@@ -20,6 +20,7 @@ export const Layout = () => {
   const user = useSelector((state) => state.userState.user);
   const users = useSelector((state) => state.socketState.onlineUsers);
   const dispatch = useDispatch();
+  const {classroom} = useOutletContext()
 
   useEffect(() => {
     console.log("socket", socket);
@@ -53,7 +54,7 @@ export const Layout = () => {
         <div className="left-section fixed left-28">
           <Sidebar />
         </div>
-        <SocketContext.Provider value={socket}>
+        <SocketContext.Provider value={{socket, classroomId: classroom._id}}>
           <Outlet />
         </SocketContext.Provider>
         <div

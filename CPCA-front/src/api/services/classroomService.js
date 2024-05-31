@@ -7,6 +7,9 @@ export const classroomService = (builder) => ({
       body: classroom,
     }),
   }),
+  getClassroomById: builder.query({
+    query: (id) => `/classroom/${id}`,
+  }),
   getClassroomsByInstructorId: builder.query({
     query: (instructorId) => `/classroom/instructor/${instructorId}`,
   }),

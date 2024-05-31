@@ -11,14 +11,14 @@ const JoinClass = () => {
       navigate("/login")
     } catch (error) {
       console.error("error", error.response.data.message);
-      if(error.response.data.message === "User not found") {
+      if(error.response.data.msg === "User not found") {
         navigate(`/register/${token}`)
       }
-      if(error.response.data.message === "User already enrolled in this classroom") {
+      else if(error.response.data.msg === "already enrolled") {
         alert("You are already enrolled in this classroom")
-      } else if (error.response.data.message === "Invalid invitaion link"){
+      } else if (error.response.data.msg === "Invalid invitaion link"){
         alert("Invalid invitation link")
-      } else if (error.response.data.message === ("Classroom not found")) {
+      } else if (error.response.data.msg === ("Classroom not found")) {
         alert("Classroom not found")
       } else {
         alert("Something went wrong, please try again")
