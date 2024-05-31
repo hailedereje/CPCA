@@ -50,8 +50,7 @@ const onSubmit = async() => {
       
 }
 
-  const defaultConfig = {
-    
+  const defaultConfig = {  
     toolbarSticky: true,
     documentReady: true,
     heightMax: 300,
@@ -79,7 +78,8 @@ const onSubmit = async() => {
                     const responseData = JSON.parse(response);
                     const secureUrl = responseData.secure_url;
                     const image = `<img src=${secureUrl} alt='image style={{object-fit: cover}}'>`
-                    setValue(prev => `${prev + image}`)                
+                    dispatch(setLessonItemValue(({language:'english',content:`${value + image}`})) )
+                    // setValue(prev => `${prev + image}`)                
             },
             'image.inserted': function ($img, response) {
     

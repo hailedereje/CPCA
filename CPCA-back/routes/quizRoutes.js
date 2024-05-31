@@ -12,13 +12,15 @@ import {
   isInstructor,
   studentCheck,
 } from "../middlewares/authenticate.js";
+import { validateRequest } from "../middlewares/validateRequest.js";
+import { quizSchema } from "../validation/chapter/quizValidator.js";
 
 const router = express.Router();
 
 router.use(authenticate);
 
-router.use(isInstructor);
-router.post("/new", createQuiz);
+// router.use(isInstructor);
+router.post("/new",validateRequest(quizSchema), createQuiz);
 router.get("/all", getAllQuizzes);
 router.post("/update/:id", updateQuizById);
 router.get("/:id", getQuizById);

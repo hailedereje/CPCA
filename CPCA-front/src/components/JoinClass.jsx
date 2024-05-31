@@ -1,35 +1,33 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import newRequests from "@/utils/newRequest";
 
 const JoinClass = () => {
-  const [email, setEmail] = useState("");
-  const [classroomId, setClassroomId] = useState("");
+  const {token} = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const email = params.get("email");
-    const classroomId = params.get("classroomId");
-    if (email) setEmail(email);
-    if (classroomId) setClassroomId(classroomId);
-  }, [location]);
 
   const handleJoinClass = async () => {
     try {
-      await newRequests.post("/enroll", { email, classroomId });
-      navigate("/dashboard");
+      await newRequests.get(`/classroom/join/${token}`);
+      navigate("/login")
     } catch (error) {
-      console.error(error);
+      console.error("error", error.response.data.message);
+      if(error.response.data.message === "User not found") {
+        navigate(`/register/${token}`)
+      }
+      if(error.response.data.message === "User already enrolled in this classroom") {
+        alert("You are already enrolled in this classroom")
+      } else if (error.response.data.message === "Invalid invitaion link"){
+        alert("Invalid invitation link")
+      } else if (error.response.data.message === ("Classroom not found")) {
+        alert("Classroom not found")
+      } else {
+        alert("Something went wrong, please try again")
+      }
     }
   };
 
   return (
     <div className="flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-4">Join Class</h1>
-      <p className="mb-2">Email: {email}</p>
-      <p className="mb-4">Classroom ID: {classroomId}</p>
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         onClick={handleJoinClass}

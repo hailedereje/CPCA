@@ -21,8 +21,8 @@ function Dashboard() {
 
   return (
     <>
-      <div className="flex flex-col space-y-16 dark:text-white">
-        <div className="flex justify-between gap-3 h-12 items-center fixed top-0 z-20 shadow-md w-full p-2 dark:bg-gray-700 bg-white">
+      <div className="flex flex-col space-y-12 dark:text-white">
+        <div className="flex justify-between gap-3 h-12 items-center fixed top-0 z-20 shadow-md w-full p-2 bg-white dark:bg-[#212121]">
           <DropdownMenu/>
           <div className="">
             Admin Dashboard

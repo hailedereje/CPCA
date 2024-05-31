@@ -33,7 +33,7 @@ export const CourseLayout = () => {
            {isLoading ? <Loading/>: <>
                 <div className="flex">
                     <Drawer data={data.data.course}/>
-                    <div className="flex items-center justify-center w-full">
+                    <div className="flex items-start justify-center w-full min-h-screen">
                         <Outlet/>
                     </div>
                 </div>

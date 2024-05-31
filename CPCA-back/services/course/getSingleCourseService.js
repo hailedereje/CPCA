@@ -6,11 +6,18 @@ export const getSingleCourseService = async (id) => {
         .populate('chapters')
         .populate({
             path: "chapters",
-            populate: {
-                path: "lessons",
-                model:"Lesson",
-                select:"_id title"
-            }
+            populate: [
+                {
+                    path: "lessons",
+                    model:"Lesson",
+                    select:"_id title"
+                },
+                {
+                    path: "quiz",
+                    model:"Quiz",
+                    select:"_id title"
+                }
+            ]
         })
     return course   
 }

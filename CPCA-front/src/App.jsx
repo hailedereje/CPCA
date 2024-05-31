@@ -47,13 +47,15 @@ import QuestionsList from "./pages/question/QuestionList";
 import AddQuestionForm from "./pages/question/PracticeQuestionForm";
 import PracticeQuestionPage from "./pages/question/Practice";
 import UsersList from "./pages/dashboard/UsersList";
-import QuizQuestionsList from "./pages/quiz/QuizQuestionsList";
+import QuizQuestionsList, { QuizQuestionsWrapper } from "./pages/quiz/QuizQuestionsList";
 import { EditCourseError } from "./components/createCourse/error/editCourseError";
 import { StarterPage } from "./components/createCourse/components/starterPage";
 import ClassroomLayout from "./pages/classroom/ClassroomLayout";
 import CreateClassroom, { createClassroomAction } from "./pages/classroom/CreateClassroom";
 import Stats from "./pages/classroom/Stats";
 import Classrooms from "./pages/classroom/Classrooms";
+import { JoinClass } from "./components";
+import { AddQuestion } from "./components/createCourse/quiz/add-questions";
 
 
 
@@ -144,7 +146,7 @@ function App() {
         { index: true, element: <Landing /> },
 
         {
-          path: "register",
+          path: "register/:token",
           element: <Register />,
           action: registerAction(store),
         },
@@ -152,6 +154,10 @@ function App() {
           path: "login",
           element: <Login />,
           action: loginAction(store),
+        },
+        {
+          path: "join/:token",
+          element: <JoinClass />,
         },
         {
           path: "courses",
@@ -216,11 +222,21 @@ function App() {
         {
           path:'course/update/:id/chapters',
           element: <CourseLayout/>,
-          errorElement:<EditCourseError/>,
+          // errorElement:<EditCourseError/>,
           children: [
            { index: true, element: <StarterPage/>},
-           {path: ":chapterId/lessons/:lessonId",element:<RichTextExample/>},
-           { path: "add-test",element:<QuizBoard/>}
+           { path: ":chapterId/lessons/:lessonId",element:<RichTextExample/>},
+           { path: ":chapterId/add-test",element:<QuizBoard/>},
+           { 
+            path: ":chapterId/add-test/:quizId",
+            element:<QuizQuestionsWrapper/>,
+            children: [
+              {index:true,element: <QuizQuestionsList/>},
+              { path: "question",element:<AddQuestion/>},
+              { path: "question/:questionId",element:<AddQuestion/>}
+            ]
+          },
+           
           ]
         },
       ],

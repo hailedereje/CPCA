@@ -3,9 +3,9 @@ import {
   archiveClassroom,
   createClassroom,
   deleteClassroom,
-  enrollStudent,
   getClassroomsByInstructorId,
   getClassroomsByUserId,
+  getInvitationByToken,
   inviteStudents,
   joinClassroom,
 } from "../controllers/index.js";
@@ -18,6 +18,9 @@ import {
 
 const router = express.Router();
 
+router.get("/invitation/:token", getInvitationByToken);
+router.get("/join/:token", joinClassroom);
+
 router.use(authenticate);
 
 router.use(isInstructor);
@@ -29,7 +32,5 @@ router.get("/instructor/:id", getClassroomsByInstructorId);
 
 router.use(studentCheck);
 router.get("/student/:id", getClassroomsByUserId);
-router.post("/enroll", enrollStudent);
-router.post("/join/:token", joinClassroom);
 
 export default router;

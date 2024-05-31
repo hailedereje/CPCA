@@ -1,16 +1,14 @@
-import { Form, Link, redirect, useLocation, useNavigate } from "react-router-dom";
+import { Form, Link, redirect, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import FormInput from "../components/FormInput";
 import SubmitBtn from "../components/SubmitBtn";
 import { api } from "../api";
 import { useEffect, useState } from "react";
-
+import newRequests from "@/utils/newRequest";
 
 export const action =
   (store) =>
-  async ({ request }) => {
-    // const navigate = useNavigate();
-    // const location = useLocation();
+  async ({ request, params }) => {
     const formData = await request.formData();
     const data = Object.fromEntries(formData); // convert to plain js
     console.log(data);
@@ -20,11 +18,9 @@ export const action =
         .unwrap();
       if (result) {
         toast.success("User Registered  successfully");
-        // const params = new URLSearchParams(location.search);
-        // const email = params.get('email');
-        // const classroomId = params.get('classroomId');
-        // const token = params.get('token');
-        // navigate(`/login?email=${email}&classroomId=${classroomId}&token=${token}`);
+        if(params.token){
+          return redirect(`/join/${params.token}`);
+        }
         return redirect("/login");
       }
     } catch (err) {
@@ -39,13 +35,19 @@ export const action =
 
 const Register = () => {
   const [email, setEmail] = useState('');
-  const location = useLocation();
+  const params = useParams();
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const email = params.get('email');
-    if (email) setEmail(email);
-  }, [location]);
+    const findEmail = async () => {
+      try {
+        const response = await newRequests.get(`/classroom/invitation/${params.token}`);
+        setEmail(response.data.email);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    findEmail();
+  }, [params]);
 
   return (
     <section className="h-screen grid place-items-center">
@@ -53,6 +55,11 @@ const Register = () => {
         method="POST"
         className="card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4"
       >
+        {params.token && (
+          <p className="text-center text-sm text-red-500">
+            You have been invited to join a class. Please register to join the class.
+          </p>
+        )}
         <h4 className="text-center text-3xl font-bold">Register</h4>
         <FormInput type="text" label="username" name="username" />
         <FormInput type="email" label="email" name="email" defaultValue={email} />

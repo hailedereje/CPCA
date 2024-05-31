@@ -27,7 +27,7 @@ export const CourseName = ({ courseId }) => {
     //         <button className="bg-red-500 hover:bg-blue-700 text-white text-sm py-1 px-2 rounded mr-2"> delete</button>
     //     </div>
     return (
-        <div className="flex flex-wrap items-start w-full gap-4 bg-slate-50 p-4 rounded-md dark:bg-gray-600">
+        <div className="flex flex-col max-w-md items-start w-full gap-4 bg-slate-50 p-4 rounded-md dark:bg-gray-600">
             <span className="flex flex-col gap-2">
                 <span className="text-xl capitalize font-medium flex gap-4 items-center">
                     <span>

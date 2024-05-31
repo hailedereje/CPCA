@@ -33,6 +33,7 @@ import { deleteLessonItemController } from "../controllers/lesson/deleteLessonIt
 import { updateLessonItemController } from "../controllers/lesson/updateLessonItemController.js";
 import { deleteLessonController } from "../controllers/lesson/deleteLessonController.js";
 import { deletChapterController } from "../controllers/chapter/deleteChapterController.js";
+import { uploadImageController } from "../controllers/course/uploadImageController.js";
 
 const router = express.Router();
 
@@ -54,13 +55,15 @@ router.post("/course/add-chapter",validateRequest(createChapterSchema),createCha
 router.get("/course",getSinglCourseController)
 router.patch("/:id", updateCourse);
 router.delete("/:id", deleteCourse);
+router.post("/course/chapters/chapter/upload-image",uploadImageController)
 
 // chapter
 router.get("/course/chapters",getChaptersController)
 router.get("/course/chapters/chapter")
 router.post("/course/chapters",createChapterController)
 router.post("/course/chapters/chapter/rename",renameChapterController)
-router.delete("/course/chapters/chapter",deletChapterController) 
+router.delete("/course/chapters/chapter",deletChapterController)
+
 //lesson
 router.get("/course/chapters/chapter/lessons/lesson",getLessonController)
 router.post("/course/chapters/chapter/lessons",validateRequest(createLessonSchema),createLessonController)
