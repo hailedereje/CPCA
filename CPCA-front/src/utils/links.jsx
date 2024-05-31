@@ -50,10 +50,10 @@ export const instructorActivities = [
   // },
   {
     id: "1",
-    text: "Manage Courses",
+    text: "Create Classroom",
     activity: "Go",
     icon: <FaChalkboardTeacher size={50} />,
-    path: '/course/edit/1'
+    path: 'classroom'
     
   },
   {

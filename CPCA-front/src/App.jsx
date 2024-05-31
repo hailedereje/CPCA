@@ -12,7 +12,7 @@ import {
 } from "./pages";
 import { loader as CoursesLoader } from "./pages/dashboard/AllCourses";
 // import { loader as SingleCourseLoader } from "./pages/Lessons";
-import { action as loginAction } from "./pages/Login";
+import { action, action as loginAction } from "./pages/Login";
 import { action as registerAction } from "./pages/Register";
 import { action as EditProfileAction } from "./pages/dashboard/Profile";
 import { store } from "./store";
@@ -50,6 +50,10 @@ import UsersList from "./pages/dashboard/UsersList";
 import QuizQuestionsList from "./pages/quiz/QuizQuestionsList";
 import { EditCourseError } from "./components/createCourse/error/editCourseError";
 import { StarterPage } from "./components/createCourse/components/starterPage";
+import ClassroomLayout from "./pages/classroom/ClassroomLayout";
+import CreateClassroom, { createClassroomAction } from "./pages/classroom/CreateClassroom";
+import Stats from "./pages/classroom/Stats";
+import Classrooms from "./pages/classroom/Classrooms";
 
 
 
@@ -57,7 +61,7 @@ const queryClient = new QueryClient();
 
 function App() {
   const user = useSelector((state) => state.userState.user);
-
+  console.log(user); 
   const getDashboardRoutes = () => {
     if (!user) return [];
 
@@ -87,6 +91,16 @@ function App() {
           element: <AllCourses />,
           loader: CoursesLoader(store),
         },
+        {
+          path: 'classroom',
+          element: <ClassroomLayout />,
+          children: [
+            { index: true, element: <CreateClassroom/>, action: createClassroomAction(store)},
+            // { path: "create", element: <CreateClassroom/>}
+            {path: 'classrooms', element: <Classrooms />}
+           
+          ]
+        }
         // { path: "create-course", element: <CreateCourse /> },
       ];
     } else {

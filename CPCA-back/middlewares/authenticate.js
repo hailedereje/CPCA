@@ -34,7 +34,7 @@ const isInstructor = async (req, res, next) => {
   console.log("checking instructor role");
   console.log(req.user);
   const user = await User.findById(req.user._id);
-  if (!user || user.isInstructor) {
+  if (!user || !user.isInstructor) {
     throw new UnautorizedError("Access denied: Instructor role required");
   }
   next();

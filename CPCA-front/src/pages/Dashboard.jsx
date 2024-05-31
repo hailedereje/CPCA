@@ -13,11 +13,11 @@ import { AdminLinks, InstructLinks, StudentLinks } from "@/utils/links";
 function Dashboard() {
     const [openSidebar,setOpenSidebar] = useState(false)
     
-  const {isLoading } = useQuery({
-    queryKey:['courseListFilter'],
-    queryFn: () => newRequests.get("/courses/courseListFilter"),
-    staleTime: 1000 * 6 * 600, 
-  })
+  // const {isLoading } = useQuery({
+  //   queryKey:['courseListFilter'],
+  //   queryFn: () => newRequests.get("/courses/courseListFilter"),
+  //   staleTime: 1000 * 6 * 600, 
+  // })
 
   return (
     <>
@@ -33,7 +33,8 @@ function Dashboard() {
           </div>
         </div>
         <div className="flex w-full p-2 items-center justify-center">
-          {isLoading ? <Loading/>:<Outlet/>}
+          {/* {isLoading ? <Loading/>:<Outlet/>} */}
+          <Outlet />
         </div> 
       </div>
     </>

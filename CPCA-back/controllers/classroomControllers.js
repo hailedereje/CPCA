@@ -1,29 +1,30 @@
+import { BadRequestError } from "../errors/index.js";
 import { Classroom, Invitation, User } from "../models/index.js";
 import crypto from "crypto";
 
 // Create a new classroom
 export const createClassroom = async (req, res) => {
-  try {
-    const { name, description, instructorId, courseId } = req.body;
-    const classroom = new Classroom({
-      name,
-      description,
-      instructorId,
-      courseId,
-    });
-    const newClassroom = await classroom.save();
-    res.status(201).json(newClassroom);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create classroom" });
+  console.log("user", req.user._id);
+  console.log(req.body); 
+  const { name, description, courseId } = req.body;
+  const newClassroom = Classroom.create({
+    name,
+    description,
+    instructorId: req.user._id,
+    courseId,
+  }); 
+  if (!newClassroom) {
+    throw new BadRequestError("Failed to create classroom");
   }
+  res.status(201).json(newClassroom);
 };
 
 // get all classrooms
 // Get all classrooms by instructorId
 export const getClassroomsByInstructorId = async (req, res) => {
   try {
-    const { instructorId } = req.params;
-    const classrooms = await Classroom.find({ instructorId });
+    const { id } = req.params;
+    const classrooms = await Classroom.find({ instructorId:id });
     res.status(200).json(classrooms);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch classrooms" });

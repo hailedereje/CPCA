@@ -23,7 +23,7 @@ router.use(authenticate);
 router.use(isInstructor);
 router.post("/", createClassroom);
 router.get("/:id", archiveClassroom);
-router.post("/delete/:id", deleteClassroom);
+router.delete("/delete/:id", deleteClassroom);
 router.post("/invite", inviteStudents);
 router.get("/instructor/:id", getClassroomsByInstructorId);
 
