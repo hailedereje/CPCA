@@ -1,24 +1,16 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const quizQuestionSchema = mongoose.Schema({
-    title: { type: String, required: true },
+const quizQuestionSchema = new Schema({
     question: { type: String, required: true },
-    options: [
-        {
-        option: { type: String, required: true },
-        isCorrect: { type: Boolean, required: true },
-        },
-    ],
-    correctAnswer: { type: String, required: true },
-    quizId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Quiz",
-    },
-    createdAt: {
-        type: Date,
-        default: new Date(),
-    },
-});
+    options: [ 
+        { 
+            option: { type: String, required: true },
+            isCorrect: { type: Boolean, required: true },  
+            _id: false
+        }
+    , ],
+    quizId: { type: mongoose.Schema.Types.ObjectId,ref: "Quiz", required: true},
+},{ timestamps: true });
 
 const QuizQuestion = mongoose.model("QuizQuestion", quizQuestionSchema);
 export default QuizQuestion;

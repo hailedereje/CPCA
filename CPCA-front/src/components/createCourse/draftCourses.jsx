@@ -11,6 +11,8 @@ const DraftCourses = () => {
     queryKey: ['draftCourses'],
     queryFn: () => newRequests.get("/courses/all/drafts"),
     staleTime: 1000 * 6 * 100,
+    retry:3,
+    refetchInterval:false
   });
 
   if (isError) {
@@ -37,7 +39,7 @@ const DraftCourses = () => {
                     {course.title}
                   </span>
                 </div>
-                <p className="mt-2 text-gray-600 dark:text-gray-300 text-sm">Click to edit this draft course.</p>
+                <p className="mt-2 text-gray-600 dark:text-gray-300 text-xs">Click to edit this draft course.</p>
               </div>
             ))
           ) : (

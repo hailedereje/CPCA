@@ -6,11 +6,9 @@ import { BsFileEarmarkCheck } from "react-icons/bs";
 import hljs from 'highlight.js';
 import 'highlight.js/styles/an-old-hope.css';
 import { MdContentCopy } from "react-icons/md";
-import { Button } from "../ui/button";
 
 export const SyntaxHighlighter = ({ code }) => {
     const codeRef = useRef(null);
-    // console.log(code)
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
@@ -20,16 +18,18 @@ export const SyntaxHighlighter = ({ code }) => {
 
     useEffect(() => {
         hljs.highlightElement(codeRef.current);
-    }, [code.content, code.language]);
+    }, [code]);
 
     return (
-        <pre className="relative w-full">
-            <CopyToClipboard text={code.content} onCopy={handleCopy}>
-            <button className="absolute right-0 top-0 p-2">
-                {copied ? <BsFileEarmarkCheck className="text-white"/>:<MdContentCopy className="text-white" />}
-            </button>
-            </CopyToClipboard>
-            <span className="absolute left-0 -top-2 rounded p-1 text-xs bg-gray-600 text-white">{code.language}</span>
+        <pre className="relative w-full flex flex-col">
+            <div className="flex items-center justify-between gap-3 bg-[#565656] rounded-t-lg">
+            <span className="rounded p-1 text-xs  text-white">{code.language}</span>
+                <CopyToClipboard text={code.content} onCopy={handleCopy}>
+                    <button className="p-2">
+                        {copied ? <BsFileEarmarkCheck className="text-white"/>:<MdContentCopy className="text-white" />}
+                    </button>
+                </CopyToClipboard>
+            </div>
             <code ref={codeRef} className={`${code.language} w-full xl:max-w-full md:max-w-xl md:text-sm sm:text-xs overflow-auto h-fit max-h-[300px] p-5 rounded-md editor`}>
                 {code.content || "// add some code"}
             </code>

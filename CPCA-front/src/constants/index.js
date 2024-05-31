@@ -45,7 +45,7 @@ export const defaultFroalaConfig = {
     attribution: false,
     wordCounterCount: false,
     lineBreakerOffset: 0,
-    lineBreakerOffsetMD: 10,
+    lineBreakerOffsetMD: 0,
     lineBreakerOffsetSM: 5,
     lineBreakerOffsetXS: 5,
     toolbarButtons: {
@@ -60,5 +60,4 @@ export const defaultFroalaConfig = {
       },
   
     },
-  
   };

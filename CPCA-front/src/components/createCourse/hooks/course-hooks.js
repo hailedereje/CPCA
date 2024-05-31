@@ -7,7 +7,9 @@ import {
     addLessonItem,
     updateLessonItem,
     deleteLessonItem,
-    deleteLesson
+    deleteLesson,
+    uploadImage,
+    createQuiz
   } from './actions';
 import { showErrorToast, showSuccessToast } from '@/toasts/toast';
 import toast from 'react-hot-toast';
@@ -60,6 +62,20 @@ export const useRenameChapter = (courseId) => {
   })
 }
 
+export const useUploadCourseImage = (courseId) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: uploadImage,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:['course',courseId]});
+      toast.success("image uploaded successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to upload image")
+    }
+  })
+}
+
 export const useUpdateChapter = (courseId, chapterId) => {
   const queryClient = useQueryClient();
   return useMutation((data) => updateChapter(courseId, chapterId, data), {
@@ -80,6 +96,20 @@ export const useDeleteChapter = (courseId) => {
     },
     onError: () => {
       showErrorToast("failed to delete chapter")
+    }
+  })
+}
+
+export const useCreateQuiz = (courseId) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: createQuiz,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ['course',courseId]})
+      showSuccessToast("quiz created successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to create quiz")
     }
   })
 }

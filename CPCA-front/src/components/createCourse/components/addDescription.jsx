@@ -39,7 +39,7 @@ export const AddDescription = ({ courseId }) => {
           </span>
           <span >description</span>
         </span>
-        <span className="text-xs lowercase line-clamp-2 text-gray-500 ">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+        <span className="text-xs lowercase line-clamp-2 text-gray-500 dark:text-white">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
       </span>
       <ContentEditor action={action} courseId={courseId} initialValue={initialValue.data.course.description} isPending={isPending} />
     </div>
