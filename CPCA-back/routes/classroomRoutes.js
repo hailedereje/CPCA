@@ -3,7 +3,6 @@ import {
   archiveClassroom,
   createClassroom,
   deleteClassroom,
-  enrollStudent,
   getClassroomsByInstructorId,
   getClassroomsByUserId,
   getInvitationByToken,
@@ -33,6 +32,5 @@ router.get("/instructor/:id", getClassroomsByInstructorId);
 
 router.use(studentCheck);
 router.get("/student/:id", getClassroomsByUserId);
-router.post("/enroll/:token", enrollStudent);
 
 export default router;
