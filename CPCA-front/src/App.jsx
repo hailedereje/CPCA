@@ -50,6 +50,7 @@ import UsersList from "./pages/dashboard/UsersList";
 import QuizQuestionsList from "./pages/quiz/QuizQuestionsList";
 import { EditCourseError } from "./components/createCourse/error/editCourseError";
 import { StarterPage } from "./components/createCourse/components/starterPage";
+import { JoinClass } from "./components";
 
 
 
@@ -130,7 +131,7 @@ function App() {
         { index: true, element: <Landing /> },
 
         {
-          path: "register",
+          path: "register/:token",
           element: <Register />,
           action: registerAction(store),
         },
@@ -138,6 +139,10 @@ function App() {
           path: "login",
           element: <Login />,
           action: loginAction(store),
+        },
+        {
+          path: "join/:token",
+          element: <JoinClass />,
         },
         {
           path: "courses",

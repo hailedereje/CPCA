@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
 import { FormInput } from "../components";
 import { SubmitBtn } from "../components";
-import { Form, Link, redirect, useActionData, useLocation, useNavigate } from "react-router-dom";
+import { Form, Link, redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 import { api } from "../api";
 
 export const action =
   (store) =>
   async ({ request }) => {
-    // const navigate = useNavigate();
-    // const location = useLocation();
+    console.log(request)
     const formData = await request.formData();
     const data = Object.fromEntries(formData); // convert to plain js
     try {
@@ -18,16 +16,7 @@ export const action =
         .unwrap();
       if (result) {
         toast.success("User Logged in   successfully");
-        // const email = params.get('email');
-        // const params = new URLSearchParams(location.search);
-        // const classroomId = params.get('classroomId');
-        // const token = params.get('token');
-        // if (email, classroomId, token) {
-        //   navigate(`/join-class?email=${email}&classroomId=${classroomId}&token=${token}`);
-        // } else {
-        //   navigate("/courses");
-        // }
-        return redirect("/courses");
+        return redirect ("/courses");
       }
     } catch (err) {
       console.log(err);
@@ -40,14 +29,6 @@ export const action =
   };
 
 function Login() {
-  // const [email, setEmail] = useState('');
-  // const location = useLocation();
-
-  // useEffect(() => {
-  //   const params = new URLSearchParams(location.search);
-  //   const email = params.get('email');
-  //   if (email) setEmail(email);
-  // }, [location]);
 
   return (
     <section id="login" className="h-screen grid place-items-center">

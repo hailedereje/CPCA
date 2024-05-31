@@ -1,5 +1,6 @@
 import { Classroom, Invitation, User } from "../models/index.js";
 import crypto from "crypto";
+import nodemailer from "nodemailer";
 
 // Create a new classroom
 export const createClassroom = async (req, res) => {
@@ -18,12 +19,11 @@ export const createClassroom = async (req, res) => {
   }
 };
 
-// get all classrooms
 // Get all classrooms by instructorId
 export const getClassroomsByInstructorId = async (req, res) => {
   try {
-    const { instructorId } = req.params;
-    const classrooms = await Classroom.find({ instructorId });
+    const { id } = req.params;
+    const classrooms = await Classroom.find({ instructorId: id });
     res.status(200).json(classrooms);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch classrooms" });
@@ -33,8 +33,8 @@ export const getClassroomsByInstructorId = async (req, res) => {
 // Get all classrooms by studentId
 export const getClassroomsByUserId = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const classrooms = await Classroom.find({ students: userId });
+    const { id } = req.params;
+    const classrooms = await Classroom.find({ students: id });
     res.status(200).json(classrooms);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch classrooms" });
@@ -76,9 +76,9 @@ export const inviteStudents = async (req, res) => {
   if (!emails || !Array.isArray(emails)) {
     return res.status(400).json({ error: "Invalid email list" });
   }
-
+  console.log("password", process.env.PASSWORD)
   const transporter = nodemailer.createTransport({
-    service: "Gmail",
+    service: "gmail",
     auth: {
       user: process.env.EMAIL,
       pass: process.env.PASSWORD,
@@ -87,9 +87,9 @@ export const inviteStudents = async (req, res) => {
 
   const sendInvitation = async (email) => {
     const token = crypto.randomBytes(20).toString("hex");
-    const invitationLink = `${process.env.CLIENT_URL}/join/${token}?classroomId=${classroomId}`;
+    const invitationLink = `${process.env.CLIENT_URL}/join/${token}`;
     const mailOptions = {
-      from: process.env.EMAIL,
+      from: "Computer Programmming Course Assistant",
       to: email,
       subject: "Classroom Invitation",
       text: `You are invited to join the classroom. Click here to join: ${invitationLink}`,
@@ -99,7 +99,8 @@ export const inviteStudents = async (req, res) => {
       await transporter.sendMail(mailOptions);
       await Invitation.create({ email, token, classroomId });
     } catch (error) {
-      console.error(`Failed to send email to ${email}:`, error);
+      console.log("error", error)
+      // res.status(400).json({message: `Failed to send email to ${email}`});
     }
   };
 
@@ -108,36 +109,65 @@ export const inviteStudents = async (req, res) => {
   res.status(200).json({ message: "Invitations sent" });
 };
 
+// Get invitation by token
+export const getInvitationByToken = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const invitation = await Invitation.findOne({ token });
+    if (!invitation) {
+      return res.status(404).json({ error: "Invitation not found" });
+    }
+    res.status(200).json(invitation);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch invitation" });
+  }
+};
+
 // Join a classroom
 export const joinClassroom = async (req, res) => {
   const { token } = req.params;
-  const { classroomId } = req.query;
-  const invitation = await Invitation.findOne({ token, classroomId });
+  const invitation = await Invitation.findOne({ token: token });
   if (!invitation) {
-    return res.status(400).json({ error: "Invalid invitation link" });
+    return res.status(400).json({ message: "Invalid invitation link" });
   }
-  const user = await User.findOne({ email: invitation.email });
-  if (user) {
-    return res.redirect(
-      `${process.env.CLIENT_URL}/login?email=${user.email}&token=${token}&classroomId=${classroomId}`
-    );
-  } else {
-    return res.redirect(
-      `${process.env.CLIENT_URL}/register?email=${invitation.email}&token=${token}&classroomId=${classroomId}`
-    );
+  const id = invitation.classroomId;
+  const classroom = await Classroom.findById(id);
+  if (!classroom) {
+    return res.status(404).json({ message: "Classroom not found" });
+  }
+
+  try {
+    const user = await User.findOne({ email: invitation.email });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    if (classroom.students.includes(user._id)) {
+      return res
+        .status(400)
+        .json({ message: "User already enrolled in this classroom" });
+    }
+    classroom.students.push(user._id);
+    await classroom.save();
+    res.status(200).json({ message: "User joined successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to join classroom" });
   }
 };
 
 // enroll a student in a classroom
 export const enrollStudent = async (req, res) => {
-  const { email, classroomId } = req.body;
-  const user = await User.findOne({ email });
+  const { token } = req.params
+  const invitation = await Invitation.findOne({token})
+  if (!invitation) {
+    return res.status(400).json({ error: "Invalid invitation link" });
+  }
+  const user = await User.findOne({ email: invitation.email });
 
   if (!user) {
     return res.status(400).json({ error: "User not found" });
   }
 
-  const classroom = await Classroom.findById(classroomId);
+  const classroom = await Classroom.findById({classroomId: invitation.classroomId});
 
   if (!classroom) {
     return res.status(404).json({ error: "Classroom not found" });
