@@ -1,4 +1,4 @@
-import { Classroom, Invitation, User } from "../models/index.js";
+import { Classroom, Discussion, Invitation, User } from "../models/index.js";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 
@@ -12,7 +12,9 @@ export const createClassroom = async (req, res) => {
       instructorId,
       courseId,
     });
+
     const newClassroom = await classroom.save();
+    await Discussion.create({ classroomId: newClassroom._id });
     res.status(201).json(newClassroom);
   } catch (error) {
     res.status(500).json({ error: "Failed to create classroom" });
@@ -76,7 +78,7 @@ export const inviteStudents = async (req, res) => {
   if (!emails || !Array.isArray(emails)) {
     return res.status(400).json({ error: "Invalid email list" });
   }
-  console.log("password", process.env.PASSWORD)
+  console.log("password", process.env.PASSWORD);
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -99,7 +101,7 @@ export const inviteStudents = async (req, res) => {
       await transporter.sendMail(mailOptions);
       await Invitation.create({ email, token, classroomId });
     } catch (error) {
-      console.log("error", error)
+      console.log("error", error);
       // res.status(400).json({message: `Failed to send email to ${email}`});
     }
   };
@@ -151,5 +153,67 @@ export const joinClassroom = async (req, res) => {
     res.status(200).json({ message: "User joined successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to join classroom" });
+  }
+};
+
+// get discussion by classroomId
+export const getDiscussionByClassroomId = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const discussion = await Discussion.findOne({ classroomId: id }).populate({
+      path: "discussion",
+      model: "DiscussionQuestion",
+      populate: [
+        {
+          path: "replies",
+          populate: {
+            path: "author",
+            model: "User",
+          },
+        },
+        {
+          path: "author",
+        },
+      ],
+      options: { sort: { createdAt: 1 } },
+    });
+
+    if (!discussion) {
+      return res.status(404).json({ error: "Discussion not found" });
+    }
+    return res.status(200).json(discussion);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch discussion" });
+  }
+};
+
+// Get my questions by classroomId
+export const getMyQuestionsByClassroomId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const discussion = await Discussion.findOne({
+      classroomId: id,
+    }).populate({
+      path: "discussion",
+      model: "DiscussionQuestion",
+      match: { author: req.user._id },
+      populate: [
+        {
+          path: "replies",
+          populate: {
+            path: "author",
+            model: "User",
+          },
+        },
+        {
+          path: "author",
+        },
+      ],
+      options: { sort: { createdAt: 1 } },
+    });
+    res.status(200).json(discussion);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch questions" });
   }
 };

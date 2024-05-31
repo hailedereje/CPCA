@@ -132,7 +132,7 @@ function App() {
         { index: true, element: <Landing /> },
 
         {
-          path: "register/:token",
+          path: "register/:token?",
           element: <Register />,
           action: registerAction(store),
         },
@@ -171,7 +171,7 @@ function App() {
         },
         {
           path: "forum",
-          element: <ForumLayout />,
+          element: <ForumLayout classroomId={"665a1674842f8630ac9bfd69"} />,
           children: [
             { path: "content", element: <Forum /> },
             { path: "myqns", element: <MyQuestions /> },

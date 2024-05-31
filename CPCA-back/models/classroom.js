@@ -7,7 +7,6 @@ export const classroomSchema = new Schema(
     instructorId: { type: Schema.Types.ObjectId, ref:"User", required: true },
     courseId: { type: Schema.Types.ObjectId, ref:"Course", required: true },
     students: { type: [Schema.Types.ObjectId], ref:"User", default: [] },
-    discussion: { type: Schema.Types.ObjectId, ref:"Discussion", default: null },
   },
   { timestamps: true }
 );

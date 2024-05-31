@@ -10,8 +10,7 @@ const authenticate = async (req, res, next) => {
 };
 
 const studentCheck = async (req, res, next) => {
-  // const payload = await ValidateJWT(req, res);
-  const user = await User.findById(payload._id);
+  const user = await User.findById(req.user._id);
   if (!user || user.role !== "student") {
     throw new UnautorizedError(
       "Access denied: Only students can enroll in courses"
@@ -21,9 +20,7 @@ const studentCheck = async (req, res, next) => {
 };
 
 const isAdmin = async (req, res, next) => {
-  console.log("checking admin role");
   const user = await User.findById(req.user._id);
-  // console.log("user", user)
   if (!user || !user.isAdmin) {
     throw new UnautorizedError("Access denied: Admin role required");
   }
@@ -31,8 +28,6 @@ const isAdmin = async (req, res, next) => {
 };
 
 const isInstructor = async (req, res, next) => {
-  console.log("checking instructor role");
-  console.log(req.user);
   const user = await User.findById(req.user._id);
   if (!user || !user.isInstructor) {
     throw new UnautorizedError("Access denied: Instructor role required");

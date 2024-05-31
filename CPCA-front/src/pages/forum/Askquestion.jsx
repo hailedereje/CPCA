@@ -4,24 +4,21 @@ import toast, { Toaster } from "react-hot-toast";
 import newRequests from "../../utils/newRequest";
 import { useSelector } from "react-redux";
 import { useContext } from "react";
-import SocketContext from "../../context/SocketContext";
+import DiscussionQuestion from "../../context/DiscussionContext";
 
 const Askquestion = () => {
-  const socket = useContext(SocketContext);
+  const {socket, classroomId} = useContext(DiscussionQuestion);
   const user = useSelector((state) => state.userState.user);
   const navigate = useNavigate();
-  console.log(user._id);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { title, description, tags } = e.target;
     const question = {
-      question: title.value,
+      classroomId,
+      title: title.value,
       description: description.value,
       tags: tags.value.split(","),
-      userId: user._id,
     };
-
-    console.log(question);
 
     const res = await newRequests.post(
       "/discussion/ask-question",
@@ -30,7 +27,7 @@ const Askquestion = () => {
     if (res.status === 201) {
       socket.emit("send-question", {question, room: "discussion", user});
       toast.success("Question added successfully");
-      navigate("/dashboard/forum/content");
+      navigate("/forum/content");
     }
   };
 
