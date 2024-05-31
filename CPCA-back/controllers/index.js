@@ -6,3 +6,4 @@ export * from './quizControllers.js';
 export * from './practiceQuestionControllers.js'; 
 export * from './progressControllers.js';
 export * from './quizQuestionControllers.js';
+export * from './classroomControllers.js';

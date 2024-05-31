@@ -65,7 +65,7 @@ const CourseSchema = new Schema(
       ],
       default: []
     },
-    instructor: { type: Schema.Types.ObjectId,ref:"User" },
+    instructors: { type: [Schema.Types.ObjectId],ref:"User", default: []},
     isPublished: {type: Boolean,default:false},
   },
   

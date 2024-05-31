@@ -89,34 +89,48 @@ function LessonDetails() {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-2 h-screen">
-      <div className="col-span-1   bg-base-300 rounded shadow  pl-1 box-border">
-        <h2 className="text-2xl font-bold mb-4 text-center">Table of Contents</h2>
+    <div className="grid grid-cols-4 gap-2 min-h-screen">
+      <div className="col-span-1 bg-base-300 rounded shadow  pl-1 box-border">
+        <h2 className="text-2xl font-bold my-4 text-center">
+          Table of Contents
+        </h2>
         <ul>
           {lessons.map((lesson) => (
-            <li key={lesson.id} className="mb-2 flex items-center justify-between">
+            <li
+              key={lesson.id}
+              className="mb-2 flex items-center justify-between"
+            >
               <button
-                className={`btn  btn-wide ${selectedLesson === lesson ? 'bg-green-500 text-white' : ''}`}
+                className={`btn  btn-wide ${
+                  selectedLesson === lesson ? "bg-green-500 text-white" : ""
+                }`}
                 onClick={() => setSelectedLesson(lesson)}
               >
                 {lesson.title}
               </button>
-              {/* <span>
-                {selectedLesson && selectedLesson.status && <Mark completed={selectedLesson.status === 'completed'}/>}
-              </span> */}
+              <span>
+                {selectedLesson && selectedLesson.status && (
+                  <Mark completed={selectedLesson.status === "completed"} />
+                )}
+              </span>
             </li>
           ))}
         </ul>
       </div>
       <div className="col-span-3 bg-base-100 rounded shadow p-4">
-        <h2 className="text-2xl font-bold mb-4">Lesson Details</h2>
         {selectedLesson && (
           <div>
-            <h3 className="text-xl font-semibold">{selectedLesson.title}</h3>
-            <p className="text-gray-600">{selectedLesson.description}</p>
-            <p className="text-sm text-gray-500">
-              Duration: {selectedLesson.duration}
-            </p>
+            <div className="flex justify-between">
+              <h2 className="text-2xl font-bold mb-4">
+                {selectedLesson.title}
+              </h2>
+              <p className="text-sm text-gray-500">
+                Estimated Time: {selectedLesson.duration}
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-600">{selectedLesson.description}</p>
+            </div>
           </div>
         )}
       </div>
