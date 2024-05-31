@@ -1,123 +1,131 @@
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { useNavigate, useParams } from 'react-router-dom';
+import FroalaEditor from 'react-froala-wysiwyg';
+import DOMPurify from 'dompurify';
+import { MdOutlineDescription } from 'react-icons/md';
 import { defaultFroalaConfig } from '@/constants';
 import { addInstruction } from '@/features/course/quizSlice';
-import newRequests from '@/utils/newRequest';
-import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
-import DOMPurify from 'dompurify';
-import React, { useState } from 'react';
-import FroalaEditor from 'react-froala-wysiwyg';
-import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
-import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import * as yup from "yup"
-
-
+import { useCreateQuiz } from './hooks/course-hooks';
 
 const InstructionEditor = () => {
-  const { instruction } = useSelector(x => x.quizState)
-  const [value, setValue] = useState(instruction)
-  const dispatch = useDispatch()
-  const isChanged = instruction !== value
+  const { instruction } = useSelector(state => state.quizState);
+  const [value, setValue] = useState(instruction);
+  const dispatch = useDispatch();
+  const isChanged = instruction !== value;
+
+  const handleSave = () => {
+    const sanitizedContent = DOMPurify.sanitize(value);
+    dispatch(addInstruction({ instruction: sanitizedContent }));
+    setValue(sanitizedContent);
+  };
 
   return (
-    <div className="flex flex-col w-fit editor gap-3">
-      <div className={`w-full relative`}>
-        <FroalaEditor tag='div'
+    <div className="flex flex-col editor gap-3">
+      <div className="relative">
+        <FroalaEditor
+          tag='div'
           model={value}
           config={defaultFroalaConfig}
-          onModelChange={(content) => setValue(content)
-          }
+          onModelChange={(content) => setValue(content)}
         />
         <div className="absolute top-3 right-0 flex z-10 items-center justify-center gap-6">
-          {isChanged && 
-          <button 
-            type='button'
-            className="bg-blue-500 hover:bg-blue-700 text-white text-sm py-1 px-2 rounded mr-2"
-            onClick={() => {
-              const content = DOMPurify.sanitize(value)
-              dispatch(addInstruction({instruction:content}))
-              setValue(content)
-            }}
-          >
-            save
-          </button>}
+          {isChanged && (
+            <button
+              type='button'
+              className="bg-blue-500 hover:bg-blue-700 text-white text-sm py-1 px-2 rounded mr-2"
+              onClick={handleSave}
+            >
+              save
+            </button>
+          )}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const quizSchema = yup.object().shape({
-  title: yup.string().required('Title is required.').min(3, 'Title must be at least 3 characters long.').max(10, 'Title cannot be longer than 100 characters.'),
-  duration: yup.number().required('Duration is required.').positive('Duration must be a positive number.').max(3, "a quiz takes maximum of 3 hours"),
-  instruction: yup.string().required('Instruction is required.').min(100, 'Instruction must be at least 100 characters long.'),
+  title: yup.string().required('Title is required.').min(3, 'Title must be at least 3 characters long.').max(100, 'Title cannot be longer than 100 characters.'),
+  duration: yup.number().required('Duration is required.').positive('Duration must be a positive number.').max(180, "A quiz can take a maximum of 3 hours."),
 });
 
 export const QuizBoard = () => {
-  const { title, instruction, duration } = useSelector(x => x.quizState)
-  const { register, handleSubmit, formState } = useForm({ resolver: yupResolver(quizSchema) })
-  const { isLoading, errors } = formState
+  const param = useParams();
+  const navigate = useNavigate()
 
-  const [formData, setFormData] = useState({
-    title: title,
-    duration: duration,
-  });
+  const { title, instruction, duration } = useSelector(state => state.quizState);
+  const { register, handleSubmit, formState } = useForm({ resolver: yupResolver(quizSchema) });
+  const { errors, isLoading } = formState
+ 
+  const { mutateAsync: createQuiz } = useCreateQuiz(param.id);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    await newRequests.post("/new", { title, duration, instruction }).then(() => {
-      console.log("success")
-    }).catch(() => {
-      console.log("error")
-    })
-    // console.log('Form submitted:', formData);
+  const onSubmit = async (formData) => {
+    try {
+      await createQuiz({ courseId:param.id, chapterId: param.chapterId, ...formData, instruction })
+        .then(result => console.log(result))
+      // navigate("")
+    } catch (error) {
+      console.error("Failed to create quiz:", error);
+    }
   };
 
   return (
-    <div className="w-full  p-6">
-      <h2 className="text-3xl font-semibold mb-4">Create Quiz</h2>
+    <div className="w-full p-6 dark:text-white max-w-4xl">
+      <h2 className="text-3xl font-semibold text-center mb-8">Create Quiz</h2>
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col justify-between gap-4'>
-        <div className="flex items-start justify-between max-w-lg gap-4">
-          <div className='basis-1/2'>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
+        <div className="flex items-start justify-between gap-4">
+          <div className='flex flex-col gap-2'>
+            <span className="text-xl capitalize font-medium flex gap-4 items-center">
+              <MdOutlineDescription />
+              <span>Title</span>
+            </span>
+            <span className="text-xs lowercase line-clamp-2 text-gray-500 dark:text-gray-200">
+              Enter a descriptive and concise title for the quiz. This title should give participants a clear idea of the quiz topic or focus.
+            </span>
             <input
               type="text"
               name="title"
-              id="title"
               {...register('title')}
-              className="mt-1 p-2 w-full text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
+              className='outline-none p-1 ps-2 rounded text-sm dark:text-white dark:bg-gray-600 border border-gray-400 max-w-sm'
             />
-            <p className='text-red-500 text-xs'>{errors.name?.message || ""}</p>
+            <p className='text-red-500 text-xs'>{errors.title?.message || ""}</p>
           </div>
-          <div className='basis-1/2'>
-            <label htmlFor="duration" className="block text-sm font-medium text-gray-700">Duration</label>
+          <div className='flex flex-col gap-2'>
+            <span className="text-xl capitalize font-medium flex gap-4 items-center">
+              <MdOutlineDescription />
+              <span>Duration</span>
+            </span>
+            <span className="text-xs lowercase line-clamp-2 text-gray-500 dark:text-gray-200">
+              Specify the total time allowed for the quiz in minutes. This is the maximum amount of time participants will have to complete all quiz questions.
+            </span>
             <input
               type="number"
               step={0.1}
-              min={.3}
+              min={0.3}
               name="duration"
-              id="duration"
               {...register("duration")}
-              className="mt-1 p-2 w-full text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
+              className='outline-none p-1 ps-2 rounded text-sm dark:text-white dark:bg-gray-600 border border-gray-400 max-w-sm'
             />
-            <p className='text-red-500 text-xs'>{errors.author?.message || ""}</p>
+            <p className='text-red-500 text-xs'>{errors.duration?.message || ""}</p>
           </div>
         </div>
-        <div className="mb-4">
-          <label htmlFor="instruction" className="block mb-2 text-sm font-medium text-gray-700">
-            Instruction
-          </label>
+        <div className="mb-4 flex flex-col gap-2">
+          <span className="text-xl capitalize font-medium flex gap-4 items-center">
+            <MdOutlineDescription />
+            <span>Instruction</span>
+          </span>
+          <span className="text-xs lowercase line-clamp-2 text-gray-500 dark:text-gray-200">
+            Provide clear and detailed instructions or guidelines for the quiz participants. Include important information such as how to answer questions, any rules they must follow, and what to do if they have technical issues.
+          </span>
           <InstructionEditor />
         </div>
-
         <button
           type="submit"
-          className="bg-indigo-500 ml-auto text-white px-6 py-1 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
+          className="bg-indigo-500 max-w-xs text-white px-6 py-1 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
         >
           Submit
         </button>
@@ -125,4 +133,3 @@ export const QuizBoard = () => {
     </div>
   );
 };
-

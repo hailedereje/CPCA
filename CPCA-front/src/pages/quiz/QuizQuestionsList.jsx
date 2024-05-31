@@ -1,36 +1,43 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { FaSearch } from "react-icons/fa";
+import { BsPencilSquare, BsTrash } from "react-icons/bs";
 import newRequests from "@/utils/newRequest";
 import Navbar from "@/components/coursePages/Navbar";
-import { FaSearch } from "react-icons/fa";
 import { QuizQuestionForm } from "@/components/createCourse/QuizQuestionForm";
+import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
+import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { AiOutlinePlus } from "react-icons/ai";
+import { stripHtmlTags } from "@/utils/html-striper";
+import { useGetQuiz } from "@/components/createCourse/hooks/quiz-hooks";
 
+export const QuizQuestionsWrapper = () => {
+  const param = useParams()
+  const { data, isLoading,isSuccess } = useGetQuiz(param.quizId)
+ 
+  return (
+    <div className="min-h-screen w-full bg-gray-100 dark:bg-transparent dark:text-white">
+      {isSuccess ? <Outlet />:<div>Loading...</div>} 
+    </div>
+  );
+}
+      
 const QuizQuestionsList = () => {
-  const [questions, setQuestions] = useState([]);
+  const client = useQueryClient()
+  const param = useParams()
+  console.log(param.quizId)
+  const data = client.getQueryData(['quiz', param.quizId])
+ 
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [showDetails, setShowDetails] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState("");
+  
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const response = await newRequests.get("/quiz_question", {
-          params: {
-            page: currentPage,
-            search: searchTerm,
-          },
-        });
-        setQuestions(response.data.questions);
-        setTotalPages(response.data.totalPages);
-      } catch (error) {
-        console.error("Error fetching questions:", error);
-      }
-    };
-
-    fetchQuestions();
-  }, [currentPage, searchTerm]);
+  const questions = data?.data.questions
+  const totalPages = questions?.length
 
   const handleDelete = (id) => {
     newRequests
@@ -44,7 +51,7 @@ const QuizQuestionsList = () => {
       });
   };
 
-  const handelDetails = (question) => {
+  const handleDetails = (question) => {
     setShowDetails(true);
     setSelectedQuestion(question);
   };
@@ -68,99 +75,110 @@ const QuizQuestionsList = () => {
   };
 
   return (
-    <div className="pt-20">
-      <Navbar />
-      <div className="p-4">
-        <div className="flex justify-between items-center mb-4 ">
-          <h2 className="text-2xl font-bold">Quiz Questions</h2>
-          <QuizQuestionForm />
+    <div className="min-h-screen w-full bg-gray-100 dark:bg-transparent dark:text-white">
+      {/* <Navbar /> */}
+      {<div className="container mx-auto p-4">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-white">Quiz Questions</h2>
+          <button onClick={() => navigate("question")} className="flex items-center justify-center bg-blue-500 p-2 rounded-md">
+            <AiOutlinePlus className="h-6 w-6 mr-2" />
+            Add Question
+          </button>
         </div>
-        <div className="relative w-1/2 flex container mx-auto">
+        <div className="relative w-full sm:w-1/2 mb-6">
           <input
             type="text"
             value={searchTerm}
             onChange={handleSearchChange}
             placeholder="Search by title or description"
-            className="shadow appearance-none border rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
+            className="shadow-sm appearance-none border border-gray-300 rounded-full w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring focus:border-blue-300"
           />
-          <FaSearch className="absolute right-3 top-3 dark:text-white" />
+          <FaSearch className="absolute right-4 top-3 text-gray-500" />
         </div>
-        <div className="w-full mt-4 overflow-x-auto">
-          <table className="w-full bg-white border border-gray-200 divide-y divide-gray-200">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="w-1/7 pt-2 pb-3 text-center">NO.</th>
-                <th className="w-1/7 pt-2 pb-3 text-left">Title</th>
-                <th className="w-2/7 pt-2 pb-3 text-left">Question</th>
-                <th className="w-1/7 pt-2 pb-3 text-left">Answer</th>
-                <th className="w-2/7 pt-2 pb-3 text-left">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {questions.map((question, index) => (
-                <tr
-                  className={`${
-                    index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                  } hover:bg-gray-100`}
-                  key={index}
-                >
-                  <td className="w-1/10 pt-2 pb-2 text-center">{index + 1}</td>
-                  <td className="w-2/10 pt-2 pb-2">
-                    <Link
-                      to={`/practice_question/${question._id}`}
-                      className="text-blue-500 hover:underline"
-                    >
-                      {question.title}
-                    </Link>
-                  </td>
-                  <td className="w-3/10 pt-2 pb-2">{question.question}</td>
-                  <td className="w-2/10 pt-2 pb-2">{question.correctAnswer}</td>
-                  <td className="w-2/10 pt-2 pb-2 flex gap-2">
-                    <button
-                      className="block rounded-lg bg-gradient-to-tr from-blue-800 to-blue-500  py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                      onClick={() => handelDetails(question)}
-                    >
-                      Details
-                    </button>
-                    <button
-                      className="block rounded-lg bg-gradient-to-tr from-red-800 to-red-500 py-2 px-4 font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-gray-500/40 active:opacity-85 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                      onClick={() => handleDelete(question._id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="bg-white shadow-md rounded-lg overflow-hidden dark:bg-transparent">
+          <QuestionsList questions={questions} />
+          <div className="mx-auto p-4 flex max-w-md gap-2 items-center">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              className="p-2 rounded-full bg-gray-300 dark:bg-transparent"
+            >
+              
+              <MdNavigateBefore size={20} />
+            </button>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              className="p-2 rounded-full bg-gray-300 dark:bg-transparent"
+            >
+              
+            </button>
+          </div>
         </div>
-        <div className="flex justify-center space-x-10 items-center mt-4">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Previous
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Next
-          </button>
-        </div>
-      </div>
-      {showDetails && selectedQuestion && (
-        <QuizQuestionForm selectedQuestion={selectedQuestion} handleCloseModal={handleCloseModal} handleUpdateQuestion={handleUpdateQuestion}/>
-      )}
+      </div>}
     </div>
   );
 };
 
 export default QuizQuestionsList;
+
+
+const QuestionsList = ({ questions }) => {
+  const navigate = useNavigate();
+  const param = useParams()
+  const {chapterId,quizId} = param
+  const [data, setData] = useState(questions);
+  const [editQuestionId, setEditQuestionId] = useState(null);
+
+  const handleDelete = (id) => {
+    const updatedQuestions = data.filter((question) => question.id !== id);
+    setData(updatedQuestions);
+  };
+
+  const handleEdit = (id) => {
+    setEditQuestionId(id);
+    // Implement actual edit functionality here
+  };
+
+  const handleSave = () => {
+    setEditQuestionId(null);
+  };
+
+  return (
+    <div className="max-w-4xl p-4">
+      <h1 className="text-2xl font-bold mb-4">Questions List</h1>
+      <ul className="divide-y divide-gray-200">
+        {data?.map((question, index) => (
+          <li key={question._id} className="flex items-center justify-between py-4 px-2 shadow-md ">
+            <div className="flex items-center">
+              <span className="mr-4 text-lg font-semibold">{index + 1}.</span>
+              <span className="line-clamp-1 text-md">
+                {stripHtmlTags(question.question)}
+              </span>
+            </div>
+            <div className="flex gap-4">
+              <button
+                onClick={() =>navigate(`question/${question._id}`)}
+                className="text-blue-600 hover:text-blue-900"
+              >
+                <BsPencilSquare />
+              </button>
+              <button
+                onClick={() => handleDelete(question._id)}
+                className="text-red-600 hover:text-red-900"
+              >
+                <BsTrash />
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+

@@ -47,9 +47,10 @@ import QuestionsList from "./pages/question/QuestionList";
 import AddQuestionForm from "./pages/question/PracticeQuestionForm";
 import PracticeQuestionPage from "./pages/question/Practice";
 import UsersList from "./pages/dashboard/UsersList";
-import QuizQuestionsList from "./pages/quiz/QuizQuestionsList";
+import QuizQuestionsList, { QuizQuestionsWrapper } from "./pages/quiz/QuizQuestionsList";
 import { EditCourseError } from "./components/createCourse/error/editCourseError";
 import { StarterPage } from "./components/createCourse/components/starterPage";
+import { AddQuestion } from "./components/createCourse/quiz/add-questions";
 
 
 
@@ -202,11 +203,21 @@ function App() {
         {
           path:'course/update/:id/chapters',
           element: <CourseLayout/>,
-          errorElement:<EditCourseError/>,
+          // errorElement:<EditCourseError/>,
           children: [
            { index: true, element: <StarterPage/>},
-           {path: ":chapterId/lessons/:lessonId",element:<RichTextExample/>},
-           { path: "add-test",element:<QuizBoard/>}
+           { path: ":chapterId/lessons/:lessonId",element:<RichTextExample/>},
+           { path: ":chapterId/add-test",element:<QuizBoard/>},
+           { 
+            path: ":chapterId/add-test/:quizId",
+            element:<QuizQuestionsWrapper/>,
+            children: [
+              {index:true,element: <QuizQuestionsList/>},
+              { path: "question",element:<AddQuestion/>},
+              { path: "question/:questionId",element:<AddQuestion/>}
+            ]
+          },
+           
           ]
         },
       ],

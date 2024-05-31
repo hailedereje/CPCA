@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { api } from "../api";
 import { useDispatch } from "react-redux";
 import { setUser } from "../features/user/userSlice";
+
 export const action =
   (store) =>
   async ({ request }) => {

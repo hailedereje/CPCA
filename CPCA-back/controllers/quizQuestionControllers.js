@@ -1,20 +1,27 @@
-import QuizQuestion from "../models/quizQuestion.js";
 import Quiz from "../models/quiz.js";
+import QuizQuestion from "../models/quizQuestion.js";
 
 // Create a new quiz question
 const createQuizQuestion = async (req, res) => {
   try {
-    const { title, question, options, correctAnswer } = req.body;
-    // const quiz = await Quiz.findById(quizId);
-    // if (!quiz) {
-    //   return res.status(404).json({ message: "Quiz not found" });
-    // }
-    const newQuizQuestion = new QuizQuestion(req.body);
-    await newQuizQuestion.save();
-    res.status(201).json(newQuizQuestion);
+    const { question, options, correctAnswer, quizId } = req.body;
+    const quiz = await Quiz.findById(quizId)
+    if (!quiz) {
+      return res.status(404).json({ error: 'Quiz not found' });
+    }
+    const quizQuestion = new QuizQuestion({
+      question,
+      options,
+      quizId,
+    });
+    
+    quiz.questions.push(quizQuestion._id)
+    await  quiz.save()
+    await quizQuestion.save();
+    res.status(201).json({ message: 'Quiz question created successfully' });
+
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -60,15 +67,16 @@ const getQuizQuestionById = async (req, res) => {
 // Update a quiz question by ID
 const updateQuizQuestionById = async (req, res) => {
   try {
-    const { title, question, options, correctAnswer } = req.body;
-    const quizQuestion = await QuizQuestion.findById(req.params.id);
+    const { question, options,questionId } = req.body;
+    const quizQuestion = await QuizQuestion.findById(questionId);
+    
     if (!quizQuestion) {
       return res.status(404).json({ message: "Quiz question not found" });
     }
-    quizQuestion.title = title;
+    
     quizQuestion.question = question;
     quizQuestion.options = options;
-    quizQuestion.correctAnswer = correctAnswer;
+    
     await quizQuestion.save();
     res.json(quizQuestion);
   } catch (error) {

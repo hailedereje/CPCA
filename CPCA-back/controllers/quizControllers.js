@@ -1,28 +1,32 @@
-import { Quiz, Chapter, Course } from '../models/index.js';
+import { Chapter, Course, Quiz,QuizQuestion } from '../models/index.js';
 
-// Create a new quiz
+
 export const createQuiz = async (req, res) => {
   try {
-    const { title, instruction, duration, courseId, chapterId } = req.body;
-    if (!title || !courseId || !chapterId) {
-      return res.status(400).json({ error: 'All fields are required' });
-    }
+    const { courseId, chapterId, title, instruction, duration } = req.body;
+    const quiz = new Quiz({
+      courseId,
+      chapterId,
+      title,
+      instruction,
+      duration,
+    });
+
     const chapter = await Chapter.findById(chapterId);
     if (!chapter) {
       return res.status(404).json({ error: 'Chapter not found' });
     }
-    const course = await Course.findById(courseId);
-    if (!course) {
-      return res.status(404).json({ error: 'Course not found' });
-    }
-    const quiz = new Quiz({ title, instruction, duration, courseId, chapterId });
+    chapter.quiz = quiz._id;
     await quiz.save();
-    res.status(201).json(quiz);
+    await chapter.save();
+
+    return res.status(201).json({ message: 'Quiz created successfully' });
+
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create quiz' });
+    return res.status(500).json({ message: error.message });
   }
 };
-// Get all quizzes
+
 export const getAllQuizzes = async (req, res) => {
   try {
     const quizzes = await Quiz.find();
@@ -32,16 +36,18 @@ export const getAllQuizzes = async (req, res) => {
   }
 };
 
-// Get a quiz by ID
+
 export const getQuizById = async (req, res) => {
   try {
     const { id } = req.params;
-    const quiz = await Quiz.findById(id);
+
+    const quiz = await Quiz.findById(id).populate('questions').exec()
     if (!quiz) {
       return res.status(404).json({ error: 'Quiz not found' });
     }
-    res.status(200).json(quiz);
+    return res.status(200).json(quiz);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: 'Failed to get quiz' });
   }
 };
