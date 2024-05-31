@@ -12,7 +12,7 @@ import {
 } from "./pages";
 import { loader as CoursesLoader } from "./pages/dashboard/AllCourses";
 // import { loader as SingleCourseLoader } from "./pages/Lessons";
-import { action as loginAction } from "./pages/Login";
+import { action, action as loginAction } from "./pages/Login";
 import { action as registerAction } from "./pages/Register";
 import { action as EditProfileAction } from "./pages/dashboard/Profile";
 import { store } from "./store";
@@ -50,8 +50,14 @@ import UsersList from "./pages/dashboard/UsersList";
 import QuizQuestionsList, { QuizQuestionsWrapper } from "./pages/quiz/QuizQuestionsList";
 import { EditCourseError } from "./components/createCourse/error/editCourseError";
 import { StarterPage } from "./components/createCourse/components/starterPage";
+import ClassroomLayout from "./pages/classroom/ClassroomLayout";
+import CreateClassroom, { createClassroomAction } from "./pages/classroom/CreateClassroom";
+import Stats from "./pages/classroom/Stats";
+import Classrooms from "./pages/classroom/Classrooms";
 import { JoinClass } from "./components";
 import { AddQuestion } from "./components/createCourse/quiz/add-questions";
+import ClassroomDetails from "./pages/classroom/ClassroomDetails";
+import Students from "./pages/classroom/Students";
 
 
 
@@ -59,7 +65,7 @@ const queryClient = new QueryClient();
 
 function App() {
   const user = useSelector((state) => state.userState.user);
-
+  console.log(user); 
   const getDashboardRoutes = () => {
     if (!user) return [];
 
@@ -89,6 +95,30 @@ function App() {
           element: <AllCourses />,
           loader: CoursesLoader(store),
         },
+        {
+          path: 'classrooms',
+          element: <ClassroomLayout />,
+          children: [
+            { index: true, element: <Classrooms/>},
+            { path: "create", element: <CreateClassroom/>, action: createClassroomAction(store)}, 
+            {
+              path: ":id",
+              element: <ClassroomDetails />,
+              children: [
+                { index: true, element: <div>Details Page</div> },
+                { path: "students", element: <Students />},
+                { path: "invitations", element: <div>Invitations Page</div> },
+                { path: "status", element: <div>Status Page</div> },
+                { path: "discussion", element: <ForumLayout />, children: [
+                  {path: "content", element: <Forum />},
+                  {path: "myqns", element: <MyQuestions />},
+                  {path: "ask", element: <Askquestion />},
+                ]},
+              ]
+            }            // {path: 'classrooms', element: <Classrooms />}
+           
+          ]
+        }
         // { path: "create-course", element: <CreateCourse /> },
       ];
     } else {

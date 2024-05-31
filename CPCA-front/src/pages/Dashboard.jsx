@@ -32,8 +32,9 @@ function Dashboard() {
             <MdDarkMode size={20}/>
           </div>
         </div>
-        <div className="flex w-full items-center justify-center dark:bg-[#212121]">
-          <Outlet/>
+        <div className="flex w-full p-2 items-center justify-center">
+          {/* {isLoading ? <Loading/>:<Outlet/>} */}
+          <Outlet />
         </div> 
       </div>
     </>

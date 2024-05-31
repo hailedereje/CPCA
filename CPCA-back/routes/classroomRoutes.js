@@ -3,6 +3,7 @@ import {
   archiveClassroom,
   createClassroom,
   deleteClassroom,
+  getClassroomById,
   getClassroomsByInstructorId,
   getClassroomsByUserId,
   getInvitationByToken,
@@ -32,8 +33,9 @@ router.get("/discussion/my-questions/:id", studentCheck, getMyQuestionsByClassro
 
 router.use(isInstructor);
 router.post("/", createClassroom);
-router.get("/:id", archiveClassroom);
-router.post("/delete/:id", deleteClassroom);
+router.get('/:id', getClassroomById)
+// router.get("/:id", archiveClassroom);
+router.delete("/delete/:id", deleteClassroom);
 router.post("/invite", inviteStudents);
 router.get("/instructor/:id", getClassroomsByInstructorId);
 

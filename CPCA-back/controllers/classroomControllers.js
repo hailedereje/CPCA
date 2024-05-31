@@ -19,6 +19,7 @@ export const createClassroom = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Failed to create classroom" });
   }
+  res.status(201).json(newClassroom);
 };
 
 // Get all classrooms by instructorId
@@ -30,6 +31,18 @@ export const getClassroomsByInstructorId = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch classrooms" });
   }
+};
+
+// get classroom by id
+export const getClassroomById = async (req, res) => {
+  const { id } = req.params;
+  console.log("id", id);  
+  const classroom = await Classroom.findById(id).populate( "students");
+
+  if (!classroom) {
+    throw new NotFoundError("classroom not found");
+  }
+  res.status(200).json(classroom);
 };
 
 // Get all classrooms by studentId
@@ -129,30 +142,21 @@ export const getInvitationByToken = async (req, res) => {
 export const joinClassroom = async (req, res) => {
   const { token } = req.params;
   const invitation = await Invitation.findOne({ token: token });
+  console.log("invitation", invitation);
   if (!invitation) {
     return res.status(400).json({ message: "Invalid invitation link" });
   }
   const id = invitation.classroomId;
   const classroom = await Classroom.findById(id);
+  console.log("classroom", classroom);
   if (!classroom) {
-    return res.status(404).json({ message: "Classroom not found" });
+    throw new NotFoundError("classroom not found ");
   }
 
-  try {
-    const user = await User.findOne({ email: invitation.email });
-    if (!user) {
-      return res.status(400).json({ message: "User not found" });
-    }
-    if (classroom.students.includes(invitation.email)) {
-      return res
-        .status(400)
-        .json({ message: "User already enrolled in this classroom" });
-    }
-    classroom.students.push(invitation.email);
-    await classroom.save();
-    res.status(200).json({ message: "User joined successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Failed to join classroom" });
+  const user = await User.findOne({ email: invitation.email });
+  console.log("user", user);
+  if (!user) {
+    throw new NotFoundError("User not found");
   }
 };
 

@@ -44,7 +44,9 @@ router.use(isAdmin);
 router.get("/all",getAllCourses)
 router.get("/all/drafts",getAllDraftCourses)
 router.get("/courseListFilter",getCourseListFilter)
-router.post("/new",validateRequest(createCourseSchema), createCourseController);
+// router.post("/new",validateRequest(createCourseSchema), createCourseController);
+router.post("/new", createCourseController);
+
 router.post("/course/add-prerequisites",validateRequest(addPrerequisiteSchema),addPrerequisiteController)
 router.post("/course/add-tags",validateRequest(addTagsSchema),addTagsController)
 router.post("/course/add-description",validateRequest(addDescriptionSchema),addDescriptionController)

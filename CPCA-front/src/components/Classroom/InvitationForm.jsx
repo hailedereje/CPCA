@@ -1,13 +1,14 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
-import newRequests from '@/utils/newRequest';
+import { useInviteStudentsMutation } from '@/services/classroomService'; // Import the hook for inviteStudents mutation
 import toast from 'react-hot-toast';
 
 const InviteForm = ({ classroomId }) => {
   const [file, setFile] = useState(null);
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
+  const [inviteStudents, { isLoading, isError }] = useInviteStudentsMutation(); // Destructure the mutation hook
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -38,7 +39,7 @@ const InviteForm = ({ classroomId }) => {
       inviteEmails = [...inviteEmails, email];
     }
     try {
-      await newRequests.post('/invite', { emails: inviteEmails, classroomId });
+      await inviteStudents({ emails: inviteEmails, classroomId }).unwrap(); // Call the inviteStudents mutation
       toast('Invitations sent successfully!');
       setEmail('');
       setEmails([]);
@@ -60,7 +61,8 @@ const InviteForm = ({ classroomId }) => {
         <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
         {file && <p>Selected file: {file.name}</p>}
       </div>
-      <button type="submit">Send Invitations</button>
+      <button type="submit" disabled={isLoading}>Send Invitations</button>
+      {isError && <p>Error sending invitations. Please try again.</p>}
     </form>
   );
 };

@@ -17,7 +17,8 @@ const progressSchema = new mongoose.Schema({
   unlocked: { type: Boolean, default: false },
   score: { type: Number, default: 0 },
   totalScore: { type: Number, default: 0 },
-  answers: [answerSchema]
+  answers: [answerSchema],
+  timeSpent: {type: Date, default: Date.now}
 });
 
 const Progress = mongoose.model('Progress', progressSchema);
