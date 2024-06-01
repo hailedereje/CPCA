@@ -20,7 +20,7 @@ const DraftCourses = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg shadow-lg dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900">
+    <div className="container border mx-auto p-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg shadow-lg dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900">
       <h1 className="text-5xl font-bold text-white dark:text-gray-100 mb-6 text-center">Draft Courses</h1>
       {isLoading ? (
         <Loading />

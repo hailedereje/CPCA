@@ -42,7 +42,7 @@ function RichTextExample() {
   return (
     <>
 
-      {!isSuccess ? <Loading/>: <div className="flex flex-col items-center justify-center w-full py-10 max-w-[1024px] ">
+      {!isSuccess ? <Loading/>: <div className="flex flex-col w-full py-10 max-w-[1024px] ">
         <div className={`group flex items-end  gap-4 ${data.data.lesson.content.length === 0 ? "":"hidden"}`}>
           <EditLinks />
           <span className="text-xl font-medium uppercase">click here and start adding contents to your <span className="text-red-400">lesson</span></span>
@@ -50,7 +50,7 @@ function RichTextExample() {
         <CodeContentEditor lessonId={param.lessonId}/>
         <TextEditor lessonId={param.lessonId}/>
         {data.data.lesson.content.map((item, idx) => (
-          <div className="group w-full h-full flex items-end  gap-3" key={idx}>
+          <div className="group w-full h-full flex items-end  gap-3 " key={idx}>
             <div className="invisible group-hover:visible">
               <EditLinks idx={idx}/>
             </div>

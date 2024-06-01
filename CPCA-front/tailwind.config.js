@@ -4,7 +4,9 @@ export default {
   theme: {
     extend: {
       screens: {
-        xxl: "2048"
+        xxs: '300px',
+        xs: '480px',
+        xxl: "2048",
       },
       animation: {
         bounce: 'bounce 2s ease-in-out infinite',

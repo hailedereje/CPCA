@@ -15,6 +15,7 @@ import { Loading } from "./components/loader";
 import { RiAddLine } from "react-icons/ri";
 import { CourseName } from "./components/courseName";
 import { UploadImage } from "../textEditor/uploadImage";
+import { FaBook, FaChevronLeft, FaChevronRight, FaEdit } from "react-icons/fa";
 
 
 
@@ -35,18 +36,26 @@ export const UpdataCourse = () => {
       {isLoading ?
         <Loading />
         :
-        <div className="w-full flex dark:text-white gap-6 p-2 ">
+        <div className="w-full flex dark:text-white gap-6 p-2">
+          <div className="flex flex-col max-w-xs w-full dark:bg-gray-600">
+              <CourseComponent course={data.data.course}/> 
+          </div>
+          {/* <div className="hidden xxs:block md:hidden">
+              <Drawer>
+                <CourseComponent course= {data.data.course} />
+              </Drawer>
+          </div> */}
+
           <div className="">
             <div className="flex gap-4 flex-col md:flex-row">
               <UploadImage id={param.id} img={data.data.course.templateImg} />
               <Tags courseId={param.id} />
             </div>
+            <div className="max-w-2xl">
               <AddDescription courseId={param.id} />
-            `</div>
-            <div className="flex flex-col w-full dark:bg-gray-600">
-              <CourseComponent course={data.data.course}/>
             </div>
-          
+              
+            `</div>
         </div>
       }
     </>
@@ -54,12 +63,10 @@ export const UpdataCourse = () => {
   )
 }
 
-import React from 'react';
-import { FaBook, FaEdit } from "react-icons/fa";
 
 const CourseComponent = ({ course }) => {
   return (
-    <div className="max-w-4xl max-h-screen overflow-auto editor w-full">
+    <div className="max-w-4xl max-h-screen border overflow-auto editor w-full">
       <div className="w-full p-2 flex justify-between items-center gap-2 bg-blue-500">
         <div className="flex gap-2 items-center">
           <span><FaBook/></span>
@@ -75,7 +82,7 @@ const CourseComponent = ({ course }) => {
         <div key={chapter._id} className="">
           <details className="group">
             <summary className="flex justify-between items-center cursor-pointer text-md capitalize font-normal text-blue-900 bg-blue-100 p-2 hover:bg-blue-200 ">
-              <span>{chapter.title}</span>
+              <span>{chapter.title+'('+chapter.lessons.length+')'}</span>
               <svg
                 className="w-5 h-5 text-blue-500 transform transition-transform duration-200 group-open:rotate-180"
                 xmlns="http://www.w3.org/2000/svg"
@@ -116,3 +123,23 @@ const CourseComponent = ({ course }) => {
   );
 };
 
+const Drawer = ({ children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+const toggleDrawer = () => {
+        setIsOpen(!isOpen);
+    };
+  return (
+    <div className="hidden xxs:block">
+        <div
+            className={`fixed inset-0 z-10 ${isOpen ? "" : "hidden"}`}
+            onClick={toggleDrawer}
+        ></div>
+        <div className={` fixed top-12 h-full left-0 bg-white dark:bg-gray-600 dark:text-white w-80 z-20 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
+            {children}
+            <button onClick={toggleDrawer} className="absolute top-1/2 -right-10 rounded p-2 bg-black/25">
+                {isOpen ? <FaChevronLeft /> : <FaChevronRight />}
+            </button>
+        </div>
+    </div>
+);
+}

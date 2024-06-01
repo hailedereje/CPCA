@@ -5,10 +5,14 @@ import axios from "axios";
 import { nanoid } from "@reduxjs/toolkit";
 import { AiOutlineLoading3Quarters, AiOutlineCloudUpload, AiOutlineClose, AiOutlineEdit } from "react-icons/ai";
 import { useUploadCourseImage } from "../createCourse/hooks/course-hooks";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const UploadImage = ({id,img}) => {
+  const client = useQueryClient();
+  const data = client.getQueryData(['course', id]).data.course
+ 
   const [image, setImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState(img);
+  const [imageUrl, setImageUrl] = useState(data.templateImg  );
   const [isUploading, setIsUploading] = useState(false);
 
   const { mutateAsync: uploadImage } = useUploadCourseImage(id)
@@ -67,8 +71,8 @@ export const UploadImage = ({id,img}) => {
           <input type="file" id="image-file" hidden onChange={handleFileChange} />
         </>
       ) : (
-        <div className="relative">
-          <img src={imageUrl} className="object-contain w-64 h-64 rounded-md" alt="Uploaded" />
+        <div className="relative w-full">
+          <img src={imageUrl} className="object-cover w-full h-full rounded-md" alt="Uploaded" />
           <label htmlFor="image-file" className="absolute cursor-pointer top-2 right-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:ring-blue-300 font-medium rounded-full p-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
             <AiOutlineEdit size={20} />
           </label>

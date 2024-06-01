@@ -44,8 +44,7 @@ export const Drawer = ({ data }) => {
                 className={`fixed inset-0 z-10 ${isOpen ? "" : "hidden"}`}
                 onClick={toggleDrawer}
             ></div>
-            <div
-                className={` fixed top-12 h-full left-0 bg-white dark:bg-gray-600 dark:text-white w-80 z-20 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
+            <div className={` fixed top-12 h-full left-0 bg-white dark:bg-gray-600 dark:text-white w-80 z-20 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
                 <div className="w-full">
                     <div className="bg-white h-screen max-h-[1024px] dark:bg-gray-600 shadow-lg overflow-auto editor">
                         <div className="flex justify-between gap-2 items-center p-4 bg-blue-500 text-white">
@@ -70,11 +69,13 @@ export const Drawer = ({ data }) => {
                         <div className="p-4 mb-10">
                             {course.chapters.map((chapter, index) => (
                                 <div key={chapter._id} className="flex flex-col gap-1">
-                                    <div className="flex justify-between items-center gap-2 p-2 bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-700 cursor-pointer hover:bg-gray-200 transition duration-300" >
-                                        <div className="flex items-center gap-2 peer" onClick={() => toggleChapter(index)}>
-                                            <span><FaBookOpen className="text-md" /></span>
-                                            <span className="text-sm dark:text-white  capitalize line-clamp-2">{chapter.title}</span>
-                                        </div>
+                                    <div className="flex justify-between items-start gap-2 p-2 bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-700 cursor-pointer hover:bg-gray-200 transition duration-300" >
+                                        <button className="flex items-start gap-2 w-full p-2" onClick={() => toggleChapter(index)}>
+                                            <span className=''>
+                                                {openChapterIndex === index ? <FaBookOpen className="text-md" /> : <FaBook className="text-md" />}
+                                            </span>
+                                            <span className="text-sm dark:text-white  capitalize line-clamp-2 text-left">{chapter.title+'('+chapter.lessons.length+')'}</span>
+                                        </button>
                                         <Menu ids={{ courseId: course._id, chapterId: chapter._id }} value={chapter.title} />
                                     </div>
                                     <div className={`${openChapterIndex === index ? "" : "hidden"}`}>

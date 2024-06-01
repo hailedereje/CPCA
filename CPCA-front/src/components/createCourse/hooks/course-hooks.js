@@ -9,7 +9,8 @@ import {
     deleteLessonItem,
     deleteLesson,
     uploadImage,
-    createQuiz
+    createQuiz,
+    addDescription
   } from './actions';
 import { showErrorToast, showSuccessToast } from '@/toasts/toast';
 import toast from 'react-hot-toast';
@@ -72,6 +73,20 @@ export const useUploadCourseImage = (courseId) => {
     },
     onError: () => {
       showErrorToast("failed to upload image")
+    }
+  })
+}
+
+export const useAddDescription = (courseId) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: addDescription,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:['course',courseId]});
+      showSuccessToast("description added successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to add description")
     }
   })
 }

@@ -1,6 +1,6 @@
 import newRequests from '@/utils/newRequest';
 
-
+export const addDescription = async (data) => await newRequests.post("/courses/course/add-prerequisites", data)
 
 export const fetchChapters = (courseId) => newRequests.get(`/courses/course/chapters`, {
     params: {

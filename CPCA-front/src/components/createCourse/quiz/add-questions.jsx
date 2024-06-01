@@ -27,6 +27,7 @@ const questionValidation = yup.object().shape({
   quizId: yup.string().required('QuizId is required')
 });
 
+
 export const AddQuestion = () => {
   const client = useQueryClient()
   const param = useParams();
@@ -41,9 +42,11 @@ export const AddQuestion = () => {
   const [isEditing, setEditing] = useState(false)
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
-  const [choices, setChoices] = useState(data.options.map(option => ({...option,id:nanoid()})) || []);
+  const [choices, setChoices] = useState(data?.options?.map(option => ({...option,id:nanoid()})) || []);
   const [newChoice, setNewChoice] = useState({ id: nanoid(), option: '', isCorrect: false });
   const [editingChoice, setEditingChoice] = useState(null);
+  const [correctAnswerIndex, setCorrectAnswerIndex] = useState(null);  
+  const isChanged = value !== data.question || !deepEqualArray(choices, data.options);
 
   const { mutateAsync: createQuestion } = useCreateQuestion(quizId)
   const { mutateAsync: updateQuestion } = useUpdateQuestion(quizId)
@@ -55,6 +58,10 @@ export const AddQuestion = () => {
         setError(err.message)
         throw new Error(err.message)
       })
+      if(correctAnswerIndex === null){
+        setError("Please set the correct answer")
+        return 
+      }
       if(!!questionId){
         const data = { question: value, options:choices,questionId,quizId }
         await updateQuestion({data,questionId}).then(result => console.log("updated",result))
@@ -104,8 +111,17 @@ export const AddQuestion = () => {
 
   const deleteChoice = (choiceId) => {
     setChoices(prevChoices => prevChoices.filter(choice => choice.id !== choiceId));
+    setCorrectAnswerIndex(null)
   };
 
+  const handleCorrectAnswerChange = (index) => {
+    setCorrectAnswerIndex(index);
+    const newChoices = choices.map((choice, i) => ({
+      ...choice,
+      isCorrect: i === index
+    }));
+    setChoices(newChoices);
+  };
 
   return (
     <div className="w-full p-6">
@@ -163,13 +179,24 @@ export const AddQuestion = () => {
               <div className="bg-green-400 text-gray-700 px-4 py-2 rounded-md font-semibold">
                 {choices.length} choices created
               </div>
+              {/* <DropdownMenu label="Add">
+                {choices?.map((choice, index) => (
+                  <li key={index} className="flex items-center px-4 py-2 hover:bg-gray-700">
+                    <button>
+                      <span>{choice.option}</span>
+                    </button>
+                  </li>
+                ))}
+              </DropdownMenu> */}
             </div>
             {(
               <div className="flex flex-col gap-4">
                 {choices.map((choice,index) => (
                   <div key={index} className="flex gap-4 items-center">
-                    <button>
-                      <FaRegCircle size={20} />
+                    <button onClick={() => handleCorrectAnswerChange(index)}>
+                      <span>
+                        {choice.isCorrect ? <FaRegCheckCircle size={20} /> : <FaRegCircle size={20} />}
+                      </span>
                     </button>
                     {editingChoice && editingChoice.id === choice.id ? (
                       <div className="flex gap-2 items-center w-full max-w-sm">
@@ -230,10 +257,10 @@ export const AddQuestion = () => {
         <ErrorBanner message={error} />
         <button
             onClick={onSubmit}
-            disabled={loading}
-            className="w-full max-w-xs py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            disabled={!isChanged}
+            className={`w-full max-w-xs flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-1  focus:ring-indigo-500 ${isChanged ? '' :'cursor-not-allowed'}`}
         >
-            {loading ? <AiOutlineLoading3Quarters className='animate-spin' /> : <span>save</span>}
+            {loading ? <span><AiOutlineLoading3Quarters className='animate-spin text-center' /></span> : <span>save</span>}
         </button>
       </div>
     </div>
@@ -266,14 +293,15 @@ const DropdownMenu = ({ label, children }) => {
 
 import React from 'react';
 import { IoWarningOutline } from "react-icons/io5";
+import { deepEqualArray } from "@/utils/comparator";
 
 const ErrorBanner = ({ message }) => {
   if (!message) return null;
 
   return (
-    <div className={`border rounded p-4 border-red-400`} role="alert">
+    <div className={` rounded p-4 border-red-400`} role="alert">
       <div className="flex items-center gap-4 text-red-500">
-        <span><IoWarningOutline /></span>
+        <span className="text-lg"><IoWarningOutline /></span>
         <p className="text-sm font-semibold">{message}</p>
       </div>
     </div>
