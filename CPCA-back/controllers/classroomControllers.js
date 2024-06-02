@@ -108,6 +108,7 @@ export const inviteStudents = async (req, res) => {
       to: email,
       subject: "Classroom Invitation",
       text: `You are invited to join the classroom. Click here to join: ${invitationLink}`,
+      // html: `<p>You are invited to join the classroom. Click <a href="${invitationLink}">here</a> to join.</p>`,
     };
 
     try {
@@ -158,6 +159,13 @@ export const joinClassroom = async (req, res) => {
   if (!user) {
     throw new NotFoundError("User not found");
   }
+  if (classroom.students.includes(user._id)) {
+    return res.status(400).json({ message: "You have already joined this classroom" });
+  }
+  await classroom.updateOne({
+    $push: { students: user._id },
+  });
+  res.status(200).json({ message: "Joined classroom successfully" });
 };
 
 // get discussion by classroomId
