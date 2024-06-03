@@ -5,6 +5,11 @@ export const getSingleCourseService = async (id) => {
     const course =  await Course.findById(id)
         .populate('chapters')
         .populate({
+            path: "labs",
+            model:"Lab",
+            select:"_id title description"
+        })
+        .populate({
             path: "chapters",
             populate: [
                 {

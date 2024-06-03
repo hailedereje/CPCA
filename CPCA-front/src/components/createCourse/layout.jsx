@@ -10,24 +10,20 @@ import { useQuery } from "@tanstack/react-query"
 import { Loading } from "./components/loader"
 import newRequests from "@/utils/newRequest"
 import { Drawer } from "./components/courseDrawer"
+import { useCourse } from "./hooks/course-hooks"
 
 export const CourseLayout = () => {
     const param = useParams()
     
-    const { data,isLoading } = useQuery({
-        queryKey: ['course', param.id],
-        queryFn: () => newRequests.get(`/courses/course`, {
-          params: {
-            id: param.id
-          }
-        }),
-        staleTime: 1000 * 6 * 500,
-        retry:3
-      })
+    const { data,isLoading,isError,error } = useCourse(param.id)
 
     const { activeLesson,course } = useSelector(x => x.createCourseState)
     const { name } = course;
     const [ show,setShow ] = useState(true)
+
+    if(isError) {
+      return JSON.stringify(error.message)
+    }
     return (
         <div className="flex flex-col w-full max-w-[2048px]">
            {isLoading ? <Loading/>: <>

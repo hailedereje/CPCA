@@ -6,6 +6,7 @@ import newRequests from "@/utils/newRequest";
 import { FaHashtag } from "react-icons/fa";
 import { tagList } from "@/constants";
 import { courseRoutes } from "@/routes";
+import { IconWrapper } from "./icon-wrapper";
 
 const addTags = async (data) => {
     return await newRequests.post(courseRoutes.addTags,data)
@@ -31,9 +32,7 @@ const addTags = async (data) => {
       <div className="flex flex-col max-w-md items-start  gap-4 bg-slate-50 dark:bg-gray-600 p-4 rounded-md">
           <span className="flex flex-col gap-2">
             <span className="text-xl capitalize font-medium flex gap-4 items-center">
-              <span>
-                <FaHashtag />
-              </span>
+              <IconWrapper bg="bg-blue-500" color="text-white" icon={<FaHashtag />} />
               <span >tags</span>
             </span>
             <span className="text-xs lowercase line-clamp-2 text-gray-500 dark:text-gray-200">

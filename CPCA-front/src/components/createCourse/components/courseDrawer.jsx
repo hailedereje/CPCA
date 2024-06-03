@@ -47,23 +47,26 @@ export const Drawer = ({ data }) => {
             <div className={` fixed top-12 h-full left-0 bg-white dark:bg-gray-600 dark:text-white w-80 z-20 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
                 <div className="w-full">
                     <div className="bg-white h-screen max-h-[1024px] dark:bg-gray-600 shadow-lg overflow-auto editor">
-                        <div className="flex justify-between gap-2 items-center p-4 bg-blue-500 text-white">
+                        <div className="flex justify-between border gap-2 items-center p-4 bg-blue-500 text-white">
                             <h2 className="text-md flex items-center line-clamp-1 gap-2">
                                 <span><FaBook className="text-md" /> </span>
                                 <p className='text-left line-clamp-2'>{course.title}</p>
                             </h2>
-                            <div className="relative group w-max mx-auto">
-                                <button
-                                    onClick={() => dispatch(addChapter({ courseId: course._id, label: "create Chapter", actionType: ActionTypes.ADD_CHAPTER }))}
-                                    className="focus:outline-none"
-                                >
-                                    <svg className='w-5' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                        <path fill="currentColor" d="M5 19V5h7v7h7v1c.7 0 1.37.13 2 .35V9l-6-6H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h8.35c-.22-.63-.35-1.3-.35-2zm9-14.5l5.5 5.5H14zM23 18v2h-3v3h-2v-3h-3v-2h3v-3h2v3z" />
-                                    </svg>
-                                </button>
-                                <span className="absolute left-1/2 transform -translate-x-1/2 top-full mb-2 w-max bg-gray-800 text-white text-sm py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    Add Chapter
-                                </span>
+                            <div className="relative group ">
+                                <MenuWrapper>
+                                    <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
+                                        <span className="mr-2"><MdModeEditOutline /></span>
+                                        <span className='text-sm capitalize'>rename</span>
+                                    </li>
+                                    <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500" onClick={() => dispatch(addChapter({ courseId: course._id, label: "create Chapter", actionType: ActionTypes.ADD_CHAPTER }))}>
+                                        <span className="mr-2"><IoMdAddCircleOutline /></span>
+                                        <span className='text-sm capitalize'>add chapter </span>
+                                    </li>
+                                    <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
+                                        <span className="mr-2"><RiDeleteBin6Line className="text-red-400" /></span>
+                                        <span className='text-sm capitalize'>delete</span>
+                                    </li>
+                                </MenuWrapper>
                             </div>
                         </div>
                         <div className="p-4 mb-10">
@@ -74,11 +77,11 @@ export const Drawer = ({ data }) => {
                                             <span className=''>
                                                 {openChapterIndex === index ? <FaBookOpen className="text-md" /> : <FaBook className="text-md" />}
                                             </span>
-                                            <span className="text-sm dark:text-white  capitalize line-clamp-2 text-left">{chapter.title+'('+chapter.lessons.length+')'}</span>
+                                            <span className="text-sm dark:text-white  capitalize line-clamp-1 text-left">{chapter.title+'('+chapter.lessons.length+')'}</span>
                                         </button>
                                         <Menu ids={{ courseId: course._id, chapterId: chapter._id }} value={chapter.title} />
                                     </div>
-                                    <div className={`${openChapterIndex === index ? "" : "hidden"}`}>
+                                    <div className={`pl-4 ${openChapterIndex === index ? "" : "hidden"}`}>
                                         <Lessons courseId={course._id} chapterId={chapter._id} lessons={chapter.lessons} />
                                         <div
                                             onClick={() => {
@@ -186,14 +189,6 @@ const Menu = ({ ids, value }) => {
                             <span className='text-sm capitalize'>add quiz</span>
                         </li>
 
-                        {/* <li
-                            className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            <span className="mr-2"><IoMdList /></span>
-                            <span className='text-sm capitalize'>view quiz</span>
-                        </li> */}
-
                         <li
                             className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
                             onClick={() => {
@@ -212,6 +207,26 @@ const Menu = ({ ids, value }) => {
     );
 };
 
+export const MenuWrapper = ({children}) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    return (
+        <div className="relative ">
+        <button className="" onClick={() => setIsMenuOpen(prev => !prev)}>
+            <SlOptions size={20} />
+        </button>
+        {isMenuOpen && (
+            <div className="fixed h-screen w-screen inset-0 z-40 cursor-default " onClick={() => setIsMenuOpen(false)}></div>
+        )}
+        {isMenuOpen && (
+            <div className="absolute  right-0 w-48 bg-white border-gray-200 z-40 rounded shadow-lg dark:bg-gray-700 dark:text-white">
+                <ul className="list-none p-0 m-0" onClick={() => setIsMenuOpen(false)}>
+                    {children}
+                </ul>
+            </div>
+        )}
+        </div>
+    )
+}
 const titleSchema = yup.object().shape({
     title: yup.string().required('Name is required')
         .min(4, 'title must be at least 4 characters long')

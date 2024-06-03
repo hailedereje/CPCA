@@ -51,6 +51,8 @@ import QuizQuestionsList, { QuizQuestionsWrapper } from "./pages/quiz/QuizQuesti
 import { EditCourseError } from "./components/createCourse/error/editCourseError";
 import { StarterPage } from "./components/createCourse/components/starterPage";
 import { AddQuestion } from "./components/createCourse/quiz/add-questions";
+import { LabPractice } from "./components/practiceQuestions/code-edtior";
+import { CreateLab, UpdateLab } from "./components/createCourse/components/create-lab";
 
 
 
@@ -191,8 +193,30 @@ function App() {
         },
         {
           path: 'course/update/:id',
-          element: <UpdataCourse/>,
-          // loader: draftCourseLoader(queryClient)
+          children: [
+            {index:true,element:<UpdataCourse/>},
+            {path:"lab", element: <CreateLab/>},
+            {path:"lab/:labId", element: <UpdateLab/> },
+            {
+              path:'chapters',
+              element: <CourseLayout/>,
+              children: [
+               { index: true, element: <StarterPage/>},
+               { path: ":chapterId/lessons/:lessonId",element:<RichTextExample/>},
+               { path: ":chapterId/add-test",element:<QuizBoard/>},
+               { 
+                path: ":chapterId/add-test/:quizId",
+                element:<QuizQuestionsWrapper/>,
+                children: [
+                  {index:true,element: <QuizQuestionsList/>},
+                  { path: "question",element:<AddQuestion/>},
+                  { path: "question/:questionId",element:<AddQuestion/>}
+                ]
+              },
+               
+              ]
+            },
+          ]
         },
       
         {
@@ -224,7 +248,7 @@ function App() {
     },
     {
       path: "code-editor",
-      element: <CodeEditor />,
+      element: <LabPractice />,
     },
 
     {

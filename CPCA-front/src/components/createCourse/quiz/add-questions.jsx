@@ -111,14 +111,16 @@ export const AddQuestion = () => {
 
   const deleteChoice = (choiceId) => {
     setChoices(prevChoices => prevChoices.filter(choice => choice.id !== choiceId));
-    setCorrectAnswerIndex(null)
+    if(correctAnswerIndex === choiceId){
+      setCorrectAnswerIndex(null)
+    }
   };
 
-  const handleCorrectAnswerChange = (index) => {
-    setCorrectAnswerIndex(index);
+  const handleCorrectAnswerChange = (id) => {
+    setCorrectAnswerIndex(id);
     const newChoices = choices.map((choice, i) => ({
       ...choice,
-      isCorrect: i === index
+      isCorrect: choice.id === id
     }));
     setChoices(newChoices);
   };
@@ -179,21 +181,12 @@ export const AddQuestion = () => {
               <div className="bg-green-400 text-gray-700 px-4 py-2 rounded-md font-semibold">
                 {choices.length} choices created
               </div>
-              {/* <DropdownMenu label="Add">
-                {choices?.map((choice, index) => (
-                  <li key={index} className="flex items-center px-4 py-2 hover:bg-gray-700">
-                    <button>
-                      <span>{choice.option}</span>
-                    </button>
-                  </li>
-                ))}
-              </DropdownMenu> */}
             </div>
             {(
               <div className="flex flex-col gap-4">
                 {choices.map((choice,index) => (
                   <div key={index} className="flex gap-4 items-center">
-                    <button onClick={() => handleCorrectAnswerChange(index)}>
+                    <button onClick={() => handleCorrectAnswerChange(choice.id)}>
                       <span>
                         {choice.isCorrect ? <FaRegCheckCircle size={20} /> : <FaRegCircle size={20} />}
                       </span>

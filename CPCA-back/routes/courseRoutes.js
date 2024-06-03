@@ -34,6 +34,8 @@ import { updateLessonItemController } from "../controllers/lesson/updateLessonIt
 import { deleteLessonController } from "../controllers/lesson/deleteLessonController.js";
 import { deletChapterController } from "../controllers/chapter/deleteChapterController.js";
 import { uploadImageController } from "../controllers/course/uploadImageController.js";
+import { createLab, deleteLab, getLab, getLabs, updateLab } from "../controllers/lab/labController.js";
+import { labValidationSchema } from "../validation/lab/labValidator.js";
 
 const router = express.Router();
 
@@ -71,4 +73,11 @@ router.delete("/course/chapters/chapter/lessons/lesson",deleteLessonController)
 router.post("/course/chapters/chapter/lessons/lesson/add-lesson-item",validateRequest(addLessonItemSchema),addLessonItemController)
 router.post("/course/chapters/chapter/lessons/lesson/update-lesson-item",updateLessonItemController)
 router.delete("/course/chapters/chapter/lessons/:lessonId/delete-lesson-item/:lessonItemId",deleteLessonItemController)
+
+// lab
+router.post("/course/labs",validateRequest(labValidationSchema),createLab)
+router.get("/course/labs/:courseId",getLabs)
+router.get("/course/labs/lab/:labId",getLab)
+router.put("/course/labs/lab/:labId", validateRequest(labValidationSchema),updateLab)
+router.delete("/course/labs/lab/:labId",deleteLab)
 export default router;

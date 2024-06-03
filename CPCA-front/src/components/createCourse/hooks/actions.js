@@ -1,6 +1,18 @@
 import newRequests from '@/utils/newRequest';
 
-export const addDescription = async (data) => await newRequests.post("/courses/course/add-prerequisites", data)
+export const createCourse = (data) => newRequests.post("/courses/new",data)
+export const getCourse = (courseId) => newRequests.get(`/courses/course`, {
+    params: {
+      id: courseId
+    }
+  })
+export const createLab = (data) => newRequests.post("/courses/course/labs",data)
+export const updateLab = (data) => newRequests.put(`/courses/course/labs/lab/${data.labId}`,data.labForm)
+export const deleteLab = ({courseId,labId}) => newRequests.delete(`/courses/course/labs/lab/${labId}`,{params: {courseId,labId}})
+export const fetchLabs = (courseId) => newRequests.get(`/courses/course/labs/${courseId}`)
+export const fetchLab = (labId) => newRequests.get(`/courses/course/labs/lab/${labId}`)    
+
+export const addDescription =  (data) =>  newRequests.post("/courses/course/add-description", data)
 
 export const fetchChapters = (courseId) => newRequests.get(`/courses/course/chapters`, {
     params: {
@@ -25,10 +37,7 @@ export const updateChapter = (courseId, chapterId, data) => newRequests.put(`/co
     }
 });
 
-export const uploadImage = (data) => {
-    console.log(data)
-    return newRequests.post(`/courses/course/chapters/chapter/upload-image`,data)
-}
+export const uploadImage = (data) => newRequests.post(`/courses/course/chapters/chapter/upload-image`,data)
 
 export const deleteChapter = ({courseId, chapterId}) => newRequests.delete(`/courses/course/chapters/chapter`,{params: {courseId,chapterId}});
 

@@ -16,11 +16,13 @@ const DraftCourses = () => {
   });
 
   if (isError) {
-    return <div className="text-red-500 text-center mt-8">Error Loading Draft Courses...</div>;
+    return <div className="text-red-500 text-center mt-8 fixed inset-0 h-full flex items-center justify-center">
+      <span className='text-xl font-bold capitalize '>Error Loading Draft Courses...</span>
+    </div>;
   }
 
   return (
-    <div className="container border mx-auto p-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg shadow-lg dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900">
+    <div className="container  p-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg shadow-lg dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900">
       <h1 className="text-5xl font-bold text-white dark:text-gray-100 mb-6 text-center">Draft Courses</h1>
       {isLoading ? (
         <Loading />

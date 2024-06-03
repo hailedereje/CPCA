@@ -10,22 +10,37 @@ import {
     deleteLesson,
     uploadImage,
     createQuiz,
-    addDescription
+    addDescription,
+    createCourse,
+    getCourse,
+    createLab,
+    updateLab,
+    deleteLab,
+    fetchLab
   } from './actions';
+
 import { showErrorToast, showSuccessToast } from '@/toasts/toast';
 import toast from 'react-hot-toast';
+import { redirect } from 'react-router-dom';
   
-
+export const useCreateCourse = () => {
+  return useMutation({
+    mutationFn: createCourse,
+    onSuccess: () => {
+      showSuccessToast("course created successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to create course")
+    }
+  })
+}
 export const useCourse = (courseId) => {
   return  useQuery({
     queryKey: ['course', courseId],
-    queryFn: () => newRequests.get(`/courses/course`, {
-      params: {
-        id: courseId
-      }
-    }),
+    queryFn: () => getCourse(courseId),
     staleTime: 1000 * 6 * 500,
-    retry:3
+    retry:3,
+    refetchInterval:false
   })
 }
 
@@ -43,13 +58,72 @@ export const useChapter = (courseId, chapterId) => {
   return useQuery(['chapter', courseId, chapterId], () => fetchChapter(courseId, chapterId));
 };
 
+export const useCreateLab = (courseId) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: createLab,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:['course',courseId]});
+      showSuccessToast("lab created successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to create lab")
+    }
+  })
+}
+
+export const useUpdateLab = (courseId,labId) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateLab,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:['course',courseId]});
+      queryClient.invalidateQueries({queryKey:['lab',labId]});
+      showSuccessToast("lab updated successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to update lab")
+    }
+  })
+}
+
+export const useDeleteLab = (courseId,labId) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteLab,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:['course',courseId]});
+      queryClient.removeQueries({queryKey:['lab',labId]});
+      // redirect("/course")
+      showSuccessToast("lab deleted successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to delete lab")
+    }
+  })
+}
+
+export const useGetLab = (labId) => {
+  return useQuery({
+    queryKey: ['lab',labId],
+    queryFn: () => fetchLab(labId),
+    staleTime: 1000 * 6 * 300,
+    retry:3,
+    refetchInterval:false
+  })
+}
+
 export const useCreateChapter = (courseId) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createChapter, 
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey:['course',courseId]});
+      showSuccessToast("chapter created successfully")
     },
+    onError: () => {
+      showErrorToast("failed to create chapter")
+    }
   });
 };
 
