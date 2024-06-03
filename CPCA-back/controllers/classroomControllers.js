@@ -56,6 +56,17 @@ export const getClassroomsByUserId = async (req, res) => {
   }
 };
 
+// get classroom by id
+export const getClassroomsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const classroom = await Classroom.findById({ id });
+    res.status(200).json(classroom);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch classrooms" });
+  }
+};
+
 // Archive a classroom
 export const archiveClassroom = async (req, res) => {
   try {
@@ -88,6 +99,8 @@ export const deleteClassroom = async (req, res) => {
 // Invite users to a classroom
 export const inviteStudents = async (req, res) => {
   const { emails, classroomId } = req.body;
+  const classroom = await Classroom.findById(classroomId);
+  const instructor = await User.findById(classroom.instructorId);
   if (!emails || !Array.isArray(emails)) {
     return res.status(400).json({ error: "Invalid email list" });
   }
@@ -113,7 +126,8 @@ export const inviteStudents = async (req, res) => {
 
     try {
       await transporter.sendMail(mailOptions);
-      await Invitation.create({ email, token, classroomId });
+      const student = await User.findOne({email: email});
+      await Invitation.create({ email, username: student?.username, token, classroomId, classroomName: classroom.name, instructor: instructor.username });
     } catch (error) {
       console.log("error", error);
       // res.status(400).json({message: `Failed to send email to ${email}`});

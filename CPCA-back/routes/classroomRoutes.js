@@ -23,6 +23,7 @@ const router = express.Router();
 
 router.get("/invitation/:token", getInvitationByToken);
 router.get("/join/:token", joinClassroom);
+router.get("/:id", getClassroomById);
 
 router.use(authenticate);
 
@@ -34,7 +35,6 @@ router.get("/discussion/my-questions/:id", studentCheck, getMyQuestionsByClassro
 router.use(isInstructor);
 router.post("/", createClassroom);
 router.get('/:id', getClassroomById)
-// router.get("/:id", archiveClassroom);
 router.delete("/delete/:id", deleteClassroom);
 router.post("/invite", inviteStudents);
 router.get("/instructor/:id", getClassroomsByInstructorId);
