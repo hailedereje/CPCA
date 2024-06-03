@@ -1,32 +1,35 @@
-import { DiscussionQuestion, Reply } from "../models/index.js";
+import { Discussion, DiscussionQuestion, Reply } from "../models/index.js";
 
 // ask questions
 export const askDiscussionQuestion = async (req, res) => {
-    const { question, description, userId, tags } = req.body;
+    const { title, description, tags, classroomId } = req.body;
     try {
       const newDiscussionQuestion = await DiscussionQuestion.create({
-        question,
+        title,
         description,
-        author: userId,
+        author: req.user._id,
         tags,
-        seen: [userId],
+        seen: [req.user._id],
+      });
+      const discussion = await Discussion.findOne({classroomId: classroomId});
+      await discussion.updateOne({
+        $push: { discussion: newDiscussionQuestion._id },
       });
       return res.status(201).json(newDiscussionQuestion);
     } catch (error) {
-      res.status(500).json({ message: "Server Error" });
+      res.status(500).json({ message: "Server Error from ask" });
     }
   }
 
 //   reply questions
 export const answerDiscussionQuestion = async (req, res) => {
-    const { answer, userId } = req.body;
+    const { answer } = req.body;
   
     const { id: questionId } = req.params;
     try {
-      const reply = await Reply.create({ reply: answer, author: userId });
+      const reply = await Reply.create({ reply: answer, author: req.user._id });
       const findDiscussionQuestion = await DiscussionQuestion.findById(questionId);
-      console.log("find", findDiscussionQuestion);
-      const addReply = await findDiscussionQuestion.updateOne({
+      await findDiscussionQuestion.updateOne({
         $push: { replies: reply._id },
       });
       return res.status(201).json(reply);

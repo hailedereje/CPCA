@@ -7,17 +7,20 @@ const answerSchema = new mongoose.Schema({
 });
 
 const progressSchema = new mongoose.Schema({
+  classroomId: { type: mongoose.Schema.Types.ObjectId, ref: 'Classroom', required: true },
   studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
-  chapterId: { type: mongoose.Schema.Types.ObjectId, ref: 'Chapter', required: true },
+  chapterId: { type: mongoose.Schema.Types.ObjectId, ref: 'Chapter', required: true},
   lessonId: { type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' },
   quizId: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz' },
   practiceQuestionId: { type: mongoose.Schema.Types.ObjectId, ref: 'PracticeQuestion' },
   completed: { type: Boolean, default: false },
-  unlocked: { type: Boolean, default: false },
-  score: { type: Number, default: 0 },
-  totalScore: { type: Number, default: 0 },
-  answers: [answerSchema]
+  unlocked: { type: Boolean, default: false }, 
+  score: { type: Number},
+  totalScore: { type: Number},
+  answers: [answerSchema],
+  timeSpent: {type: Number},
+  lastAccessed: { type: Date}
 });
 
 const Progress = mongoose.model('Progress', progressSchema);

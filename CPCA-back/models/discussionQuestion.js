@@ -2,12 +2,13 @@ import mongoose from "mongoose";
 
 const questionSchema = mongoose.Schema(
   {
-    question: {
+    title: {
       type: String,
       required: true,
     },
     description: {
       type: String,
+      required: true,
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,

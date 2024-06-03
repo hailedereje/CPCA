@@ -1,37 +1,55 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import newRequests from "@/utils/newRequest";
+import { useEffect, useState } from "react";
 
 const JoinClass = () => {
-  const [email, setEmail] = useState("");
-  const [classroomId, setClassroomId] = useState("");
+  const {token} = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
+  const [data, setData] = useState({});
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const email = params.get("email");
-    const classroomId = params.get("classroomId");
-    if (email) setEmail(email);
-    if (classroomId) setClassroomId(classroomId);
-  }, [location]);
+    const fetchData = async () => {
+      const response = await newRequests.get(`/classroom/invitation/${token}`);
+      if(response.data.msg === "Invalid invitaion link") {
+        alert("Invalid invitation link")
+        return navigate("/login")
+      }
+      console.log(response.data);
+      setData(response.data);
+    }
+    fetchData();
+  }, [token, navigate]);
 
   const handleJoinClass = async () => {
     try {
-      await newRequests.post("/enroll", { email, classroomId });
-      navigate("/dashboard");
+      await newRequests.get(`/classroom/join/${token}`);
+      navigate("/login")
     } catch (error) {
-      console.error(error);
+      console.error("error", error.response.data.message);
+      if(error.response.data.msg === "User not found") {
+        navigate(`/register/${token}`)
+      }
+      else if(error.response.data.msg === "already enrolled") {
+        alert("You are already enrolled in this classroom")
+      } else if (error.response.data.msg === "Invalid invitaion link"){
+        alert("Invalid invitation link")
+      } else if (error.response.data.msg === ("Classroom not found")) {
+        alert("Classroom not found")
+      } else {
+        alert("Something went wrong, please try again")
+      }
     }
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-4">Join Class</h1>
-      <p className="mb-2">Email: {email}</p>
-      <p className="mb-4">Classroom ID: {classroomId}</p>
+    <div className="flex flex-col items-center h-screen justify-center">
+      <div className="p-4 flex flex-col text-center w-96 border border-gray-300 rounded-t-lg pb-10 shadow-lg hover:shadow-xl">
+        <h1 className="text-2xl font-bold mb-5">Join Classroom</h1>
+        <p className="">Hey <span className="font-bold">{data.username}</span>, you are invited to join <span className="font-bold text-lg">{data.classroomName}</span> class</p>
+        <p>by Instructor <span className="font-bold text-lg">{data.instructor}</span></p>
+      </div>
       <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="w-96 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded rounded-t-none"
         onClick={handleJoinClass}
       >
         Join Class

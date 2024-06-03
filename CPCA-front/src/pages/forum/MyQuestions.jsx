@@ -1,20 +1,21 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import UserInfo from "../../components/forum/UserInfo";
 import { useQuery } from "react-query";
 import newRequests from "../../utils/newRequest";
 import Loading from "../../components/Loading";
 import NothingHere from "../../components/NothingHere";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import LikeDislikeComponent from "../../icons/LikeDislike";
-import { useSelector } from "react-redux";
+import DiscussionContext from "@/context/DiscussionContext";
 
 const Content = () => {
-  const user = useSelector((state) => state.userState.user);
   const [openId, setOpenId] = useState([]);
-  const id = user._id
+  const {socket, classroomId} = useContext(DiscussionContext);
 
   const { isLoading, data } = useQuery("getMyQuestions", () =>
     newRequests
-      .get(`/discussion/my-questions/${id}`)
+      .get(`/classroom/discussion/my-questions/${classroomId}`)
       .then((res) => res.data)
   );
   if (isLoading) return <Loading />;
@@ -24,8 +25,8 @@ const Content = () => {
     className="h-full w-full mt-12 md:w-[60%] flex flex-col items-center 
     gap-8 "
     >
-      {data.length > 0 &&
-        data.map((question, index) => {
+      {data?.discussion.length > 0 &&
+        data.discussion.map((question, index) => {
           console.log("question", question);
           return (
             <div
@@ -84,7 +85,7 @@ const Content = () => {
             </div>
           );
         })}
-      {data.length === 0 && <NothingHere />}
+      {data?.discussion.length === 0 && <NothingHere />}
     </div>
   );
 };

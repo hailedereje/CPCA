@@ -1,5 +1,3 @@
-import { Video } from "video-react";
-
 export { default as FormInput } from "../components/FormInput";
 export { default as SubmitBtn } from "../components/SubmitBtn";
 export { default as Header } from "../components/Header";
@@ -27,3 +25,4 @@ export { default as ContactSection } from "./ContactSection";
 export { default as ProfileInputElt } from "./ProfileInputElt";
 export { default as ActivityCard } from "./ActivityCard";
 export { default as Loading } from "./Loading";
+export { default as JoinClass } from "./JoinClass";

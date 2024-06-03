@@ -11,32 +11,32 @@ import { useContext, useEffect, useState } from "react";
 import LikeDislikeComponent from "../../icons/LikeDislike";
 import { useSelector, useDispatch } from "react-redux";
 import { useQuery } from "react-query";
-import SocketContext from "@/context/SocketContext";
+import DiscussionContext from "@/context/DiscussionContext";
 
 const Forum = () => {
   const user = useSelector((state) => state.userState.user);
-  const socket = useContext(SocketContext);
+  const {socket, classroomId} = useContext(DiscussionContext);
   const dispatch = useDispatch();
   const { topic } = useParams();
   const [openId, setOpenId] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [answer, setAnswer] = useState("");
 
-  const { isLoading, data } = useQuery("getAllQuestions", async () => {
+  const { isLoading, data } = useQuery("getDiscussionByClassroomId", async () => {
     if (topic) {
       console.log(topic);
       const res = await newRequests.get(`/discussion/find/${topic}`);
       return res.data;
     } else {
-      const res = await newRequests.get("/discussion/questions");
+      const res = await newRequests.get(`/classroom/discussion/${classroomId}`);
       return res.data;
     }
   });
   
 
   useEffect(() => {
-    if (data) {
-      setQuestions(data);
+    if (data && data.discussion) {
+      setQuestions(data.discussion);
     }
   }, [data]);
 
@@ -141,7 +141,7 @@ const Forum = () => {
             </div>
           );
         })}
-      {data.length === 0 && <NothingHere />}
+      {questions.length === 0 && <NothingHere />}
     </div>
   );
 };

@@ -3,11 +3,14 @@ import {
   archiveClassroom,
   createClassroom,
   deleteClassroom,
-  enrollStudent,
+  getClassroomById,
   getClassroomsByInstructorId,
   getClassroomsByUserId,
+  getInvitationByToken,
   inviteStudents,
   joinClassroom,
+  getDiscussionByClassroomId,
+  getMyQuestionsByClassroomId
 } from "../controllers/index.js";
 
 import {
@@ -18,18 +21,24 @@ import {
 
 const router = express.Router();
 
+router.get("/invitation/:token", getInvitationByToken);
+router.get("/join/:token", joinClassroom);
+router.get("/:id", getClassroomById);
+
 router.use(authenticate);
+
+// router.use(studentCheck);
+router.get("/student/:id", studentCheck, getClassroomsByUserId);
+router.get("/discussion/:id", studentCheck, getDiscussionByClassroomId);
+router.get("/discussion/my-questions/:id", studentCheck, getMyQuestionsByClassroomId);
 
 router.use(isInstructor);
 router.post("/", createClassroom);
-router.get("/:id", archiveClassroom);
-router.post("/delete/:id", deleteClassroom);
+router.get('/:id', getClassroomById)
+router.delete("/delete/:id", deleteClassroom);
 router.post("/invite", inviteStudents);
 router.get("/instructor/:id", getClassroomsByInstructorId);
 
-router.use(studentCheck);
-router.get("/student/:id", getClassroomsByUserId);
-router.post("/enroll", enrollStudent);
-router.post("/join/:token", joinClassroom);
+
 
 export default router;

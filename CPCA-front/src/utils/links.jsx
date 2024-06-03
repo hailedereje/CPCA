@@ -11,10 +11,13 @@ import { BsFillPeopleFill } from "react-icons/bs";
 import { GiTeacher } from "react-icons/gi";
 
 export const InstructLinks = [
+  {id: 0, text: "Home", path: "/", icon: <IoBarChartSharp />},
   { id: 1, text: "Activities", path: "/dashboard", icon: <IoBarChartSharp /> },
   { id: 2, text: "All courses", path: "courses", icon: <MdQueryStats /> },
   { id: 3, text: "Add-course", path: "add-course", icon: <FaWpforms /> },
   { id: 4, text: "profile", path: "profile", icon: <ImProfile /> },
+  {id: 5, text: "classrooms", path: "classrooms", icon: <FaChalkboardTeacher/>
+}
 ];
 
 export const StudentLinks = [
@@ -50,10 +53,10 @@ export const instructorActivities = [
   // },
   {
     id: "1",
-    text: "Manage Courses",
+    text: "Create Classroom",
     activity: "Go",
     icon: <FaChalkboardTeacher size={50} />,
-    path: '/course/edit/1'
+    path: 'classroom'
     
   },
   {

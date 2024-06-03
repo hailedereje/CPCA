@@ -2,8 +2,11 @@ import mongoose from 'mongoose';
 
 const invitationSchema = new mongoose.Schema({
   email: { type: String, required: true },
+  username: { type: String},
   token: { type: String, required: true },
-  classroomId: { type: mongoose.Schema.Types.ObjectId, ref: 'Classroom', required: true },
+  classroomId: { type: String, required: true },
+  classroomName: { type: String, required: true },
+  instructor: { type: String, required: true },
   invitedAt: { type: Date, default: Date.now }
 });
 

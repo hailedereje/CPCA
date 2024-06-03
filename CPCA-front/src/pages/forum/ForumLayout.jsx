@@ -1,12 +1,12 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useOutletContext } from "react-router-dom";
 import CreateButton from "@/components/forum/CreateButton";
 import Sidebar from "@/components/forum/ForumSidebar";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { setSocket, addUsers } from "@/features/forum/socketSlice";
+import { addUsers } from "@/features/forum/socketSlice";
 import { QueryClient, QueryClientProvider } from "react-query";
-import SocketContext from "@/context/SocketContext";
+import SocketContext from "@/context/DiscussionContext";
 import Navbar from "@/components/coursePages/Navbar";
 
 const queryClient = new QueryClient();
@@ -20,21 +20,15 @@ export const Layout = () => {
   const user = useSelector((state) => state.userState.user);
   const users = useSelector((state) => state.socketState.onlineUsers);
   const dispatch = useDispatch();
+  const {classroom} = useOutletContext()
 
   useEffect(() => {
-    console.log("socket", socket);
-    dispatch(setSocket(socket));
     socket.connect();
-    socket.on("connect", () => {
-      console.log("socket connected", socket.id);
-    });
     socket.auth = user;
     socket.on("user-connected", (users) => {
       dispatch(addUsers(users));
-      console.log("users", users);
     });
     socket.on("user-disconnected", (users) => {
-      console.log("users", users);
       dispatch(addUsers(users));
     });
 
@@ -53,7 +47,7 @@ export const Layout = () => {
         <div className="left-section fixed left-28">
           <Sidebar />
         </div>
-        <SocketContext.Provider value={socket}>
+        <SocketContext.Provider value={{socket, classroomId: classroom._id}}>
           <Outlet />
         </SocketContext.Provider>
         <div
@@ -65,9 +59,9 @@ export const Layout = () => {
             className="mt-8  py-4 px-3 rounded-md flex
          flex-col items-start gap-5"
           >
-            <h2 className="text-gray-600 font-bold text-start">Top Users</h2>
+            <h2 className="text-gray-600 font-bold text-start">Online Users</h2>
             {users.length > 0 &&
-              users.slice(0, 5).map((user, index) => {
+              users.map((user, index) => {
                 console.log("user", user);
                 return (
                   <div key={index} className="flex items-center cursor-pointer">
@@ -76,7 +70,7 @@ export const Layout = () => {
                       alt="profile"
                       className="w-6 h-6 rounded-full mr-2"
                     />
-                    <h3 className="text-xs">{user.name}</h3>
+                    <h3 className="text-xs">{user.username}</h3>
                   </div>
                 );
               })}

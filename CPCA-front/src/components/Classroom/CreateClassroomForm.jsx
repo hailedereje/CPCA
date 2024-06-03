@@ -1,4 +1,4 @@
-const FormInput = ({ label, name, type, defaultValue, size }) => {
+const CreateClassroomForm = ({ label, name, type, defaultValue, size }) => {
     return (
       <div className='form-control '>
         <label htmlFor={name} className='label'>
@@ -13,5 +13,5 @@ const FormInput = ({ label, name, type, defaultValue, size }) => {
       </div>
     );
   };
-  export default FormInput; 
+  export default CreateClassroomForm; 
   

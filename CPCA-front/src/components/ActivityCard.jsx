@@ -2,7 +2,7 @@ import React from 'react'
 
 function ActivityCard({text, icon, activity}) {
   return (
-    <div className="card border border-base-100 p-3 bg-base-100">
+    <div className="card border border-base-200 shadow-xl hover:shadow-2xl p-3 bg-base-100">
         <figure>
           {icon}
         </figure> 
