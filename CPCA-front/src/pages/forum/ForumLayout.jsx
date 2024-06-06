@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import { addUsers } from "@/features/forum/socketSlice";
 import { QueryClient, QueryClientProvider } from "react-query";
 import SocketContext from "@/context/DiscussionContext";
-import Navbar from "@/components/coursePages/Navbar";
 
 const queryClient = new QueryClient();
 
@@ -21,7 +20,7 @@ export const Layout = () => {
   const users = useSelector((state) => state.socketState.onlineUsers);
   const dispatch = useDispatch();
   const {classroom} = useOutletContext()
-
+  console.log(classroom);
   useEffect(() => {
     socket.connect();
     socket.auth = user;
@@ -39,21 +38,16 @@ export const Layout = () => {
 
   return (
     <QueryClientProvider client={queryClient} contextSharing={true}>
-      <Navbar />
       <div
-        className="container mx-auto flex justify-center items-start px-4 
-        md:px-12 pt-12 dark:bg-[#32353F]"
+        className="flex justify-between items-start"
       >
-        <div className="left-section fixed left-28">
+        <div className="">
           <Sidebar />
         </div>
         <SocketContext.Provider value={{socket, classroomId: classroom._id}}>
           <Outlet />
         </SocketContext.Provider>
-        <div
-          className="right-section
-          hidden md:block fixed top-24 right-28"
-        >
+        <div className="">
           <CreateButton />
           <div
             className="mt-8  py-4 px-3 rounded-md flex

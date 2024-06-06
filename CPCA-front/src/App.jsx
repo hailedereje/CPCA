@@ -1,5 +1,5 @@
 import "react-toastify/dist/ReactToastify.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import {
   Dashboard,
   ErrorPage,
@@ -109,7 +109,8 @@ function App() {
                 { path: "students", element: <Students />},
                 { path: "invitations", element: <div>Invitations Page</div> },
                 { path: "status", element: <div>Status Page</div> },
-                { path: "discussion", element: <ForumLayout />, children: [
+                { path: "discussions", element: <ForumLayout />, children: [
+                  { path: "", element: <Navigate to="content" /> }, 
                   {path: "content", element: <Forum />},
                   {path: "myqns", element: <MyQuestions />},
                   {path: "ask", element: <Askquestion />},
@@ -198,18 +199,6 @@ function App() {
         {
           path: "quiz_question",
           element: <QuizQuestionsList />,
-        },
-        {
-          path: "forum",
-          element: <ForumLayout classroomId={"665a1674842f8630ac9bfd69"} />,
-          children: [
-            { path: "content", element: <Forum /> },
-            { path: "myqns", element: <MyQuestions /> },
-            {
-              path: "ask",
-              element: <Askquestion />,
-            },
-          ]
         },
       ],
     },

@@ -27,27 +27,25 @@ const Askquestion = () => {
     if (res.status === 201) {
       socket.emit("send-question", {question, room: "discussion", user});
       toast.success("Question added successfully");
-      navigate("/forum/content");
+      navigate("content");
     }
   };
 
   return (
-    <div className="">
+    <div className="w-1/2 bg-slate-100">
       <Toaster />
       <div
         className="flex flex-col items-center 
-      gap-4 mb-12 border p-4 pb-6 rounded-md bg-purple-300 
-      dark:bg-[#1E212A]  mt-12"
+      gap-4 border p-4 rounded-md"
       >
         <h1
           className="text-2xl font-bold text-center
-        text-purple-600 
         "
         >
-          Ask a Question
+          Start a New Topic
         </h1>
 
-        <form onSubmit={handleSubmit} className="form w-full ">
+        <form onSubmit={handleSubmit} className="form w-full">
           <div className="title">
             <label className="text-gray-800 text-start dark:text-white">
               Question Title
@@ -82,7 +80,7 @@ const Askquestion = () => {
           </div>
           <button
             type="submit"
-            className="mt-8 w-[230px] mx-auto flex items-center gap-2 bg-purple-700 rounded-md shadow-sm px-8 py-2 cursor-pointer"
+            className="flex items-center mt-8 gap-2 bg-blue-700 rounded-md px-8 py-2 cursor-pointer"
           >
             <Share />
             <span className="text-white">Ask on Community</span>

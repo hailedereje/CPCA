@@ -22,24 +22,17 @@ const Content = () => {
 
   return (
     <div
-    className="h-full w-full mt-12 md:w-[60%] flex flex-col items-center 
-    gap-8 "
+    className="flex flex-col items-center bg-slate-100 w-1/2"
     >
       {data?.discussion.length > 0 &&
         data.discussion.map((question, index) => {
-          console.log("question", question);
           return (
             <div
               key={index}
-              className="w-full md:w-[80%] md:mx-12 flex flex-col items-end border 
-          
-          p-2
-          md:p-4 rounded-md bg-purple-100 dark:bg-slate-400" 
+              className="flex flex-col items-end p-2 md:p-4 border-b border-gray-200" 
           >
               <div
-                className="w-full bg-white dark:bg-[#1E212A]
-              
-              p-4 md:p-5 rounded-lg shadow-md flex items-start gap-5"
+                className="w-full bg-white dark:bg-[#1E212A] p-4 md:p-5 rounded-lg shadow-md flex items-start gap-5"
               >
                 <div className="left-section space-y-1 text-center">
                   <LikeDislikeComponent question={question} />
@@ -60,14 +53,12 @@ const Content = () => {
                   />
                 </div>
               </div>
-              {/* nested comment       */}
               {openId.find((ele) => ele === index + 1) && (
                 <>
                   {question?.replies?.map((answer) => {
                     console.log("answer", answer);
                     return (
                       <div key={answer._id} className="flex items-center gap-4">
-                        {/* fix this */}
                         <img
                           className="h-4 md:h-6 w-4 md:w-6"
                           src="https://cdn.icon-icons.com/icons2/2596/PNG/512/nested_arrows_icon_155086.png"

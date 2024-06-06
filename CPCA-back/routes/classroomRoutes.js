@@ -28,9 +28,9 @@ router.get("/:id", getClassroomById);
 router.use(authenticate);
 
 // router.use(studentCheck);
-router.get("/student/:id", studentCheck, getClassroomsByUserId);
-router.get("/discussion/:id", studentCheck, getDiscussionByClassroomId);
-router.get("/discussion/my-questions/:id", studentCheck, getMyQuestionsByClassroomId);
+router.get("/student/:id", getClassroomsByUserId);
+router.get("/discussion/:id", getDiscussionByClassroomId);
+router.get("/discussion/my-questions/:id", getMyQuestionsByClassroomId);
 
 router.use(isInstructor);
 router.post("/", createClassroom);
