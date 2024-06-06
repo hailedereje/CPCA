@@ -1,12 +1,22 @@
-import React from "react";
+/* eslint-disable react/prop-types */
+import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useGetCourseQuery, useGetLessonsQuery } from "@/api";
+import newRequests from "@/utils/newRequest";
 
 function AllLessonsGrid() {
-  // const courseId = useSelector((state) => state.courseState.selectedCourse);
+  const courseId = useSelector((state) => state.courseState.selectedCourse);
   // const { data: course, isLoading: isCourseLoading } = useGetCourseQuery(courseId);
   // const {data: lessons, isLoading: isLessonsLoading}= useGetLessonsQuery(courseId);
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      const response = await newRequests.get(`/courses/course?id=${courseId}`);
+      console.log("response", response.data);
+    };
+    fetchCourse();
+  }, []);
 
   const lessons = [
     {
