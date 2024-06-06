@@ -65,6 +65,7 @@ const CourseSchema = new Schema(
       ],
       default: []
     },
+    labs: {type: [Schema.Types.ObjectId], ref:"Lab",default: []},
     instructors: { type: [Schema.Types.ObjectId],ref:"User", default: []},
     isPublished: {type: Boolean,default:false},
   },

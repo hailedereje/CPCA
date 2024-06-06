@@ -67,8 +67,8 @@ const UsersList = () => {
   };
 
   return (
-    <div className="">
-      <div className="">
+    <div className="flex w-full">
+      <div className="flex w-full flex-col p-4">
         <div className="flex justify-between items-center mb-3 ">
           <h2 className="text-2xl font-bold">Users List</h2>
           <AddInstructor />
