@@ -1,29 +1,25 @@
 // src/pages/CreateClassroom.js
-import { api } from "@/api";
-import { FormInput, SectionTitle, SubmitBtn } from "@/components";
+import { api, useGetAllCoursesQuery } from "@/api";
+import { SectionTitle, SubmitBtn } from "@/components";
 import CreateClassroomForm from "@/components/Classroom/CreateClassroomForm";
-import React from "react";
+import { Loading } from "react-daisyui";
 import { Form, redirect } from "react-router-dom";
 import { toast } from "react-toastify";
-// import { toast } from "react-toastify";
-// import { api } from "../api";
 
 export const createClassroomAction =
   (store) =>
   async ({ request }) => {
     const formData = await request.formData();
-    const data = Object.fromEntries(formData); 
-    console.log(data)// convert to plain js
+    const data = Object.fromEntries(formData);
     try {
       const result = await store
         .dispatch(api.endpoints.createClassroom.initiate(data))
-        .unwrap(); // send a request to the server
+        .unwrap();
       if (result) {
         toast.success("Classroom created successfully");
         return redirect("/dashboard/classrooms");
       }
     } catch (err) {
-      console.log('error', err);
       const errorMessage =
         err?.data?.msg || "Server Error. Please try again later.";
       toast.error(errorMessage);
@@ -32,8 +28,15 @@ export const createClassroomAction =
   };
 
 function CreateClassroom() {
+  const { data: courses, isLoading: isCoursesLoading } =
+    useGetAllCoursesQuery();
+
+  if (isCoursesLoading) {
+    return <Loading />;
+  }
+
   return (
-    <section id="create-classroom" className="h-screen grid  w-full ">
+    <section id="create-classroom" className="h-screen grid w-full">
       <Form
         method="post"
         className="card p-8 bg-base-100 shadow-lg flex flex-col gap-y-4"
@@ -41,17 +44,22 @@ function CreateClassroom() {
         <SectionTitle text={"Create Classroom"} />
         <div className="w-[70%] ">
           <CreateClassroomForm type="text" label="Name" name="name" />
-          <CreateClassroomForm
-            type="text"
-            label="Description"
-            name="description"
-          />
-          <CreateClassroomForm type="text" label="Course ID" name="courseId" />
-          <div className="mt-4  ">
-            <SubmitBtn
-              className="bg-green-2 btn btn-secondary"
-              text="Create Classroom"
-            />
+          <CreateClassroomForm type="text" label="Description" name="description" />
+          <div className="form-control mt-5">
+            <label htmlFor="courseId" className="label">
+              <span className="label-text capitalize">Course</span>
+            </label>
+            <select id="courseId" name="courseId" className="select select-bordered select-text capitalize">
+              <option key={"0"} className="capitalize" value="">Select a course</option>
+              {courses.map((course) => (
+                <option className="capitalize" key={course._id} value={course._id}>
+                  {course.title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mt-4">
+            <SubmitBtn className="bg-green-2 btn btn-secondary" text="Create Classroom" />
           </div>
         </div>
       </Form>
