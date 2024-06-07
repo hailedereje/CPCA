@@ -47,12 +47,14 @@ const Forum = () => {
       await newRequests.get(`/seen-question/${question._id}`, {userId: user._id});
     };
 
-    socket.emit("join-room", { room: "discussion", user });
-    socket.on('receive-question', handleReceiveQuestion);
-    
-    return () => {
-      socket.off('receive-question', handleReceiveQuestion);
-    };
+    if(socket){
+      socket.emit("join-room", { room: "discussion", user });
+      socket.on('receive-question', handleReceiveQuestion);
+      
+      return () => {
+        socket.off('receive-question', handleReceiveQuestion);
+      };
+    }
   }, [user, dispatch, socket]);
 
   if (isLoading) return <Loading />;

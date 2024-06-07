@@ -5,11 +5,11 @@ import nodemailer from "nodemailer";
 // Create a new classroom
 export const createClassroom = async (req, res) => {
   try {
-    const { name, description, instructorId, courseId } = req.body;
+    const { name, description, courseId } = req.body;
     const classroom = new Classroom({
       name,
       description,
-      instructorId,
+      instructorId: req.user._id,
       courseId,
     });
 
@@ -17,9 +17,8 @@ export const createClassroom = async (req, res) => {
     await Discussion.create({ classroomId: newClassroom._id });
     res.status(201).json(newClassroom);
   } catch (error) {
-    res.status(500).json({ error: "Failed to create classroom" });
+    res.status(500).json({ error: "Error creating classroom" });
   }
-  res.status(201).json(newClassroom);
 };
 
 // Get all classrooms by instructorId

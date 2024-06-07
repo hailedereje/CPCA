@@ -26,6 +26,7 @@ const Askquestion = () => {
     );
     if (res.status === 201) {
       socket.emit("send-question", {question, room: "discussion", user});
+      
       toast.success("Question added successfully");
       navigate("content");
     }
