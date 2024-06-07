@@ -21,7 +21,8 @@ export const Layout = () => {
   const users = useSelector((state) => state.socketState.onlineUsers);
   const dispatch = useDispatch();
   const {classroom} = useOutletContext()
-
+  console.log("classroom", classroom);
+// console.log(useOutletContext());
   useEffect(() => {
     socket.connect();
     socket.auth = user;
@@ -39,10 +40,10 @@ export const Layout = () => {
 
   return (
     <QueryClientProvider client={queryClient} contextSharing={true}>
-      <Navbar />
+      {/* <Navbar /> */}
       <div
         className="container mx-auto flex justify-center items-start px-4 
-        md:px-12 pt-12 dark:bg-[#32353F]"
+        md:px-12 pt-12 "
       >
         <div className="left-section fixed left-28">
           <Sidebar />

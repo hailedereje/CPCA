@@ -35,22 +35,7 @@ function ClassroomDetails() {
         </div>
       </div>
       <div className="mt-4">
-        {classroom && (
-          <div className="space-y-4">
-            <div className="flex items-center">
-              <FiBookOpen className="mr-2 text-primary" />
-              <p className="text-lg font-semibold">
-                Name: <span className="font-normal">{classroom.name}</span>
-              </p>
-            </div>
-            <div className="flex items-center">
-              <FiInfo className="mr-2 text-primary" />
-              <p className="text-lg font-semibold">
-                Description: <span className="font-normal">{classroom.description}</span>
-              </p>
-            </div>
-          </div>
-        )}
+        
         <Outlet context={{classroom}} />
       </div>
     </div>
@@ -58,3 +43,21 @@ function ClassroomDetails() {
 }
 
 export default ClassroomDetails;
+
+
+// {classroom && (
+//   <div className="space-y-4">
+//     <div className="flex items-center">
+//       <FiBookOpen className="mr-2 text-primary" />
+//       <p className="text-lg font-semibold">
+//         Name: <span className="font-normal">{classroom.name}</span>
+//       </p>
+//     </div>
+//     <div className="flex items-center">
+//       <FiInfo className="mr-2 text-primary" />
+//       <p className="text-lg font-semibold">
+//         Description: <span className="font-normal">{classroom.description}</span>
+//       </p>
+//     </div>
+//   </div>
+// )}

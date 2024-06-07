@@ -12,9 +12,8 @@ import {
 } from "./pages";
 import { loader as CoursesLoader } from "./pages/dashboard/AllCourses";
 // import { loader as SingleCourseLoader } from "./pages/Lessons";
-import { action, action as loginAction } from "./pages/Login";
+import { action as loginAction } from "./pages/Login";
 import { action as registerAction } from "./pages/Register";
-import { action as EditProfileAction } from "./pages/dashboard/Profile";
 import { store } from "./store";
 import {
   Activities,
@@ -47,25 +46,29 @@ import QuestionsList from "./pages/question/QuestionList";
 import AddQuestionForm from "./pages/question/PracticeQuestionForm";
 import PracticeQuestionPage from "./pages/question/Practice";
 import UsersList from "./pages/dashboard/UsersList";
-import QuizQuestionsList, { QuizQuestionsWrapper } from "./pages/quiz/QuizQuestionsList";
+import QuizQuestionsList, {
+  QuizQuestionsWrapper,
+} from "./pages/quiz/QuizQuestionsList";
 import { EditCourseError } from "./components/createCourse/error/editCourseError";
 import { StarterPage } from "./components/createCourse/components/starterPage";
 import ClassroomLayout from "./pages/classroom/ClassroomLayout";
-import CreateClassroom, { createClassroomAction } from "./pages/classroom/CreateClassroom";
+import CreateClassroom, {
+  createClassroomAction,
+} from "./pages/classroom/CreateClassroom";
 import Stats from "./pages/classroom/Stats";
 import Classrooms from "./pages/classroom/Classrooms";
 import { JoinClass } from "./components";
 import { AddQuestion } from "./components/createCourse/quiz/add-questions";
 import ClassroomDetails from "./pages/classroom/ClassroomDetails";
 import Students from "./pages/classroom/Students";
-
-
+import StudentsLayout from "./pages/classroom/StudentsLayout";
+import InviteForm from "./components/Classroom/InvitationForm";
 
 const queryClient = new QueryClient();
 
 function App() {
   const user = useSelector((state) => state.userState.user);
-  console.log(user); 
+  console.log(user);
   const getDashboardRoutes = () => {
     if (!user) return [];
 
@@ -76,7 +79,6 @@ function App() {
         {
           path: "profile",
           element: <Profile />,
-          action: EditProfileAction(store),
         },
         { path: "users", element: <UsersList /> },
       ];
@@ -86,39 +88,52 @@ function App() {
         {
           path: "profile",
           element: <Profile />,
-          action: EditProfileAction(store),
         },
         { path: "add-course", element: <RichTextExample /> },
-        
+
         {
           path: "courses",
           element: <AllCourses />,
           loader: CoursesLoader(store),
         },
         {
-          path: 'classrooms',
+          path: "classrooms",
           element: <ClassroomLayout />,
           children: [
-            { index: true, element: <Classrooms/>},
-            { path: "create", element: <CreateClassroom/>, action: createClassroomAction(store)}, 
+            { index: true, element: <Classrooms /> },
+            {
+              path: "create",
+              element: <CreateClassroom />,
+              action: createClassroomAction(store),
+            },
             {
               path: ":id",
               element: <ClassroomDetails />,
               children: [
-                { index: true, element: <div>Details Page</div> },
-                { path: "students", element: <Students />},
+                { index: true, element: <Stats /> },
+                {
+                  path: "students",
+                  element: <StudentsLayout />,
+                  children: [
+                    {index: true, element: <Students />},
+                    { path: "invite", element: <InviteForm /> },
+                  ],
+                },
                 { path: "invitations", element: <div>Invitations Page</div> },
                 { path: "status", element: <div>Status Page</div> },
-                { path: "discussion", element: <ForumLayout />, children: [
-                  {path: "content", element: <Forum />},
-                  {path: "myqns", element: <MyQuestions />},
-                  {path: "ask", element: <Askquestion />},
-                ]},
-              ]
-            }            // {path: 'classrooms', element: <Classrooms />}
-           
-          ]
-        }
+                {
+                  path: "forum",
+                  element: <ForumLayout />,
+                  children: [
+                    { path: "content", element: <Forum /> },
+                    { path: "myqns", element: <MyQuestions /> },
+                    { path: "ask", element: <Askquestion /> },
+                  ],
+                },
+              ],
+            }, // {path: 'classrooms', element: <Classrooms />}
+          ],
+        },
         // { path: "create-course", element: <CreateCourse /> },
       ];
     } else {
@@ -129,7 +144,6 @@ function App() {
         {
           path: "profile",
           element: <Profile />,
-          action: EditProfileAction(store),
         },
         {
           path: "courses",
@@ -141,7 +155,7 @@ function App() {
           path: "courses/:id",
           element: <Lessons />,
         },
-        { path: "courses/:id/lessons/:id", element: <LessonDetails/> },
+        { path: "courses/:id/lessons/:id", element: <LessonDetails /> },
 
         {
           path: "enrolled-courses",
@@ -159,7 +173,7 @@ function App() {
       element: <HomeLayout />,
       // errorElement: <ErrorPage />,
       children: [
-        { index: true, element: <Landing /> },
+        { index: true, element: <Home /> },
 
         {
           path: "register/:token?",
@@ -199,18 +213,6 @@ function App() {
           path: "quiz_question",
           element: <QuizQuestionsList />,
         },
-        {
-          path: "forum",
-          element: <ForumLayout classroomId={"665a1674842f8630ac9bfd69"} />,
-          children: [
-            { path: "content", element: <Forum /> },
-            { path: "myqns", element: <MyQuestions /> },
-            {
-              path: "ask",
-              element: <Askquestion />,
-            },
-          ]
-        },
       ],
     },
 
@@ -221,39 +223,41 @@ function App() {
       children: [
         ...getDashboardRoutes(),
         {
-          path:'course',
-          element: <CreateCourse/>,
+          path: "course",
+          element: <CreateCourse />,
         },
         {
-          path: 'course/update/:id',
-          element: <UpdataCourse/>,
+          path: "course/update/:id",
+          element: <UpdataCourse />,
           // loader: draftCourseLoader(queryClient)
-        },
-      
-        {
-          path: "courses/draft",
-          element: <DraftCourses/>
         },
 
         {
-          path:'course/update/:id/chapters',
-          element: <CourseLayout/>,
+          path: "courses/draft",
+          element: <DraftCourses />,
+        },
+
+        {
+          path: "course/update/:id/chapters",
+          element: <CourseLayout />,
           // errorElement:<EditCourseError/>,
           children: [
-           { index: true, element: <StarterPage/>},
-           { path: ":chapterId/lessons/:lessonId",element:<RichTextExample/>},
-           { path: ":chapterId/add-test",element:<QuizBoard/>},
-           { 
-            path: ":chapterId/add-test/:quizId",
-            element:<QuizQuestionsWrapper/>,
-            children: [
-              {index:true,element: <QuizQuestionsList/>},
-              { path: "question",element:<AddQuestion/>},
-              { path: "question/:questionId",element:<AddQuestion/>}
-            ]
-          },
-           
-          ]
+            { index: true, element: <StarterPage /> },
+            {
+              path: ":chapterId/lessons/:lessonId",
+              element: <RichTextExample />,
+            },
+            { path: ":chapterId/add-test", element: <QuizBoard /> },
+            {
+              path: ":chapterId/add-test/:quizId",
+              element: <QuizQuestionsWrapper />,
+              children: [
+                { index: true, element: <QuizQuestionsList /> },
+                { path: "question", element: <AddQuestion /> },
+                { path: "question/:questionId", element: <AddQuestion /> },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -264,16 +268,14 @@ function App() {
 
     {
       path: "test",
-      element: <Editor/>
+      element: <Editor />,
     },
-    
-    
   ]);
-  return(
+  return (
     <QueryClientProvider client={queryClient} contextSharing={true}>
       <RouterProvider router={router} />
-        <Toaster position="top-center" reverseOrder={false} />
-      <ReactQueryDevtools/>
+      <Toaster position="top-center" reverseOrder={false} />
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }

@@ -3,6 +3,7 @@ import { Discussion, DiscussionQuestion, Reply } from "../models/index.js";
 // ask questions
 export const askDiscussionQuestion = async (req, res) => {
     const { title, description, tags, classroomId } = req.body;
+    console.log('c-id', classroomId)
     try {
       const newDiscussionQuestion = await DiscussionQuestion.create({
         title,
@@ -12,11 +13,13 @@ export const askDiscussionQuestion = async (req, res) => {
         seen: [req.user._id],
       });
       const discussion = await Discussion.findOne({classroomId: classroomId});
+      console.log('discussion', discussion)
       await discussion.updateOne({
         $push: { discussion: newDiscussionQuestion._id },
       });
       return res.status(201).json(newDiscussionQuestion);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "Server Error from ask" });
     }
   }

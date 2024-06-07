@@ -89,24 +89,23 @@ const getAllUsers = async (req, res) => {
 const getUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
-    return res.json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-    });
+    return res.json(user);
   }
   throw NotFoundError("User not found");
 };
 const editUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   // console.log(req.body);
-  const { username, email, profileImg } = req.body;
-  if (user) {
-    const { username, email, password } = req.body;
+  if (user) { 
+    const { username, profileImg, phoneNumber, bio, studentId, fullName, password } = req.body;
 
+    user.fullName = fullName || user.fullName;  
     user.username = username || user.username;
     user.profileImg = profileImg || user.profileImg;
     // user.password = password || user.password; 
+    user.phoneNumber = phoneNumber || user.phoneNumber;
+    user.bio = bio || user.bio; 
+    user.studentId = studentId || user.studentId;
     if (password) {
       user.password = password;
     }

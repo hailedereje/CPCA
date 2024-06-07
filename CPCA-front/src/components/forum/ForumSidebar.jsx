@@ -16,7 +16,7 @@ const Sidebar = () => {
     `}
     >
       <li
-        onClick={() => navigate("/forum/content")}
+        onClick={() => navigate("content")}
         className={
           "flex items-center gap-2 mx-2 md:mx-0 px-4 py-1 hover:cursor-pointer " +
           (location === "/forum/content" ? active : " ")
@@ -39,7 +39,7 @@ const Sidebar = () => {
         HOME
       </li>
       <li
-        onClick={() => navigate("/forum/myqns")}
+        onClick={() => navigate("myqns")}
         className={
           "flex items-center gap-2 mx-2 md:mx-0 px-4 py-1 cursor-pointer " +
           (location === "/forum/myqns" ? active : "")

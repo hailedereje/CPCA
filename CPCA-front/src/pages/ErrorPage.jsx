@@ -18,7 +18,7 @@ export const ErrorPage = () => {
             Sorry, we couldn’t find the page you’re looking for.
           </p>
           <div className='mt-10 flex items-center justify-center p-3 rounded-md bg-blue-500'>
-            <Link to='/' className='text-white'>
+          <Link to='/' className='text-white'>
               go back home
             </Link>
           </div>
