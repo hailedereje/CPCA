@@ -18,7 +18,6 @@ export const createClassroom = async (req, res) => {
     await Discussion.create({ classroomId: newClassroom._id });
     res.status(201).json(newClassroom);
   } catch (error) {
-    console.log(error)
     res.status(500).json({ error: "Failed to create classroom" });
   }
 };

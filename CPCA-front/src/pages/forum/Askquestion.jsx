@@ -53,7 +53,7 @@ const Askquestion = () => {
             <input
               name="title"
               className="mt-2 w-full h-10 px-3 rounded outline-none border-none
-                shadow-sm bg-base-200"
+                shadow-sm"
               type="text"
             />
           </div>

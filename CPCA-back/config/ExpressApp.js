@@ -7,7 +7,8 @@ import { userRoutes, courseRoutes, lessonRoutes,
   quizQuestionRoutes,
   discussionQuestionRoutes,
   progressRoutes,
-  classroomRoutes} from "../routes/index.js";
+  classroomRoutes,
+  notificationRoutes} from "../routes/index.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -34,6 +35,7 @@ const App = async (app) => {
   app.use("/api/v1/practice_question", practiceQuestionRoutes)
   app.use("/api/v1/progress", progressRoutes)
   app.use("/api/v1/classroom", classroomRoutes)
+  app.use("/api/v1/notifications", notificationRoutes)
 
   app.use(notFound);
   app.use(errorHandler);

@@ -4,7 +4,7 @@ const links = [
     { id: 1, url: "", text: "Details" },
     { id: 3, url: "students", text: "Students" },
     { id: 5, url: "invitations", text: "Invitations" },
-    { id: 6, url: "forum", text: "Discussions" },
+    { id: 6, url: "discussions", text: "Discussions" },
   ];
   
   const ClassroomNavbar = () => {

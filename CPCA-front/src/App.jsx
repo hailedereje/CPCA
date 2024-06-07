@@ -63,16 +63,20 @@ import ClassroomDetails from "./pages/classroom/ClassroomDetails";
 import Students from "./pages/classroom/Students";
 import { LabPractice } from "./components/practiceQuestions/code-edtior";
 import { CreateLab, UpdateLab } from "./components/createCourse/components/create-lab";
+import { io } from "socket.io-client";
+import SocketContext from "@/context/DiscussionContext";
 import StudentsLayout from "./pages/classroom/StudentsLayout";
 import InviteForm from "./components/Classroom/InvitationForm";
 
-
-
 const queryClient = new QueryClient();
+
+export const socket = io("http://localhost:5000", {
+  withCredentials: true,
+  secure: true,
+});
 
 function App() {
   const user = useSelector((state) => state.userState.user);
-  console.log(user);
   const getDashboardRoutes = () => {
     if (!user) return [];
 
@@ -297,9 +301,11 @@ function App() {
   ]);
   return (
     <QueryClientProvider client={queryClient} contextSharing={true}>
-      <RouterProvider router={router} />
-      <Toaster position="top-center" reverseOrder={false} />
-      <ReactQueryDevtools />
+      <SocketContext.Provider value={socket}>
+        <RouterProvider router={router} />
+          <Toaster position="top-center" reverseOrder={false} />
+        <ReactQueryDevtools/>
+      </SocketContext.Provider>
     </QueryClientProvider>
   );
 }
