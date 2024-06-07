@@ -1,3 +1,5 @@
+import 'froala-editor/css/themes/gray.min.css';
+
 export const tagList = [
   { id: "e24d1f1a-b12a-421b-a482-789c4f12b34f", title: "Programming" },
   { id: "17f908c2-d01c-4eef-827e-d421f2e02a1b", title: "Web Development" },
@@ -37,6 +39,7 @@ export const tagList = [
 ];
 
 export const defaultFroalaConfig = {
+    theme:'gray',
     documentReady: true,
     toolbarSticky: true,
     heightMax: 200,

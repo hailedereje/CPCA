@@ -94,11 +94,10 @@ export const CodeEditor = () => {
         </div>
       </div>
       <div className="xs:hidden lg:block">
-        {" "}
-        <Languages />{" "}
+        <Languages />
       </div>
-      <div className="flex sm:flex-col lg:flex-row w-full">
-        <div className="pl-10 flex overflow-hidden w-full sm:w-full border border-[#333]">
+      <div className="flex sm:flex-col lg:flex-row w-full pt-14">
+        <div className="lg:pl-10 flex overflow-hidden w-full sm:w-full border border-[#333]">
           <EditorModal
             language={editorContent.language}
             value={editorContent.code}
@@ -121,7 +120,7 @@ export const CodeEditor = () => {
                 ))
               ) : (
                 <p className="text-gray-400 text-sm">
-                  'Click "Run code" to see the output here'
+                  run tha code to see the out put
                 </p>
               )}
             </div>

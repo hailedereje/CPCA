@@ -1,19 +1,16 @@
 import { useState } from "react";
 
 import { useDispatch, useSelector } from 'react-redux'
-import { addTopic, removeTopic, toggleShow } from "../../features/course/createCourse";
-import { nanoid } from "@reduxjs/toolkit";
 import { TextEditor } from "./fraolaEditor";
 import { CodeContentEditor } from "./code-content";
 import { SyntaxHighlighter } from "./syntax-highlighter";
-import { UploadImage } from "./uploadImage";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
-import { useQueryClient } from "@tanstack/react-query";
 import { addLessonItem, createLessonItem, openConfirmationDialog, updateLessonItem } from "@/features/course/coursSidebarSlice";
 import { useLesson, useLessons } from "../createCourse/hooks/course-hooks";
 import { Loading } from "../createCourse/components/loader";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ActionTypes } from "../createCourse/action.Types";
+import { Breadcrumb } from "../createCourse/components/bread-crumb";
 
 const deleteLessonItemMessage = "Warning: You are about to delete a lesson item. This action cannot be undone"
 
@@ -21,7 +18,6 @@ function RichTextExample() {
   const param = useParams()
   const dispatch = useDispatch()
   const { data, isSuccess, isError,error } = useLesson(param.lessonId)
-  // const {data,isSuccess,isError,error} = useLessons(param.)
 
   if(isError) {
     console.log(error)
@@ -40,9 +36,9 @@ function RichTextExample() {
   }
 
   return (
-    <>
-
-      {!isSuccess ? <Loading/>: <div className="flex flex-col items-center justify-center w-full py-10 max-w-[1024px] ">
+    <div className="py-10 p-4 flex flex-col w-full gap-4">
+      <Breadcrumb items={[{ title: "Courses", link: "courses" }, { title: data?.data?.lesson.title }]} />
+      {!isSuccess ? <Loading/>: <div className="flex flex-col w-full mx-auto max-w-[1024px]">
         <div className={`group flex items-end  gap-4 ${data.data.lesson.content.length === 0 ? "":"hidden"}`}>
           <EditLinks />
           <span className="text-xl font-medium uppercase">click here and start adding contents to your <span className="text-red-400">lesson</span></span>
@@ -50,7 +46,7 @@ function RichTextExample() {
         <CodeContentEditor lessonId={param.lessonId}/>
         <TextEditor lessonId={param.lessonId}/>
         {data.data.lesson.content.map((item, idx) => (
-          <div className="group w-full h-full flex items-end  gap-3" key={idx}>
+          <div className="group w-full h-full flex items-end  gap-3 " key={idx}>
             <div className="invisible group-hover:visible">
               <EditLinks idx={idx}/>
             </div>
@@ -105,11 +101,9 @@ function RichTextExample() {
           </div>
         ))}
       </div>}
-    </>
+    </div>
   );
 }
-
-
 
 export default RichTextExample;
 
@@ -153,3 +147,4 @@ const EditLinks = ({ idx }) => {
     </div>
   )
 }
+

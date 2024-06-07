@@ -12,16 +12,11 @@ import { AdminLinks, InstructLinks, StudentLinks } from "@/utils/links";
 
 function Dashboard() {
     const [openSidebar,setOpenSidebar] = useState(false)
-    
-  // const {isLoading } = useQuery({
-  //   queryKey:['courseListFilter'],
-  //   queryFn: () => newRequests.get("/courses/courseListFilter"),
-  //   staleTime: 1000 * 6 * 600, 
-  // })
+
 
   return (
     <>
-      <div className="flex flex-col space-y-12 dark:text-white">
+      <div className="flex flex-col dark:text-white h-screen">
         <div className="flex justify-between gap-3 h-12 items-center fixed top-0 z-20 shadow-md w-full p-2 bg-white dark:bg-[#212121]">
           <DropdownMenu/>
           <div className="">
@@ -32,9 +27,9 @@ function Dashboard() {
             <MdDarkMode size={20}/>
           </div>
         </div>
-        <div className="flex w-full p-2 items-center justify-center">
-          {/* {isLoading ? <Loading/>:<Outlet/>} */}
-          <Outlet />
+        {/* <div className="">hello</div> */}
+        <div className="flex h-full dark:bg-[#212121] pt-14">
+          <Outlet/>
         </div> 
       </div>
     </>

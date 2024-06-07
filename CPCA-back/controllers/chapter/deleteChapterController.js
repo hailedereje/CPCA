@@ -4,7 +4,6 @@ import Course from "../../models/course.js";
 export const deletChapterController = async (req, res) => {
     try {
         const { chapterId,courseId } = req.query;
-        console.log(chapterId,courseId)
          await Course.findByIdAndUpdate(courseId, { $pull: { chapters: chapterId } });
          await Chapter.findByIdAndDelete(chapterId);
 

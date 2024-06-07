@@ -3,24 +3,20 @@ import { useNavigate } from "react-router-dom";
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = window.location.pathname;
-  const active =
-    "  bg-purple-100 text-purple-500 px-4 py-2 rounded-sm border-l-4 border-purple-700";
+  const active = "bg-gray-300";
   return (
     <div
       className={`${
         open ? "block" : "hidden"
-      } md:block  w-[60%] md:w-[15%] h-full md:h-80 fixed left-0 md:left-28 z-10 top-14 md:top-24 list-none
-    text-gray-300 text-sm space-y-4 py-8 md:py-0
-     bg-white dark:bg-[#1E212A] md:dark:bg-inherit shadow-md 
-     md:shadow-none md:bg-transparent
-    `}
+      } md:block list-none
+    text-gray-700 text-sm space-y-1 py-8 md:py-0`}
     >
       <li
         onClick={() => navigate("content")}
         className={
-          "flex items-center gap-2 mx-2 md:mx-0 px-4 py-1 hover:cursor-pointer " +
-          (location === "/forum/content" ? active : " ")
-        }
+          `w-48 flex items-center gap-2 px-4 py-2 hover:cursor-pointer rounded-md bg-gray-100
+          ${location.includes("content") ? active : ""}
+          `}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -41,9 +37,9 @@ const Sidebar = () => {
       <li
         onClick={() => navigate("myqns")}
         className={
-          "flex items-center gap-2 mx-2 md:mx-0 px-4 py-1 cursor-pointer " +
-          (location === "/forum/myqns" ? active : "")
-        }
+          `w-48 flex items-center gap-2 px-4 py-2 hover:cursor-pointer rounded-md bg-gray-100
+          ${location.includes("myqns") ? active : ""}
+          `}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -56,6 +56,17 @@ export const getClassroomsByUserId = async (req, res) => {
   }
 };
 
+// get classroom by id
+export const getClassroomsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const classroom = await Classroom.findById({ id });
+    res.status(200).json(classroom);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch classrooms" });
+  }
+};
+
 // Archive a classroom
 export const archiveClassroom = async (req, res) => {
   try {
@@ -88,6 +99,8 @@ export const deleteClassroom = async (req, res) => {
 // Invite users to a classroom
 export const inviteStudents = async (req, res) => {
   const { emails, classroomId } = req.body;
+  const classroom = await Classroom.findById(classroomId);
+  const instructor = await User.findById(classroom.instructorId);
   if (!emails || !Array.isArray(emails)) {
     return res.status(400).json({ error: "Invalid email list" });
   }
@@ -108,11 +121,13 @@ export const inviteStudents = async (req, res) => {
       to: email,
       subject: "Classroom Invitation",
       text: `You are invited to join the classroom. Click here to join: ${invitationLink}`,
+      // html: `<p>You are invited to join the classroom. Click <a href="${invitationLink}">here</a> to join.</p>`,
     };
 
     try {
       await transporter.sendMail(mailOptions);
-      await Invitation.create({ email, token, classroomId });
+      const student = await User.findOne({email: email});
+      await Invitation.create({ email, username: student?.username, token, classroomId, classroomName: classroom.name, instructor: instructor.username });
     } catch (error) {
       console.log("error", error);
       // res.status(400).json({message: `Failed to send email to ${email}`});
@@ -158,6 +173,13 @@ export const joinClassroom = async (req, res) => {
   if (!user) {
     throw new NotFoundError("User not found");
   }
+  if (classroom.students.includes(user._id)) {
+    return res.status(400).json({ message: "You have already joined this classroom" });
+  }
+  await classroom.updateOne({
+    $push: { students: user._id },
+  });
+  res.status(200).json({ message: "Joined classroom successfully" });
 };
 
 // get discussion by classroomId

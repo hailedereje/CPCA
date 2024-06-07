@@ -12,6 +12,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { stripHtmlTags } from "@/utils/html-striper";
 import { useGetQuiz } from "@/components/createCourse/hooks/quiz-hooks";
 
+
 export const QuizQuestionsWrapper = () => {
   const param = useParams()
   const { data, isLoading,isSuccess } = useGetQuiz(param.quizId)
@@ -26,7 +27,7 @@ export const QuizQuestionsWrapper = () => {
 const QuizQuestionsList = () => {
   const client = useQueryClient()
   const param = useParams()
-  console.log(param.quizId)
+  
   const data = client.getQueryData(['quiz', param.quizId])
  
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,36 +39,6 @@ const QuizQuestionsList = () => {
 
   const questions = data?.data.questions
   const totalPages = questions?.length
-
-  const handleDelete = (id) => {
-    newRequests
-      .delete(`/quiz_question/${id}`)
-      .then((response) => {
-        console.log(response.data);
-        setQuestions(questions.filter((question) => question._id !== id));
-      })
-      .catch((error) => {
-        console.error("Error deleting question:", error);
-      });
-  };
-
-  const handleDetails = (question) => {
-    setShowDetails(true);
-    setSelectedQuestion(question);
-  };
-
-  const handleUpdateQuestion = (updatedQuestion) => {
-    setQuestions((prevQuestions) =>
-      prevQuestions.map((question) =>
-        question.id === updatedQuestion.id ? updatedQuestion : question
-      )
-    );
-  };
-
-  const handleCloseModal = () => {
-    setShowDetails(false);
-    setSelectedQuestion("");
-  };
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -102,8 +73,7 @@ const QuizQuestionsList = () => {
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               className="p-2 rounded-full bg-gray-300 dark:bg-transparent"
-            >
-              
+            > 
               <MdNavigateBefore size={20} />
             </button>
             <span>
@@ -116,7 +86,7 @@ const QuizQuestionsList = () => {
               }
               className="p-2 rounded-full bg-gray-300 dark:bg-transparent"
             >
-              
+              <MdNavigateNext size={20} />
             </button>
           </div>
         </div>
