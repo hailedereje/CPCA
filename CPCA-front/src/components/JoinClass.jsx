@@ -14,7 +14,6 @@ const JoinClass = () => {
         alert("Invalid invitation link")
         return navigate("/login")
       }
-      console.log(response.data);
       setData(response.data);
     }
     fetchData();
@@ -23,6 +22,7 @@ const JoinClass = () => {
   const handleJoinClass = async () => {
     try {
       await newRequests.get(`/classroom/join/${token}`);
+      await newRequests.put("/classroom/invitation/accept", { token });
       navigate("/login")
     } catch (error) {
       console.error("error", error.response.data.message);

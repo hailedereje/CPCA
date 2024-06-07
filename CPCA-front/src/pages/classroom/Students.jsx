@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import StudentList from "@/components/Classroom/StudentList";
 import { useOutletContext } from "react-router-dom";
 

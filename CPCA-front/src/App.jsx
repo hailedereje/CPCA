@@ -67,6 +67,7 @@ import { io } from "socket.io-client";
 import SocketContext from "@/context/DiscussionContext";
 import StudentsLayout from "./pages/classroom/StudentsLayout";
 import InviteForm from "./components/Classroom/InvitationForm";
+import InvitationList from "./pages/classroom/Invitations";
 
 const queryClient = new QueryClient();
 
@@ -127,7 +128,7 @@ function App() {
                     { path: "invite", element: <InviteForm /> },
                   ],
                 },
-                { path: "invitations", element: <div>Invitations Page</div> },
+                { path: "invitations", element: <InvitationList /> },
                 { path: "status", element: <div>Status Page</div> },
                 { path: "discussions", element: <ForumLayout />, children: [
                   { path: "", element: <Navigate to="content" /> }, 

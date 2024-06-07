@@ -35,8 +35,7 @@ export const getClassroomsByInstructorId = async (req, res) => {
 
 // get classroom by id
 export const getClassroomById = async (req, res) => {
-  const { id } = req.params;
-  console.log("id", id);  
+  const { id } = req.params; 
   const classroom = await Classroom.findById(id).populate( "students");
 
   if (!classroom) {
@@ -101,13 +100,10 @@ export const inviteStudents = async (req, res) => {
   const { emails, classroomId } = req.body;
   const classroom = await Classroom.findById(classroomId);
   const instructor = await User.findById(classroom.instructorId);
-  if (!emails || !Array.isArray(emails)) {
-    // return res.status(400).json({ error: "Invalid email list" });
+  if (emails.length === 0 || !Array.isArray(emails)) {
     throw new BadRequestError('invalid email list'); 
 
   }
-console.log('trying to send email')
-  console.log("password", process.env.PASSWORD);
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -142,6 +138,16 @@ console.log('trying to send email')
   res.status(200).json({ message: "Invitations sent" });
 };
 
+// Get all invitations
+export const getAllInvitations = async (req, res) => {
+  try {
+    const invitations = await Invitation.find();
+    res.status(200).json(invitations);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch invitations" });
+  }
+};
+
 // Get invitation by token
 export const getInvitationByToken = async (req, res) => {
   try {
@@ -153,6 +159,22 @@ export const getInvitationByToken = async (req, res) => {
     res.status(200).json(invitation);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch invitation" });
+  }
+};
+
+// Update invitation accepted to true
+export const updateInvitationAccepted = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const invitation = await Invitation.findOne({token: token});
+    if (!invitation) {
+      return res.status(404).json({ error: "Invitation not found" });
+    }
+    invitation.accepted = true;
+    await invitation.save();
+    res.status(200).json(invitation);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update invitation" });
   }
 };
 

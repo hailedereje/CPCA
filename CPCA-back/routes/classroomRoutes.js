@@ -10,7 +10,9 @@ import {
   inviteStudents,
   joinClassroom,
   getDiscussionByClassroomId,
-  getMyQuestionsByClassroomId
+  getMyQuestionsByClassroomId,
+  getAllInvitations,
+  updateInvitationAccepted
 } from "../controllers/index.js";
 
 import {
@@ -28,6 +30,7 @@ router.get("/:id", getClassroomById);
 router.use(authenticate);
 
 // router.use(studentCheck);
+
 router.get("/student/:id", getClassroomsByUserId);
 router.get("/discussion/:id", getDiscussionByClassroomId);
 router.get("/discussion/my-questions/:id", getMyQuestionsByClassroomId);
@@ -37,6 +40,8 @@ router.post("/", createClassroom);
 router.get('/:id', getClassroomById)
 router.delete("/delete/:id", deleteClassroom);
 router.post("/invite", inviteStudents);
+router.get("/invitations/all", getAllInvitations);
+router.put("/invitation/accept", updateInvitationAccepted);
 router.get("/instructor/:id", getClassroomsByInstructorId);
 
 
