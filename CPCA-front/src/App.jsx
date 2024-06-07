@@ -1,5 +1,5 @@
 import "react-toastify/dist/ReactToastify.css";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Outlet, Navigate, RouterProvider } from "react-router-dom";
 import {
   Dashboard,
   ErrorPage,
@@ -12,9 +12,8 @@ import {
 } from "./pages";
 import { loader as CoursesLoader } from "./pages/dashboard/AllCourses";
 // import { loader as SingleCourseLoader } from "./pages/Lessons";
-import { action, action as loginAction } from "./pages/Login";
+import { action as loginAction } from "./pages/Login";
 import { action as registerAction } from "./pages/Register";
-import { action as EditProfileAction } from "./pages/dashboard/Profile";
 import { store } from "./store";
 import {
   Activities,
@@ -47,11 +46,15 @@ import QuestionsList from "./pages/question/QuestionList";
 import AddQuestionForm from "./pages/question/PracticeQuestionForm";
 import PracticeQuestionPage from "./pages/question/Practice";
 import UsersList from "./pages/dashboard/UsersList";
-import QuizQuestionsList, { QuizQuestionsWrapper } from "./pages/quiz/QuizQuestionsList";
+import QuizQuestionsList, {
+  QuizQuestionsWrapper,
+} from "./pages/quiz/QuizQuestionsList";
 import { EditCourseError } from "./components/createCourse/error/editCourseError";
 import { StarterPage } from "./components/createCourse/components/starterPage";
 import ClassroomLayout from "./pages/classroom/ClassroomLayout";
-import CreateClassroom, { createClassroomAction } from "./pages/classroom/CreateClassroom";
+import CreateClassroom, {
+  createClassroomAction,
+} from "./pages/classroom/CreateClassroom";
 import Stats from "./pages/classroom/Stats";
 import Classrooms from "./pages/classroom/Classrooms";
 import { JoinClass } from "./components";
@@ -83,7 +86,6 @@ function App() {
         {
           path: "profile",
           element: <Profile />,
-          action: EditProfileAction(store),
         },
         { path: "users", element: <UsersList /> },
       ];
@@ -93,27 +95,37 @@ function App() {
         {
           path: "profile",
           element: <Profile />,
-          action: EditProfileAction(store),
         },
         { path: "add-course", element: <RichTextExample /> },
-        
+
         {
           path: "courses",
           element: <AllCourses />,
           loader: CoursesLoader(store),
         },
         {
-          path: 'classrooms',
+          path: "classrooms",
           element: <ClassroomLayout />,
           children: [
-            { index: true, element: <Classrooms/>},
-            { path: "create", element: <CreateClassroom/>, action: createClassroomAction(store)}, 
+            { index: true, element: <Classrooms /> },
+            {
+              path: "create",
+              element: <CreateClassroom />,
+              action: createClassroomAction(store),
+            },
             {
               path: ":id",
               element: <ClassroomDetails />,
               children: [
-                { index: true, element: <div>Details Page</div> },
-                { path: "students", element: <Students />},
+                { index: true, element: <Stats /> },
+                {
+                  path: "students",
+                  element: <StudentsLayout />,
+                  children: [
+                    {index: true, element: <Students />},
+                    { path: "invite", element: <InviteForm /> },
+                  ],
+                },
                 { path: "invitations", element: <div>Invitations Page</div> },
                 { path: "status", element: <div>Status Page</div> },
                 { path: "discussions", element: <ForumLayout />, children: [
@@ -137,7 +149,6 @@ function App() {
         {
           path: "profile",
           element: <Profile />,
-          action: EditProfileAction(store),
         },
         {
           path: "courses",
@@ -149,7 +160,7 @@ function App() {
           path: "courses/:id",
           element: <Lessons />,
         },
-        { path: "courses/:id/lessons/:id", element: <LessonDetails/> },
+        { path: "courses/:id/lessons/:id", element: <LessonDetails /> },
 
         {
           path: "enrolled-courses",
@@ -167,7 +178,7 @@ function App() {
       element: <HomeLayout />,
       // errorElement: <ErrorPage />,
       children: [
-        { index: true, element: <Landing /> },
+        { index: true, element: <Home /> },
 
         {
           path: "register/:token?",
@@ -217,8 +228,8 @@ function App() {
       children: [
         ...getDashboardRoutes(),
         {
-          path:'course',
-          element: <CreateCourse/>,
+          path: "course",
+          element: <CreateCourse />,
         },
         {
           path: 'course/update/:id',
@@ -226,6 +237,7 @@ function App() {
             {index:true,element:<UpdataCourse/>},
             {path:"lab", element: <CreateLab/>},
             {path:"lab/:labId", element: <UpdateLab/> },
+            {path: "lab/:labId/view",element: <LabPractice/>},
             {
               path:'chapters',
               element: <CourseLayout/>,
@@ -247,20 +259,21 @@ function App() {
             },
           ]
         },
-      
+
         {
           path: "courses/draft",
-          element: <DraftCourses/>
+          element: <DraftCourses />,
         },
 
         {
-          path:'course/update/:id/chapters',
-          element: <CourseLayout/>,
+          path: "course/update/:id/chapters",
+          element: <CourseLayout />,
           // errorElement:<EditCourseError/>,
           children: [
            { index: true, element: <StarterPage/>},
            { path: ":chapterId/lessons/:lessonId",element:<RichTextExample/>},
            { path: ":chapterId/add-test",element:<QuizBoard/>},
+           
            { 
             path: ":chapterId/add-test/:quizId",
             element:<QuizQuestionsWrapper/>,
@@ -282,18 +295,16 @@ function App() {
 
     {
       path: "test",
-      element: <Editor/>
+      element: <Editor />,
     },
-    
-    
   ]);
-  return(
+  return (
     <QueryClientProvider client={queryClient} contextSharing={true}>
       <SocketContext.Provider value={socket}>
-      <RouterProvider router={router} />
-        <Toaster position="top-center" reverseOrder={false} />
-      <ReactQueryDevtools/>
-    </SocketContext.Provider>
+        <RouterProvider router={router} />
+          <Toaster position="top-center" reverseOrder={false} />
+        <ReactQueryDevtools/>
+      </SocketContext.Provider>
     </QueryClientProvider>
   );
 }

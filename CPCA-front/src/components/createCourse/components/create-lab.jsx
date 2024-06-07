@@ -28,11 +28,11 @@ export const UpdateLab = () => {
     const {data,isLoading} = useGetLab(param.labId)
     return (
         <div className="w-full"> 
-            {isLoading ? <Loading/>:<CreateLab data={data}/>}
+            {isLoading ? <Loading/>:<CreateLab data={data} title={"update Lab"}/>}
         </div>
     )
 }
-export const CreateLab = ({data}) => {
+export const CreateLab = ({data,title}) => {
 
     const param = useParams();
     const [loading, setLoading] = useState(false);
@@ -72,8 +72,8 @@ export const CreateLab = ({data}) => {
     }
 
     return (
-        <div className="flex flex-col items-center editor gap-6 w-full h-full dark:bg-gray-600 py-4">
-            <h1 className="text-center text-4xl font-bold">Create Lab</h1>
+        <div className="flex flex-col items-center overflow-auto editor gap-6 w-full h-full dark:bg-gray-600 py-4">
+            <h1 className="text-center text-4xl font-bold capitalize">{title || "Create Lab"}</h1>
             <div className="max-w-4xl p-2 rounded-md flex xxs:flex-col md:flex-row gap-4 justify-between shadow-md">
                 <div className="flex flex-col gap-4">
                     <span className="flex flex-col gap-4">

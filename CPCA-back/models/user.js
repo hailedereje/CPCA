@@ -3,6 +3,7 @@ import { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 const userSchema = new Schema(
   {
+    fullName: {type: String, default: null},
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -10,6 +11,9 @@ const userSchema = new Schema(
     role: { type: String, enum: ["student", "instructor", "admin"] },
     isAdmin: { type: Boolean, default: false },
     isInstructor: { type: Boolean, default: false },
+    phoneNumber: {type: String, default: null}, 
+    bio: {type: String, default: null},
+    studentId: {type: String, default: null},
     //aditional fields to add
   },
   {

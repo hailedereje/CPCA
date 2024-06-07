@@ -17,11 +17,11 @@ export const createClassroom = async (req, res) => {
     await Discussion.create({ classroomId: newClassroom._id });
     res.status(201).json(newClassroom);
   } catch (error) {
-    res.status(500).json({ error: "Error creating classroom" });
+    res.status(500).json({ error: "Failed to create classroom" });
   }
 };
 
-// Get all classrooms by instructorId
+// Get all classrooms by instruc6658d50970ef68ebbd316285torId
 export const getClassroomsByInstructorId = async (req, res) => {
   try {
     const { id } = req.params;

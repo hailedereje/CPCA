@@ -4,28 +4,41 @@ export const authService = (builder) => ({
     loginUser: builder.mutation({
         query: (credentials) => ({
             url: '/user/login', 
-            method: 'post', 
+            method: 'POST', 
             body: credentials
         })
     }),
     logoutUser: builder.mutation({
         query: () => ({
-            method: 'post', 
+            method: 'POST', 
             url: '/user/logout'
         })
     }), 
     registerUser:  builder.mutation({
         query: (credentials)=> ({
             url: '/user/register',
-            method: 'post', 
+            method: 'POST', 
             body: credentials,
         })
     }), 
     editUserInfo: builder.mutation({
         query: (data) => ({
-            url: '/user/edit', 
-            method: 'patch', 
+            url: '/user/profile', 
+            method: 'PATCH', 
             body: data
         })
-    })
+    }), 
+    fetchUserProfile: builder.query({
+        query: () => ({
+            url: '/user/profile',
+            method: 'GET',
+        }),
+    }),
+    fetchUserById: builder.query({
+        query: (id) => ({
+            url: `/user/${id}`,
+            method: 'GET',
+        }),
+    }),
+
 })

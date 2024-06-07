@@ -24,6 +24,6 @@ export default {
   },
   plugins: [require('@tailwindcss/typography'), require('daisyui')],
   daisyui: {
-    themes: ['light'],
+    themes: ['dim'],
   },
 };

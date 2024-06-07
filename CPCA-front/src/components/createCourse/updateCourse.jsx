@@ -22,6 +22,7 @@ import { GiTestTubes } from "react-icons/gi";
 import { IconWrapper } from "./components/icon-wrapper";
 import { AiOutlinePlus } from "react-icons/ai";
 import { MenuWrapper } from "./components/courseDrawer";
+import { CiViewTimeline } from "react-icons/ci";
 
 
 
@@ -31,11 +32,11 @@ export const UpdataCourse = () => {
   const { data, isLoading } = useCourse(param.id)
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex w-full h-full flex-col gap-4">
       {isLoading ?
         <Loading />
         :
-        <div className="w-full flex dark:text-white gap-6 p-2 lg:ml-[33%] ">
+        <div className="w-full h-screen overflow-auto editor flex dark:text-white gap-6 p-2 lg:pl-[30%]">
           <div className="flex flex-col max-w-xs w-1/3 h-full dark:bg-gray-600 xxs:hidden lg:block fixed top-12 left-0 z-20">
             <CourseComponent course={data.data.course} />
           </div>
@@ -45,7 +46,7 @@ export const UpdataCourse = () => {
             </SidebarDrawer>
           </div>
 
-          <div className="w-full h-full flex flex-col gap-2">
+          <div className="w-full h-full flex flex-col gap-2 ">
             <div className="flex gap-4 flex-col md:flex-row">
               <UploadImage id={param.id} img={data.data.course.templateImg} />
               <Tags courseId={param.id} />
@@ -97,10 +98,14 @@ const Lab = ({lab}) => {
     await deleteLab({courseId:param.id,labId:lab._id})
   }
   return (
-    <div key={lab._id} className="flex flex-col gap-2 max-h-20 p-1 border dark:bg-gray-800 rounded-md dark:border-gray-700 relative">
-            <div className="flex justify-between items-center gap-4 relative">
-              <span className="text-sm capitalize font-medium">{lab.title}</span>
+    <div className="flex flex-col gap-2 max-h-20 p-2 border dark:bg-gray-800 rounded-md dark:border-gray-700 relative">
+            <div className="flex justify-between items-start gap-x-4 relative">
+              <span className="text-sm capitalize font-medium line-clamp-1">{lab.title}</span>
               <MenuWrapper >
+                  <li onClick={() => navigate(`lab/${lab._id}/view`)} className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
+                      <span className="mr-2"><CiViewTimeline /></span>
+                      <span className='text-sm capitalize'>view</span>
+                  </li>
                   <li onClick={() => navigate(`lab/${lab._id}`)} className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
                       <span className="mr-2"><MdModeEditOutline /></span>
                       <span className='text-sm capitalize'>update</span>
@@ -112,7 +117,7 @@ const Lab = ({lab}) => {
             </MenuWrapper>
             </div>
             
-            <span className="text-xs text-gray-500 dark:text-white md:line-clamp-2">{lab.description}</span>
+            <span className="text-xs text-gray-400 dark:text-white md:line-clamp-2 line-clamp-1">{lab.description}</span>
           </div>
   )
 }
@@ -120,7 +125,7 @@ const Lab = ({lab}) => {
 
 const CourseComponent = ({ course }) => {
   return (
-    <div className="max-w-4xl max-h-screen border overflow-auto editor w-full">
+    <div className="max-w-4xl max-h-screen overflow-auto editor w-full">
       <div className="w-full p-2 flex justify-between items-center gap-2 bg-blue-500">
         <div className="flex gap-2 items-center">
           <span><FaBook /></span>
@@ -190,7 +195,7 @@ export const SidebarDrawer = ({ children }) => {
       ></div>
       <div className={` fixed  h-full top-0 left-0 bg-white dark:bg-gray-600 dark:text-white w-80 z-20 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
         {children}
-        <button onClick={toggleDrawer} className="absolute top-1/2 -right-10 rounded p-2 bg-black/25">
+        <button onClick={toggleDrawer} className="absolute top-1/2 -right-10 rounded p-2 bg-gray-500/10 h-32">
           {isOpen ? <FaChevronLeft /> : <FaChevronRight />}
         </button>
       </div>

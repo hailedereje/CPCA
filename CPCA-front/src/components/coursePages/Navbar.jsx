@@ -33,6 +33,7 @@ const Navbar = () => {
     navigate("/");
     dispatch(logoutUser());
   };
+
   return (
     <header className="fixed top-0 z-50 w-screen bg-white dark:bg-gray-800 dark:text-white p-4 border border-gray-200">
       <div className="mx-auto flex justify-between items-center">
@@ -47,7 +48,7 @@ const Navbar = () => {
             Courses
           </NavLink>
           <NavLink
-            to="/courses"
+            to="/category"
             className="hover:text-gray-400 dark:hover:text-gray-300"
           >
             Category
@@ -114,31 +115,48 @@ const Navbar = () => {
                 <Notifications onNotificationCount={handleNotificationCount}/>
             </div>
           </div>
-          <div onClick={toggleDropdown} className="relative">
-            <img
-              className="object-contain mask mask-circle btn"
-              src={user.profileImg}
-              alt="profileImg"
-            />
-            <div
-              className={`absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg overflow-hidden z-50 ${
-                dropdownOpen ? "block" : "hidden"
-              }`}
-            >
-              <NavLink
-                to="/dashboard"
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                Dashboard
-              </NavLink>
+          {user ? (
+            <div onClick={toggleDropdown} className="relative">
+              <img
+                className="object-contain mask mask-circle btn"
+                src={user.profileImg}
+                alt="profileImg"
+              />
               <div
-                onClick={handleLogout}
-                className="block px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className={`absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg overflow-hidden z-50 ${
+                  dropdownOpen ? "block" : "hidden"
+                }`}
               >
-                Logout
+                <NavLink
+                  to="/dashboard"
+                  className="block px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  Dashboard
+                </NavLink>
+                <div
+                  onClick={handleLogout}
+                  className="block px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                >
+                  Logout
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center space-x-4">
+              <NavLink
+                to="/login"
+                className="hover:text-gray-400 dark:hover:text-gray-300"
+              >
+                Login
+              </NavLink>
+              <NavLink
+                to="/register"
+                className="hover:text-gray-400 dark:hover:text-gray-300"
+              >
+                Register
+              </NavLink>
+            </div>
+          )}
         </div>
       </div>
     </header>

@@ -65,8 +65,8 @@ export const UploadImage = ({id,img}) => {
           <input type="file" id="image-file" hidden onChange={handleFileChange} />
         </>
       ) : (
-        <div className="relative w-full">
-          <img src={imageUrl} className="object-cover w-full h-full rounded-md" alt="Uploaded" />
+        <div className="relative w-fit">
+          <img src={imageUrl} className="object-cover w-full h-full rounded-md max-h-[100px] max-w-[100px]" alt="Uploaded" />
           <label htmlFor="image-file" className="absolute cursor-pointer top-2 right-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:ring-blue-300 font-medium rounded-full p-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
             <AiOutlineEdit size={20} />
           </label>
@@ -78,7 +78,7 @@ export const UploadImage = ({id,img}) => {
         <div className="fixed z-20 flex items-center justify-center top-0 left-0 w-screen h-screen bg-black/60">
           <div className="relative z-30 flex flex-col items-center gap-4 w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
             <div className="relative w-full h-64">
-              <img src={URL.createObjectURL(image)} className="object-cover w-full h-full rounded-md" alt="Selected" />
+              <img src={URL.createObjectURL(image)} className="object-contain w-full h-full rounded-md" alt="Selected" />
             </div>
             <div className="flex gap-4 w-full">
               <button
