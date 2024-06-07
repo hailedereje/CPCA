@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Loading, SectionTitle } from "@/components";
 import { FiBookOpen, FiInfo, FiPlus } from "react-icons/fi"; // Importing Feather Icons
 import { Link } from "react-router-dom";
+
 function Classrooms() {
   const { user } = useSelector((store) => store.userState); // Get the current user from the Redux store
   const instructorId = user?._id; // Assuming the user object contains the instructor's ID
@@ -15,8 +16,8 @@ function Classrooms() {
     refetchOnMountOrArgChange: true,
   });
 
-  console.log('classrooms', classrooms);
-  console.log("user", user);
+  // console.log('classrooms', classrooms);
+  // console.log("user", user);
 
   if (isLoading) {
     return <Loading />;
@@ -33,7 +34,7 @@ function Classrooms() {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container  bg-black-200 mx-auto p-4">
       <div className="flex justify-between border-b p-3  border-base-300 items-center mb-4">
         <h1 className="text-2xl font-bold">Classrooms</h1>
         <Link to={"create"}>
@@ -59,7 +60,6 @@ function Classrooms() {
                 <p className="text-gray-700">{classroom.description}</p>
               </div>
             </Link>
-            {/* Add more classroom details as needed */}
           </div>
         ))}
       </div>

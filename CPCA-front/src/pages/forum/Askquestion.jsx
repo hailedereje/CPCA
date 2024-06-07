@@ -27,11 +27,7 @@ const Askquestion = () => {
     if (res.status === 201) {
       socket.emit("send-question", {question, room: "discussion", user});
       toast.success("Question added successfully");
-<<<<<<< HEAD
-      navigate(-1);
-=======
       navigate("content");
->>>>>>> 8645c6294ef58657dad18d349819bef862f6450d
     }
   };
 
@@ -40,19 +36,10 @@ const Askquestion = () => {
       <Toaster />
       <div
         className="flex flex-col items-center 
-<<<<<<< HEAD
-      gap-4 mb-12 border border-base-200 p-4 pb-6 rounded-md 
-        mt-12"
-      >
-        <h1
-          className="text-2xl font-bold text-center
-        
-=======
       gap-4 border p-4 rounded-md"
       >
         <h1
           className="text-2xl font-bold text-center
->>>>>>> 8645c6294ef58657dad18d349819bef862f6450d
         "
         >
           Start a New Topic
@@ -93,11 +80,7 @@ const Askquestion = () => {
           </div>
           <button
             type="submit"
-<<<<<<< HEAD
-            className="mt-8 w-[230px] mx-auto flex items-center gap-2 btn btn-primary rounded-md shadow-sm px-8 py-2 cursor-pointer"
-=======
             className="flex items-center mt-8 gap-2 bg-blue-700 rounded-md px-8 py-2 cursor-pointer"
->>>>>>> 8645c6294ef58657dad18d349819bef862f6450d
           >
             <Share />
             <span className="">Ask on Community</span>

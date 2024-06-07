@@ -2,10 +2,10 @@ import React from 'react'
 import { Outlet, useOutletContext } from 'react-router-dom'
 
 function StudentsLayout() {
-    const {classroom} = useOutletContext() 
+    const {classroom, refetch} = useOutletContext() 
   return (
     <div>
-      <Outlet context={{classroom}}/>
+      <Outlet context={{classroom, refetch}}/>
     </div>
   )
 }

@@ -20,12 +20,7 @@ export const Layout = () => {
   const users = useSelector((state) => state.socketState.onlineUsers);
   const dispatch = useDispatch();
   const {classroom} = useOutletContext()
-<<<<<<< HEAD
-  console.log("classroom", classroom);
-// console.log(useOutletContext());
-=======
   console.log(classroom);
->>>>>>> 8645c6294ef58657dad18d349819bef862f6450d
   useEffect(() => {
     socket.connect();
     socket.auth = user;

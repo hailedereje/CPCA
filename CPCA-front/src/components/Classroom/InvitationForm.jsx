@@ -1,14 +1,19 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
 import toast from 'react-hot-toast';
 import { useInviteStudentsMutation } from '@/api';
+import { FiUpload } from 'react-icons/fi'; // Importing Feather Icons
+import { useOutletContext } from 'react-router-dom';
 
-const InviteForm = ({ classroomId }) => {
+const InviteForm = () => {
+  const {classroom} = useOutletContext(); 
+  console.log(classroom);
+  const classroomId = classroom._id;
+  console.log('invitation form ')
   const [file, setFile] = useState(null);
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
-  const [inviteStudents, { isLoading, isError }] = useInviteStudentsMutation();
+  const [inviteStudents, { isLoading, isError, error }] = useInviteStudentsMutation();
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -56,14 +61,14 @@ const InviteForm = ({ classroomId }) => {
       setEmail('');
       setEmails([]);
       setFile(null);
-    } catch (error) {
+    } catch (err) {
       console.error('Error sending invitations', error);
-      toast.error('Failed to send invitations. Please try again.');
+      toast.error(error.msg || 'Failed to send invitations. Please try again.');
     }
   };
 
   return (
-    <form onSubmit={handleInvite} className="p-6 bg-white rounded-lg shadow-md">
+    <form onSubmit={handleInvite} className="p-6 w-1/2 border border-base-100 rounded-lg shadow-md">
       <div className="mb-4">
         <label className="block text-gray-700 font-bold mb-2">Invite by Email:</label>
         <input
@@ -91,14 +96,17 @@ const InviteForm = ({ classroomId }) => {
           </div>
         )}
       </div>
-      <div className="mb-4">
+      <div className="mb-4 ">
         <label className="block text-gray-700 font-bold mb-2">Or Upload Excel File:</label>
-        <input
-          type="file"
-          accept=".xlsx, .xls"
-          onChange={handleFileChange}
-          className="input input-bordered w-full"
-        />
+        <label className="input input-bordered  border cursor-pointer">
+          <input
+            type="file"
+            accept=".xlsx, .xls"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+          Upload file
+        </label>
         {file && <p className="mt-2 text-gray-600">Selected file: {file.name}</p>}
       </div>
       <button type="submit" className="btn btn-primary w-full" disabled={isLoading}>

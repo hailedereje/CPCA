@@ -63,6 +63,8 @@ import ClassroomDetails from "./pages/classroom/ClassroomDetails";
 import Students from "./pages/classroom/Students";
 import { LabPractice } from "./components/practiceQuestions/code-edtior";
 import { CreateLab, UpdateLab } from "./components/createCourse/components/create-lab";
+import StudentsLayout from "./pages/classroom/StudentsLayout";
+import InviteForm from "./components/Classroom/InvitationForm";
 
 
 

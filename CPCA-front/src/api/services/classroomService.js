@@ -21,13 +21,13 @@ export const classroomService = (builder) => ({
   }),
   deleteClassroom: builder.mutation({
     query: (id) => ({
-      url: `/classrooms/${id}`,
+      url: `/classroom/${id}`,
       method: "DELETE",
     }),
   }),
   inviteStudents: builder.mutation({
     query: (invitationData) => ({
-      url: "classrooms/invite",
+      url: "classroom/invite",
       method: "POST",
       body: invitationData,
     }),

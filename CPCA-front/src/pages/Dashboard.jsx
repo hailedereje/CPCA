@@ -16,8 +16,8 @@ function Dashboard() {
 
   return (
     <>
-      <div className="flex flex-col dark:text-white h-screen">
-        <div className="flex justify-between gap-3 h-12 items-center fixed top-0 z-20 shadow-md w-full p-2 bg-white dark:bg-[#212121]">
+      <div className="flex flex-col  h-screen">
+        <div className="flex justify-between gap-3 h-12 items-center fixed top-0 z-20 shadow-md w-full p-2 ">
           <DropdownMenu/>
           <div className="">
             Admin Dashboard
@@ -28,7 +28,7 @@ function Dashboard() {
           </div>
         </div>
         {/* <div className="">hello</div> */}
-        <div className="flex h-full dark:bg-[#212121] pt-14">
+        <div className="flex h-full  pt-14">
           <Outlet/>
         </div> 
       </div>

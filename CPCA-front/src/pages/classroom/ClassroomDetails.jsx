@@ -13,6 +13,8 @@ function ClassroomDetails() {
     data: classroom,
     error,
     isLoading,
+    isFetching,
+    refetch
   } = useGetClassroomByIdQuery(id, {
     refetchOnMountOrArgChange: true,
   });
@@ -36,7 +38,7 @@ function ClassroomDetails() {
       </div>
       <div className="mt-4">
         
-        <Outlet context={{classroom}} />
+        <Outlet context={{classroom, isFetching, refetch}} />
       </div>
     </div>
   );

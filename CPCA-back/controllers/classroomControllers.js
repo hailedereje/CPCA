@@ -1,6 +1,7 @@
 import { Classroom, Discussion, Invitation, User } from "../models/index.js";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import { BadRequestError } from "../errors/index.js";
 
 // Create a new classroom
 export const createClassroom = async (req, res) => {
@@ -102,8 +103,11 @@ export const inviteStudents = async (req, res) => {
   const classroom = await Classroom.findById(classroomId);
   const instructor = await User.findById(classroom.instructorId);
   if (!emails || !Array.isArray(emails)) {
-    return res.status(400).json({ error: "Invalid email list" });
+    // return res.status(400).json({ error: "Invalid email list" });
+    throw new BadRequestError('invalid email list'); 
+
   }
+console.log('trying to send email')
   console.log("password", process.env.PASSWORD);
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -129,7 +133,7 @@ export const inviteStudents = async (req, res) => {
       const student = await User.findOne({email: email});
       await Invitation.create({ email, username: student?.username, token, classroomId, classroomName: classroom.name, instructor: instructor.username });
     } catch (error) {
-      console.log("error", error);
+      throw new Error('failed to send email ')
       // res.status(400).json({message: `Failed to send email to ${email}`});
     }
   };
@@ -158,8 +162,10 @@ export const joinClassroom = async (req, res) => {
   const { token } = req.params;
   const invitation = await Invitation.findOne({ token: token });
   console.log("invitation", invitation);
+  console.log('joining classroom')
   if (!invitation) {
-    return res.status(400).json({ message: "Invalid invitation link" });
+    // return res.status(400).json({ message: "Invalid invitation link" });
+    throw new BadRequestError('invalid invitation link'); 
   }
   const id = invitation.classroomId;
   const classroom = await Classroom.findById(id);
@@ -174,7 +180,7 @@ export const joinClassroom = async (req, res) => {
     throw new NotFoundError("User not found");
   }
   if (classroom.students.includes(user._id)) {
-    return res.status(400).json({ message: "You have already joined this classroom" });
+    throw new BadRequestError('already joined classroom')
   }
   await classroom.updateOne({
     $push: { students: user._id },
