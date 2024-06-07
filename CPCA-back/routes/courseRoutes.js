@@ -42,7 +42,7 @@ const router = express.Router();
 router.use(authenticate);
 
 router.get("/", getAllCourses);
-router.use(isAdmin);
+// router.use(isAdmin);
 router.get("/all",getAllCourses)
 router.get("/all/drafts",getAllDraftCourses)
 router.get("/courseListFilter",getCourseListFilter)
@@ -58,6 +58,7 @@ router.get("/course",getSinglCourseController)
 router.patch("/:id", updateCourse);
 router.delete("/:id", deleteCourse);
 router.post("/course/chapters/chapter/upload-image",uploadImageController)
+
 
 // chapter
 router.get("/course/chapters",getChaptersController)

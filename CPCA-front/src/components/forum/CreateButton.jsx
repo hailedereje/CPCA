@@ -5,8 +5,8 @@ const CreateButton = () => {
   const navigate = useNavigate();
   return (
     <div
-      onClick={() => navigate("/forum/ask")}
-      className="flex items-center gap-2 bg-purple-700 rounded-md shadow-sm px-8 py-2 cursor-pointer"
+      onClick={() => navigate("ask")}
+      className="flex items-center gap-2 bg-blue-700 rounded-md shadow-sm px-8 py-2 cursor-pointer"
     >
       <Add />
       <span className="text-white">Start a New Topic</span>

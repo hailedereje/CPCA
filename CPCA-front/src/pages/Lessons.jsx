@@ -24,7 +24,7 @@ function Lessons() {
 
       <div className="flex  gap-x-1 ">
         <div className="flex flex-auto  ">
-            <AllLessonsGrid />
+            <AllLessonsGrid id={""}/>
         </div>
         {/* <div className="w-[350px] flex-none border border-base-300 bg-base-200 p-2 rounded h-screen ">
           <h2 className="border-b border-base-300 mb-2 pb-2">Top Chats</h2>

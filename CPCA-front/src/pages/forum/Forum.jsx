@@ -59,8 +59,7 @@ const Forum = () => {
 
   return (
     <div
-      className="md:w-[60%] flex flex-col items-center gap-y-5 
-    md:gap-8 mt-12 "
+      className="flex flex-col items-center w-1/2 bg-slate-100 dark:bg-slate-400"
     >
       <Toaster />
       {questions.length > 0 &&
@@ -69,14 +68,12 @@ const Forum = () => {
           return (
             <div
               key={index}
-              className="w-[96%] md:w-[80%] mx-12 flex flex-col 
-              items-end  p-3 md:p-4 rounded-md bg-purple-100
-               dark:bg-slate-400"
+              className="flex flex-col 
+              items-end p-3 md:p-4 border-b border-gray-200"
             >
               <div
                 className="w-full bg-white dark:bg-[#1E212A]
-              
-              p-4 md:p-5 rounded-lg shadow-md flex items-start gap-5"
+                p-4 md:p-5 rounded-lg shadow-md flex items-start gap-5"
               >
                 <div className="left-section space-y-1 text-center">
                   <LikeDislikeComponent question={question} />
