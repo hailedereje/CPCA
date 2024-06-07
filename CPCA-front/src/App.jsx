@@ -65,7 +65,8 @@ import { LabPractice } from "./components/practiceQuestions/code-edtior";
 import { CreateLab, UpdateLab } from "./components/createCourse/components/create-lab";
 import { io } from "socket.io-client";
 import SocketContext from "@/context/DiscussionContext";
-import Notifications from "./components/Notification";
+import StudentsLayout from "./pages/classroom/StudentsLayout";
+import InviteForm from "./components/Classroom/InvitationForm";
 
 const queryClient = new QueryClient();
 
