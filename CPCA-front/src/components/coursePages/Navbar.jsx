@@ -9,7 +9,7 @@ import Notifications from "../Notification";
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [toggleNotification, setToggleNotification] = useState(false);
-  const [count, setCount] = useState(0); // [1
+  const [count, setCount] = useState(0);
   const { user } = useSelector((state) => state.userState);
   const theme = useSelector((state) => state.userState.theme);
   const dispatch = useDispatch();
@@ -106,21 +106,25 @@ const Navbar = () => {
                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                   />
                 </svg>
-                <span className="badge badge-xs bg-red-500 indicator-item text-white">{count}</span>
+                <span className="badge badge-xs bg-red-500 indicator-item text-white">
+                  {count}
+                </span>
               </div>
             </button>
-            <div className={`absolute right-0 w-96 ${
+            <div
+              className={`absolute right-0 w-96 ${
                 toggleNotification ? "block" : "hidden"
-              }`}>
-                <Notifications onNotificationCount={handleNotificationCount}/>
+              }`}
+            >
+              <Notifications onNotificationCount={handleNotificationCount} />
             </div>
           </div>
           {user ? (
             <div onClick={toggleDropdown} className="relative">
               <img
-                className="object-contain mask mask-circle btn"
                 src={user.profileImg}
-                alt="profileImg"
+                alt="profile"
+                className="w-10 h-10 rounded-full mr-2 cursor-pointer"
               />
               <div
                 className={`absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg overflow-hidden z-50 ${
