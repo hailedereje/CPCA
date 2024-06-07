@@ -1,5 +1,5 @@
 import "react-toastify/dist/ReactToastify.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import {
   Dashboard,
   ErrorPage,
@@ -232,6 +232,7 @@ function App() {
             {index:true,element:<UpdataCourse/>},
             {path:"lab", element: <CreateLab/>},
             {path:"lab/:labId", element: <UpdateLab/> },
+            {path: "lab/:labId/view",element: <LabPractice/>},
             {
               path:'chapters',
               element: <CourseLayout/>,
@@ -267,6 +268,7 @@ function App() {
            { index: true, element: <StarterPage/>},
            { path: ":chapterId/lessons/:lessonId",element:<RichTextExample/>},
            { path: ":chapterId/add-test",element:<QuizBoard/>},
+           
            { 
             path: ":chapterId/add-test/:quizId",
             element:<QuizQuestionsWrapper/>,
