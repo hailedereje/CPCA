@@ -53,20 +53,17 @@ const StudentList = ({ students }) => {
                   {student.email || "N/A"}
                 </p>
                 <p className="text-gray-600 dark:text-gray-400">
-                  {student.phoneNumber || "N/A"}
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
                   {student.studentId || "N/A"}
                 </p>
                 <p className="text-gray-600 dark:text-gray-400">
                   {student.username || "N/A"}
                 </p>
                 <p className="text-gray-600 dark:text-gray-400">
+                  {student.phoneNumber || "N/A"}
+                </p>
+                <p className="text-gray-600 dark:text-gray-400">
                   {student.bio || "N/A"}
                 </p>
-                <span className="mt-2 inline-block px-3 py-1 text-sm font-semibold bg-blue-500 text-white rounded-full">
-                  {student.role || "N/A"}
-                </span>
               </div>
             </article>
           ))}
@@ -76,12 +73,12 @@ const StudentList = ({ students }) => {
           <table className="table table-zebra w-full">
             <thead>
               <tr>
+                <th></th>
                 <th>Full Name</th>
                 <th>Email</th>
-                <th>Phone Number</th>
                 <th>Student ID</th>
                 <th>Username</th>
-                <th>Role</th>
+                <th>Phone Number</th>
               </tr>
             </thead>
             <tbody>
@@ -93,13 +90,21 @@ const StudentList = ({ students }) => {
                 </tr>
               )}
               {students.map((student) => (
-                <tr key={student.email}>
+                <tr key={student.email} className="items-center">
+                  <td>
+                    <img
+                      src={
+                        student.profileImg || "https://via.placeholder.com/150"
+                      }
+                      alt={student.username}
+                      className="h-10 w-10 rounded-lg object-cover mr-4"
+                    />
+                  </td>
                   <td>{student.fullName || "N/A"}</td>
                   <td>{student.email || "N/A"}</td>
-                  <td>{student.phoneNumber || "N/A"}</td>
                   <td>{student.studentId || "N/A"}</td>
                   <td>{student.username || "N/A"}</td>
-                  <td>{student.role || "N/A"}</td>
+                  <td>{student.phoneNumber || "N/A"}</td>
                 </tr>
               ))}
             </tbody>

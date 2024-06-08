@@ -4,7 +4,7 @@ import { Link, Outlet } from 'react-router-dom'
 
 function ClassroomLayout() {
   return (
-    <div className='w-full   h-full p-3'>
+    <div className='w-full h-full'>
       {/* <div className="text-md breadcrumbs mb-6">
         <ul>
           <li>

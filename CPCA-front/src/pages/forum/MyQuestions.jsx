@@ -22,14 +22,14 @@ const Content = () => {
 
   return (
     <div
-    className="flex flex-col items-center bg-slate-100 w-1/2"
+    className="flex flex-col items-center bg-slate-100 w-1/2 h-[82vh] overflow-y-auto"
     >
       {data?.discussion.length > 0 &&
         data.discussion.map((question, index) => {
           return (
             <div
               key={index}
-              className="flex flex-col items-end p-2 md:p-4 border-b border-gray-200" 
+              className="flex flex-col items-end p-2 md:p-4 border-b border-gray-200 w-full" 
           >
               <div
                 className="w-full bg-white dark:bg-[#1E212A] p-4 md:p-5 rounded-lg shadow-md flex items-start gap-5"

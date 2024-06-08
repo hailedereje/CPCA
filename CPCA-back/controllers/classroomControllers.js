@@ -141,7 +141,8 @@ export const inviteStudents = async (req, res) => {
 // Get all invitations
 export const getAllInvitations = async (req, res) => {
   try {
-    const invitations = await Invitation.find();
+    const { id } = req.params;
+    const invitations = await Invitation.find({classroomId: id});
     res.status(200).json(invitations);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch invitations" });

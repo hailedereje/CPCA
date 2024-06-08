@@ -2,14 +2,12 @@ import { useState } from 'react';
 import * as XLSX from 'xlsx';
 import toast from 'react-hot-toast';
 import { useInviteStudentsMutation } from '@/api';
-import { FiUpload } from 'react-icons/fi'; // Importing Feather Icons
+import { AiFillFileExcel } from 'react-icons/ai';
 import { useOutletContext } from 'react-router-dom';
 
 const InviteForm = () => {
-  const {classroom} = useOutletContext(); 
-  console.log(classroom);
+  const { classroom } = useOutletContext(); 
   const classroomId = classroom._id;
-  console.log('invitation form ')
   const [file, setFile] = useState(null);
   const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
@@ -25,7 +23,7 @@ const InviteForm = () => {
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
         const json = XLSX.utils.sheet_to_json(worksheet);
-        const emailList = json.map(row => row.email);
+        const emailList = json.map(row => Object.keys(row).find(key => key.toLowerCase() === 'email') ? row[Object.keys(row).find(key => key.toLowerCase() === 'email')] : null).filter(email => email);
         setEmails(emailList);
       };
       reader.readAsArrayBuffer(selectedFile);
@@ -70,15 +68,26 @@ const InviteForm = () => {
   return (
     <form onSubmit={handleInvite} className="p-6 w-1/2 border border-base-100 rounded-lg shadow-md">
       <div className="mb-4">
-        <label className="block text-gray-700 font-bold mb-2">Invite by Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={handleEmailChange}
-          onKeyDown={handleEmailKeyDown}
-          className="input input-bordered w-full"
-          placeholder="Enter email and press Enter"
-        />
+        <label className="block text-gray-700 font-bold mb-2">Invite by Email / Upload Excel File</label>
+        <div className="flex items-center">
+          <input
+            type="email"
+            value={email}
+            onChange={handleEmailChange}
+            onKeyDown={handleEmailKeyDown}
+            className="input input-bordered w-full"
+            placeholder="Enter email and press Enter"
+          />
+          <label className="cursor-pointer text-5xl ml-2">
+            <input
+              type="file"
+              accept=".xlsx, .xls"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            <AiFillFileExcel className="mr-2 text-green-500"/>
+          </label>
+        </div>
         {emails.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-2">
             {emails.map((email, index) => (
@@ -96,19 +105,7 @@ const InviteForm = () => {
           </div>
         )}
       </div>
-      <div className="mb-4 ">
-        <label className="block text-gray-700 font-bold mb-2">Or Upload Excel File:</label>
-        <label className="input input-bordered  border cursor-pointer">
-          <input
-            type="file"
-            accept=".xlsx, .xls"
-            onChange={handleFileChange}
-            className="hidden"
-          />
-          Upload file
-        </label>
-        {file && <p className="mt-2 text-gray-600">Selected file: {file.name}</p>}
-      </div>
+      {file && <p className="ml-4 mt-2 text-gray-600">Selected file: {file.name}</p>}
       <button type="submit" className="btn btn-primary w-full" disabled={isLoading}>
         {isLoading ? 'Sending...' : 'Send Invitations'}
       </button>

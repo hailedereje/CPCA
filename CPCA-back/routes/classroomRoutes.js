@@ -24,6 +24,7 @@ import {
 const router = express.Router();
 
 router.get("/invitation/:token", getInvitationByToken);
+router.put("/invitation/accept", updateInvitationAccepted);
 router.get("/join/:token", joinClassroom);
 router.get("/:id", getClassroomById);
 
@@ -40,8 +41,7 @@ router.post("/", createClassroom);
 router.get('/:id', getClassroomById)
 router.delete("/delete/:id", deleteClassroom);
 router.post("/invite", inviteStudents);
-router.get("/invitations/all", getAllInvitations);
-router.put("/invitation/accept", updateInvitationAccepted);
+router.get("/invitations/:id", getAllInvitations);
 router.get("/instructor/:id", getClassroomsByInstructorId);
 
 
