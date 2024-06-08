@@ -1,13 +1,12 @@
 import { useGetClassroomsByInstructorIdQuery } from "@/api";
-import React from "react";
 import { useSelector } from "react-redux";
-import { Loading, SectionTitle } from "@/components";
-import { FiBookOpen, FiInfo, FiPlus } from "react-icons/fi"; // Importing Feather Icons
+import { Loading } from "@/components";
+import { FiBookOpen, FiInfo, FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 function Classrooms() {
-  const { user } = useSelector((store) => store.userState); // Get the current user from the Redux store
-  const instructorId = user?._id; // Assuming the user object contains the instructor's ID
+  const { user } = useSelector((store) => store.userState);
+  const instructorId = user?._id;
   const {
     data: classrooms,
     error,
@@ -15,9 +14,6 @@ function Classrooms() {
   } = useGetClassroomsByInstructorIdQuery(instructorId, {
     refetchOnMountOrArgChange: true,
   });
-
-  // console.log('classrooms', classrooms);
-  // console.log("user", user);
 
   if (isLoading) {
     return <Loading />;

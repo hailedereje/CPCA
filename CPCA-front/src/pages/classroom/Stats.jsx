@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { format } from 'date-fns';
-import { FaRegClock, FaUsers, FaBook, FaCalendarAlt, FaInfoCircle } from 'react-icons/fa';
+import { FaUsers, FaBook, FaCalendarAlt, FaInfoCircle } from 'react-icons/fa';
 import { BiLoaderCircle } from 'react-icons/bi';
 import { FiRefreshCw } from 'react-icons/fi';
 
@@ -13,7 +13,7 @@ function Stats() {
   }
 
   const { classroom, refetch, isFetching } = context;
-  const { _id: id, name, description, createdAt, students } = classroom;
+  const { name, description, createdAt, students } = classroom;
 
   useEffect(() => {
     if (!isFetching) {
@@ -33,14 +33,14 @@ function Stats() {
           <div className="p-6 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
             <div className="flex items-center">
               <FaInfoCircle className="text-blue-500 h-6 w-6 mr-2" />
-              <h3 className="text-lg font-semibold">Classroom ID:</h3>
+              <h3 className="text-lg font-semibold">Classroom Name:</h3>
             </div>
-            <p>{id}</p>
+            <p>{name}</p>
           </div>
           <div className="p-6 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
             <div className="flex items-center">
               <FaBook className="text-green-500 h-6 w-6 mr-2" />
-              <h3 className="text-lg font-semibold">Name</h3>
+              <h3 className="text-lg font-semibold">Course Name</h3>
             </div>
             <p>{name}</p>
           </div>

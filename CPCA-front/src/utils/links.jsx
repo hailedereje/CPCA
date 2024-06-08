@@ -1,20 +1,13 @@
 import { IoBarChartSharp } from "react-icons/io5";
-import { MdQueryStats } from "react-icons/md";
-import { FaWpforms } from "react-icons/fa";
 import { ImProfile } from "react-icons/im";
-import { BsFiles } from "react-icons/bs";
 import { FaUsers } from "react-icons/fa";
 import { RiDraftLine, RiSoundModuleLine } from "react-icons/ri";
 import { FaChalkboardTeacher } from "react-icons/fa";
-import { AiOutlineFileAdd } from "react-icons/ai";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { GiTeacher } from "react-icons/gi";
 
 export const InstructLinks = [
-  {id: 0, text: "Home", path: "/", icon: <IoBarChartSharp />},
   { id: 1, text: "Activities", path: "/dashboard", icon: <IoBarChartSharp /> },
-  { id: 2, text: "All courses", path: "courses", icon: <MdQueryStats /> },
-  { id: 3, text: "Add-course", path: "add-course", icon: <FaWpforms /> },
   { id: 4, text: "profile", path: "profile", icon: <ImProfile /> },
   {id: 5, text: "classrooms", path: "classrooms", icon: <FaChalkboardTeacher/>
 }
@@ -22,10 +15,8 @@ export const InstructLinks = [
 
 export const StudentLinks = [
   { id: 1, text: "Status", path: "/dashboard", icon: <IoBarChartSharp /> },
-  { id: 2, text: "all Courses", path: "courses", icon: <MdQueryStats /> },
-  { id: 3, text: "Enroll", path: "add-course", icon: <FaWpforms /> },
   { id: 4, text: "profile", path: "profile", icon: <ImProfile /> },
-  { id: 5, text: "Files", path: "Files", icon: <BsFiles /> },
+  {id: 5, text: "classrooms", path: "courses", icon: <FaChalkboardTeacher/>}
 ];
 
 export const AdminLinks = [
@@ -39,18 +30,6 @@ export const AdminLinks = [
 
 
 export const instructorActivities = [
-  // {
-  //   id: "1",
-  //   text: "Add Course",
-  //   activity: "Add",
-  //   icon: <IoMdAddCircleOutline size={50} />,
-  // },
-  // {
-  //   id: "2",
-  //   text: "Add Lesson",
-  //   activity: "Add",
-  //   icon: <BiBookAdd size={50} />,
-  // },
   {
     id: "1",
     text: "Create Classroom",
@@ -58,14 +37,6 @@ export const instructorActivities = [
     icon: <FaChalkboardTeacher size={50} />,
     path: 'classroom'
     
-  },
-  {
-    id: "2",
-    text: "Add Files",
-    activity: "Add",
-    icon: <AiOutlineFileAdd size={50} />,
-    path: ''
-
   },
   {
     id: "3",
