@@ -17,6 +17,7 @@ export const AddInstructorForm = () => {
     try {
       await newRequests.post("/user/create-instructor", user);
       setUser({ email: "", password: "", username: "" });
+      setPopupOpen(false);
     } catch (error) {
       console.log("Error adding instructor:", error);
     }
@@ -58,7 +59,7 @@ export const AddInstructorForm = () => {
                   <h1 className="text-2xl ">ADD INSTRUCTOR</h1>
                   <img src={add} alt="add icon" className="w-1/3 h-20 -mt-6" />
                 </div>
-                <form className="max-w-md mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
+                <form className="">
                   <label
                     htmlFor="username"
                     className="block text-gray-700 text-sm font-semibold mb-2"

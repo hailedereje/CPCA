@@ -28,7 +28,7 @@ function Dashboard() {
   return (
     <>
       <div className="flex flex-col  h-screen">
-        <div className="flex justify-between gap-3 h-12 items-center fixed top-0 z-20 shadow-md w-full p-2 ">
+        <div className="flex justify-between gap-3 h-12 items-center fixed top-0 z-10 shadow-md w-full p-2 bg-white">
           <DropdownMenu />
           <div className="">Dashboard</div>
           <div className="flex gap-3">
