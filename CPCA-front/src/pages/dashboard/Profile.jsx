@@ -10,6 +10,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 
+console.log(cloudName); 
+
 export default function Profile() {
   const { data: user, refetch: refetchUserProfile } = useFetchUserProfileQuery({
     refetchOnMountOrArgChange: true,

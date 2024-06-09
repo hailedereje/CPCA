@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FiList, FiGrid, FiUserPlus } from "react-icons/fi";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 const StudentList = ({ students }) => {
   const [view, setView] = useState("detailed");
@@ -36,39 +36,40 @@ const StudentList = ({ students }) => {
       {view === "detailed" ? (
         <ul className="space-y-2">
           {students.map((student, index) => (
-            <article
-              key={student.email}
-              className="flex border border-base-200 shadow-sm items-center flex-col gap-y-4 sm:flex-row flex-wrap p-3"
-            >
-              <img
-                src={student.profileImg || "https://via.placeholder.com/150"}
-                alt={student.username}
-                className="h-24 w-24 rounded-lg object-cover mr-4"
-              />
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold">
-                  {student.fullName || "N/A"}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {student.email || "N/A"}
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {student.phoneNumber || "N/A"}
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {student.studentId || "N/A"}
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {student.username || "N/A"}
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {student.bio || "N/A"}
-                </p>
-                <span className="mt-2 inline-block px-3 py-1 text-sm font-semibold bg-blue-500 text-white rounded-full">
-                  {student.role || "N/A"}
-                </span>
-              </div>
-            </article>
+            <NavLink to={`${student._id}`}  key={student._id}>
+              <article
+                className="flex border border-base-200 shadow-sm items-center flex-col gap-y-4 sm:flex-row flex-wrap p-3 hover:bg-gray-100 transition"
+              >
+                <img
+                  src={student.profileImg || "https://via.placeholder.com/150"}
+                  alt={student.username}
+                  className="h-24 w-24 rounded-lg object-cover mr-4"
+                />
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold">
+                    {student.fullName || "N/A"}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {student.email || "N/A"}
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {student.phoneNumber || "N/A"}
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {student.studentId || "N/A"}
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {student.username || "N/A"}
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {student.bio || "N/A"}
+                  </p>
+                  <span className="mt-2 inline-block px-3 py-1 text-sm font-semibold bg-blue-500 text-white rounded-full">
+                    {student.role || "N/A"}
+                  </span>
+                </div>
+              </article>
+            </NavLink>
           ))}
         </ul>
       ) : (
@@ -93,8 +94,12 @@ const StudentList = ({ students }) => {
                 </tr>
               )}
               {students.map((student) => (
-                <tr key={student.email}>
-                  <td>{student.fullName || "N/A"}</td>
+                <tr key={student._id}>
+                  <td>
+                    <Link to={`${student._id}`} className="text-blue-500 hover:underline">
+                      {student.fullName || "N/A"}
+                    </Link>
+                  </td>
                   <td>{student.email || "N/A"}</td>
                   <td>{student.phoneNumber || "N/A"}</td>
                   <td>{student.studentId || "N/A"}</td>

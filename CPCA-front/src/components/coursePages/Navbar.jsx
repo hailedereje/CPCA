@@ -35,12 +35,12 @@ const Navbar = () => {
   };
 
   return (
-    <header className="fixed top-0 z-50 w-screen bg-white dark:bg-gray-800 dark:text-white p-4 border border-gray-200">
+    <header className="fixed top-0 z-50 w-screen bg-white dark:bg-gray-800 dark:text-white p-4 ">
       <div className="mx-auto flex justify-between items-center">
         <div className="flex items-center">
           <h1 className="text-2xl font-bold">CPCA</h1>
         </div>
-        <nav className="flex items-center space-x-4">
+        {/* <nav className="flex items-center space-x-4">
           <NavLink
             to="/courses"
             className="hover:text-gray-400 dark:hover:text-gray-300"
@@ -65,15 +65,15 @@ const Navbar = () => {
           >
             Quiz Questions
           </NavLink>
-        </nav>
-        <div className="relative">
+        </nav> */}
+        {/* <div className="relative">
           <input
             type="text"
             placeholder="Search courses..."
             className="bg-gray-200 dark:bg-gray-700 p-2 rounded-full dark:text-white focus:outline-none w-96"
           />
           <FaSearch className="absolute right-3 top-3 dark:text-white" />
-        </div>
+        </div> */}
         <div className="flex items-center">
           <button className="btn ml-3 btn-ghost btn-circle">
             <label className="swap swap-rotate">
