@@ -68,6 +68,7 @@ import SocketContext from "@/context/DiscussionContext";
 import StudentsLayout from "./pages/classroom/StudentsLayout";
 import InviteForm from "./components/Classroom/InvitationForm";
 import InvitationList from "./pages/classroom/Invitations";
+import CourseDetails from "./pages/course/CourseDetails";
 
 const queryClient = new QueryClient();
 
@@ -167,7 +168,8 @@ function App() {
               element: <ClassroomDetails />,
               children: [
                 { index: true, element: <Stats /> },
-                { path: "content", element: <div>Content</div> },
+                { path: "content", element: <CourseDetails /> },
+                { path: "content/labs/:labId", element: <LabPractice /> },
                 { path: "progress", element: <div>Progress</div> },
                 { path: "discussions", element: <ForumLayout />, children: [
                   { path: "", element: <Navigate to="content" /> }, 

@@ -35,7 +35,7 @@ export const Layout = () => {
   return (
     <QueryClientProvider client={queryClient} contextSharing={true}>
       <div
-        className="flex justify-between items-start"
+        className="flex justify-between items-start px-10"
       >
         <div className="">
           <Sidebar />

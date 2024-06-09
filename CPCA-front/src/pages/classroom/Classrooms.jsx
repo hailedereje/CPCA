@@ -11,7 +11,7 @@ function Classrooms() {
     data: classrooms,
     error,
     isLoading,
-  } = user.role === "instructor" ? useGetClassroomsByInstructorIdQuery(instructorId, {
+  } = user.role === "instructor" ? useGetClassroomsByInstructorIdQuery(userId, {
     refetchOnMountOrArgChange: true,
   }): useGetClassroomsByUserIdQuery(userId, {
     refetchOnMountOrArgChange: true,
