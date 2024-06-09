@@ -13,7 +13,7 @@ const progressSchema = new mongoose.Schema({
   chapterId: { type: mongoose.Schema.Types.ObjectId, ref: 'Chapter', required: true},
   lessonId: { type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' },
   quizId: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz' },
-  practiceQuestionId: { type: mongoose.Schema.Types.ObjectId, ref: 'PracticeQuestion' },
+  labId: { type: mongoose.Schema.Types.ObjectId, ref: 'Lab' },
   completed: { type: Boolean, default: false },
   unlocked: { type: Boolean, default: false }, 
   score: { type: Number},
