@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FiList, FiGrid, FiUserPlus } from "react-icons/fi";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const StudentList = ({ students }) => {
   const [view, setView] = useState("detailed");
@@ -35,37 +35,36 @@ const StudentList = ({ students }) => {
       </div>
       {view === "detailed" ? (
         <ul className="space-y-2">
-          {students.map((student, index) => (
-            <article
-              key={student.email}
-              className="flex border border-base-200 shadow-sm items-center flex-col gap-y-4 sm:flex-row flex-wrap p-3"
-            >
-              <img
-                src={student.profileImg || "https://via.placeholder.com/150"}
-                alt={student.username}
-                className="h-24 w-24 rounded-lg object-cover mr-4"
-              />
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold">
-                  {student.fullName || "N/A"}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {student.email || "N/A"}
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {student.studentId || "N/A"}
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {student.username || "N/A"}
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {student.phoneNumber || "N/A"}
-                </p>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {student.bio || "N/A"}
-                </p>
-              </div>
-            </article>
+          {students.map((student) => (
+            <NavLink to={`${student._id}`} key={student._id}>
+              <article className="flex border border-base-200 shadow-sm items-center flex-col gap-y-4 sm:flex-row flex-wrap p-3 hover:bg-gray-100 cursor-pointer">
+                <img
+                  src={student.profileImg || "https://via.placeholder.com/150"}
+                  alt={student.username}
+                  className="h-24 w-24 rounded-lg object-cover mr-4"
+                />
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold">
+                    {student.fullName || "N/A"}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {student.email || "N/A"}
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {student.studentId || "N/A"}
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {student.username || "N/A"}
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {student.phoneNumber || "N/A"}
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {student.bio || "N/A"}
+                  </p>
+                </div>
+              </article>
+            </NavLink>
           ))}
         </ul>
       ) : (
@@ -90,21 +89,41 @@ const StudentList = ({ students }) => {
                 </tr>
               )}
               {students.map((student) => (
-                <tr key={student.email} className="items-center">
+                <tr key={student._id} className="items-center">
                   <td>
-                    <img
-                      src={
-                        student.profileImg || "https://via.placeholder.com/150"
-                      }
-                      alt={student.username}
-                      className="h-10 w-10 rounded-lg object-cover mr-4"
-                    />
+                    <NavLink to={`${student._id}`}>
+                      <img
+                        src={student.profileImg || "https://via.placeholder.com/150"}
+                        alt={student.username}
+                        className="h-10 w-10 rounded-lg object-cover mr-4"
+                      />
+                    </NavLink>
                   </td>
-                  <td>{student.fullName || "N/A"}</td>
-                  <td>{student.email || "N/A"}</td>
-                  <td>{student.studentId || "N/A"}</td>
-                  <td>{student.username || "N/A"}</td>
-                  <td>{student.phoneNumber || "N/A"}</td>
+                  <td>
+                    <NavLink to={`/students/${student.studentId}`}>
+                      {student.fullName || "N/A"}
+                    </NavLink>
+                  </td>
+                  <td>
+                    <NavLink to={`/students/${student.studentId}`}>
+                      {student.email || "N/A"}
+                    </NavLink>
+                  </td>
+                  <td>
+                    <NavLink to={`/students/${student.studentId}`}>
+                      {student.studentId || "N/A"}
+                    </NavLink>
+                  </td>
+                  <td>
+                    <NavLink to={`/students/${student.studentId}`}>
+                      {student.username || "N/A"}
+                    </NavLink>
+                  </td>
+                  <td>
+                    <NavLink to={`/students/${student.studentId}`}>
+                      {student.phoneNumber || "N/A"}
+                    </NavLink>
+                  </td>
                 </tr>
               ))}
             </tbody>

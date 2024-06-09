@@ -15,6 +15,7 @@ import Forum from "@/pages/forum/Forum";
 import Askquestion from "@/pages/forum/Askquestion";
 import {loader as CoursesLoader} from "@/pages/dashboard/AllCourses";
 import RichTextExample from "@/components/textEditor/textEditor";
+import StudentDetails from "@/pages/classroom/StudentDetails";
 
 const instructorRoutes = (store) => [
   { index: true, element: <Activities /> },
@@ -42,7 +43,7 @@ const instructorRoutes = (store) => [
             children: [
               { index: true, element: <Students /> },
               { path: "invite", element: <InviteForm /> },
-              { path: ''}
+              { path: ':studentId', element: <StudentDetails />}
             ],
           },
           { path: "invitations", element: <InvitationList /> },

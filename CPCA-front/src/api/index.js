@@ -63,5 +63,7 @@ export const {
   useCompleteLessonMutation,
   useTrackTimeMutation,
   useSubmitQuizProgressMutation,
-  
+  useSubmitPracticeProgressMutation,
+  useRequestUnlockChapterMutation,
+  useRequestUnlockLessonMutation,
 } = api;
