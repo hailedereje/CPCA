@@ -18,11 +18,37 @@ import AboutCourse from "./pages/course/AboutCourse";
 import QuestionsList from "./pages/question/QuestionList";
 import AddQuestionForm from "./pages/question/PracticeQuestionForm";
 import PracticeQuestionPage from "./pages/question/Practice";
+<<<<<<< HEAD
 import QuizQuestionsList from "./pages/quiz/QuizQuestionsList";
 import { Editor } from "./components/textEditor/test";
 import AdminRoutes from "./routes/AdminRoutes";
 import InstructorRoutes from "./routes/InstructorRoutes";
 import StudentRoutes from "./routes/StudentRoutes";
+=======
+import UsersList from "./pages/dashboard/UsersList";
+import QuizQuestionsList, {
+  QuizQuestionsWrapper,
+} from "./pages/quiz/QuizQuestionsList";
+import { EditCourseError } from "./components/createCourse/error/editCourseError";
+import { StarterPage } from "./components/createCourse/components/starterPage";
+import ClassroomLayout from "./pages/classroom/ClassroomLayout";
+import CreateClassroom, {
+  createClassroomAction,
+} from "./pages/classroom/CreateClassroom";
+import Stats from "./pages/classroom/Stats";
+import Classrooms from "./pages/classroom/Classrooms";
+import { JoinClass } from "./components";
+import { AddQuestion } from "./components/createCourse/quiz/add-questions";
+import ClassroomDetails from "./pages/classroom/ClassroomDetails";
+import Students from "./pages/classroom/Students";
+import { LabPractice } from "./components/practiceQuestions/code-edtior";
+import { CreateLab, UpdateLab } from "./components/createCourse/components/create-lab";
+import { io } from "socket.io-client";
+import SocketContext from "@/context/DiscussionContext";
+import StudentsLayout from "./pages/classroom/StudentsLayout";
+import InviteForm from "./components/Classroom/InvitationForm";
+import InvitationList from "./pages/classroom/Invitations";
+>>>>>>> 678f503f8c6eb8664f999a3088df2b1a7ee711bd
 
 const queryClient = new QueryClient();
 
@@ -36,9 +62,126 @@ function App() {
 
   const getDashboardRoutes = () => {
     if (!user) return [];
+<<<<<<< HEAD
     if (user.isAdmin) return AdminRoutes;
     if (user.isInstructor) return InstructorRoutes;
     return StudentRoutes; // Assume student role
+=======
+
+    let dashboardRoutes = [];
+    if (user.isAdmin) {
+      dashboardRoutes = [
+        { index: true, element: <Status /> },
+        {
+          path: "profile",
+          element: <Profile />,
+        },
+        { path: "users", element: <UsersList /> },
+      ];
+    } else if (user.isInstructor) {
+      dashboardRoutes = [
+        { index: true, element: <Activities /> },
+        {
+          path: "profile",
+          element: <Profile />,
+        },
+        { path: "add-course", element: <RichTextExample /> },
+
+        {
+          path: "courses",
+          element: <AllCourses />,
+          loader: CoursesLoader(store),
+        },
+        {
+          path: "classrooms",
+          element: <ClassroomLayout />,
+          children: [
+            { index: true, element: <Classrooms /> },
+            {
+              path: "create",
+              element: <CreateClassroom />,
+              action: createClassroomAction(store),
+            },
+            {
+              path: ":id",
+              element: <ClassroomDetails />,
+              children: [
+                { index: true, element: <Stats /> },
+                {
+                  path: "students",
+                  element: <StudentsLayout />,
+                  children: [
+                    {index: true, element: <Students />},
+                    { path: "invite", element: <InviteForm /> },
+                  ],
+                },
+                { path: "invitations", element: <InvitationList /> },
+                { path: "status", element: <div>Status Page</div> },
+                { path: "discussions", element: <ForumLayout />, children: [
+                  { path: "", element: <Navigate to="content" /> }, 
+                  {path: "content", element: <Forum />},
+                  {path: "myqns", element: <MyQuestions />},
+                  {path: "ask", element: <Askquestion />},
+                ]},
+              ]
+            }            // {path: 'classrooms', element: <Classrooms />}
+           
+          ]
+        }
+        // { path: "create-course", element: <CreateCourse /> },
+      ];
+    } else {
+      // Assume student role
+      // Define routes for student dashboard
+      dashboardRoutes = [
+        { index: true, element: <Status /> },
+        {
+          path: "profile",
+          element: <Profile />,
+        },
+        {
+          path: "courses",
+          element: <AllCourses />,
+          errorElement: <div>Failed to load courses</div>,
+        },
+        {
+          path: "classrooms",
+          element: <ClassroomLayout />,
+          children: [
+            { index: true, element: <Classrooms /> },
+            {
+              path: ":id",
+              element: <ClassroomDetails />,
+              children: [
+                { index: true, element: <Stats /> },
+                { path: "content", element: <div>Content</div> },
+                { path: "progress", element: <div>Progress</div> },
+                { path: "discussions", element: <ForumLayout />, children: [
+                  { path: "", element: <Navigate to="content" /> }, 
+                  {path: "content", element: <Forum />},
+                  {path: "myqns", element: <MyQuestions />},
+                  {path: "ask", element: <Askquestion />},
+                ]},
+              ]
+            } 
+          ]
+        },
+        {
+          path: "courses/:id",
+          element: <Lessons />,
+        },
+        { path: "courses/:id/lessons/:id", element: <LessonDetails /> },
+
+        {
+          path: "enrolled-courses",
+          element: <EnrolledCourses />,
+          // loader: EnrolledCourses(store),
+        },
+      ];
+    }
+
+    return dashboardRoutes;
+>>>>>>> 678f503f8c6eb8664f999a3088df2b1a7ee711bd
   };
 
   const router = createBrowserRouter([

@@ -56,11 +56,11 @@ export const Layout = () => {
                 return (
                   <div key={index} className="flex items-center cursor-pointer">
                     <img
-                      src={user?.profileImage}
+                      src={user.profileImg}
                       alt="profile"
-                      className="w-6 h-6 rounded-full mr-2"
+                      className="w-10 h-10 rounded-full mr-2"
                     />
-                    <h3 className="text-xs">{user.username}</h3>
+                    <h3 className="text-md">{user.username}</h3>
                   </div>
                 );
               })}
