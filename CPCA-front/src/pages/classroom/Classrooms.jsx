@@ -1,4 +1,4 @@
-import { useGetClassroomsByInstructorIdQuery } from "@/api";
+import { useGetClassroomsByInstructorIdQuery, useGetClassroomsByUserIdQuery } from "@/api";
 import { useSelector } from "react-redux";
 import { Loading } from "@/components";
 import { FiBookOpen, FiInfo, FiPlus } from "react-icons/fi";
@@ -6,12 +6,14 @@ import { Link } from "react-router-dom";
 
 function Classrooms() {
   const { user } = useSelector((store) => store.userState);
-  const instructorId = user?._id;
+  const userId = user?._id;
   const {
     data: classrooms,
     error,
     isLoading,
-  } = useGetClassroomsByInstructorIdQuery(instructorId, {
+  } = user.role === "instructor" ? useGetClassroomsByInstructorIdQuery(instructorId, {
+    refetchOnMountOrArgChange: true,
+  }): useGetClassroomsByUserIdQuery(userId, {
     refetchOnMountOrArgChange: true,
   });
 

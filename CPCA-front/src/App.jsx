@@ -157,7 +157,28 @@ function App() {
           element: <AllCourses />,
           errorElement: <div>Failed to load courses</div>,
         },
-
+        {
+          path: "classrooms",
+          element: <ClassroomLayout />,
+          children: [
+            { index: true, element: <Classrooms /> },
+            {
+              path: ":id",
+              element: <ClassroomDetails />,
+              children: [
+                { index: true, element: <Stats /> },
+                { path: "content", element: <div>Content</div> },
+                { path: "progress", element: <div>Progress</div> },
+                { path: "discussions", element: <ForumLayout />, children: [
+                  { path: "", element: <Navigate to="content" /> }, 
+                  {path: "content", element: <Forum />},
+                  {path: "myqns", element: <MyQuestions />},
+                  {path: "ask", element: <Askquestion />},
+                ]},
+              ]
+            } 
+          ]
+        },
         {
           path: "courses/:id",
           element: <Lessons />,

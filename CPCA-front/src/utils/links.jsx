@@ -15,8 +15,9 @@ export const InstructLinks = [
 
 export const StudentLinks = [
   { id: 1, text: "Status", path: "/dashboard", icon: <IoBarChartSharp /> },
-  { id: 4, text: "profile", path: "profile", icon: <ImProfile /> },
-  {id: 5, text: "classrooms", path: "courses", icon: <FaChalkboardTeacher/>}
+  { id: 2, text: "Profile", path: "profile", icon: <ImProfile /> },
+  {id: 3, text: "All Courses", path: "courses", icon: <FaChalkboardTeacher/>},
+  {id: 4, text: "Classrooms", path: "classrooms", icon: <FaChalkboardTeacher/>}
 ];
 
 export const AdminLinks = [

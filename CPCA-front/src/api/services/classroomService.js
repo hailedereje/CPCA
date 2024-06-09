@@ -14,7 +14,7 @@ export const classroomService = (builder) => ({
     query: (instructorId) => `/classroom/instructor/${instructorId}`,
   }),
   getClassroomsByUserId: builder.query({
-    query: (userId) => `/classroom/invite`,
+    query: (userId) => `/classroom/student/${userId}`,
   }),
   archiveClassroom: builder.query({
     query: (id) => `classroom/${id}`,
