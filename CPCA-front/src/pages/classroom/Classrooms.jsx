@@ -1,4 +1,7 @@
-import { useGetClassroomsByInstructorIdQuery, useGetClassroomsByUserIdQuery } from "@/api";
+import {
+  useGetClassroomsByInstructorIdQuery,
+  useGetClassroomsByUserIdQuery,
+} from "@/api";
 import { useSelector } from "react-redux";
 import { Loading } from "@/components";
 import { FiBookOpen, FiInfo, FiPlus } from "react-icons/fi";
@@ -11,11 +14,13 @@ function Classrooms() {
     data: classrooms,
     error,
     isLoading,
-  } = user.role === "instructor" ? useGetClassroomsByInstructorIdQuery(userId, {
-    refetchOnMountOrArgChange: true,
-  }): useGetClassroomsByUserIdQuery(userId, {
-    refetchOnMountOrArgChange: true,
-  });
+  } = user.role === "instructor"
+    ? useGetClassroomsByInstructorIdQuery(userId, {
+        refetchOnMountOrArgChange: true,
+      })
+    : useGetClassroomsByUserIdQuery(userId, {
+        refetchOnMountOrArgChange: true,
+      });
 
   if (isLoading) {
     return <Loading />;
@@ -32,15 +37,17 @@ function Classrooms() {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="p-4">
       <div className="flex justify-between border-b p-3 border-base-300 items-center mb-4">
         <h1 className="text-2xl font-bold">Classrooms</h1>
-        <Link to={"create"}>
-          <button className="btn btn-primary flex items-center">
-            <FiPlus className="mr-2" size={20} />
-            Add Classroom
-          </button>
-        </Link>
+        {user.role === "instructor" && (
+          <Link to={"create"}>
+            <button className="btn btn-primary flex items-center">
+              <FiPlus className="mr-2" size={20} />
+              Add Classroom
+            </button>
+          </Link>
+        )}
       </div>
       <div className="grid gap-4 lg:grid-cols-3">
         {classrooms?.map((classroom) => (
@@ -53,7 +60,9 @@ function Classrooms() {
                     {classroom.name}
                   </h2>
                 </div>
-                <p className="text-gray-700">{classroom.description.slice(0, 100)}...</p>
+                <p className="text-gray-700">
+                  {classroom.description.slice(0, 100)}...
+                </p>
                 <div className="card-actions justify-end mt-2">
                   <div className="badge badge-accent badge-outline">
                     {classroom.students?.length} Students

@@ -14,8 +14,6 @@ function ClassroomDetails() {
   } = useGetClassroomByIdQuery(id, {
     refetchOnMountOrArgChange: true,
   });
-
-  console.log("classroom", classroom);
   if (isLoading) return <div className="text-center mt-4">Loading...</div>;
   if (error)
     return (
@@ -25,9 +23,9 @@ function ClassroomDetails() {
     );
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex items-center justify-between border-b border-base-200">
-        <h1 className="text-2xl font-bold">Classroom Details</h1>
+    <div className="">
+      <div className="flex items-center justify-between border-b border-base-200 px-4">
+        <h1 className="text-2xl font-bold">{classroom.name}</h1>
         <div className="navbar-center hidden lg:flex ">
           <ClassroomNavbar />
         </div>
