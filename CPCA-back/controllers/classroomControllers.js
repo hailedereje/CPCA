@@ -18,7 +18,6 @@ export const createClassroom = async (req, res) => {
     }
     await Discussion.create({ classroomId: newClassroom._id });
     res.status(201).json(newClassroom);
-
 };
 
 // Get all classrooms by instruc6658d50970ef68ebbd316285torId
@@ -101,7 +100,6 @@ export const inviteStudents = async (req, res) => {
   const instructor = await User.findById(classroom.instructorId);
   if (emails.length === 0 || !Array.isArray(emails)) {
     throw new BadRequestError('invalid email list'); 
-
   }
   const transporter = nodemailer.createTransport({
     service: "gmail",

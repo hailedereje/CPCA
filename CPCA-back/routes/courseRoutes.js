@@ -41,8 +41,7 @@ const router = express.Router();
 
 router.use(authenticate);
 
-router.get("/", getAllCourses);
-// router.use(isAdmin);
+router.use(isAdmin);
 router.get("/all",getAllCourses)
 router.get("/all/drafts",getAllDraftCourses)
 router.get("/courseListFilter",getCourseListFilter)
