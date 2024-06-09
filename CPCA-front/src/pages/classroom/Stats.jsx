@@ -16,10 +16,11 @@ function Stats() {
   const { name, description, createdAt, students } = classroom;
 
   useEffect(() => {
-    if (!isFetching) {
+    // Call refetch only if classroom data is not available to prevent infinite loops
+    if (!classroom && !isFetching) {
       refetch();
     }
-  }, [refetch]);
+  }, [classroom, isFetching, refetch]);
 
   return (
     <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">

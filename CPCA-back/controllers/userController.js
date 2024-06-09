@@ -36,7 +36,6 @@ const userRegister = async (req, res) => {
   throw new BadRequestError("Invalid user data");
 };
 const userLogin = async (req, res) => {
-  try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (user && (await user.matchPasswords(password))) {
@@ -45,10 +44,6 @@ const userLogin = async (req, res) => {
       return res.json({ userId: user._id, user, jwt });
     }
     throw new NotFoundError("Invalid email or password");
-  } catch (err) {
-    console.error(err)
-    return res.status(500).send({ message: "something went wrong", title: "internal server error", err })
-  }
 }
 
 

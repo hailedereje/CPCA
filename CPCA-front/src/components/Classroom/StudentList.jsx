@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FiList, FiGrid, FiUserPlus } from "react-icons/fi";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 const StudentList = ({ students }) => {
   const [view, setView] = useState("detailed");

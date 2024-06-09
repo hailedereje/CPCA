@@ -18,7 +18,7 @@ function ClassroomDetails() {
   if (error)
     return (
       <div className="text-center mt-4 text-red-500">
-        Error: {error.message}
+        Error: '{error.message}'
       </div>
     );
 

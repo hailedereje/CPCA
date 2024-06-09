@@ -37,6 +37,7 @@
     "fuse.js": "^7.0.0",
     "highlightjs": "^9.16.2",
     "html-react-parser": "^5.1.10",
+    "joi": "^17.13.1",
     "json-server": "^1.0.0-alpha.23",
     "lodash": "^4.17.21",
     "lottie-react": "^2.4.0",

@@ -5,21 +5,20 @@ import { BadRequestError } from "../errors/index.js";
 
 // Create a new classroom
 export const createClassroom = async (req, res) => {
-  try {
     const { name, description, courseId } = req.body;
-    const classroom = new Classroom({
+    const newClassroom = Classroom.create({
       name,
       description,
       instructorId: req.user._id,
       courseId,
     });
 
-    const newClassroom = await classroom.save();
+    if(!newClassroom) {
+      throw new BadRequestError('failed to create classroom');
+    }
     await Discussion.create({ classroomId: newClassroom._id });
     res.status(201).json(newClassroom);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create classroom" });
-  }
+
 };
 
 // Get all classrooms by instruc6658d50970ef68ebbd316285torId

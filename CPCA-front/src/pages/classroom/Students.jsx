@@ -16,7 +16,7 @@ function Students() {
       refetch();
       console.log('refetch called');
     }
-  }, [refetch, isFetching]);
+  }, [refetch]);
 
   return (
     <div>

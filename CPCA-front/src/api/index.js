@@ -4,6 +4,7 @@ import { courseService } from "./services/coursesService";
 import { quizService } from "./services/quizService";
 import { profileService } from "./services/profileServices";
 import { classroomService } from "./services/classroomService";
+import { progressService } from "./services/progressService";
 
 export const api = createApi({
   reducerPath: "api",
@@ -23,6 +24,7 @@ export const api = createApi({
     ...quizService(builder),
     ...profileService(builder), 
     ...classroomService(builder), 
+    ...progressService(builder)
     
   }),
 });
@@ -52,4 +54,14 @@ export const {
   useJoinClassroomMutation,
   useEnrollStudentMutation,
   useGetClassroomByIdQuery,
+
+  // progress endpoints 
+  useGetChaptersProgressQuery, 
+  useGetLessonsProgressQuery,
+  useCalculateChapterProgressMutation,
+  useCalculateCourseProgressMutation, 
+  useCompleteLessonMutation,
+  useTrackTimeMutation,
+  useSubmitQuizProgressMutation,
+  
 } = api;

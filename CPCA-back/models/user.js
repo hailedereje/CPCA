@@ -3,7 +3,7 @@ import { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 const userSchema = new Schema(
   {
-    fullName: {type: String, default: null},
+    fullName: { type: String, default: null },
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -11,17 +11,15 @@ const userSchema = new Schema(
     role: { type: String, enum: ["student", "instructor", "admin"] },
     isAdmin: { type: Boolean, default: false },
     isInstructor: { type: Boolean, default: false },
-    phoneNumber: {type: String, default: null}, 
-    bio: {type: String, default: null},
-    studentId: {type: String, default: null},
+    phoneNumber: { type: String, default: null },
+    bio: { type: String, default: null },
+    studentId: { type: String, default: null },
     //aditional fields to add
   },
   {
     toJSON: {
       transform: function (doc, ret) {
-        delete ret.password, 
-        delete ret.__v, 
-        delete ret._id;
+        delete ret.password, delete ret.__v;
       },
     },
   }
@@ -38,10 +36,10 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.matchPasswords = async function (passwordEntered) {
-  // return this.password === passwordEntered; 
-  // console.log(this.password); 
+  // return this.password === passwordEntered;
+  // console.log(this.password);
   // console.log(passwordEntered) ;
-  console.log(await bcrypt.compare(passwordEntered, this.password))
+  console.log(await bcrypt.compare(passwordEntered, this.password));
   return await bcrypt.compare(passwordEntered, this.password);
 };
 
