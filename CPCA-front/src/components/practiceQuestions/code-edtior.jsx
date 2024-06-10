@@ -1,4 +1,4 @@
-import { LANGUAGES, LANGUAGE_List } from "@/assets/constants"
+import { LANGUAGES, LANGUAGE_List, SNIPTS } from "@/assets/constants"
 import { Editor } from "@monaco-editor/react"
 import { useRef, useState } from "react"
 import { FaPlay } from "react-icons/fa"
@@ -15,7 +15,7 @@ import { useParams } from "react-router-dom"
 
 export const LabPractice = () => {
     const editorRef = useRef()
-    const [code, setCode] = useState({ language: 'javascript', content: '' })
+    const [code, setCode] = useState({ language: 'javascript', content: SNIPTS['javascript'] })
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
     const [output, setOutput] = useState(null)
@@ -45,7 +45,7 @@ export const LabPractice = () => {
     }
     return (
         <>
-            <div className="w-full h-full flex p-2">
+            <div className="w-full h-full flex p-1">
                <LabManual />
                 <div className="flex flex-col md:w-1/2 xxs:w-full">
                     <div className="h-fit w-full p-1 bg-gray-600 flex items-center justify-between gap-4">
@@ -73,7 +73,7 @@ export const LabPractice = () => {
                         />
                     </div>
 
-                    <div className={`h-1/5 max-h-32 w-full editor text-sm overflow-auto p-4 border-2 border-gray-600 ${error ? 'border-red-500 text-red-500' : 'dark:text-white'}`}>
+                    <div className={`h-1/5 max-h-32 w-full editor text-sm overflow-auto p-4 border-t-2 border-gray-600 ${error ? 'border-red-500 text-red-500' : 'dark:text-white'}`}>
                         {output ? (
                             output.map((line, idx) => (
                                 <p key={idx} className="text-sm">
@@ -117,7 +117,7 @@ const LabManual = () => {
             <div className="md:hidden">
                 <SidebarDrawer>
                     {isSuccess ? <div className="w-full h-full overflow-auto editor">
-                        <div className="max-w-3xl w-full bg-white shadow-md rounded-lg p-4 ">
+                        <div className="max-w-3xl w-full bg-white shadow-md p-4 ">
                             <h1 className="text-md font-bold text-gray-800 mb-4">{data.data.title}</h1>
                             <p className="text-gray-700 mb-6 text-xs">{data.data.description}</p>
                             <div className="rounded-md">
@@ -150,7 +150,7 @@ const CodeMenu = ({ code, setCode }) => {
                 <div className="absolute top-10 left-0 w-48 h-48 overflow-auto editor bg-white border-gray-200 z-30 rounded shadow-lg dark:bg-gray-700 dark:text-white">
                     {languages.map((item, idx) => (
                         <button key={idx} onClick={() => {
-                            setCode(prev => ({ language: item.name, content: code.content }))
+                            setCode(prev => ({ language: item.name, content: SNIPTS[item.name] }))
                             setIsMenuOpen(false)
                         }} className={`group flex items-center gap-2 p-2 capitalize text-black dark:hover:bg-gray-500 w-full text-left ${code.language === item.name ? "bg-[#32bc6e] text-white hover:bg-[#32bc6e]" : ""}`}>
                             <span className='dark:text-white'>{item.icon}</span>

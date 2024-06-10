@@ -36,8 +36,8 @@ function RichTextExample() {
   }
 
   return (
-    <div className="py-10 p-4 flex flex-col w-full gap-4">
-      <Breadcrumb items={[{ title: "Courses", link: "courses" }, { title: data?.data?.lesson.title }]} />
+    <div className=" h-full p-4 flex flex-col w-full gap-4">
+      {/* <Breadcrumb items={[{ title: "Courses", link: "courses" }, { title: data?.data?.lesson.title }]} /> */}
       {!isSuccess ? <Loading/>: <div className="flex flex-col w-full mx-auto max-w-[1024px]">
         <div className={`group flex items-end  gap-4 ${data.data.lesson.content.length === 0 ? "":"hidden"}`}>
           <EditLinks />

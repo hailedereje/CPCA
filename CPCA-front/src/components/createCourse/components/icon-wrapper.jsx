@@ -1,6 +1,6 @@
-export const IconWrapper = ({bg,color,icon}) => {
+export const IconWrapper = ({bg,color,icon,size= 14}) => {
     return (
-        <div className={`xxs:hidden  w-14 h-14 p-4 md:flex  justify-center items-center rounded-full ${bg} ${color}`}>
+        <div className={`w-${size} h-${size} p-4 flex  justify-center items-center rounded-full ${bg} ${color}`}>
             <span className="text-2xl">
                 {icon} 
             </span>

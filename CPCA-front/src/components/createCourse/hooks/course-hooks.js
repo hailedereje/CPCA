@@ -16,24 +16,43 @@ import {
     createLab,
     updateLab,
     deleteLab,
-    fetchLab
+    fetchLab,
+    updateCourse,
+    deleteCourse
   } from './actions';
 
 import { showErrorToast, showSuccessToast } from '@/toasts/toast';
 import toast from 'react-hot-toast';
-import { redirect } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
   
 export const useCreateCourse = () => {
+  const navigate = useNavigate()
   return useMutation({
     mutationFn: createCourse,
-    onSuccess: () => {
+    onSuccess: (data) => {
       showSuccessToast("course created successfully")
+      navigate(`/dashboard/course/update/${ data.data.id }`)
     },
     onError: () => {
       showErrorToast("failed to create course")
     }
   })
 }
+
+export const useUpdateCourse = (courseId) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: updateCourse,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:['course',courseId]})
+      showSuccessToast("course updated successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to update course")
+    }
+  })
+}
+
 export const useCourse = (courseId) => {
   return  useQuery({
     queryKey: ['course', courseId],
@@ -42,6 +61,24 @@ export const useCourse = (courseId) => {
     retry:3,
     refetchInterval:false
   })
+}
+
+export const useDeleteCourse = (courseId) => {
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: deleteCourse,
+    onSuccess: () => {
+      queryClient.removeQueries({queryKey:['course',courseId]})
+      queryClient.invalidateQueries({queryKey:['draftCourses']})
+      navigate('/dashboard/courses/draft')
+      showSuccessToast("course deleted successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to delete course")
+    }
+  })
+
 }
 
 export const useChapters = (courseId) => {
@@ -175,12 +212,13 @@ export const useUpdateChapter = (courseId, chapterId) => {
   });
 };
 
-export const useDeleteChapter = (courseId) => {
+export const useDeleteChapter = (courseId,lessonIds) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: deleteChapter,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: ['course',courseId]})
+      lessonIds.map((lessonId) => queryClient.removeQueries(['lesson',lessonId]))
       toast.success("chapter deleted successfully")
     },
     onError: () => {

@@ -10,7 +10,7 @@ import { MdContentCopy } from "react-icons/md";
 export const SyntaxHighlighter = ({ code }) => {
     const codeRef = useRef(null);
     const [copied, setCopied] = useState(false);
-
+    console.log(code);
     const handleCopy = () => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2500);
@@ -21,8 +21,8 @@ export const SyntaxHighlighter = ({ code }) => {
     }, [code]);
 
     return (
-        <pre className="relative w-full flex flex-col">
-            <div className="flex items-center justify-between gap-3 bg-[#565656] rounded-t-lg">
+        <pre className="relative w-full flex flex-col p-3 bg-white">
+            <div className="flex items-center justify-between gap-3 bg-[#565656] rounded-t-lg w-full xl:max-w-full md:max-w-xl">
             <span className="rounded p-1 text-xs  text-white">{code.language}</span>
                 <CopyToClipboard text={code.content} onCopy={handleCopy}>
                     <button className="p-2">
@@ -30,7 +30,7 @@ export const SyntaxHighlighter = ({ code }) => {
                     </button>
                 </CopyToClipboard>
             </div>
-            <code ref={codeRef} className={`${code.language} w-full xl:max-w-full md:max-w-xl md:text-sm sm:text-xs overflow-auto h-fit max-h-[300px] p-5 rounded-md editor`}>
+            <code ref={codeRef} className={`${code.language} w-full xl:max-w-full md:max-w-xl md:text-sm sm:text-xs overflow-auto h-fit max-h-[300px] p-5 editor`}>
                 {code.content || "// add some code"}
             </code>
             

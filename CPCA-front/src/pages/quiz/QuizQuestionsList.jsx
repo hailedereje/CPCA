@@ -46,9 +46,9 @@ const QuizQuestionsList = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 dark:bg-transparent dark:text-white">
+    <div className="w-full h-full p-4 dark:bg-transparent dark:text-white">
       {/* <Navbar /> */}
-      {<div className="container mx-auto p-4">
+      {<div className="container p-4 ">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold text-gray-800 dark:text-white">Quiz Questions</h2>
           <button onClick={() => navigate("question")} className="flex items-center justify-center bg-blue-500 p-2 rounded-md">
@@ -108,15 +108,6 @@ const QuestionsList = ({ questions }) => {
   const handleDelete = (id) => {
     const updatedQuestions = data.filter((question) => question.id !== id);
     setData(updatedQuestions);
-  };
-
-  const handleEdit = (id) => {
-    setEditQuestionId(id);
-    // Implement actual edit functionality here
-  };
-
-  const handleSave = () => {
-    setEditQuestionId(null);
   };
 
   return (

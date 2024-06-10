@@ -60,6 +60,7 @@ import ClassroomDetails from "./pages/classroom/ClassroomDetails";
 import Students from "./pages/classroom/Students";
 import { LabPractice } from "./components/practiceQuestions/code-edtior";
 import { CreateLab, UpdateLab } from "./components/createCourse/components/create-lab";
+import { Quiz } from "./components/Quiz";
 
 
 
@@ -281,7 +282,10 @@ function App() {
       path: "test",
       element: <Editor/>
     },
-    
+    {
+      path: "quiz",
+      element: <Quiz />
+    },
     
   ]);
   return(

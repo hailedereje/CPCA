@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  completeQuiz,
   createQuiz,
   deleteQuizById,
   getAllQuizzes,
@@ -13,7 +14,7 @@ import {
   studentCheck,
 } from "../middlewares/authenticate.js";
 import { validateRequest } from "../middlewares/validateRequest.js";
-import { quizSchema } from "../validation/chapter/quizValidator.js";
+import { quizAnswerValidator, quizSchema } from "../validation/chapter/quizValidator.js";
 
 const router = express.Router();
 
@@ -25,6 +26,7 @@ router.get("/all", getAllQuizzes);
 router.post("/update/:id", updateQuizById);
 router.get("/:id", getQuizById);
 router.post("/delete/:id", deleteQuizById);
+router.post("/complete/:quizId",validateRequest(quizAnswerValidator), completeQuiz);
 
 router.use(studentCheck);
 router.get("/:id", getQuizById);

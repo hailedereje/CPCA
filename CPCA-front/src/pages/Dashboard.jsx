@@ -16,7 +16,7 @@ function Dashboard() {
 
   return (
     <>
-      <div className="flex flex-col dark:text-white h-screen">
+      <div className="flex flex-col dark:text-white h-screen dark:bg-gray-600">
         <div className="flex justify-between gap-3 h-12 items-center fixed top-0 z-20 shadow-md w-full p-2 bg-white dark:bg-[#212121]">
           <DropdownMenu/>
           <div className="">
@@ -27,8 +27,7 @@ function Dashboard() {
             <MdDarkMode size={20}/>
           </div>
         </div>
-        {/* <div className="">hello</div> */}
-        <div className="flex h-full dark:bg-[#212121] pt-14">
+        <div className="flex w-full h-full pt-12 ">
           <Outlet/>
         </div> 
       </div>
@@ -51,7 +50,7 @@ const DropdownMenu = () => {
       : StudentLinks;
 
   return (
-    <div className="relative inline-block">
+    <div className="relative z-50">
       <button className="" onClick={() => setIsMenuOpen(prev => !prev)}>
             <svg className="w-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
                 <path fill="currentColor" d="M.5 9h9.75v1.25H.5zm0-3.25h15V7H.5zm0 6.5h15v1.25H.5zm0-9.75h9.75v1.25H.5z" />

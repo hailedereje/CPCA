@@ -34,26 +34,48 @@ export const trackTime = async (req, res) => {
   }
 }
 
-// Endpoint to submit quiz progress
-export const submitQuizProgress =  async (req, res) => {
-  const { studentId, courseId, chapterId, quizId, score, totalScore, answers } = req.body;
 
+export const submitQuizProgress =  async (req, res) => {
+    const {studentId,quizId,questions} = req.body;
+    const classroomId = "665a14e2e5dda17a7dcd55df"
   try {
+    const quiz = await Quiz.findById(quizId);
+    if (!quiz) {
+      return res.status(404).json({ error: 'Quiz not found' });
+    }
+    const { courseId, chapterId } = quiz;
+    const score = calculateScore(quiz, questions);
+    const totalScore = quiz.questions.length;
+
     let progress = await Progress.findOne({ studentId, courseId, chapterId, quizId });
     if (!progress) {
-      progress = new Progress({ studentId, courseId, chapterId, quizId, completed: true, score, totalScore, answers });
+      progress = new Progress({classroomId, studentId, courseId, chapterId, quizId, completed: true, score, totalScore });
     } else {
       progress.completed = true;
       progress.score = score;
       progress.totalScore = totalScore;
-      progress.answers = answers;
     }
 
     await progress.save();
-    res.json(progress);
+    res.json({score:progress.score, totalScore:progress.totalScore});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+const calculateScore = (quiz, answeredQuestions) => {
+  let score = 0;
+  answeredQuestions.forEach(answeredQuestion => {
+    const question = quiz.questions.find(q => q.id === answeredQuestion.questionId);
+    if (question) {
+      const selectedOption = question.options.find(option => option.id === answeredQuestion.answerId);
+      if (selectedOption && selectedOption.isCorrect) {
+        score++; 
+      }
+    }
+  });
+
+  return score;
 };
 
 // Endpoint to submit practice question progress

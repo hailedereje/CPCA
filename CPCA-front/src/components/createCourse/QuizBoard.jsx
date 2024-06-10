@@ -39,7 +39,7 @@ const InstructionEditor = () => {
 const quizSchema = yup.object().shape({
   title: yup.string().required('Title is required.').min(3, 'Title must be at least 3 characters long.').max(100, 'Title cannot be longer than 100 characters.'),
   duration: yup.number().required('Duration is required.').positive('Duration must be a positive number.').max(180, "A quiz can take a maximum of 3 hours."),
-  instruction: yup.string().required('Instruction is required.').min(10, 'Instruction must be at least 10 characters long.'),
+  instruction: yup.string().required('Instruction is required.').min(100, 'Instruction must be at least 10 characters long.'),
 });
 
 export const QuizBoard = () => {
@@ -57,7 +57,7 @@ export const QuizBoard = () => {
   const onSubmit = async (formData) => {
     try {
       setLoading(true)
-      await quizSchema.validate(quizForm );
+      await quizSchema.validate(quizForm ).then(() => console.log('Validation passed'))
 
       await createQuiz({ courseId:param.id, chapterId: param.chapterId, ...quizForm})
         .then(result => console.log(result))

@@ -66,7 +66,7 @@ export const UploadImage = ({id,img}) => {
         </>
       ) : (
         <div className="relative w-fit">
-          <img src={imageUrl} className="object-cover w-full h-full rounded-md max-h-[100px] max-w-[100px]" alt="Uploaded" />
+          <img src={imageUrl} className="object-cover w-full h-full rounded-md " alt="Uploaded" />
           <label htmlFor="image-file" className="absolute cursor-pointer top-2 right-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:ring-blue-300 font-medium rounded-full p-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
             <AiOutlineEdit size={20} />
           </label>

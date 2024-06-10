@@ -1,11 +1,10 @@
 import newRequests from '@/utils/newRequest';
 
 export const createCourse = (data) => newRequests.post("/courses/new",data)
-export const getCourse = (courseId) => newRequests.get(`/courses/course`, {
-    params: {
-      id: courseId
-    }
-  })
+export const getCourse = (courseId) => newRequests.get(`/courses/course`, { params: { id: courseId }})
+export const updateCourse = ({data,courseId}) => newRequests.put(`/courses/course/${courseId}`,data)
+export const deleteCourse = ({courseId}) => newRequests.delete(`/courses/course/${courseId}`)
+
 export const createLab = (data) => newRequests.post("/courses/course/labs",data)
 export const updateLab = (data) => newRequests.put(`/courses/course/labs/lab/${data.labId}`,data.labForm)
 export const deleteLab = ({courseId,labId}) => newRequests.delete(`/courses/course/labs/lab/${labId}`,{params: {courseId,labId}})
@@ -39,7 +38,7 @@ export const updateChapter = (courseId, chapterId, data) => newRequests.put(`/co
 
 export const uploadImage = (data) => newRequests.post(`/courses/course/chapters/chapter/upload-image`,data)
 
-export const deleteChapter = ({courseId, chapterId}) => newRequests.delete(`/courses/course/chapters/chapter`,{params: {courseId,chapterId}});
+export const deleteChapter = ({courseId, chapterId,lessonIds}) => newRequests.delete(`/courses/course/chapters/chapter`,{data: {lessonIds},params: {courseId,chapterId}});
 
 
 export const fetchLessons = ({chapterId}) => newRequests.get(`/courses/course/chapters/chapter/lessons`,{params: {chapterId}});
@@ -74,4 +73,6 @@ export const updateQuiz = (data) => newRequests.put("/quiz",data)
 export const createQuestion = (data) => newRequests.post("/quiz_question",data)
 export const updateQuestion = (data,questionId) => newRequests.put(`/quiz_question/${questionId}`,data)
 export const deleteQuestion = (questionId) => newRequests.delete(`/quiz/question/${questionId}`)
+
+export const completeQuiz = (data) =>  newRequests.post(`/progress/submit_quiz_progess`,data)
 
