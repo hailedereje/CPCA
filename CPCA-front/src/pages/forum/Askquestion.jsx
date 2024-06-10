@@ -83,7 +83,7 @@ const Askquestion = () => {
             className="flex items-center mt-8 gap-2 bg-blue-700 rounded-md px-8 py-2 cursor-pointer"
           >
             <Share />
-            <span className="text-white">Ask on Community</span>
+            <span className="">Ask on Community</span>
           </button>
         </form>
       </div>

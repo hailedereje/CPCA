@@ -14,20 +14,20 @@ export const classroomService = (builder) => ({
     query: (instructorId) => `/classroom/instructor/${instructorId}`,
   }),
   getClassroomsByUserId: builder.query({
-    query: (userId) => `/classroom/invite`,
+    query: (userId) => `/classroom/student/${userId}`,
   }),
   archiveClassroom: builder.query({
     query: (id) => `classroom/${id}`,
   }),
   deleteClassroom: builder.mutation({
     query: (id) => ({
-      url: `/classrooms/${id}`,
+      url: `/classroom/${id}`,
       method: "DELETE",
     }),
   }),
   inviteStudents: builder.mutation({
     query: (invitationData) => ({
-      url: "classrooms/invite",
+      url: "classroom/invite",
       method: "POST",
       body: invitationData,
     }),

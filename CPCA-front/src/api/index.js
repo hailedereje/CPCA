@@ -4,12 +4,18 @@ import { courseService } from "./services/coursesService";
 import { quizService } from "./services/quizService";
 import { profileService } from "./services/profileServices";
 import { classroomService } from "./services/classroomService";
+import { progressService } from "./services/progressService";
 
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
      baseUrl: "http://localhost:5000/api/v1",
-    credentials: 'include'
+    credentials: 'include', 
+    prepareHeaders: (headers) => {
+      headers.set('Access-Control-Allow-Origin', '*')
+      
+      return headers
+    },
   }),
   
   endpoints: (builder) => ({
@@ -18,6 +24,7 @@ export const api = createApi({
     ...quizService(builder),
     ...profileService(builder), 
     ...classroomService(builder), 
+    ...progressService(builder)
     
   }),
 });
@@ -26,6 +33,8 @@ export const {
   useLoginUserMutation,
   useLogoutUserMutation,
   useRegisterUserMutation,
+  useEditUserInfoMutation,
+  useFetchUserProfileQuery,
   useGetAllCoursesQuery,
   useGetCourseQuery,
   useCreateCourseMutation,
@@ -45,4 +54,16 @@ export const {
   useJoinClassroomMutation,
   useEnrollStudentMutation,
   useGetClassroomByIdQuery,
+
+  // progress endpoints 
+  useGetChaptersProgressQuery, 
+  useGetLessonsProgressQuery,
+  useCalculateChapterProgressMutation,
+  useCalculateCourseProgressMutation, 
+  useCompleteLessonMutation,
+  useTrackTimeMutation,
+  useSubmitQuizProgressMutation,
+  useSubmitPracticeProgressMutation,
+  useRequestUnlockChapterMutation,
+  useRequestUnlockLessonMutation,
 } = api;

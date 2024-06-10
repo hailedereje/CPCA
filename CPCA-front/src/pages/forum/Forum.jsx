@@ -47,29 +47,30 @@ const Forum = () => {
       await newRequests.get(`/seen-question/${question._id}`, {userId: user._id});
     };
 
-    socket.emit("join-room", { room: "discussion", user });
-    socket.on('receive-question', handleReceiveQuestion);
-    
-    return () => {
-      socket.off('receive-question', handleReceiveQuestion);
-    };
+    if(socket){
+      socket.emit("join-room", { room: "discussion", user });
+      socket.on('receive-question', handleReceiveQuestion);
+      
+      return () => {
+        socket.off('receive-question', handleReceiveQuestion);
+      };
+    }
   }, [user, dispatch, socket]);
 
   if (isLoading) return <Loading />;
 
   return (
     <div
-      className="flex flex-col items-center w-1/2 bg-slate-100 dark:bg-slate-400"
+      className="flex flex-col items-center w-1/2 bg-slate-100 dark:bg-slate-400 h-screen overflow-y-auto"
     >
       <Toaster />
       {questions.length > 0 &&
         questions.map((question, index) => {
-          console.log("question", question);
           return (
             <div
               key={index}
               className="flex flex-col 
-              items-end p-3 md:p-4 border-b border-gray-200"
+              items-end p-3 md:p-4 border-b border-gray-200 w-full"
             >
               <div
                 className="w-full bg-white dark:bg-[#1E212A]

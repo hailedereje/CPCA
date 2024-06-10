@@ -16,7 +16,7 @@ export const action =
         .unwrap();
       if (result) {
         toast.success("User Logged in   successfully");
-        return redirect ("/courses");
+        return redirect ("/dashboard");
       }
     } catch (err) {
       console.log(err);

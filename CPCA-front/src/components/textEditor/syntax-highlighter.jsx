@@ -21,7 +21,7 @@ export const SyntaxHighlighter = ({ code }) => {
     }, [code]);
 
     return (
-        <pre className="relative w-full flex flex-col p-3 bg-white">
+        <pre className="relative w-full flex flex-col">
             <div className="flex items-center justify-between gap-3 bg-[#565656] rounded-t-lg w-full xl:max-w-full md:max-w-xl">
             <span className="rounded p-1 text-xs  text-white">{code.language}</span>
                 <CopyToClipboard text={code.content} onCopy={handleCopy}>

@@ -25,7 +25,7 @@ router.route("/all").get(getAllUsers);
 router
   .route("/profile")
   .get(getUserProfile)
-  .patch(upload.single("profileImg"), editUserProfile);
+  .patch( editUserProfile);
 router.route("/logout").post(userLogout);
 router.use(isAdmin)
 router.route("/create-instructor").post(createInstructor);

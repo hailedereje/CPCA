@@ -53,4 +53,6 @@ export const socketConnection = async(server) => {
           io.emit("user-disconnected", delUser);
         });
       });
+
+      return io;
 }

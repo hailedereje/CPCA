@@ -36,7 +36,6 @@ const userRegister = async (req, res) => {
   throw new BadRequestError("Invalid user data");
 };
 const userLogin = async (req, res) => {
-  try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (user && (await user.matchPasswords(password))) {
@@ -45,10 +44,6 @@ const userLogin = async (req, res) => {
       return res.json({ userId: user._id, user, jwt });
     }
     throw new NotFoundError("Invalid email or password");
-  } catch (err) {
-    console.error(err)
-    return res.status(500).send({ message: "something went wrong", title: "internal server error", err })
-  }
 }
 
 
@@ -89,24 +84,23 @@ const getAllUsers = async (req, res) => {
 const getUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
-    return res.json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-    });
+    return res.json(user);
   }
   throw NotFoundError("User not found");
 };
 const editUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   // console.log(req.body);
-  const { username, email, profileImg } = req.body;
-  if (user) {
-    const { username, email, password } = req.body;
+  if (user) { 
+    const { username, profileImg, phoneNumber, bio, studentId, fullName, password } = req.body;
 
+    user.fullName = fullName || user.fullName;  
     user.username = username || user.username;
     user.profileImg = profileImg || user.profileImg;
     // user.password = password || user.password; 
+    user.phoneNumber = phoneNumber || user.phoneNumber;
+    user.bio = bio || user.bio; 
+    user.studentId = studentId || user.studentId;
     if (password) {
       user.password = password;
     }

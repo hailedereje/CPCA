@@ -7,3 +7,4 @@ export {default as discussionQuestionRoutes} from './discussionQuestionRoutes.js
 export {default as quizQuestionRoutes} from './quizQuestionRoutes.js'
 export {default as progressRoutes} from './progressRoutes.js'
 export {default as classroomRoutes} from './classroomRoutes.js'
+export {default as notificationRoutes} from './notificationRoutes.js'
