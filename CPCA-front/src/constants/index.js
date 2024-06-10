@@ -61,6 +61,5 @@ export const defaultFroalaConfig = {
       'moreParagraph': {
         buttons: ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'],
       },
-  
     },
   };

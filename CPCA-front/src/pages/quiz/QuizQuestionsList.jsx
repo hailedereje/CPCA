@@ -76,7 +76,7 @@ const QuizQuestionsList = () => {
             > 
               <MdNavigateBefore size={20} />
             </button>
-            <span>
+            <span className="text-black">
               Page {currentPage} of {totalPages}
             </span>
             <button
@@ -112,10 +112,10 @@ const QuestionsList = ({ questions }) => {
 
   return (
     <div className="max-w-4xl p-4">
-      <h1 className="text-2xl font-bold mb-4">Questions List</h1>
-      <ul className="divide-y divide-gray-200">
+      <h1 className="text-2xl font-bold mb-4 text-black">Questions List</h1>
+      {data.length !== 0 ?<ul className="divide-y divide-gray-200">
         {data?.map((question, index) => (
-          <li key={question._id} className="flex items-center justify-between py-4 px-2 shadow-md ">
+          <li key={question._id} className="flex items-center justify-between py-4 px-2 shadow-md">
             <div className="flex items-center">
               <span className="mr-4 text-lg font-semibold">{index + 1}.</span>
               <span className="line-clamp-1 text-md">
@@ -138,7 +138,7 @@ const QuestionsList = ({ questions }) => {
             </div>
           </li>
         ))}
-      </ul>
+      </ul> : <div className="text-center text-gray-500">No questions found</div>}
     </div>
   );
 };

@@ -25,7 +25,6 @@ const courseSchema = yup.object({
 export const CreateCourse = () => {
 
     const { register, handleSubmit, formState } = useForm({ resolver: yupResolver(courseSchema) })
-
     const {mutateAsync:postCourse,isPending } = useCreateCourse()
 
     const onSubmite =  async (formData) =>{
@@ -44,28 +43,28 @@ export const CreateCourse = () => {
                         <div className='w-full space-y-4'>
                             <label className="text-xl capitalize font-medium flex gap-4 items-center">
                                 <IconWrapper bg="bg-blue-500" color="text-white" size={5} icon={<MdOutlineTitle size={15} />} />
-                                <span >Name</span>
+                                <span className="text-blue-500">Name</span>
                                 </label>
                             <input
                                 type="text"
                                 name="title"
                                 id="title"
                                 {...register('title')}
-                                className="dark:bg-transparent mt-1 p-2 w-full text-sm border border-gray-300 rounded-md dark:text-white  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none dark "
+                                className="dark:bg-transparent mt-1 p-2 w-full text-sm border border-gray-300 rounded-md text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none dark "
                             />
                             <p className='text-red-500 text-xs'>{errors.title?.message || ""}</p>
                         </div>
                         <div className='w-full space-y-4'>
                             <label className="text-xl capitalize font-medium flex gap-4 items-center">
                                 <IconWrapper bg="bg-blue-500" color="text-white" size={5} icon={<GrUserManager size={15} />} />
-                                <span >Author</span>
+                                <span className="text-blue-500">Author</span>
                                 </label>
                             <input
                                 type="text"
                                 name="author"
                                 id="author"
                                 {...register("author")}
-                                className="dark:bg-transparent mt-1 p-2 w-full text-sm border border-gray-300 rounded-md dark:text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
+                                className="dark:bg-transparent mt-1 p-2 w-full text-sm border border-gray-300 rounded-md text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
                             />
                             <p className='text-red-500 text-xs'>{errors.author?.message || ""}</p>
                         </div>
@@ -75,13 +74,13 @@ export const CreateCourse = () => {
                         <div className='w-full space-y-4'>
                             <label className="text-xl capitalize font-medium flex gap-4 items-center">
                                 <IconWrapper bg="bg-blue-500" color="text-white" size={5} icon={<IoIosTimer size={15} />} />
-                                <span >Duration</span>
+                                <span className="text-blue-500">Duration</span>
                                 </label>
                             <select
                                 name="duration"
                                 id="duration"
                                 {...register("duration")}
-                                className="dark:bg-transparent select w-full text-sm border border-gray-300 rounded-md dark:text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
+                                className="dark:bg-transparent select w-full text-sm border border-gray-300 rounded-md text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
                             >
                                 <option className="text-black" value={1} defaultChecked>1 month</option>
                                 <option className="text-black" value={2}>2 month </option>
@@ -93,14 +92,14 @@ export const CreateCourse = () => {
                         <div className='w-full space-y-4'>
                             <label className="text-xl capitalize font-medium flex gap-4 items-center">
                                 <IconWrapper bg="bg-blue-500" color="text-white" size={5} icon={<PiStepsFill size={15}/>} />
-                                <span >Level</span>
+                                <span className="text-blue-500">Level</span>
                                 </label>
                             <select
                                 name="level"
                                 id="level"
                                 {...register("level")}
-                                className="dark:bg-transparent select  w-full text-sm border border-gray-300 rounded-md dark:text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
-                            >
+                                className="dark:bg-transparent select  w-full text-sm border border-gray-300 rounded-md text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none"
+                                >
                                 <option className="text-black" value="BEGINER" defaultChecked>Beginner</option>
                                 <option className="text-black" value="INTERMEDIATE">Intermediate</option>
                                 <option className="text-black" value="ADVANCED">Advanced</option>
@@ -111,7 +110,7 @@ export const CreateCourse = () => {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full flex items-center justify-center max-w-xs py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-1  focus:ring-indigo-500"
+                        className="w-full flex items-center justify-center max-w-xs py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-indigo-700 focus:outline-none focus:ring-1  focus:ring-indigo-500"
                     >
                         {isPending ? <AiOutlineLoading3Quarters className='animate-spin' /> : <span>Create Course</span>}
                     </button>

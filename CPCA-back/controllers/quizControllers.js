@@ -20,7 +20,7 @@ export const createQuiz = async (req, res) => {
     await quiz.save();
     await chapter.save();
 
-    return res.status(201).json({ message: 'Quiz created successfully' });
+    return res.status(201).json({ message: 'Quiz created successfully', quiz });
 
   } catch (error) {
     return res.status(500).json({ message: error.message });

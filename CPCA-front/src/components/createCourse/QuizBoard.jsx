@@ -11,6 +11,7 @@ import { defaultFroalaConfig } from '@/constants';
 import { addInstruction } from '@/features/course/quizSlice';
 import { useCreateQuiz } from './hooks/course-hooks';
 import 'froala-editor/css/themes/gray.min.css';
+import { IconWrapper } from './components/icon-wrapper';
 
 const InstructionEditor = () => {
   const { instruction } = useSelector(state => state.quizState);
@@ -60,8 +61,10 @@ export const QuizBoard = () => {
       await quizSchema.validate(quizForm ).then(() => console.log('Validation passed'))
 
       await createQuiz({ courseId:param.id, chapterId: param.chapterId, ...quizForm})
-        .then(result => console.log(result))
-      // navigate("")
+        .then(result => {
+          navigate(`${result.data.quiz._id}`)
+        })
+
     } catch (error) {
       console.error("Failed to create quiz:", error);
     } finally{
@@ -70,32 +73,32 @@ export const QuizBoard = () => {
   };
 
   return (
-    <div className="w-full p-6 dark:text-white max-w-4xl">
+    <div className="w-full p-6 max-w-4xl">
       <h2 className="text-3xl font-semibold text-center mb-8">Create Quiz</h2>
       <div  className='flex flex-col justify-between gap-4'>
         <div className="flex items-start justify-between gap-4">
           <div className='flex flex-col gap-2'>
             <span className="text-xl capitalize font-medium flex gap-4 items-center">
-              <MdOutlineDescription />
+            <IconWrapper icon={<MdOutlineDescription />} bg={"bg-blue-600"} color={"text-white"} size={5}/>
               <span>Title</span>
             </span>
-            <span className="text-xs lowercase line-clamp-2 text-gray-500 dark:text-gray-200">
+            <span className="text-xs lowercase line-clamp-2 text-gray-500 ">
               Enter a descriptive and concise title for the quiz. This title should give participants a clear idea of the quiz topic or focus.
             </span>
             <input
               type="text"
               name="title"
               onChange={(e) => setQuizForm({ ...quizForm, title: e.target.value })}
-              className='outline-none p-1 ps-2 rounded text-sm dark:text-white dark:bg-gray-600 border border-gray-400 max-w-sm'
+              className='outline-none p-1 ps-2 rounded text-sm border border-gray-400 max-w-sm'
             />
 
           </div>
           <div className='flex flex-col gap-2'>
             <span className="text-xl capitalize font-medium flex gap-4 items-center">
-              <MdOutlineDescription />
+              <IconWrapper icon={<MdOutlineDescription />} bg={"bg-blue-600"} color={"text-white"} size={5}/>
               <span>Duration</span>
             </span>
-            <span className="text-xs lowercase line-clamp-2 text-gray-500 dark:text-gray-200">
+            <span className="text-xs lowercase line-clamp-2 text-gray-500">
               Specify the total time allowed for the quiz in minutes. This is the maximum amount of time participants will have to complete all quiz questions.
             </span>
             <input
@@ -104,17 +107,17 @@ export const QuizBoard = () => {
               min={15}
               name="duration"
               onChange={(e) => setQuizForm({...quizForm, duration: e.target.value})}
-              className='outline-none p-1 ps-2 rounded text-sm dark:text-white dark:bg-gray-600 border border-gray-400 max-w-sm'
+              className='outline-none p-1 ps-2 rounded text-sm border border-gray-400 max-w-sm'
             />
 
           </div>
         </div>
         <div className="mb-4 flex flex-col gap-2">
           <span className="text-xl capitalize font-medium flex gap-4 items-center">
-            <MdOutlineDescription />
+          <IconWrapper icon={<MdOutlineDescription />} bg={"bg-blue-600"} color={"text-white"} size={5}/>
             <span>Instruction</span>
           </span>
-          <span className="text-xs lowercase line-clamp-2 text-gray-500 dark:text-gray-200">
+          <span className="text-xs lowercase line-clamp-2 text-gray-500 ">
             Provide clear and detailed instructions or guidelines for the quiz participants. Include important information such as how to answer questions, any rules they must follow, and what to do if they have technical issues.
           </span>
           
@@ -131,7 +134,7 @@ export const QuizBoard = () => {
         <button
           onClick={onSubmit}
           type="submit"
-          className="bg-indigo-500 max-w-xs text-white px-6 py-1 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
+          className="bg-blue-500 h-10 max-w-xs text-white px-6 py-1 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
         >
           {loading ? 'Creating Quiz...' : 'Create Quiz'}
         </button>

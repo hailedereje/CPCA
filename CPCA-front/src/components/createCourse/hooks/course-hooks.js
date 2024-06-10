@@ -23,7 +23,7 @@ import {
 
 import { showErrorToast, showSuccessToast } from '@/toasts/toast';
 import toast from 'react-hot-toast';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
   
 export const useCreateCourse = () => {
   const navigate = useNavigate()
@@ -96,11 +96,13 @@ export const useChapter = (courseId, chapterId) => {
 };
 
 export const useCreateLab = (courseId) => {
+  const navigate = useNavigate()
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createLab,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey:['course',courseId]});
+      navigate(`/dashboard/course/update/${courseId}`)
       showSuccessToast("lab created successfully")
     },
     onError: () => {

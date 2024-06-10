@@ -10,7 +10,7 @@ import { MdOutlineDescription, MdOutlineIntegrationInstructions } from "react-ic
 import { RiAddLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { useCreateQuestion, useGetQuiz, useUpdateQuestion } from "../hooks/quiz-hooks";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { addChoices } from "@/features/course/quizSlice";
 import * as yup from 'yup';
 import { useCreateQuiz } from "../hooks/course-hooks";
@@ -32,6 +32,7 @@ const questionValidation = yup.object().shape({
 
 
 export const AddQuestion = () => {
+  const navigate = useNavigate()
   const client = useQueryClient()
   const param = useParams();
   const { quizId, questionId } = param
@@ -67,10 +68,14 @@ export const AddQuestion = () => {
       }
       if (!!questionId) {
         const data = { question: value, options: choices, questionId, quizId }
-        await updateQuestion({ data, questionId }).then(result => console.log("updated", result))
+        await updateQuestion({ data, questionId }).then(result => {
+          // navigate("/question")
+        })
       }
       else {
-        await createQuestion({ question: value, options: choices, quizId }).then(result => console.log(result))
+        await createQuestion({ question: value, options: choices, quizId }).then(result => {
+          // navigate("/question")
+        })
       }
 
     } catch (err) {

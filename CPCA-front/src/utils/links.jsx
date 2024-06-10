@@ -25,7 +25,7 @@ export const AdminLinks = [
   { id: 2, text: "profile", path: "profile", icon: <ImProfile /> },
   { id: 3, text: "Users", path: "users", icon: <FaUsers /> },
   { id: 4, text: "Create course",path: "course",icon: <RiSoundModuleLine />},
-  { id: 5, text: "Draft courses", path: "courses/draft",icon: <RiDraftLine/>}
+  { id: 5, text: "Draft courses", path: "course/drafts",icon: <RiDraftLine/>}
 ];
 
 

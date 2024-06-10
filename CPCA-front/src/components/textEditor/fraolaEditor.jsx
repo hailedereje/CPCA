@@ -11,6 +11,7 @@ import DOMPurify from "dompurify"
 import { closeEditor, setLessonItemValue } from '@/features/course/coursSidebarSlice';
 import { useAddLessonItem, useUpdateLessonItem } from '../createCourse/hooks/course-hooks';
 import { ActionTypes } from '../createCourse/action.Types';
+import { defaultFroalaConfig } from '@/constants';
 
 export const TextEditor = ({lessonId}) => {
   const  {showTextEditor,lessonItem}  = useSelector(x => x.courseInputState)
@@ -95,14 +96,15 @@ const onSubmit = async() => {
     
     toolbarButtons: {
         'moreMisc': {
-            buttons: ['fullscreen', 'undo', 'redo', 'print', 'spellChecker', 'codeView', 'html'],
-          },
+        buttons: ['fullscreen'],
+        },
         'moreText': {
-          buttons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting'],
+            buttons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting'],
         },
         'moreParagraph': {
-          buttons: ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'],
+            buttons: ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'],
         },
+    
         'moreRich': {
           buttons: ['insertImage', 'insertLink', 'insertTable', 'insertHR', 'embedly', 'specialCharacters'],
         },
@@ -117,7 +119,7 @@ const onSubmit = async() => {
       <>
         {showTextEditor &&  <div className={`fixed z-30 flex items-center justify-center top-0 left-0 w-screen h-screen  transform transition-all duration-500 ${showTextEditor ? 'scale-100 ' : 'scale-40 hidden'}`}>
             <div  className="absolute top-0 left-0 w-full h-full bg-black/30" />
-            <div className="flex items-center justify-center gap-4 w-1/2  bg-red-400 relative ">
+            <div className="flex items-center justify-center gap-4 relative w-2/3">
                 <FroalaEditor tag='div'
                     model={value}
                     config={defaultConfig}
