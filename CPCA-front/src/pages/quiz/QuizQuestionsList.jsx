@@ -46,9 +46,9 @@ const QuizQuestionsList = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 dark:bg-transparent dark:text-white">
+    <div className="w-full h-full p-4 dark:bg-transparent dark:text-white">
       {/* <Navbar /> */}
-      {<div className="container mx-auto p-4">
+      {<div className="container p-4 ">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold text-gray-800 dark:text-white">Quiz Questions</h2>
           <button onClick={() => navigate("question")} className="flex items-center justify-center bg-blue-500 p-2 rounded-md">
@@ -76,7 +76,7 @@ const QuizQuestionsList = () => {
             > 
               <MdNavigateBefore size={20} />
             </button>
-            <span>
+            <span className="text-black">
               Page {currentPage} of {totalPages}
             </span>
             <button
@@ -110,21 +110,12 @@ const QuestionsList = ({ questions }) => {
     setData(updatedQuestions);
   };
 
-  const handleEdit = (id) => {
-    setEditQuestionId(id);
-    // Implement actual edit functionality here
-  };
-
-  const handleSave = () => {
-    setEditQuestionId(null);
-  };
-
   return (
     <div className="max-w-4xl p-4">
-      <h1 className="text-2xl font-bold mb-4">Questions List</h1>
-      <ul className="divide-y divide-gray-200">
+      <h1 className="text-2xl font-bold mb-4 text-black">Questions List</h1>
+      {data.length !== 0 ?<ul className="divide-y divide-gray-200">
         {data?.map((question, index) => (
-          <li key={question._id} className="flex items-center justify-between py-4 px-2 shadow-md ">
+          <li key={question._id} className="flex items-center justify-between py-4 px-2 shadow-md">
             <div className="flex items-center">
               <span className="mr-4 text-lg font-semibold">{index + 1}.</span>
               <span className="line-clamp-1 text-md">
@@ -147,7 +138,7 @@ const QuestionsList = ({ questions }) => {
             </div>
           </li>
         ))}
-      </ul>
+      </ul> : <div className="text-center text-gray-500">No questions found</div>}
     </div>
   );
 };

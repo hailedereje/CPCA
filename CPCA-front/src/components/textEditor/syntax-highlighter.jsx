@@ -10,7 +10,7 @@ import { MdContentCopy } from "react-icons/md";
 export const SyntaxHighlighter = ({ code }) => {
     const codeRef = useRef(null);
     const [copied, setCopied] = useState(false);
-
+    console.log(code);
     const handleCopy = () => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2500);

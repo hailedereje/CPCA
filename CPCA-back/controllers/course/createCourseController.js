@@ -1,3 +1,4 @@
+import Course from "../../models/course.js"
 import { createCourseService } from "../../services/course/createCourseService.js"
 
 export const createCourseController = async (req, res) => {
@@ -10,3 +11,14 @@ export const createCourseController = async (req, res) => {
         return res.status(500).send({ message: "something went wrong", title: "internal server error",err })
     }
   }
+
+  export const updateCourseController = async (req, res) => {
+    try{
+        const { courseId } = req.params
+        const {title,author,duration,level } = req.body
+        const course = await Course.findByIdAndUpdate(courseId, { title,author,duration,level },{new:true})
+    } catch(err) {
+        console.error(err)
+        return res.status(500).send({ message: "something went wrong", title: "internal server error",err })
+    }
+    }

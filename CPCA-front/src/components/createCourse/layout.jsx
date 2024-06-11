@@ -25,11 +25,11 @@ export const CourseLayout = () => {
       return JSON.stringify(error.message)
     }
     return (
-        <div className="flex flex-col w-full max-w-[2048px]">
+        <div className="w-full h-full max-w-[2048px]">
            {isLoading ? <Loading/>: <>
-                <div className="flex">
+                <div className="flex w-full h-full">
                     <Drawer data={data.data.course}/>
-                    <div className="flex items-start justify-center w-full min-h-screen">
+                    <div className="flex items-start justify-center w-full h-full">
                         <Outlet/>
                     </div>
                 </div>

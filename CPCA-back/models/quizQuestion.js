@@ -6,7 +6,6 @@ const quizQuestionSchema = new Schema({
         { 
             option: { type: String, required: true },
             isCorrect: { type: Boolean, required: true },  
-            _id: false
         }
     , ],
     quizId: { type: mongoose.Schema.Types.ObjectId,ref: "Quiz", required: true},

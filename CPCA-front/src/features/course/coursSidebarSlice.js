@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialValue = { 
   courseId: '',
   chapterId: '',
+  lessonIds: [],
   lessonId: '',
   lessonItemId:'',
   actionType: '',
@@ -61,8 +62,8 @@ const uiSlice = createSlice({
       state.formState = {...state.formState,courseId,chapterId,message,showConfirmation:true}
     },
     openConfirmationDialog: (state,action) => {
-      const { courseId = '',chapterId = '',lessonId = '',lessonItemId = '',actionType,message } = action.payload
-      state.formState = { ...state.formState,courseId,chapterId,lessonId,lessonItemId,actionType,message,showConfirmation:true }
+      const { courseId = '',chapterId = '',lessonId = '',lessonItemId = '',actionType,message,lessonIds } = action.payload
+      state.formState = { ...state.formState,courseId,chapterId,lessonId,lessonItemId,actionType,message,lessonIds,showConfirmation:true }
     },
     deleteLesson: (state,action) => {
 

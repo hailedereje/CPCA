@@ -36,12 +36,11 @@ function RichTextExample() {
   }
 
   return (
-    <div className="py-10 p-4 flex flex-col w-full gap-4">
-      <Breadcrumb items={[{ title: "Courses", link: "courses" }, { title: data?.data?.lesson.title }]} />
+    <div className=" h-full p-4 flex flex-col w-full gap-4">
       {!isSuccess ? <Loading/>: <div className="flex flex-col w-full mx-auto max-w-[1024px]">
         <div className={`group flex items-end  gap-4 ${data.data.lesson.content.length === 0 ? "":"hidden"}`}>
           <EditLinks />
-          <span className="text-xl font-medium uppercase">click here and start adding contents to your <span className="text-red-400">lesson</span></span>
+          <span className="text-lg font-medium uppercase ">click here and start adding contents to your <span className="text-red-400">lesson</span></span>
         </div>
         <CodeContentEditor lessonId={param.lessonId}/>
         <TextEditor lessonId={param.lessonId}/>

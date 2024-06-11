@@ -1,6 +1,18 @@
+import { ActionTypes } from "@/components/createCourse/action.Types";
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 
+const quizModal = {
+  label:'',
+  message:'',
+  actionType:'',
+  open:false,
+  data:null,
+  showScore:false,
+  totalQuestions:1,
+  score:0
+}
 const initialState = {
+  quizModal,
   title: "",
   instruction: "",
   duration: 0,
@@ -48,9 +60,34 @@ const quizSlice = createSlice({
     deleteChoice: (state, action) => {
       const question = state.questions.find(q => q.id === action.payload.questionId);
       question.choices = question.choices.filter(c => c.id !== action.payload.choiceId);
-    }
+    },
+    openQuizDialog: (state, action) => {
+      const {label, message, actionType, data} = action.payload;
+      switch (actionType) {
+        case ActionTypes.CLOSE_QUIZ:
+          state.quizModal = {label,message,actionType,open: true,data: null}
+          break;
+        case ActionTypes.SUBMIT_QUIZ:
+          state.quizModal = {label,message,actionType,open: true,data}
+          break;
+       
+      }
+    },
+    closeQuizDialog: (state, action) => {
+      state.quizModal.open = false;
+    },
+    showScoreDialog: (state, action) => {
+      const {score,totalQuestions} = action.payload;
+      state.quizModal = {...state.quizModal,showScore:true,score,totalQuestions}
   },
+  closeScoreDialog: (state, action) => {
+    state.quizModal = {...state.quizModal,showScore:false}
+  },
+  }
 });
 
-export const { addInstruction, updateQuiz, createQuiz, addChoices, updateChoice, deleteChoice,setQuestionType } = quizSlice.actions;
+export const { addInstruction, updateQuiz, 
+  createQuiz, addChoices, updateChoice, 
+  deleteChoice,setQuestionType, openQuizDialog,
+  closeQuizDialog, showScoreDialog,closeScoreDialog } = quizSlice.actions;
 export default quizSlice.reducer;

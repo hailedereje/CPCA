@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { api } from "@/api"; // Adjust the import path as needed
+import {
+  api,
+  useGetChaptersProgressQuery,
+  useGetLessonsProgressQuery,
+  useRequestUnlockChapterMutation,
+  useRequestUnlockLessonMutation,
+} from "@/api";
 import {
   FiChevronDown,
   FiChevronRight,
@@ -7,6 +13,9 @@ import {
   FiBook,
   FiFolder,
   FiClipboard,
+  FiUnlock,
+  FiLock,
+  FiCheckCircle,
 } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { Link, useOutletContext } from "react-router-dom";
@@ -14,7 +23,6 @@ import {
   useCourse,
   useLesson,
 } from "@/components/createCourse/hooks/course-hooks";
-import { CheckCircleIcon } from "@heroicons/react/solid";
 import DOMPurify from "dompurify";
 import { SyntaxHighlighter } from "@/components/textEditor/syntax-highlighter";
 
@@ -25,25 +33,104 @@ const CourseDetails = () => {
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [openChapters, setOpenChapters] = useState({});
   const [openLabs, setOpenLabs] = useState(false);
-  const [progress, setProgress] = useState({});
+  const [requestUnloackChapter] = useRequestUnlockChapterMutation();
+  const [requestUnlockLesson] = useRequestUnlockLessonMutation();
+  const [chapterId, setChapterId] = useState(null);
 
-  useEffect(() => {
-    if (data) {
-      fetchProgress(data.data.course?.id);
-    }
-  }, [data]);
+  const {
+    data: chapterProgressData,
+    isLoading: chapterProgressLoading,
+    isError: chapterProgressError,
+  } = useGetChaptersProgressQuery(
+    {
+      classroomId: classroom._id,
+      courseId: classroom.courseId,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
 
-  const fetchProgress = async (courseId) => {
+  const {
+    data: lessonProgressData,
+    isLoading: lessonProgressLoading,
+    isError: lessonProgressError,
+  } = useGetLessonsProgressQuery(
+    {
+      classroomId: classroom._id,
+      courseId: classroom.courseId,
+      chapterId: chapterId,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
+
+  console.log("lessonProgressData", lessonProgressData);
+
+  const requestChapterUnlock = async (chapterId) => {
     try {
-      const response = await api.get(`/courses/${courseId}/progress`);
-      setProgress(response.data);
+      await requestUnloackChapter({
+        classroomId: classroom._id,
+        courseId: classroom.courseId,
+        chapterId: chapterId,
+      }).unwrap();
+      toast.success("Chapter unlocked successfully.");
     } catch (error) {
-      console.error("Failed to fetch progress:", error);
-      toast.error("Failed to load progress. Please try again later.");
+      toast.error(error.data.message);
     }
   };
 
+  const requestLessonUnlock = async (lessonId) => {
+    try {
+      await requestUnlockLesson({
+        classroomId: classroom._id,
+        courseId: classroom.courseId,
+        chapterId: chapterId,
+        lessonId: lessonId,
+      }).unwrap();
+      toast.success("Lesson unlocked successfully.");
+    } catch (error) {
+      toast.error(error.data.message);
+    }
+  };
+
+  const renderChapterProgress = (id) => {
+    const itemProgress = chapterProgressData?.filter(
+      (item) => item.chapterId === id
+    )[0];
+    if (itemProgress) {
+      if (itemProgress.completed) {
+        return <FiCheckCircle className="text-green-500 ml-2 h-6 w-6" />;
+      } else if (itemProgress.unlocked) {
+        return <FiUnlock className="text-yellow-500 ml-2 h-6 w-6" />;
+      } else {
+        return <FiLock className="text-gray-500 ml-2 h-6 w-6" />;
+      }
+    }
+    return null;
+  };
+
+  const renderLessonProgress = (id) => {
+    const itemProgress = lessonProgressData?.filter(
+      (item) => item.lessonId === id
+    )[0];
+    if (itemProgress) {
+      if (itemProgress.completed) {
+        return <FiCheckCircle className="text-green-500 ml-2 h-6 w-6" />;
+      } else if (itemProgress.unlocked) {
+        return <FiUnlock className="text-yellow-500 ml-2 h-6 w-6" />;
+      } else {
+        return <FiLock className="text-gray-500 ml-2 h-6 w-6" />;
+      }
+    }
+    return null;
+  };
+
   const toggleChapter = (chapterId) => {
+    const itemProgress = chapterProgressData?.filter(
+      (item) => item.chapterId === chapterId
+    )[0];
+    if (itemProgress && !itemProgress.unlocked) {
+      toast.error("Please unlock me first.");
+      return;
+    }
     setOpenChapters((prev) => ({
       ...prev,
       [chapterId]: !prev[chapterId],
@@ -56,18 +143,6 @@ const CourseDetails = () => {
 
   const handleLessonClick = (id) => {
     setSelectedLesson(id);
-  };
-
-  const renderProgress = (id, type) => {
-    const itemProgress = progress[type]?.[id];
-    if (itemProgress) {
-      return itemProgress.completed ? (
-        <CheckCircleIcon className="text-green-500 ml-2 h-6 w-6" />
-      ) : (
-        <span className="text-yellow-500 ml-2">In Progress</span>
-      );
-    }
-    return null;
   };
 
   const {
@@ -125,7 +200,6 @@ const CourseDetails = () => {
                           >
                             <FiFolder className="mr-2" />
                             {lab.title}
-                            {renderProgress(lab._id, "lab")}
                           </Link>
                         </li>
                       ))}
@@ -141,32 +215,43 @@ const CourseDetails = () => {
                 {course.chapters.map((chapter) => (
                   <li key={chapter._id} className="p-2">
                     <div>
-                      <button
-                        className="flex items-center w-full p-2 text-left hover:bg-gray-400 rounded"
-                        onClick={() => toggleChapter(chapter._id)}
-                      >
-                        {openChapters[chapter._id] ? (
-                          <FiChevronDown className="mr-2" />
-                        ) : (
-                          <FiChevronRight className="mr-2" />
-                        )}
-                        <FiBook className="mr-2" />
-                        {chapter.title}
-                        {renderProgress(chapter._id, "chapter")}
-                      </button>
+                      <div className="flex gap-2 items-center">
+                        <button
+                          className="flex items-center w-full p-2 text-left hover:bg-gray-400 rounded"
+                          onClick={() => {
+                            setChapterId(chapter._id),
+                              toggleChapter(chapter._id);
+                          }}
+                        >
+                          {openChapters[chapter._id] ? (
+                            <FiChevronDown className="mr-2" />
+                          ) : (
+                            <FiChevronRight className="mr-2" />
+                          )}
+                          <FiBook className="mr-2" />
+                          {chapter.title}
+                        </button>
+                        <button
+                          onClick={() => requestChapterUnlock(chapter._id)}
+                        >
+                          {renderChapterProgress(chapter._id)}
+                        </button>
+                      </div>
                       {openChapters[chapter._id] && (
                         <ul className="pl-6 space-y-2">
                           {chapter.lessons.map((lesson) => (
                             <li key={lesson._id}>
                               <button
                                 className="flex items-center w-full p-2 text-left hover:bg-gray-400 rounded"
-                                onClick={() =>
-                                  handleLessonClick(lesson._id)
-                                }
+                                onClick={() => handleLessonClick(lesson._id)}
                               >
                                 <FiFileText className="mr-2" />
                                 {lesson.title}
-                                {renderProgress(lesson._id, "lesson")}
+                              </button>
+                              <button
+                                onClick={() => requestLessonUnlock(lesson._id)}
+                              >
+                                {renderLessonProgress(lesson._id)}
                               </button>
                             </li>
                           ))}
@@ -178,7 +263,6 @@ const CourseDetails = () => {
                               >
                                 <FiClipboard className="mr-2" />
                                 {chapter.quiz.title}
-                                {renderProgress(chapter.quiz._id, "quiz")}
                               </Link>
                             </li>
                           )}
@@ -202,7 +286,11 @@ const CourseDetails = () => {
               return (
                 <div key={index} className="mb-4">
                   {content.type === "text" && (
-                    <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content.value.content) }} />
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(content.value.content),
+                      }}
+                    />
                   )}
                   {content.type === "code" && (
                     <SyntaxHighlighter code={content.value} />

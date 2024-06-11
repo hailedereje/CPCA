@@ -18,6 +18,7 @@ const QuizSchema = new Schema({
     ref: "QuizQuestion",
   }],
   duration: { type: Number , required: true}, 
+  takenBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   
 }, { timestamps: true});
 

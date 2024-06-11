@@ -1,26 +1,29 @@
 import { close } from "@/features/course/coursSidebarSlice";
 import { TiWarningOutline } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
-import { useDeleteChapter, useDeleteLessonItem } from "../hooks/course-hooks";
+import { useDeleteChapter, useDeleteCourse, useDeleteLessonItem } from "../hooks/course-hooks";
 import { useState } from "react";
 import { ActionTypes } from "../action.Types";
 import { showSuccessToast } from "@/toasts/toast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const Confirmation = () => {
     const param = useParams()
+    const navigate = useNavigate()
+
     const dispatch = useDispatch();
     const [ loading, setLoading ] = useState(false)
 
-    const { actionType, courseId, chapterId,lessonId,lessonItemId,showConfirmation, message } = useSelector(x => x.courseInputState.formState);
+    const { actionType, courseId, chapterId,lessonId,lessonIds,lessonItemId,showConfirmation, message } = useSelector(x => x.courseInputState.formState);
     const data = useSelector(x => x.courseInputState.formState)
-    
+
     const {mutateAsync: deleteLessonItem } = useDeleteLessonItem(lessonId)
-    const {mutateAsync: deleteChapter } = useDeleteChapter(courseId)
+    const {mutateAsync: deleteChapter } = useDeleteChapter(courseId,lessonIds)
+    const {mutateAsync: deleteCourse } = useDeleteCourse(courseId)
 
     const actions = {
         deleteLessonItem: async() => await deleteLessonItem({lessonId,lessonItemId}),
-        deleteChapter: async() => await deleteChapter({courseId,chapterId}) 
+        deleteChapter: async() => await deleteChapter({courseId,chapterId,lessonIds}) 
     }
     const onSubmit = async() => {
         try {
@@ -31,7 +34,11 @@ export const Confirmation = () => {
                     break
                 case ActionTypes.DELETE_CHAPTER:
                     await actions.deleteChapter()
+                    navigate('')
                     break
+                case ActionTypes.DELETE_COURSE:
+                    await deleteCourse({courseId})
+                    break;
             }
         }catch(err) {
             console.log(err)
@@ -74,3 +81,4 @@ export const Confirmation = () => {
         </div>
     )
 }
+

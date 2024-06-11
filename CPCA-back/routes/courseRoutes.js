@@ -2,7 +2,6 @@ import express from "express";
 import { authenticate, isAdmin, isInstructor, studentCheck } from "../middlewares/authenticate.js";
 
 import {
-  deleteCourse,
   getAllCourses,
   getChapterById,
   getCourseListFilter,
@@ -37,6 +36,7 @@ import { deletChapterController } from "../controllers/chapter/deleteChapterCont
 import { uploadImageController } from "../controllers/course/uploadImageController.js";
 import { createLab, deleteLab, getLab, getLabs, updateLab } from "../controllers/lab/labController.js";
 import { labValidationSchema } from "../validation/lab/labValidator.js";
+import { deleteCourse } from "../controllers/course/deleteCourse.js";
 
 const router = express.Router();
 router.use(authenticate);
@@ -48,6 +48,8 @@ router.get("/all/drafts",getAllDraftCourses)
 router.get("/courseListFilter",getCourseListFilter)
 // router.post("/new",validateRequest(createCourseSchema), createCourseController);
 router.post("/new", createCourseController);
+router.put("/course/:id", updateCourse);
+router.delete("/course/:id",deleteCourse)
 
 router.get("/course/:courseId/chapters/:chapterId", getChapterById);
 

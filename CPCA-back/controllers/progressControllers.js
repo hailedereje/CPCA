@@ -1,6 +1,4 @@
-import path from "path";
-import { Chapter, Classroom, Lesson, PracticeQuestion, Progress, Quiz } from "../models/index.js";
-import { model } from "mongoose";
+import { Chapter, Classroom, Lab, Lesson, PracticeQuestion, Progress, Quiz } from "../models/index.js";
 
 // Helper function to get progress
 const getProgress = async (classroomId, studentId, courseId, chapterId) => {
@@ -89,26 +87,48 @@ export const trackTime = async (req, res) => {
   }
 }
 
-// Endpoint to submit quiz progress
-export const submitQuizProgress = async (req, res) => {
-  const { studentId, courseId, chapterId, quizId, score, totalScore, answers } = req.body;
 
+export const submitQuizProgress =  async (req, res) => {
+    const {studentId,quizId,questions} = req.body;
+    const classroomId = "665a14e2e5dda17a7dcd55df"
   try {
+    const quiz = await Quiz.findById(quizId);
+    if (!quiz) {
+      return res.status(404).json({ error: 'Quiz not found' });
+    }
+    const { courseId, chapterId } = quiz;
+    const score = calculateScore(quiz, questions);
+    const totalScore = quiz.questions.length;
+
     let progress = await Progress.findOne({ studentId, courseId, chapterId, quizId });
     if (!progress) {
-      progress = new Progress({ studentId, courseId, chapterId, quizId, completed: true, score, totalScore, answers });
+      progress = new Progress({classroomId, studentId, courseId, chapterId, quizId, completed: true, score, totalScore });
     } else {
       progress.completed = true;
       progress.score = score;
       progress.totalScore = totalScore;
-      progress.answers = answers;
     }
 
     await progress.save();
-    res.json(progress);
+    res.json({score:progress.score, totalScore:progress.totalScore});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+const calculateScore = (quiz, answeredQuestions) => {
+  let score = 0;
+  answeredQuestions.forEach(answeredQuestion => {
+    const question = quiz.questions.find(q => q.id === answeredQuestion.questionId);
+    if (question) {
+      const selectedOption = question.options.find(option => option.id === answeredQuestion.answerId);
+      if (selectedOption && selectedOption.isCorrect) {
+        score++; 
+      }
+    }
+  });
+
+  return score;
 };
 
 // Endpoint to submit practice question progress
@@ -132,6 +152,7 @@ export const submitPracticeProgress = async (req, res) => {
 };
 
 // requestUnlockChapter and requestUnlockLesson functions
+
 const arePreviousItemsCompleted = async (classroomId, courseId, currentId, studentId, type) => {
   if (type === 'chapter') {
     const chapters = await Chapter.find({ courseId }).sort({ _id: 1 });
@@ -148,7 +169,74 @@ const arePreviousItemsCompleted = async (classroomId, courseId, currentId, stude
       if (!progress || !progress.completed) return false;
     }
   }
+  else if (type === 'lab'){
+    const labs = await Lab.find({ courseId: currentId }).sort({ _id: 1 });
+    for (let lab of labs) {
+      if (lab._id.toString() === currentId) break;
+      const progress = await Progress.findOne({ classroomId, studentId: req.user._id, courseId, labId: lab._id });
+      if (!progress || !progress.completed) return false;
+    }
+  }
   return true;
+};
+
+export const requestUnlockQuiz = async (req, res) => {
+  const { classroomId, courseId, chapterId, quizId } = req.body;
+  const studentId = req.user._id;
+
+  try {
+    const lessons = await Lesson.find({ chapterId }).sort({ _id: 1 });
+    const allLessonsCompleted = lessons.every(lesson => {
+      return Progress.findOne({ classroomId, studentId, courseId, chapterId, lessonId: lesson._id, completed: true });
+    });
+
+    if (allLessonsCompleted) {
+      let progress = await Progress.findOne({ classroomId, studentId, courseId, chapterId, quizId });
+      if (!progress) {
+        progress = new Progress({ classroomId, studentId, courseId, chapterId, quizId, unlocked: true });
+      }
+      else if (progress.unlocked) {
+        return res.status(400).json({ success: false, message: 'Quiz is already unlocked.' });
+      }
+      else {
+        progress.unlocked = true;
+      }
+      await progress.save();
+      res.status(200).json({ success: true, message: 'Quiz unlocked successfully.' });
+    } else {
+      res.status(400).json({ success: false, message: 'All previous lessons must be completed before unlocking this quiz.' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const requestUnlockLab = async (req, res) => {
+  const { classroomId, courseId, chapterId, labId } = req.body;
+  const studentId = req.user._id;
+  const currentId = labId;
+
+  try {
+    const allPreviousCompleted = await arePreviousItemsCompleted(classroomId, courseId, currentId, studentId, 'lab');
+    if (allPreviousCompleted) {
+      let progress = await Progress.findOne({ classroomId, studentId, courseId, chapterId, labId });
+      if (!progress) {
+        progress = new Progress({ classroomId, studentId, courseId, chapterId, labId, unlocked: true });
+      } 
+      else if (progress.unlocked) {
+        return res.status(400).json({ success: false, message: 'Lab is already unlocked.' });
+      }
+      else {
+        progress.unlocked = true;
+      }
+      await progress.save();
+      res.status(200).json({ success: true, message: 'Lab unlocked successfully.' });
+    } else {
+      res.status(400).json({ success: false, message: 'All previous items must be completed before unlocking this lab.' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 export const requestUnlockChapter = async (req, res) => {
@@ -166,11 +254,15 @@ export const requestUnlockChapter = async (req, res) => {
       let progress = await Progress.findOne({ classroomId, studentId, courseId, chapterId });
       if (!progress) {
         progress = new Progress({ classroomId, studentId, courseId, chapterId, unlocked: true });
-      } else {
+      } 
+      else if (progress.unlocked) {
+        return res.status(400).json({ success: false, message: 'Chapter is already unlocked.' });
+      }
+      else {
         progress.unlocked = true;
       }
       await progress.save();
-      res.json({ success: true, message: 'Chapter unlocked successfully.' });
+      res.status(200).json({ success: true, message: 'Chapter unlocked successfully.' });
     } else {
       res.status(400).json({ success: false, message: 'All previous chapters must be completed before unlocking this chapter.' });
     }
