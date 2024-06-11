@@ -4,7 +4,6 @@ import ClassroomNavbar from "@/components/Classroom/ClassroomDetailNavbar";
 
 function ClassroomDetails() {
   const { id } = useParams();
-
   const {
     data: classroom,
     error,
@@ -14,6 +13,7 @@ function ClassroomDetails() {
   } = useGetClassroomByIdQuery(id, {
     refetchOnMountOrArgChange: true,
   });
+
   if (isLoading) return <div className="text-center mt-4">Loading...</div>;
   if (error)
     return (

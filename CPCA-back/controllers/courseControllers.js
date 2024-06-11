@@ -1,5 +1,5 @@
 import { BadRequestError, NotFoundError } from "../errors/index.js";
-import { Progress } from "../models/index.js";
+import { Chapter, Progress } from "../models/index.js";
 import Course from "../models/course.js";
 import courseSchema from "../validation/courseValidation.js";
 import { createCourseService } from "../services/course/createCourseService.js";
@@ -53,10 +53,49 @@ const getAllCourses = async (req, res) => {
   
 };
 
-const getCourseById = async (req, res) => {
-  const course = await Course.findById(req.params.id);
-  if (!course) return NotFoundError("Course not found");
-  res.send(course);
+
+const getChapterById = async (req, res) => {
+  const { courseId, chapterId } = req.params;
+  try {
+    const course = await Course.findById(courseId).populate({
+      path: 'chapters',
+      populate: {
+        path: 'lessons',
+      },
+    });
+
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    const chapter = course.chapters.find(chap => chap._id.toString() === chapterId)
+    if (!chapter) {
+      return res.status(404).json({ message: 'Chapter not found' });
+    }
+
+    res.json(chapter);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+ const getCourseById = async (req, res) => {
+  const { chapterId } = req.params;
+
+  try {
+    const course = await Course.findOne({ chapterId });
+
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    res.json(course);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
 };
 
 const updateCourse = async (req, res) => {
@@ -77,53 +116,7 @@ const deleteCourse = async (req, res) => {
 };
 
 
-const enrollCourse = async (req, res) => {
-  const { courseId, studentId } = req.body;
 
-  try {
-    const course = await Course.findById(courseId);
-    if (!course) return NotFoundError("Course not found");
-
-    // Check if the student is already enrolled in the course
-    const isEnrolled = course.students.includes(studentId);
-    if (isEnrolled) return BadRequestError("Student is already enrolled in the course");
-
-    // Add the student to the course's students array
-    course.students.push(studentId);
-    await course.save();
-
-    return res.status(200).json({ message: "Enrollment request successful" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Failed to enroll in the course" });
-  }
-};
-
-const approveEnrollment = async (req, res) => {
-  const { courseId, studentId } = req.body;
-
-  try {
-    const course = await Course.findById(courseId);
-    if (!course) return NotFoundError("Course not found");
-
-    // Check if the student is in the unapprovedStudents array
-    const isUnapproved = course.unapprovedStudents.includes(studentId);
-    if (!isUnapproved) return BadRequestError("Student is not in the unapproved students list");
-
-    // Remove the student from the unapprovedStudents array
-    course.unapprovedStudents = course.unapprovedStudents.filter((id) => id !== studentId);
-
-    // Add the student to the enrolledStudents array
-    course.enrolledStudents.push(studentId);
-
-    await course.save();
-
-    return res.status(200).json({ message: "Enrollment approved" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Failed to approve enrollment" });
-  }
-};
 
 export {
   // createCourse,
@@ -132,6 +125,5 @@ export {
   updateCourse,
   deleteCourse,
   addPrerequistes,
-  enrollCourse,
-  approveEnrollment,
+  getChapterById
 };

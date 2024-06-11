@@ -1,4 +1,6 @@
+import path from "path";
 import { Chapter, Classroom, Lesson, PracticeQuestion, Progress, Quiz } from "../models/index.js";
+import { model } from "mongoose";
 
 // Helper function to get progress
 const getProgress = async (classroomId, studentId, courseId, chapterId) => {
@@ -302,8 +304,6 @@ export const calculateChapterProgress = async (req, res) => {
     res.status(500).json({ message: 'Error calculating chapter progress', error });
   }
 };
-
-// New endpoint for instructors to get student progress
 export const getStudentProgress = async (req, res) => {
   const { classroomId, studentId } = req.params;
 
@@ -317,13 +317,14 @@ export const getStudentProgress = async (req, res) => {
       return res.status(403).json({ success: false, message: 'Student is not enrolled in this classroom.' });
     }
 
-    let progress = await Progress.find({ classroomId, studentId });
+    let progress = await Progress.find({ classroomId, studentId })
+
     if (!progress) {
-      return res.status(404).json({ success: false, message: 'No progress found for this student.' });
+      return res.status(404).json({ message: 'Progress not found' });
     }
 
     res.json(progress);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: 'Error getting student progress', error });
   }
 };

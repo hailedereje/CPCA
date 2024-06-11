@@ -4,6 +4,7 @@ import { authenticate, isAdmin, isInstructor, studentCheck } from "../middleware
 import {
   deleteCourse,
   getAllCourses,
+  getChapterById,
   getCourseListFilter,
   updateCourse,
 } from "../controllers/index.js";
@@ -38,15 +39,17 @@ import { createLab, deleteLab, getLab, getLabs, updateLab } from "../controllers
 import { labValidationSchema } from "../validation/lab/labValidator.js";
 
 const router = express.Router();
-
 router.use(authenticate);
 
-router.use(isAdmin);
+// router.use(isAdmin);
 router.get("/all",getAllCourses)
+
 router.get("/all/drafts",getAllDraftCourses)
 router.get("/courseListFilter",getCourseListFilter)
 // router.post("/new",validateRequest(createCourseSchema), createCourseController);
 router.post("/new", createCourseController);
+
+router.get("/course/:courseId/chapters/:chapterId", getChapterById);
 
 router.post("/course/add-prerequisites",validateRequest(addPrerequisiteSchema),addPrerequisiteController)
 router.post("/course/add-tags",validateRequest(addTagsSchema),addTagsController)
