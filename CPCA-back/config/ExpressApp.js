@@ -11,6 +11,7 @@ import { userRoutes, courseRoutes, lessonRoutes,
   notificationRoutes} from "../routes/index.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { analyticsRouter } from "../routes/analyticsRoutes.js";
 
 const App = async (app) => {
   app.use(express.json());
@@ -36,7 +37,7 @@ const App = async (app) => {
   app.use("/api/v1/progress", progressRoutes)
   app.use("/api/v1/classroom", classroomRoutes)
   app.use("/api/v1/notifications", notificationRoutes)
-
+  app.use("/api/v1/analytics",analyticsRouter)
   app.use(notFound);
   app.use(errorHandler);
 
