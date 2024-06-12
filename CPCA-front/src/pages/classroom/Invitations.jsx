@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FiList, FiGrid, FiUserPlus } from "react-icons/fi";
+import { FiList, FiGrid, FiUserPlus, FiSearch, FiTrash2 } from "react-icons/fi";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { toast } from "react-toastify";
 import newRequests from "@/utils/newRequest";
@@ -84,14 +84,14 @@ const InvitationList = () => {
       <div className="flex justify-between items-center mb-4">
         <div className="space-x-2">
           <button
-            className="btn btn-primary btn-sm"
+            className={`btn btn-primary btn-sm ${view === "detailed" && "btn-active"}`}
             onClick={() => toggleView("detailed")}
           >
             <FiGrid className="mr-2" />
             Detailed View
           </button>
           <button
-            className="btn btn-primary btn-sm"
+            className={`btn btn-primary btn-sm ${view === "table" && "btn-active"}`}
             onClick={() => toggleView("table")}
           >
             <FiList className="mr-2" />
@@ -99,13 +99,16 @@ const InvitationList = () => {
           </button>
         </div>
         <div className="flex items-center space-x-2">
-          <input
-            type="text"
-            placeholder="Search by email or username"
-            className="input input-bordered input-sm"
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search by email or username"
+              className="input input-bordered input-sm pr-10"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+            <FiSearch className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500" />
+          </div>
           <select
             className="select select-bordered select-sm"
             value={statusFilter}
@@ -121,8 +124,8 @@ const InvitationList = () => {
           Invite User
         </button>
       </div>
-      <div className="mb-4 flex justify-end">
-        <label className="mr-2">Students per page:</label>
+      <div className="mb-4 flex justify-end items-center space-x-2">
+        <label>Students per page:</label>
         <select
           className="select select-bordered select-sm"
           value={studentsPerPage}
@@ -135,29 +138,29 @@ const InvitationList = () => {
         </select>
       </div>
       {view === "detailed" ? (
-        <ul className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3">
           {currentInvitations.map((invitation) => (
             <article
               key={invitation.email}
-              className="flex border border-base-200 shadow-sm items-center flex-col gap-y-4 sm:flex-row flex-wrap p-3"
+              className="border border-base-200 shadow-sm p-4 rounded-lg hover:bg-gray-100 cursor-pointer"
             >
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold">
-                  {invitation.email}
-                </h3>
-                <span className={`mt-2 inline-block px-3 py-1 text-sm font-semibold rounded-full ${invitation.accepted ? "bg-green-500 text-white" : "bg-red-500 text-white"}`}>
-                  {invitation.accepted ? "Accepted" : "Pending"}
-                </span>
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-xl font-semibold">{invitation.email}</h3>
+                  <span className={`mt-2 inline-block px-3 py-1 text-sm font-semibold rounded-full ${invitation.accepted ? "bg-green-500 text-white" : "bg-red-500 text-white"}`}>
+                    {invitation.accepted ? "Accepted" : "Pending"}
+                  </span>
+                </div>
+                <button
+                  onClick={() => handleDelete(invitation.email)}
+                  className="btn btn-error btn-sm"
+                >
+                  <FiTrash2 />
+                </button>
               </div>
-              <button
-                onClick={() => handleDelete(invitation.email)}
-                className="btn btn-error btn-sm"
-              >
-                Delete
-              </button>
             </article>
           ))}
-        </ul>
+        </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="table table-zebra w-full">
@@ -187,9 +190,9 @@ const InvitationList = () => {
                   <td>
                     <button
                       onClick={() => handleDelete(invitation.email)}
-                      className="btn btn-error btn-sm"
+                      className="btn btn-info btn-sm"
                     >
-                      Delete
+                      <FiTrash2 />
                     </button>
                   </td>
                 </tr>
@@ -198,12 +201,12 @@ const InvitationList = () => {
           </table>
         </div>
       )}
-      <div className="mt-4 flex justify-center">
+      <div className="mt-4 flex justify-center space-x-2">
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index + 1}
             onClick={() => handlePageChange(index + 1)}
-            className={`btn btn-sm mx-1 ${currentPage === index + 1 ? "btn-active" : ""}`}
+            className={`btn btn-sm ${currentPage === index + 1 ? "btn-active" : ""}`}
           >
             {index + 1}
           </button>

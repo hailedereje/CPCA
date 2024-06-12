@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { format } from 'date-fns';
 import { FaUsers, FaBook, FaCalendarAlt, FaInfoCircle } from 'react-icons/fa';
@@ -16,56 +16,25 @@ function Stats() {
   const { name, description, createdAt, students } = classroom;
 
   useEffect(() => {
-    // Call refetch only if classroom data is not available to prevent infinite loops
     if (!classroom && !isFetching) {
       refetch();
     }
   }, [classroom, isFetching, refetch]);
 
   return (
-    <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <div className="p-6 bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:bg-gray-900 rounded-lg shadow-xl">
       {isFetching ? (
         <div className="flex items-center justify-center text-gray-500 dark:text-gray-400">
           <BiLoaderCircle className="animate-spin h-6 w-6 mr-2" />
           Fetching data...
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-6 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div className="flex items-center">
-              <FaInfoCircle className="text-blue-500 h-6 w-6 mr-2" />
-              <h3 className="text-lg font-semibold">Classroom Name:</h3>
-            </div>
-            <p>{name}</p>
-          </div>
-          <div className="p-6 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div className="flex items-center">
-              <FaBook className="text-green-500 h-6 w-6 mr-2" />
-              <h3 className="text-lg font-semibold">Course Name</h3>
-            </div>
-            <p>{name}</p>
-          </div>
-          <div className="p-6 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div className="flex items-center">
-              <FaInfoCircle className="text-yellow-500 h-6 w-6 mr-2" />
-              <h3 className="text-lg font-semibold">Description</h3>
-            </div>
-            <p>{description}</p>
-          </div>
-          <div className="p-6 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div className="flex items-center">
-              <FaCalendarAlt className="text-red-500 h-6 w-6 mr-2" />
-              <h3 className="text-lg font-semibold">Created At</h3>
-            </div>
-            <p>{format(new Date(createdAt), 'PPP')}</p>
-          </div>
-          <div className="p-6 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div className="flex items-center">
-              <FaUsers className="text-purple-500 h-6 w-6 mr-2" />
-              <h3 className="text-lg font-semibold">Number of Students</h3>
-            </div>
-            <p>{students.length}</p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <StatCard icon={FaInfoCircle} color="blue" title="Classroom Name" value={name} />
+          <StatCard icon={FaBook} color="green" title="Course Name" value={name} />
+          <StatCard icon={FaInfoCircle} color="yellow" title="Description" value={description} />
+          <StatCard icon={FaCalendarAlt} color="red" title="Created At" value={format(new Date(createdAt), 'PPP')} />
+          <StatCard icon={FaUsers} color="purple" title="Number of Students" value={students.length} />
         </div>
       )}
       <button
@@ -75,6 +44,18 @@ function Stats() {
         <FiRefreshCw className="mr-2" />
         Refresh Data
       </button>
+    </div>
+  );
+}
+
+function StatCard({ icon: Icon, color, title, value }) {
+  return (
+    <div className="p-6 bg-white dark:bg-gray-800 border-l-4 border-blue-500 rounded-lg shadow-lg transform hover:scale-104 transition-transform duration-300">
+      <div className="flex items-center mb-2">
+        <Icon className={`text-${color}-500 h-6 w-6 mr-2`} />
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{title}</h3>
+      </div>
+      <p className="text-gray-700 dark:text-gray-300">{value}</p>
     </div>
   );
 }

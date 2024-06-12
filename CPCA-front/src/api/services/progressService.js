@@ -88,4 +88,12 @@ export const progressService = (builder) => ({
       body: data,
     }),
   }),
+
+  // Get progress for a specific student
+  getStudentProgress: builder.query({
+    query: ({ classroomId, studentId }) => ({
+      url: `/progress/${classroomId}/student/${studentId}`,
+      method: 'GET',
+    }),
+  }),
 });

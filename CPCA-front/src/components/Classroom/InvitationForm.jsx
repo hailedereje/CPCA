@@ -3,6 +3,7 @@ import * as XLSX from 'xlsx';
 import toast from 'react-hot-toast';
 import { useInviteStudentsMutation } from '@/api';
 import { AiFillFileExcel } from 'react-icons/ai';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
 import { useOutletContext } from 'react-router-dom';
 
 const InviteForm = () => {
@@ -24,6 +25,9 @@ const InviteForm = () => {
         const worksheet = workbook.Sheets[firstSheetName];
         const json = XLSX.utils.sheet_to_json(worksheet);
         const emailList = json.map(row => Object.keys(row).find(key => key.toLowerCase() === 'email') ? row[Object.keys(row).find(key => key.toLowerCase() === 'email')] : null).filter(email => email);
+        if (emailList.length === 0) {
+          toast.error('Please make sure your Excel file contains a header named "email".');
+        }
         setEmails(emailList);
       };
       reader.readAsArrayBuffer(selectedFile);
@@ -78,7 +82,7 @@ const InviteForm = () => {
             className="input input-bordered w-full"
             placeholder="Enter email and press Enter"
           />
-          <label className="cursor-pointer text-5xl ml-2">
+          <label className="cursor-pointer text-5xl ml-2" title="Upload an Excel file with a header named 'email'">
             <input
               type="file"
               accept=".xlsx, .xls"
@@ -106,6 +110,10 @@ const InviteForm = () => {
         )}
       </div>
       {file && <p className="ml-4 mt-2 text-gray-600">Selected file: {file.name}</p>}
+      <div className="flex items-center text-info mb-4">
+        <AiOutlineInfoCircle className="mr-2 text-xl" />
+        <p>Please ensure your Excel file contains a header named "email".</p>
+      </div>
       <button type="submit" className="btn btn-primary w-full" disabled={isLoading}>
         {isLoading ? 'Sending...' : 'Send Invitations'}
       </button>

@@ -66,4 +66,5 @@ export const {
   useSubmitPracticeProgressMutation,
   useRequestUnlockChapterMutation,
   useRequestUnlockLessonMutation,
+  useGetStudentProgressQuery, // Add this line
 } = api;
