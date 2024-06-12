@@ -1,8 +1,8 @@
 import newRequests from '@/utils/newRequest';
 
-export const getCourses = () => newRequests.get("/courses/all/drafts")
+export const getCourses = () => newRequests.get("/courses/all")
 export const createCourse = (data) => newRequests.post("/courses/new",data)
-export const getCourse = (courseId) => newRequests.get(`/courses/course`, { params: { id: courseId }})
+export const getCourse = (courseId) => newRequests.get(`/courses/course/${courseId}`)
 export const updateCourse = ({data,courseId}) => newRequests.put(`/courses/course/${courseId}`,data)
 export const deleteCourse = ({courseId}) => newRequests.delete(`/courses/course/${courseId}`)
 

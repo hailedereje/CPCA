@@ -99,12 +99,7 @@ const getChapterById = async (req, res) => {
 };
 
 const updateCourse = async (req, res) => {
-  const { error } = courseSchema.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  const course = await Course.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
+  const course = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true, });
   if (!course) return NotFoundError("Course not found");
   res.send(course);
 };

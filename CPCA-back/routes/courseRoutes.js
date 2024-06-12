@@ -43,12 +43,9 @@ router.use(authenticate);
 
 // router.use(isAdmin);
 router.get("/all",getAllCourses)
-
-router.get("/all/drafts",getAllDraftCourses)
-router.get("/courseListFilter",getCourseListFilter)
-// router.post("/new",validateRequest(createCourseSchema), createCourseController);
-router.post("/new", createCourseController);
-router.put("/course/:id", updateCourse);
+router.get("/course/:id",getSinglCourseController)
+router.post("/new",validateRequest(createCourseSchema), createCourseController);
+router.put("/course/:id",validateRequest(createCourseSchema), updateCourse);
 router.delete("/course/:id",deleteCourse)
 
 router.get("/course/:courseId/chapters/:chapterId", getChapterById);

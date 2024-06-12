@@ -36,8 +36,8 @@ export const CreateCourse = () => {
         <div className="flex w-full justify-center">
             <form 
                 onSubmit={handleSubmit(onSubmite)} 
-                className="w-full h-fit  max-w-2xl max-h-xl rounded-lg p-5 dark:text-white space-y-10">
-                <h2 className="text-4xl font-semibold">Create a New Course</h2>
+                className="w-full h-fit  max-w-2xl max-h-xl rounded-lg p-5 space-y-10">
+                <h2 className="text-4xl font-semibold text-center">Create a New Course</h2>
                 <div  className="space-y-4 flex flex-col">
                     <div className="flex w-full items-start justify-between xxs:flex-col sm:flex-row gap-3">
                         <div className='w-full space-y-4'>

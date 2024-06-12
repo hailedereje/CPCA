@@ -18,6 +18,7 @@ import { UpdatebasicInFormation } from "./createCourse";
 import { openConfirmationDialog } from "@/features/course/coursSidebarSlice";
 import { ActionTypes } from "./action.Types";
 import { Confirmation } from "./components/confirmationDialog";
+import { EditCourseError, QuizError } from "./error/editCourseError";
 
 
 
@@ -25,17 +26,19 @@ export const UpdataCourse = () => {
   const param = useParams()
   const dispatch = useDispatch()
   
-  const { data, isLoading,isSuccess } = useCourse(param.id)
+  const { data, isLoading,isSuccess,isError ,error} = useCourse(param.id)
   const courseRequirement = { numOfChapters:0,numOfMinLessons:0,numOfQuizes:0 }
-  
-  if(isSuccess) {
-    let { course } = data.data
-    courseRequirement.numOfChapters = course.chapters.length
-    for(let chapter of course.chapters) {
-      courseRequirement.numOfMinLessons += chapter.lessons.length
-    }
+  console.log(param.id)
+  // if(isSuccess) {
+  //   let { course } = data.data
+  //   courseRequirement.numOfChapters = course.chapters.length
+  //   for(let chapter of course.chapters) {
+  //     courseRequirement.numOfMinLessons += chapter.lessons.length
+  //   }
+  // }
+  if(isError) {
+    return <QuizError message={error.response.data.error} status={error.response.status}/>
   }
-  console.log(courseRequirement)
   return (
     <div className="flex w-full h-full flex-col gap-4">
       <Confirmation />
@@ -58,7 +61,7 @@ export const UpdataCourse = () => {
             </div>
 
             <div className="flex gap-4 flex-col md:flex-row">
-              <UploadImage id={param.id} img={data.data.course.templateImg} />
+              <UploadImage id={param.id} img={data.data.course?.templateImg} />
               <Tags courseId={param.id} />
             </div>
             <div className="max-w-4xl">
