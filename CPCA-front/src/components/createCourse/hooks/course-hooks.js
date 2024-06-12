@@ -18,13 +18,24 @@ import {
     deleteLab,
     fetchLab,
     updateCourse,
-    deleteCourse
+    deleteCourse,
+    getCourses
   } from './actions';
 
 import { showErrorToast, showSuccessToast } from '@/toasts/toast';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-  
+ 
+export const useCourses = () => {
+  return useQuery({
+    queryKey: ['draftCourses'],
+    queryFn: () => getCourses(),
+    staleTime: 1000 * 6 * 100,
+    retry:3,
+    refetchInterval:false
+  });
+}
+
 export const useCreateCourse = () => {
   const navigate = useNavigate()
   return useMutation({

@@ -24,8 +24,8 @@ export const AdminLinks = [
   { id: 1, text: "status", path: "/dashboard", icon: <IoBarChartSharp /> },
   { id: 2, text: "profile", path: "profile", icon: <ImProfile /> },
   { id: 3, text: "Users", path: "users", icon: <FaUsers /> },
-  { id: 4, text: "Create course",path: "course",icon: <RiSoundModuleLine />},
-  { id: 5, text: "Draft courses", path: "course/drafts",icon: <RiDraftLine/>}
+  { id: 4, text: "Create course",path: "course/create",icon: <RiSoundModuleLine />},
+  { id: 5, text: "courses", path: "course",icon: <RiDraftLine/>}
 ];
 
 

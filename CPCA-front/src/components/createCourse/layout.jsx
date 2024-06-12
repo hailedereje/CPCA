@@ -14,12 +14,7 @@ import { useCourse } from "./hooks/course-hooks"
 
 export const CourseLayout = () => {
     const param = useParams()
-    
     const { data,isLoading,isError,error } = useCourse(param.id)
-
-    const { activeLesson,course } = useSelector(x => x.createCourseState)
-    const { name } = course;
-    const [ show,setShow ] = useState(true)
 
     if(isError) {
       return JSON.stringify(error.message)

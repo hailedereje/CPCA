@@ -48,13 +48,13 @@ export const UploadImage = ({id,img}) => {
 
 
   return (
-    <div className="flex flex-col items-center gap-4 bg-gray-600 rounded-md p-4 max-w-md">
+    <div className="flex flex-col items-center gap-4 border rounded-md p-4 max-w-md">
       <span className="flex flex-col gap-2">
           <span className="text-xl capitalize font-medium flex gap-4 items-center">
             <IconWrapper bg="bg-blue-500" color="text-white" icon={<CiImageOn />} />
             <span >course image</span>
           </span>
-          <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500 dark:text-gray-200"> add course image that appears in the course list that students to see </span>
+          <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500"> add course image that appears in the course list that students to see </span>
         </span>
       {!imageUrl ? (
         <>

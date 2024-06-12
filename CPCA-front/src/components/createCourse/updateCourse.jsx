@@ -1,29 +1,20 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { defaultFroalaConfig } from "@/constants";
 import { useDispatch } from "react-redux";
-import FroalaEditor from "react-froala-wysiwyg";
 import { useState } from "react";
-import { MdDelete, MdModeEditOutline, MdOutlineDescription } from "react-icons/md";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import newRequests from "@/utils/newRequest";
+import { MdDelete, MdModeEditOutline, MdPublish } from "react-icons/md";
 import { Tags } from "./components/addTags";
-import { Prerequisites } from "./components/addPrerequisites";
-import { courseRoutes } from "@/routes";
 import { AddDescription } from "./components/addDescription";
-import { AddObjective } from "./components/addObjective";
 import { Loading } from "./components/loader";
-import { RiAddLine, RiDeleteBin6Line } from "react-icons/ri";
-import { CourseName } from "./components/courseName";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import { UploadImage } from "../textEditor/uploadImage";
 import { FaBook, FaChevronLeft, FaChevronRight, FaEdit } from "react-icons/fa";
-import { Breadcrumb } from "./components/bread-crumb";
 import { useCourse, useDeleteLab } from "./hooks/course-hooks";
 import { GiTestTubes } from "react-icons/gi";
 import { IconWrapper } from "./components/icon-wrapper";
 import { AiOutlinePlus } from "react-icons/ai";
 import { MenuWrapper } from "./components/courseDrawer";
 import { CiViewTimeline } from "react-icons/ci";
-import { CreateCourse, UpdatebasicInFormation } from "./createCourse";
+import { UpdatebasicInFormation } from "./createCourse";
 import { openConfirmationDialog } from "@/features/course/coursSidebarSlice";
 import { ActionTypes } from "./action.Types";
 import { Confirmation } from "./components/confirmationDialog";
@@ -34,15 +25,24 @@ export const UpdataCourse = () => {
   const param = useParams()
   const dispatch = useDispatch()
   
-  const { data, isLoading } = useCourse(param.id)
-
+  const { data, isLoading,isSuccess } = useCourse(param.id)
+  const courseRequirement = { numOfChapters:0,numOfMinLessons:0,numOfQuizes:0 }
+  
+  if(isSuccess) {
+    let { course } = data.data
+    courseRequirement.numOfChapters = course.chapters.length
+    for(let chapter of course.chapters) {
+      courseRequirement.numOfMinLessons += chapter.lessons.length
+    }
+  }
+  console.log(courseRequirement)
   return (
     <div className="flex w-full h-full flex-col gap-4">
       <Confirmation />
       {isLoading ?
         <Loading />
         :
-        <div className="w-full h-screen overflow-auto editor flex dark:text-white gap-6 p-2 lg:pl-[30%] dark:bg-gray-600">
+        <div className="w-full h-screen overflow-auto editor flex  gap-6 p-2 lg:pl-[30%] ">
           <div className="flex flex-col max-w-xs w-1/3 h-full dark:bg-gray-600 xxs:hidden lg:block fixed top-12 left-0 ">
             <CourseComponent course={data.data.course} />
           </div>
@@ -51,14 +51,8 @@ export const UpdataCourse = () => {
               <CourseComponent course={data.data.course} />
             </SidebarDrawer>
           </div>
-
           <div className="w-full h-full flex flex-col gap-2">
-          <span className="flex justify-between items-center gap-4 px-4 py-2 rounded-md font-bold shadow-md hover:bg-gray-500 transition duration-300">
-            <h1 className="text-center text-2xl capitalize">course details</h1>
-            <button onClick={() => dispatch(openConfirmationDialog({courseId: param.id,actionType: ActionTypes.DELETE_COURSE,message:"are you sure u want to delete the course"}))}>
-              <IconWrapper bg="bg-red-500" color="text-white" icon={<MdDelete size={15} />} />
-            </button>
-          </span>
+            <UpdateCourseBanner courseId={param.id} isCourseValid={courseRequirement} />
             <div className="flex gap-4 flex-col md:flex-row">
               <UpdatebasicInFormation courseId={param.id} initialData={data.data.course} />
             </div>
@@ -79,25 +73,42 @@ export const UpdataCourse = () => {
   )
 }
 
+const UpdateCourseBanner = ({ courseId, isCourseValid }) => {
+  return (
+    <div className="flex justify-between items-center gap-4 px-4 py-2 rounded-md  transition duration-300">
+      <h1 className="text-center text-2xl capitalize">course details</h1>
+      <MenuWrapper>
+        <li onClick={() => dispatch(openConfirmationDialog({courseId: param.id,actionType: ActionTypes.DELETE_COURSE,message:"are you sure u want to delete the course"}))} className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
+          <span className="mr-2"><MdDelete size={15} className="text-red-400"/></span>
+          <span className='text-sm capitalize'>Delete course</span>
+        </li>
+        <li onClick={() => dispatch(openConfirmationDialog({courseId: param.id,actionType: ActionTypes.DELETE_COURSE,message:"are you sure u want to publish the  course"}))} className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
+          <span className="mr-2"><MdPublish /></span>
+          <span className='text-sm capitalize'>Publish course</span>
+        </li>
+      </MenuWrapper>
+    </div>
+  )
+}
 export const CourseLabs = ({ data }) => {
   const navigate = useNavigate()
   return (
-    <div className="dark:bg-gray-600 p-4 rounded-md max-w-4xl flex flex-col gap-4">
+    <div className=" p-4 rounded-md max-w-4xl flex flex-col gap-4">
       <span className="flex flex-col gap-4">
         <span className="flex justify-between items-center gap-4">
           <span className="text-xl capitalize font-medium flex gap-4 items-center">
             <IconWrapper bg="bg-blue-500" color="text-white" icon={<GiTestTubes />} />
             <span >Labs</span>
           </span>
-          <button onClick={() => navigate('lab')} className="flex items-center justify-center bg-blue-500 p-2 rounded-md">
+          <button onClick={() => navigate('lab')} className="flex items-center justify-center bg-blue-500 p-2 rounded-md text-white">
             <AiOutlinePlus className="h-6 w-6 mr-2" />
             <span className="xxs:text-sm md:text-md">Add Lab</span>
           </button>
         </span>
 
-        <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500 dark:text-white">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+        <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
       </span>
-      <div className="grid md:grid-cols-2 xxs:grid-cols-1 gap-2 h-[200px] overflow-auto editor border p-2 rounded-md border-gray-400">
+      <div className="grid md:grid-cols-2 xxs:grid-cols-1 gap-2 h-[200px] overflow-auto editor border p-2  border-gray-300">
         {data?.map((lab) => (
           <Lab lab={lab} />
         ))}
@@ -114,7 +125,7 @@ const Lab = ({ lab }) => {
     await deleteLab({ courseId: param.id, labId: lab._id })
   }
   return (
-    <div className="flex flex-col gap-2 max-h-20 p-2 border dark:bg-gray-800 rounded-md dark:border-gray-700 relative">
+    <div className="flex flex-col gap-2 max-h-20 p-2 border rounded-md  relative">
       <div className="flex justify-between items-start gap-x-4 relative">
         <span className="text-sm capitalize font-medium line-clamp-1">{lab.title}</span>
         <MenuWrapper >
@@ -132,8 +143,7 @@ const Lab = ({ lab }) => {
           </li>
         </MenuWrapper>
       </div>
-
-      <span className="text-xs text-gray-400 dark:text-white md:line-clamp-2 line-clamp-1">{lab.description}</span>
+      <span className="text-xs text-gray-700  md:line-clamp-2 line-clamp-1">{lab.description}</span>
     </div>
   )
 }
@@ -141,15 +151,14 @@ const Lab = ({ lab }) => {
 
 const CourseComponent = ({ course }) => {
   return (
-    <div className="max-w-4xl max-h-screen overflow-auto editor w-full h-full border">
-      <div className="w-full p-2 flex justify-between items-center gap-2 bg-blue-500">
-        <div className="flex gap-2 items-start">
-          <span><FaBook /></span>
-          <h1 className="text-md capitalize text-center">{course.title}</h1>
+    <div className="max-w-4xl max-h-screen overflow-auto editor w-full h-full border bg-white">
+      <div className="w-full p-2 flex justify-between items-start gap-2 bg-blue-500">
+        <div className="flex gap-2 items-center">
+          <span><FaBook className="text-white"/></span>
+          <h1 className="text-md capitalize text-center text-white">{course.title}</h1>
         </div>
-
         <Link to={"chapters"}>
-          <FaEdit />
+          <FaEdit className="text-white"/>
         </Link >
       </div>
 
@@ -171,9 +180,9 @@ const CourseComponent = ({ course }) => {
             <div className="px-4 pt-4 pb-2 text-sm text-gray-600">
               <ul className="list-disc list-inside flex flex-col gap-1">
                 {chapter.lessons.map((lesson) => (
-                  <li key={lesson._id} className="w-full flex items-center shadow-sm dark:hover:bg-gray-500 p-1">
+                  <li key={lesson._id} className="w-full flex items-center">
                     <svg
-                      className="w-5 h-5 text-blue-500 mr-2 dark:text-white"
+                      className="w-5 h-5 text-blue-500 mr-2"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -186,7 +195,7 @@ const CourseComponent = ({ course }) => {
                         d="M12 20l9-5-9-5-9 5 9 5zM12 12l9-5-9-5-9 5 9 5z"
                       />
                     </svg>
-                    <span className="dark:text-white text-sm capitalize">{lesson.title}</span>
+                    <span className=" text-sm capitalize">{lesson.title}</span>
                   </li>
                 ))}
               </ul>
@@ -209,7 +218,7 @@ export const SidebarDrawer = ({ children }) => {
         className={`fixed inset-0 z-10 ${isOpen ? "" : "hidden"}`}
         onClick={toggleDrawer}
       ></div>
-      <div className={` fixed  h-full top-0 left-0 bg-white dark:bg-gray-600 dark:text-white w-3/4  z-20 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
+      <div className={`fixed  h-full top-0 left-0 w-1/2 z-20 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
         {children}
         <button onClick={toggleDrawer} className="absolute top-1/2 -right-10 rounded p-2 bg-gray-500/10 h-20">
           {isOpen ? <FaChevronLeft /> : <FaChevronRight />}

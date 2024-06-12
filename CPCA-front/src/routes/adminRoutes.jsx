@@ -18,8 +18,8 @@ const adminRoutes = [
   { path: "profile", element: <Profile /> },
   { path: "users", element: <UsersList /> },
   { path: "course", children: [
-    { index: true, element: <CreateCourse /> },
-    { path: "drafts", element: <DraftCourses />},
+    { path: "create", element: <CreateCourse /> },
+    { index: true, element: <DraftCourses />},
     { path: "update/:id", children: [
       { index: true, element: <UpdataCourse/>},
       { path: "lab", element: <CreateLab /> },

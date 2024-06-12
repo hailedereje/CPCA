@@ -23,19 +23,18 @@ const addTags = async (data) => {
     })
   
     const onSubmit = async () => {
-      console.log(tags)
       await postTags({tags,courseId}).then(data => {
         console.log(data)
       }).catch(err => console.error(err))
     }
     return (
-      <div className="flex flex-col max-w-md items-start  gap-4 bg-slate-50 dark:bg-gray-600 p-4 rounded-md">
+      <div className="flex flex-col max-w-md items-start  gap-4 border p-4 rounded-md">
           <span className="flex flex-col gap-2">
             <span className="text-xl capitalize font-medium flex gap-4 items-center">
               <IconWrapper bg="bg-blue-500" color="text-white" icon={<FaHashtag />} />
               <span >tags</span>
             </span>
-            <span className="text-xs lowercase line-clamp-2 text-gray-500 dark:text-gray-200">
+            <span className="text-xs lowercase line-clamp-2 text-gray-500">
             Assign relevant tags to categorize and identify the course easily. Use descriptive keywords to enhance searchability and organization              </span>
           </span>
           <div className="w-full bg-white">
