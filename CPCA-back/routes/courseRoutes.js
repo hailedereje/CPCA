@@ -7,7 +7,7 @@ import {
   getCourseListFilter,
   updateCourse,
 } from "../controllers/index.js";
-import { createCourseController } from "../controllers/course/createCourseController.js";
+import { createCourseController, publishCourseController } from "../controllers/course/createCourseController.js";
 import { validateRequest } from "../middlewares/validateRequest.js";
 import { addPrerequisiteController } from "../controllers/course/addPrerequisiteController.js";
 import { addPrerequisiteSchema } from "../validation/course/addPrerequisiteValidator.js";
@@ -47,9 +47,9 @@ router.get("/course/:id",getSinglCourseController)
 router.post("/new",validateRequest(createCourseSchema), createCourseController);
 router.put("/course/:id",validateRequest(createCourseSchema), updateCourse);
 router.delete("/course/:id",deleteCourse)
+router.put("/course/publish/:id",publishCourseController)
 
 router.get("/course/:courseId/chapters/:chapterId", getChapterById);
-
 router.post("/course/add-prerequisites",validateRequest(addPrerequisiteSchema),addPrerequisiteController)
 router.post("/course/add-tags",validateRequest(addTagsSchema),addTagsController)
 router.post("/course/add-description",validateRequest(addDescriptionSchema),addDescriptionController)

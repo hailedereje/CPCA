@@ -2,7 +2,7 @@ import { QuizBoard } from "@/components/createCourse/QuizBoard";
 import { CreateLab, UpdateLab } from "@/components/createCourse/components/create-lab";
 import { StarterPage } from "@/components/createCourse/components/starterPage";
 import { CreateCourse } from "@/components/createCourse/createCourse";
-import DraftCourses from "@/components/createCourse/draftCourses";
+import { Courses } from "@/components/createCourse/courses";
 import { CourseLayout } from "@/components/createCourse/layout";
 import { AddQuestion } from "@/components/createCourse/quiz/add-questions";
 import { UpdataCourse } from "@/components/createCourse/updateCourse";
@@ -19,7 +19,7 @@ const adminRoutes = [
   { path: "users", element: <UsersList /> },
   { path: "course", children: [
     { path: "create", element: <CreateCourse /> },
-    { index: true, element: <DraftCourses />},
+    { index: true, element: <Courses />},
     { path: "update/:id", children: [
       { index: true, element: <UpdataCourse/>},
       { path: "lab", element: <CreateLab /> },
@@ -46,11 +46,6 @@ const adminRoutes = [
 
 export default adminRoutes;
 
-
-
-
-
-        // {
         //   path: "course",
         //   element: <CreateCourse />,
         // },

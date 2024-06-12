@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Loading } from './components/loader';
 import { useCourses } from './hooks/course-hooks';
 
-const Courses = () => {
+export const Courses = () => {
   const [selectedTab, setSelectedTab] = useState('all');
   const navigate = useNavigate();
 
@@ -55,7 +55,7 @@ const Courses = () => {
         </div>
       ))
     ) : (
-      <div className="text-center col-span-full text-gray-200 dark:text-gray-100 text-sm">No courses available.</div>
+      <div className="text-center col-span-full text-gray-400 text-sm">No courses available.</div>
     );
   };
 

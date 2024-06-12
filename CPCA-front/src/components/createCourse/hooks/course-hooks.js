@@ -19,7 +19,8 @@ import {
     fetchLab,
     updateCourse,
     deleteCourse,
-    getCourses
+    getCourses,
+    publishCourse
   } from './actions';
 
 import { showErrorToast, showSuccessToast } from '@/toasts/toast';
@@ -28,7 +29,7 @@ import { useNavigate } from 'react-router-dom';
  
 export const useCourses = () => {
   return useQuery({
-    queryKey: ['draftCourses'],
+    queryKey: ['courses'],
     queryFn: () => getCourses(),
     staleTime: 1000 * 6 * 100,
     retry:3,
@@ -63,6 +64,22 @@ export const useUpdateCourse = (courseId) => {
     }
   })
 }
+
+export const usePublishCourse = (courseId) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: publishCourse,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:['course',courseId]})
+      queryClient.invalidateQueries({queryKey:['draftCourses']})
+      showSuccessToast("course published successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to publish course")
+    }
+  })
+}
+
 
 export const useCourse = (courseId) => {
   return  useQuery({

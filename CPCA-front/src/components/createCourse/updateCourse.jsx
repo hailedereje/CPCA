@@ -1,14 +1,14 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { MdDelete, MdModeEditOutline, MdPublish } from "react-icons/md";
+import { MdCheckCircle, MdDelete, MdError, MdModeEditOutline, MdPublish } from "react-icons/md";
 import { Tags } from "./components/addTags";
 import { AddDescription } from "./components/addDescription";
 import { Loading } from "./components/loader";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { UploadImage } from "../textEditor/uploadImage";
 import { FaBook, FaChevronLeft, FaChevronRight, FaEdit } from "react-icons/fa";
-import { useCourse, useDeleteLab } from "./hooks/course-hooks";
+import { useCourse, useDeleteLab, usePublishCourse } from "./hooks/course-hooks";
 import { GiTestTubes } from "react-icons/gi";
 import { IconWrapper } from "./components/icon-wrapper";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -25,19 +25,21 @@ import { EditCourseError, QuizError } from "./error/editCourseError";
 export const UpdataCourse = () => {
   const param = useParams()
   const dispatch = useDispatch()
+
+  const { data, isLoading, isSuccess, isError, error } = useCourse(param.id)
+  const courseRequirement = { numOfChapters: 0, numOfMinLessons: 0, numOfQuizes: 0 }
+  const state = { isPublished: false, isValid: false }
+  if(isSuccess) {
+    handleCourseData(data, state)
+  }
   
-  const { data, isLoading,isSuccess,isError ,error} = useCourse(param.id)
-  const courseRequirement = { numOfChapters:0,numOfMinLessons:0,numOfQuizes:0 }
-  console.log(param.id)
-  // if(isSuccess) {
-  //   let { course } = data.data
-  //   courseRequirement.numOfChapters = course.chapters.length
-  //   for(let chapter of course.chapters) {
-  //     courseRequirement.numOfMinLessons += chapter.lessons.length
-  //   }
-  // }
-  if(isError) {
-    return <QuizError message={error.response.data.error} status={error.response.status}/>
+
+  if (isError && error.response.status == 404) {
+    return (
+      <div className="flex items-center justify-center fixed inset-0 w-full h-full">
+        <QuizError message={error.response.data.error} status={error.response.status} />
+      </div>
+    )
   }
   return (
     <div className="flex w-full h-full flex-col gap-4">
@@ -55,7 +57,7 @@ export const UpdataCourse = () => {
             </SidebarDrawer>
           </div>
           <div className="w-full h-full flex flex-col gap-2">
-            <UpdateCourseBanner courseId={param.id} isCourseValid={courseRequirement} />
+            <UpdateCourseBanner courseId={param.id} state={state} />
             <div className="flex gap-4 flex-col md:flex-row">
               <UpdatebasicInFormation courseId={param.id} initialData={data.data.course} />
             </div>
@@ -76,23 +78,43 @@ export const UpdataCourse = () => {
   )
 }
 
-const UpdateCourseBanner = ({ courseId, isCourseValid }) => {
+const UpdateCourseBanner = ({ courseId, state }) => {
+  const dispatch = useDispatch()
+  const { mutateAsync: publish, isPending} = usePublishCourse(courseId)
+  const onPublish = async () => {
+    await publish(courseId)
+  }
   return (
-    <div className="flex justify-between items-center gap-4 px-4 py-2 rounded-md  transition duration-300">
-      <h1 className="text-center text-2xl capitalize">course details</h1>
+    <div className="flex justify-between items-center gap-4 px-6 py-3 bg-white  rounded-md shadow-md transition duration-300">
+      <div className="flex items-center gap-2">
+        <h1 className="text-2xl font-bold capitalize text-gray-800 ">Course Details</h1>
+        {state.isPublished ? (
+          <MdCheckCircle size={24} className="text-green-500" title="Published" />
+        ) : (
+          <MdError size={24} className="text-yellow-500" title="Unpublished" />
+        )}
+      </div>
       <MenuWrapper>
-        <li onClick={() => dispatch(openConfirmationDialog({courseId: param.id,actionType: ActionTypes.DELETE_COURSE,message:"are you sure u want to delete the course"}))} className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
-          <span className="mr-2"><MdDelete size={15} className="text-red-400"/></span>
-          <span className='text-sm capitalize'>Delete course</span>
-        </li>
-        <li onClick={() => dispatch(openConfirmationDialog({courseId: param.id,actionType: ActionTypes.DELETE_COURSE,message:"are you sure u want to publish the  course"}))} className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
+        <button 
+          onClick={onPublish}
+          disabled = {state.isPublished || !state.isValid}
+          className={`px-4 py-2 w-full flex items-center hover:bg-gray-100   ${!state.isPublished && state.isValid ? 'cursor-pointer':'cursor-not-allowed disabled'}`}>
           <span className="mr-2"><MdPublish /></span>
           <span className='text-sm capitalize'>Publish course</span>
-        </li>
+          {isPending && <Loading />}
+        </button>
+        <button 
+          onClick={() => dispatch(openConfirmationDialog({ courseId, actionType: ActionTypes.DELETE_COURSE, message: "are you sure u want to delete the course" }))} 
+          className="px-4 py-2 flex w-full items-center  hover:bg-gray-100">
+          <span className="mr-2"><MdDelete size={15} className="text-red-400" /></span>
+          <span className='text-sm capitalize'>Delete course</span>
+        </button>
+        
       </MenuWrapper>
     </div>
-  )
+  );
 }
+
 export const CourseLabs = ({ data }) => {
   const navigate = useNavigate()
   return (
@@ -157,11 +179,11 @@ const CourseComponent = ({ course }) => {
     <div className="max-w-4xl max-h-screen overflow-auto editor w-full h-full border bg-white">
       <div className="w-full p-2 flex justify-between items-start gap-2 bg-blue-500">
         <div className="flex gap-2 items-center">
-          <span><FaBook className="text-white"/></span>
+          <span><FaBook className="text-white" /></span>
           <h1 className="text-md capitalize text-center text-white">{course.title}</h1>
         </div>
         <Link to={"chapters"}>
-          <FaEdit className="text-white"/>
+          <FaEdit className="text-white" />
         </Link >
       </div>
 
@@ -230,3 +252,26 @@ export const SidebarDrawer = ({ children }) => {
     </div>
   );
 }
+
+
+const handleCourseData = (data, state) => {
+  if (!data || !data.data) return;
+
+  const { course } = data.data;
+
+  if (course.isPublished) {
+    state.isPublished = true;
+  } else {
+    const { chapters } = course;
+    const numOfChapters = chapters.length;
+    let numOfMinLessons = 0;
+
+    for (let chapter of chapters) {
+      numOfMinLessons += chapter.lessons.length;
+    }
+
+    if (numOfChapters >= 2 && numOfMinLessons >= 2) {
+      state.isValid = true;
+    }
+  }
+};

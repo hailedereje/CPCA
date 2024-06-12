@@ -25,8 +25,9 @@ export const createCourseController = async (req, res) => {
 
 export const publishCourseController = async (req,res) => {
     try {
-        const { courseId } = req.body
-        const course = await Course.findById(courseId)
+        const { id } = req.params
+        const course = await Course.findById(id)
+        if(!course) return res.status(404).send({ message: "course not found", title: "not found" })
         course.isPublished = true
         await course.save()
         return res.status(201).json({message: "course published"})

@@ -270,7 +270,7 @@ export const MenuWrapper = ({ children }) => {
                 <div className="fixed h-screen w-screen inset-0 z-40 cursor-default " onClick={() => setIsMenuOpen(false)}></div>
             )}
             {isMenuOpen && (
-                <div className="absolute  right-0 w-48 bg-white border-gray-200 z-40 rounded shadow-lg dark:bg-gray-700 dark:text-white">
+                <div className="absolute  right-0 w-48 bg-white border-gray-200 z-40 rounded shadow-lg ">
                     <ul className="list-none p-0 m-0" onClick={() => setIsMenuOpen(false)}>
                         {children}
                     </ul>
