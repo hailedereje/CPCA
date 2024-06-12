@@ -58,9 +58,9 @@ export const UploadImage = ({id,img}) => {
         </span>
       {!imageUrl ? (
         <>
-          <label htmlFor="image-file" className="cursor-pointer p-2 flex flex-col items-center justify-center w-full border border-dashed border-white rounded-lg  transition-colors duration-300">
-            <AiOutlineCloudUpload size={40} className="text-blue-500 dark:text-white" />
-            <span className="mt-2 text-blue-500 dark:text-white">Upload Image</span>
+          <label htmlFor="image-file" className="cursor-pointer p-2 flex flex-col items-center justify-center w-full border border-dashed border-blue-500 rounded-lg  transition-colors duration-300">
+            <AiOutlineCloudUpload size={40} className="text-blue-500 " />
+            <span className="mt-2 text-blue-500">Upload Image</span>
           </label>
           <input type="file" id="image-file" hidden onChange={handleFileChange} />
         </>

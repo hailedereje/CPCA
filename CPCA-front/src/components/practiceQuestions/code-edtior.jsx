@@ -47,7 +47,7 @@ export const LabPractice = () => {
         <>
             <div className="w-full h-full flex p-1">
                <LabManual />
-                <div className="flex flex-col md:w-1/2 xxs:w-full">
+                <div className="flex flex-col md:w-1/2 xxs:w-full border">
                     <div className="h-fit w-full p-1 bg-gray-600 flex items-center justify-between gap-4">
                         <CodeMenu code={code} setCode={setCode} />
                         <div className="flex gap-2">
@@ -73,7 +73,7 @@ export const LabPractice = () => {
                         />
                     </div>
 
-                    <div className={`h-1/5 max-h-32 w-full editor text-sm overflow-auto p-4 border-t-2 border-gray-600 ${error ? 'border-red-500 text-red-500' : 'dark:text-white'}`}>
+                    <div className={`h-1/5 max-h-32 w-full editor text-sm overflow-auto p-4 border bg-gray-200 border-gray-600 ${error ? 'border-red-500 text-red-500' : 'dark:text-white'}`}>
                         {output ? (
                             output.map((line, idx) => (
                                 <p key={idx} className="text-sm">
@@ -81,7 +81,7 @@ export const LabPractice = () => {
                                 </p>
                             ))
                         ) : (
-                            <p className="text-gray-400 text-sm">
+                            <p className="text-gray-800 text-sm">
                                 {loading ? 'loading ... ' : "click 'Run' to see the output here"}
                             </p>
                         )}
