@@ -47,8 +47,8 @@ export const UpdataCourse = () => {
       {isLoading ?
         <Loading />
         :
-        <div className="w-full h-screen overflow-auto editor flex  gap-6 p-2 lg:pl-[30%] ">
-          <div className="flex flex-col max-w-xs w-1/3 h-full dark:bg-gray-600 xxs:hidden lg:block fixed top-12 left-0 ">
+        <div className="w-full h-screen  flex  gap-6 p-2 lg:pl-[30%] ">
+          <div className="flex flex-col max-w-xs w-1/3 h-full xxs:hidden lg:block fixed top-12 left-0 ">
             <CourseComponent course={data.data.course} />
           </div>
           <div className="xxs:block lg:hidden">
@@ -85,16 +85,11 @@ const UpdateCourseBanner = ({ courseId, state }) => {
     await publish(courseId)
   }
   return (
-    <div className="flex justify-between items-center gap-4 px-6 py-3 bg-white  rounded-md shadow-md transition duration-300">
-      <div className="flex items-center gap-2">
-        <h1 className="text-2xl font-bold capitalize text-gray-800 ">Course Details</h1>
-        {state.isPublished ? (
-          <MdCheckCircle size={24} className="text-green-500" title="Published" />
-        ) : (
-          <MdError size={24} className="text-yellow-500" title="Unpublished" />
-        )}
+    <div className="flex justify-between items-center gap-4 px-6 py-3 bg-gray-50  rounded-t-md  border  transition duration-300">
+      <div className="flex items-center gap-4">
+        <h1 className="text-2xl xxs:text-lg font-bold capitalize text-black">Update course details</h1>
       </div>
-      <MenuWrapper>
+      <MenuWrapper color={'text-'}>
         <button 
           onClick={onPublish}
           disabled = {state.isPublished || !state.isValid}
@@ -118,7 +113,7 @@ const UpdateCourseBanner = ({ courseId, state }) => {
 export const CourseLabs = ({ data }) => {
   const navigate = useNavigate()
   return (
-    <div className=" p-4 rounded-md max-w-4xl flex flex-col gap-4">
+    <div className=" p-4 rounded-md max-w-4xl flex flex-col gap-4 border">
       <span className="flex flex-col gap-4">
         <span className="flex justify-between items-center gap-4">
           <span className="text-xl capitalize font-medium flex gap-4 items-center">
@@ -131,9 +126,12 @@ export const CourseLabs = ({ data }) => {
           </button>
         </span>
 
-        <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+        <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500">
+          add labs to the course that students can perform to test their understanding of the course content make it interactive and fun
+          as students can learn by doing and not just reading or watching videos 
+        </span>
       </span>
-      <div className="grid md:grid-cols-2 xxs:grid-cols-1 gap-2 h-[200px] overflow-auto editor border p-2  border-gray-300">
+      <div className="grid md:grid-cols-2 xxs:grid-cols-1 gap-2 h-[200px] overflow-auto editor p-2">
         {data?.map((lab) => (
           <Lab lab={lab} />
         ))}
@@ -176,22 +174,22 @@ const Lab = ({ lab }) => {
 
 const CourseComponent = ({ course }) => {
   return (
-    <div className="max-w-4xl max-h-screen overflow-auto editor w-full h-full border bg-white">
-      <div className="w-full p-2 flex justify-between items-start gap-2 bg-blue-500">
-        <div className="flex gap-2 items-center">
-          <span><FaBook className="text-white" /></span>
-          <h1 className="text-md capitalize text-center text-white">{course.title}</h1>
+    <div className="max-w-4xl max-h-screen overflow-auto w-full h-full  rounded-lg shadow-lg pt-4">
+      <div className="w-full p-4 flex justify-between items-center bg-blue-400 rounded-t-lg">
+        <div className="flex items-center gap-2">
+          <FaBook className="text-white text-xl" />
+          <h1 className="text-lg font-semibold capitalize text-white">{course.title}</h1>
         </div>
         <Link to={"chapters"}>
-          <FaEdit className="text-white" />
-        </Link >
+          <FaEdit className="text-white text-xl hover:text-blue-200 transition-colors" />
+        </Link>
       </div>
 
       {course.chapters.map((chapter) => (
-        <div key={chapter._id} className="">
+        <div key={chapter._id} className="border-b last:border-b-0">
           <details className="group">
-            <summary className="flex justify-between items-center cursor-pointer text-sm capitalize font-normal text-blue-900 bg-blue-100 p-2 hover:bg-blue-200 ">
-              <span>{chapter.title + '(' + chapter.lessons.length + ')'}</span>
+            <summary className="flex justify-between items-center cursor-pointer text-md capitalize font-medium p-3 hover:bg-blue-100 transition-colors">
+              <span>{chapter.title} ({chapter.lessons.length})</span>
               <svg
                 className="w-5 h-5 text-blue-500 transform transition-transform duration-200 group-open:rotate-180"
                 xmlns="http://www.w3.org/2000/svg"
@@ -202,10 +200,10 @@ const CourseComponent = ({ course }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </summary>
-            <div className="px-4 pt-4 pb-2 text-sm text-gray-600">
+            <div className="px-6 pt-4 pb-2 text-gray-700">
               <ul className="list-disc list-inside flex flex-col gap-1">
                 {chapter.lessons.map((lesson) => (
-                  <li key={lesson._id} className="w-full flex items-center">
+                  <li key={lesson._id} className="flex items-center">
                     <svg
                       className="w-5 h-5 text-blue-500 mr-2"
                       xmlns="http://www.w3.org/2000/svg"
@@ -220,7 +218,7 @@ const CourseComponent = ({ course }) => {
                         d="M12 20l9-5-9-5-9 5 9 5zM12 12l9-5-9-5-9 5 9 5z"
                       />
                     </svg>
-                    <span className=" text-sm capitalize">{lesson.title}</span>
+                    <span className="text-md capitalize">{lesson.title}</span>
                   </li>
                 ))}
               </ul>
@@ -231,6 +229,9 @@ const CourseComponent = ({ course }) => {
     </div>
   );
 };
+
+export default CourseComponent;
+
 
 export const SidebarDrawer = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -246,7 +247,7 @@ export const SidebarDrawer = ({ children }) => {
       <div className={`fixed  h-full top-0 left-0 w-1/2 z-20 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
         {children}
         <button onClick={toggleDrawer} className="absolute top-1/2 -right-10 rounded p-2 bg-gray-500/10 h-20">
-          {isOpen ? <FaChevronLeft /> : <FaChevronRight />}
+          {isOpen ? <FaChevronLeft className="text-white"/> : <FaChevronRight className="text-white"/>}
         </button>
       </div>
     </div>

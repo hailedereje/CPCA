@@ -6,19 +6,20 @@ import { FaPhoneAlt as PhoneIcon, FaRegUser as NameIcon } from "react-icons/fa";
 import { useEditUserInfoMutation, useFetchUserProfileQuery } from "@/api";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
+import { MdOutlineCancel, MdOutlineDescription, MdOutlineSave } from "react-icons/md";
+import { RiImageEditLine, RiDeleteBin6Line } from "react-icons/ri";
+import blankProfile from "../../assets/blank_profile.webp";
 
 const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-
-console.log(cloudName); 
 
 export default function Profile() {
   const { data: user, refetch: refetchUserProfile } = useFetchUserProfileQuery({
     refetchOnMountOrArgChange: true,
   });
   const [editUserInfo, { isLoading: isSaving, error }] = useEditUserInfoMutation();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const location = useLocation();
-  
+
   const [formData, setFormData] = useState({
     fullName: "",
     phoneNumber: "",
@@ -42,7 +43,7 @@ export default function Profile() {
         username: user.username || "",
         bio: user.bio || "",
         profileImg: user.profileImg || "",
-        studentId: user.studentId || "", // Populate Student ID field
+        studentId: user.studentId || "",
       });
     }
   }, [user]);
@@ -58,17 +59,13 @@ export default function Profile() {
     e.preventDefault();
     try {
       const response = await editUserInfo(formData);
-      console.log("form Data", formData);
       if (response.data) {
-        console.log("User info updated", response.data);
         toast.success("User info updated successfully");
-        navigate(location.pathname); 
+        navigate(location.pathname);
       } else {
-        console.error("Error updating user info", response.error);
         toast.error("Failed to update user info");
       }
     } catch (err) {
-      console.error("Error submitting form", err);
       toast.error("An error occurred. Please try again.");
     }
   };
@@ -88,130 +85,134 @@ export default function Profile() {
           ...formData,
           profileImg: imageUrl,
         });
-        console.log("Image uploaded:", imageUrl);
       }
     }).open();
   };
 
   return (
     user && (
-      <div className="w-full grid grid-cols-5 gap-8">
-        <div className="col-span-5 xl:col-span-3 bg-base-100">
-          <div className="rounded-sm border border-base-300 shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="border-b border-base-300 py-4 px-7 dark:border-strokedark">
-              <h3 className="font-medium">Personal Information</h3>
-            </div>
-            <div className="p-7">
-              <form onSubmit={handleSubmit}>
-                <div className="mb-5 flex items-center gap-3">
-                  <div className="border border-blue-200 h-24 w-24 rounded-full">
-                    <img
-                      className="w-full h-full rounded-full"
-                      src={formData.profileImg || user.profileImg}
-                      alt="User"
-                    />
-                  </div>
-                  <div>
-                    <span className="mb-1.5">Edit your photo</span>
-                    <span className="flex gap-3">
-                      <button
-                        type="button"
-                        className="text-sm hover:text-primary"
-                        onClick={() => setFormData({ ...formData, profileImg: null })}
-                      >
-                        Delete
-                      </button>
-                      <button
-                        type="button"
-                        className="text-sm hover:text-primary"
-                        onClick={openUploadWidget}
-                      >
-                        Update
-                      </button>
-                    </span>
-                  </div>
-                </div>
-                <div className="mb-2 grid grid-cols-1 sm:grid-cols-2 gap-x-6">
-                  <div className="w-full">
-                    <ProfileInputElt
-                      name="emailAddress"
-                      type="email"
-                      label="Email Address"
-                      value={formData.emailAddress}
-                      onChange={handleChange}
-                      icon={<EmailIcon />}
-                      readOnly={true} // Prevent editing email address
-                    />
-                  </div>
-                  <div className="w-full">
-                    <ProfileInputElt
-                      name="studentId"
-                      type="text"
-                      label="Student ID"
-                      value={formData.studentId}
-                      onChange={handleChange}
-                      icon={<NameIcon />}
-                    />
-                  </div>
-                  <div className="w-full">
-                    <ProfileInputElt
-                      type="text"
-                      name="fullName"
-                      label="Full Name"
-                      value={formData.fullName}
-                      onChange={handleChange}
-                      icon={<NameIcon />}
-                    />
-                  </div>
-                  <div className="w-full">
-                    <ProfileInputElt
-                      type="text"
-                      name="phoneNumber"
-                      label="Phone Number"
-                      value={formData.phoneNumber}
-                      onChange={handleChange}
-                      icon={<PhoneIcon />}
-                    />
-                  </div>
-                  <div className="w-full">
-                    <ProfileInputElt
-                      type="text"
-                      label="Username"
-                      name="username"
-                      value={formData.username}
-                      onChange={handleChange}
-                      icon={<NameIcon />}
-                    />
-                  </div>
-                  <div className="w-full">
-                    <ProfileInputElt
-                      type="text-area"
-                      label="Bio"
-                      name="bio"
-                      value={formData.bio}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-                <div className="flex justify-start gap-4">
-                <button
-                    type="submit"
-                    disabled={isSaving}
-                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
-                  >
-                    {isSaving ? (
-                      <>
-                        <span className="loading loading-spinner"></span>
-                        saving...
-                      </>
-                    ) : (
-                      "Save"
-                    )}
-                  </button>
+      <div className="container mx-auto p-4">
+        <div className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-lg overflow-hidden">
+          <div className="py-4 px-6 bg-blue-400">
+            <h3 className="text-lg font-semibold text-white">Personal Information</h3>
+          </div>
+          <div className="p-6">
+            <form onSubmit={handleSubmit}>
+              <div className="mb-6 flex items-center gap-6">
+                <div className="relative w-24 h-24 border border-blue-200 rounded-full flex items-center">
+                  <img
+                    className="w-full h-full object-cover rounded-full"
+                    src={formData.profileImg || user.profileImg || blankProfile}
+                    alt="User"
+                  />
                   <button
-                    className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                     type="button"
-                    onClick={() => setFormData({
+                    className="absolute bottom-0 right-0 p-1 bg-blue-600 text-white rounded-full"
+                    onClick={openUploadWidget}
+                  >
+                    <RiImageEditLine className="text-xl" />
+                  </button>
+                </div>
+                <div>
+                  <span className="block mb-1">Edit your photo</span>
+                  <span className="flex gap-3">
+                    <button
+                      type="button"
+                      className="text-sm text-red-600 hover:underline"
+                      onClick={() => setFormData({ ...formData, profileImg: null })}
+                    >
+                      <RiDeleteBin6Line className="inline mr-1" /> Delete
+                    </button>
+                    <button
+                      type="button"
+                      className="text-sm text-blue-600 hover:underline"
+                      onClick={openUploadWidget}
+                    >
+                      <RiImageEditLine className="inline mr-1" /> Update
+                    </button>
+                  </span>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <ProfileInputElt
+                  name="emailAddress"
+                  type="email"
+                  label="Email Address"
+                  value={formData.emailAddress}
+                  onChange={handleChange}
+                  icon={<EmailIcon />}
+                  readOnly={true}
+                  className="border border-blue-400"
+                />
+                <ProfileInputElt
+                  name="studentId"
+                  type="text"
+                  label="Student ID"
+                  value={formData.studentId}
+                  onChange={handleChange}
+                  icon={<NameIcon />}
+                  className="border border-blue-400"
+                />
+                <ProfileInputElt
+                  type="text"
+                  name="fullName"
+                  label="Full Name"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  icon={<NameIcon />}
+                  className="border border-blue-400"
+                />
+                <ProfileInputElt
+                  type="text"
+                  name="phoneNumber"
+                  label="Phone Number"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  icon={<PhoneIcon />}
+                  className="border border-blue-400"
+                />
+                <ProfileInputElt
+                  type="text"
+                  name="username"
+                  label="Username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  icon={<NameIcon />}
+                  className="border border-blue-400"
+                />
+                <ProfileInputElt
+                  type="textarea"
+                  name="bio"
+                  label="Bio"
+                  value={formData.bio}
+                  onChange={handleChange}
+                  icon={<MdOutlineDescription />}
+                  className="border border-blue-400"
+                />
+              </div>
+              <div className="flex justify-start gap-4 mt-6">
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="flex items-center bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                >
+                  {isSaving ? (
+                    <>
+                      <span className="loading loading-spinner mr-2"></span>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <MdOutlineSave className="mr-2" />
+                      Save
+                    </>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className="flex items-center bg-gray-200 text-gray-700 py-2 px-4 rounded hover:bg-gray-300"
+                  onClick={() =>
+                    setFormData({
                       fullName: user.fullName,
                       phoneNumber: user.phoneNumber,
                       emailAddress: user.emailAddress,
@@ -219,13 +220,14 @@ export default function Profile() {
                       bio: user.bio,
                       profileImg: user.profileImg,
                       studentId: user.studentId,
-                    })}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
+                    })
+                  }
+                >
+                  <MdOutlineCancel className="mr-2" />
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
