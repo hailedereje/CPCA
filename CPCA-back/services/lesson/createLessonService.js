@@ -6,7 +6,7 @@ export const createLessonService = async(data) => {
     if(!chapter) {
         throw new Error()
     }
-    const lesson = await Lesson.create({title})
+    const lesson = await Lesson.create({title, chapterId})
 
     chapter.lessons.push(lesson._id)
     await chapter.save()

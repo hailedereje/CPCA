@@ -17,7 +17,8 @@ const lessonSchema = new Schema({
   content: {
     type: [contentSchema],
     default: []
-  }
+  },
+  chapterId: { type: Schema.Types.ObjectId, ref: 'Chapter', required: true },
 }, {
   timestamps: true
 });

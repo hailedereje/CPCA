@@ -1,18 +1,18 @@
-import { LANGUAGES, LANGUAGE_List, SNIPTS } from "@/assets/constants";
-import { Editor } from "@monaco-editor/react";
-import { useRef, useState } from "react";
-import { FaBook, FaCheckCircle, FaPlay } from "react-icons/fa";
-import { RiArrowDropDownLine } from "react-icons/ri";
-import { SidebarDrawer } from "../createCourse/updateCourse";
-import { excuteCode } from "@/EditorApi";
-import { showErrorToast } from "@/toasts/toast";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useGetLab } from "../createCourse/hooks/course-hooks";
-import { Loading } from "../createCourse/components/loader";
-import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
-import { defaultFroalaConfig } from "@/constants";
-import { useParams } from "react-router-dom";
-import { MdDescription } from "react-icons/md";
+import { LANGUAGES, LANGUAGE_List, SNIPTS } from "@/assets/constants"
+import { Editor } from "@monaco-editor/react"
+import { useEffect, useRef, useState } from "react"
+import { FaPlay } from "react-icons/fa"
+import { RiArrowDropDownLine } from "react-icons/ri"
+import { SidebarDrawer } from "../createCourse/updateCourse"
+import { excuteCode } from "@/EditorApi"
+import { showErrorToast } from "@/toasts/toast"
+import { AiOutlineLoading3Quarters } from "react-icons/ai"
+import { useGetLab } from "../createCourse/hooks/course-hooks"
+import { Loading } from "../createCourse/components/loader"
+import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView"
+import { defaultFroalaConfig } from "@/constants"
+import { useOutletContext, useParams } from "react-router-dom"
+import { useCompleteLabMutation } from "@/api"
 
 export const LabPractice = () => {
     const editorRef = useRef();
@@ -91,8 +91,28 @@ export const LabPractice = () => {
 };
 
 const LabManual = () => {
-    const param = useParams();
-    const { data, isSuccess } = useGetLab(param.labId);
+    const param = useParams()
+    const { data, isSuccess } = useGetLab(param.labId)
+    const [completeLab] = useCompleteLabMutation();
+    const {classroom} = useOutletContext();
+
+    useEffect(() => {
+        const labComplete = async () => {
+            try {
+              await completeLab({
+                classroomId: classroom._id,
+                courseId: classroom.courseId,
+                labId: param.labId,
+              }).unwrap();
+            } catch (error) {
+              toast.error("internal error, please try again later.");
+            }
+        };
+
+        if (isSuccess) {
+            labComplete();
+        }
+    }, [isSuccess, classroom, completeLab, param.labId]);
 
     return (
             <>

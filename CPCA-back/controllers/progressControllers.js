@@ -1,4 +1,4 @@
-import { Chapter, Classroom, Lab, Lesson, PracticeQuestion, Progress, Quiz } from "../models/index.js";
+import { Chapter, Classroom, Lab, Lesson, PracticeQuestion, Progress, Quiz, QuizQuestion } from "../models/index.js";
 
 // Helper function to get progress
 const getProgress = async (classroomId, studentId, courseId, chapterId) => {
@@ -56,7 +56,6 @@ const getProgress = async (classroomId, studentId, courseId, chapterId) => {
 // Endpoint to submit lesson complete
 export const completeLesson = async (req, res) => {
   const { classroomId, courseId, chapterId, lessonId } = req.body;
-
   try {
     let progress = await Progress.findOne({ classroomId, studentId: req.user._id, courseId, chapterId, lessonId });
     progress.completed = true;
@@ -67,66 +66,109 @@ export const completeLesson = async (req, res) => {
   }
 };
 
-// Endpoint for time tracking
-export const trackTime = async (req, res) => {
-  const { courseId, chapterId, lessonId, sessionTime, lastAccessed } = req.body;
-  const userId = req.user._id;
-
+// Endpoint to submit lab complete
+export const completeLab = async (req, res) => {
+  const { classroomId, courseId, labId } = req.body;
   try {
-    let progress = await Progress.findOne({ courseId, chapterId, lessonId, userId });
+    let progress = await Progress.findOne({ classroomId, studentId: req.user._id, courseId, labId });
+    progress.completed = true;
+    await progress.save();
+    res.json(progress);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+// Endpoint to track time
+const trackLessonTime = async (courseId, chapterId, contentId, userId, sessionTime, lastAccessed) => {
+  try {
+    let progress = await Progress.findOne({ courseId, chapterId, lessonId: contentId, userId });
     if (progress) {
       progress.timeSpent += sessionTime;
       progress.lastAccessed = lastAccessed;
     } else {
-      progress = new Progress({ courseId, chapterId, lessonId, userId, timeSpent: sessionTime, lastAccessed, completed: false });
+      progress = new Progress({ courseId, chapterId, lessonId: contentId, userId, timeSpent: sessionTime, lastAccessed, completed: false });
     }
     await progress.save();
     res.status(200).send('Time tracked successfully');
   } catch (error) {
     res.status(500).send('Server error');
   }
-}
+};
+const trackLabTime = async (courseId, chapterId, contentId, userId, sessionTime, lastAccessed) => {
+  try {
+    let progress = await Progress.findOne({ courseId, chapterId, labId: contentId, userId });
+    if (progress) {
+      progress.timeSpent += sessionTime;
+      progress.lastAccessed = lastAccessed;
+    } else {
+      progress = new Progress({ courseId, chapterId, labId: contentId, userId, timeSpent: sessionTime, lastAccessed, completed: false });
+    }
+    await progress.save();
+    res.status(200).send('Time tracked successfully');
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
+};
+
+// Endpoint for time tracking
+export const trackTime = async (req, res) => {
+  const { courseId, chapterId, contentId, type, sessionTime, lastAccessed } = req.body;
+  const userId = req.user._id;
+
+  if (type === 'lesson') {
+    return trackLessonTime(courseId, chapterId, contentId, userId, sessionTime, lastAccessed);
+  } else if (type === 'lab') {
+    return trackLabTime(courseId, chapterId, contentId, userId, sessionTime, lastAccessed);
+  } else {
+    return res.status(400).send('Invalid content type');
+  }
+};
 
 
 export const submitQuizProgress =  async (req, res) => {
-    const {studentId,quizId,questions} = req.body;
-    const classroomId = "665a14e2e5dda17a7dcd55df"
+    const {classroomId, studentId, quizId, questions} = req.body;
   try {
     const quiz = await Quiz.findById(quizId);
     if (!quiz) {
       return res.status(404).json({ error: 'Quiz not found' });
     }
     const { courseId, chapterId } = quiz;
-    const score = calculateScore(quiz, questions);
+    const score = await calculateScore(questions);
     const totalScore = quiz.questions.length;
 
-    let progress = await Progress.findOne({ studentId, courseId, chapterId, quizId });
-    if (!progress) {
-      progress = new Progress({classroomId, studentId, courseId, chapterId, quizId, completed: true, score, totalScore });
+    let quizProgress = await Progress.findOne({classroomId, studentId, courseId, chapterId, quizId });
+    if (!quizProgress) {
+      quizProgress = new Progress({classroomId, studentId, courseId, chapterId, quizId, completed: true, score, totalScore });
     } else {
-      progress.completed = true;
-      progress.score = score;
-      progress.totalScore = totalScore;
+      quizProgress.completed = true;
+      quizProgress.score = score;
+      quizProgress.totalScore = totalScore;
     }
 
-    await progress.save();
-    res.json({score:progress.score, totalScore:progress.totalScore});
+    const chapterProgress = await Progress.findOne({classroomId, studentId, courseId, chapterId });
+    chapterProgress.completed = true;
+
+    await quizProgress.save();
+    await chapterProgress.save();
+
+    res.json({score:quizProgress.score, totalScore:quizProgress.totalScore});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-const calculateScore = (quiz, answeredQuestions) => {
+const calculateScore = async (answeredQuestions) => {
   let score = 0;
-  answeredQuestions.forEach(answeredQuestion => {
-    const question = quiz.questions.find(q => q.id === answeredQuestion.questionId);
+  for(let answeredQuestion of answeredQuestions){
+    const question = await QuizQuestion.findById(answeredQuestion.questionId);
     if (question) {
       const selectedOption = question.options.find(option => option.id === answeredQuestion.answerId);
       if (selectedOption && selectedOption.isCorrect) {
         score++; 
       }
     }
-  });
+  }
 
   return score;
 };
@@ -152,28 +194,27 @@ export const submitPracticeProgress = async (req, res) => {
 };
 
 // requestUnlockChapter and requestUnlockLesson functions
-
-const arePreviousItemsCompleted = async (classroomId, courseId, currentId, studentId, type) => {
+const arePreviousItemsCompleted = async (classroomId, parentId, currentId, studentId, type) => {
   if (type === 'chapter') {
-    const chapters = await Chapter.find({ courseId }).sort({ _id: 1 });
+    const chapters = await Chapter.find({ courseId: parentId }).sort({ _id: 1 });
     for (let chapter of chapters) {
       if (chapter._id.toString() === currentId) break;
-      const progress = await Progress.findOne({ classroomId, studentId, courseId, chapterId: chapter._id });
+      const progress = await Progress.findOne({ classroomId, studentId, courseId: parentId, chapterId: chapter._id });
       if (!progress || !progress.completed) return false;
     }
   } else if (type === 'lesson') {
-    const lessons = await Lesson.find({ chapterId: currentId }).sort({ _id: 1 });
+    const lessons = await Lesson.find({ chapterId: parentId }).sort({ _id: 1 });
     for (let lesson of lessons) {
       if (lesson._id.toString() === currentId) break;
-      const progress = await Progress.findOne({ classroomId, studentId: req.user._id, courseId, lessonId: lesson._id });
+      const progress = await Progress.findOne({ classroomId, studentId, chapterId: parentId, lessonId: lesson._id });
       if (!progress || !progress.completed) return false;
     }
   }
   else if (type === 'lab'){
-    const labs = await Lab.find({ courseId: currentId }).sort({ _id: 1 });
+    const labs = await Lab.find({ courseId: parentId }).sort({ _id: 1 });
     for (let lab of labs) {
       if (lab._id.toString() === currentId) break;
-      const progress = await Progress.findOne({ classroomId, studentId: req.user._id, courseId, labId: lab._id });
+      const progress = await Progress.findOne({ classroomId, studentId, courseId: parentId, labId: lab._id });
       if (!progress || !progress.completed) return false;
     }
   }
@@ -186,12 +227,24 @@ export const requestUnlockQuiz = async (req, res) => {
 
   try {
     const lessons = await Lesson.find({ chapterId }).sort({ _id: 1 });
-    const allLessonsCompleted = lessons.every(lesson => {
-      return Progress.findOne({ classroomId, studentId, courseId, chapterId, lessonId: lesson._id, completed: true });
-    });
+    let allLessonsCompleted = true;
+    for (let lesson of lessons) {
+      const progress = await Progress.findOne({
+        classroomId,
+        studentId,
+        chapterId,
+        lessonId: lesson._id
+      });
+
+      if (!progress || !progress.completed) {
+        allLessonsCompleted = false;
+        break;
+      }
+    }
 
     if (allLessonsCompleted) {
-      let progress = await Progress.findOne({ classroomId, studentId, courseId, chapterId, quizId });
+      let progress = await Progress.findOne({ classroomId, studentId, chapterId, courseId, quizId });
+      console.log("quiz", progress)
       if (!progress) {
         progress = new Progress({ classroomId, studentId, courseId, chapterId, quizId, unlocked: true });
       }
@@ -212,16 +265,17 @@ export const requestUnlockQuiz = async (req, res) => {
 };
 
 export const requestUnlockLab = async (req, res) => {
-  const { classroomId, courseId, chapterId, labId } = req.body;
+  const { classroomId, courseId, labId } = req.body;
   const studentId = req.user._id;
   const currentId = labId;
+  const parentId = courseId;
 
   try {
-    const allPreviousCompleted = await arePreviousItemsCompleted(classroomId, courseId, currentId, studentId, 'lab');
+    const allPreviousCompleted = await arePreviousItemsCompleted(classroomId, parentId, currentId, studentId, 'lab');
     if (allPreviousCompleted) {
-      let progress = await Progress.findOne({ classroomId, studentId, courseId, chapterId, labId });
+      let progress = await Progress.findOne({ classroomId, studentId, courseId, labId });
       if (!progress) {
-        progress = new Progress({ classroomId, studentId, courseId, chapterId, labId, unlocked: true });
+        progress = new Progress({ classroomId, studentId, courseId, labId, unlocked: true });
       } 
       else if (progress.unlocked) {
         return res.status(400).json({ success: false, message: 'Lab is already unlocked.' });
@@ -243,13 +297,14 @@ export const requestUnlockChapter = async (req, res) => {
   const { classroomId, courseId, chapterId } = req.body;
   const studentId = req.user._id;
   const currentId = chapterId;
+  const parentId = courseId;
 
   try {
     const classroom = await Classroom.findById(classroomId);
     if (!classroom.students.includes(studentId)) {
       return res.status(403).json({ success: false, message: 'You are not enrolled in this classroom.' });
     }
-    const allPreviousCompleted = await arePreviousItemsCompleted(classroomId, courseId, currentId, studentId, 'chapter');
+    const allPreviousCompleted = await arePreviousItemsCompleted(classroomId, parentId, currentId, studentId, 'chapter');
     if (allPreviousCompleted) {
       let progress = await Progress.findOne({ classroomId, studentId, courseId, chapterId });
       if (!progress) {
@@ -275,14 +330,19 @@ export const requestUnlockLesson = async (req, res) => {
   const { classroomId, courseId, chapterId, lessonId } = req.body;
   const studentId = req.user._id;
   const currentId = lessonId;
+  const parentId = chapterId;
 
   try {
-    const allPreviousCompleted = await arePreviousItemsCompleted(classroomId, courseId, currentId, studentId, 'lesson');
+    const allPreviousCompleted = await arePreviousItemsCompleted(classroomId, parentId, currentId, studentId, 'lesson');
     if (allPreviousCompleted) {
       let progress = await Progress.findOne({ classroomId, studentId, courseId, chapterId, lessonId });
       if (!progress) {
         progress = new Progress({ classroomId, studentId, courseId, chapterId, lessonId, unlocked: true });
-      } else {
+      } 
+      else if (progress.unlocked) {
+        return res.status(400).json({ success: false, message: 'Lesson is already unlocked.' });
+      }
+      else {
         progress.unlocked = true;
       }
       await progress.save();
@@ -321,7 +381,7 @@ export const getChaptersProgress = async (req, res) => {
   }
 };
 
-// Endpoint to get lesson prozgress
+// Endpoint to get lesson progress
 export const getLessonsProgress = async (req, res) => {
   const { classroomId, courseId, chapterId } = req.params;
   const studentId = req.user._id
@@ -339,6 +399,61 @@ export const getLessonsProgress = async (req, res) => {
         await lessonProgress.save();
       }
       progress.push(lessonProgress);
+    }
+    res.json(progress);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Endpoint to get lab progress
+export const getLabsProgress = async (req, res) => {
+  const { classroomId, courseId } = req.params;
+  const studentId = req.user._id
+  try {
+    const classroom = await Classroom.findById(classroomId);
+    if (!classroom.students.includes(studentId)) {
+      return res.status(403).json({ success: false, message: 'You are not enrolled in this classroom.' });
+    }
+    let progress = []
+    const labs = await Lab.find({ courseId: courseId });
+    for (let lab of labs) {
+      let labProgress = await Progress.findOne({ classroomId, studentId, courseId, labId: lab._id });
+      if (!labProgress) {
+        labProgress = new Progress({ classroomId, studentId, courseId, labId: lab._id });
+        await labProgress.save();
+      }
+      progress.push(labProgress);
+    }
+    res.json(progress);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Endpoint to get quiz progress
+export const getQuizzesProgress = async (req, res) => {
+  const { classroomId, courseId } = req.params;
+  const studentId = req.user._id
+  try {
+    const classroom = await Classroom.findById(classroomId);
+    if (!classroom.students.includes(studentId)) {
+      return res.status(403).json({ success: false, message: 'You are not enrolled in this classroom.' });
+    }
+    let progress = []
+    let quizzes = []
+    const chapters = await Chapter.find({ courseId: courseId });
+    for (let chapter of chapters) {
+      const chapterQuizzes = await Quiz.find({ chapterId: chapter._id });
+      quizzes = quizzes.concat(chapterQuizzes);
+    }
+    for (let quiz of quizzes) {
+      let quizProgress = await Progress.findOne({ classroomId, studentId, courseId, chapterId: quiz.chapterId, quizId: quiz._id });
+      if (!quizProgress) {
+        quizProgress = new Progress({ classroomId, studentId, courseId, chapterId: quiz.chapterId, quizId: quiz._id });
+        await quizProgress.save();
+      }
+      progress.push(quizProgress);
     }
     res.json(progress);
   } catch (error) {

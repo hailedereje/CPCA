@@ -76,5 +76,5 @@ export const createQuestion = (data) => newRequests.post("/quiz_question",data)
 export const updateQuestion = (data,questionId) => newRequests.put(`/quiz_question/${questionId}`,data)
 export const deleteQuestion = (questionId) => newRequests.delete(`/quiz/question/${questionId}`)
 
-export const completeQuiz = (data) =>  newRequests.post(`/progress/submit_quiz_progess`,data)
+export const completeQuiz = (data) =>  newRequests.post(`/progress/submit_quiz_progress`,data)
 

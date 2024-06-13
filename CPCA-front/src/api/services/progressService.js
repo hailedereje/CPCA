@@ -4,7 +4,7 @@ export const progressService = (builder) => ({
   // Get chapters progress for a specific course in a classroom
   getChaptersProgress: builder.query({
     query: ({ classroomId, courseId }) => ({
-      url: `/progress/${classroomId}/${courseId}`,
+      url: `/progress/chapters/${classroomId}/${courseId}`,
       method: 'GET',
     }),
   }),
@@ -12,7 +12,23 @@ export const progressService = (builder) => ({
   // Get lessons progress for a specific chapter in a course
   getLessonsProgress: builder.query({
     query: ({ classroomId, courseId, chapterId }) => ({
-      url: `/progress/${classroomId}/${courseId}/${chapterId}`,
+      url: `/progress/lessons/${classroomId}/${courseId}/${chapterId}`,
+      method: 'GET',
+    }),
+  }),
+
+  // Get lessons progress for a specific chapter in a course
+  getLabsProgress: builder.query({
+    query: ({ classroomId, courseId }) => ({
+      url: `/progress/labs/${classroomId}/${courseId}`,
+      method: 'GET',
+    }),
+  }),
+
+  // Get quizzes progress for a specific course
+  getQuizzesProgress: builder.query({
+    query: ({ classroomId, courseId }) => ({
+      url: `/progress/quizzes/${classroomId}/${courseId}`,
       method: 'GET',
     }),
   }),
@@ -38,7 +54,16 @@ export const progressService = (builder) => ({
   // Complete a lesson (only accessible to students)
   completeLesson: builder.mutation({
     query: (data) => ({
-      url: '/progress/submit_lesson_progess',
+      url: '/progress/submit_lesson_progress',
+      method: 'POST',
+      body: data,
+    }),
+  }),
+
+  // Complete a lab (only accessible to students)
+  completeLab: builder.mutation({
+    query: (data) => ({
+      url: '/progress/submit_lab_progress',
       method: 'POST',
       body: data,
     }),
@@ -56,7 +81,7 @@ export const progressService = (builder) => ({
   // Submit progress for a quiz
   submitQuizProgress: builder.mutation({
     query: (data) => ({
-      url: '/progress/submit_quiz_progess',
+      url: '/progress/submit_quiz_progress',
       method: 'POST',
       body: data,
     }),
@@ -65,7 +90,7 @@ export const progressService = (builder) => ({
   // Submit progress for a practice
   submitPracticeProgress: builder.mutation({
     query: (data) => ({
-      url: '/progress/submit_practice_progess',
+      url: '/progress/submit_practice_progress',
       method: 'POST',
       body: data,
     }),
@@ -89,6 +114,24 @@ export const progressService = (builder) => ({
     }),
   }),
 
+  // Request to unlock a lab
+  requestUnlockLab: builder.mutation({
+    query: (data) => ({
+      url: '/progress/request_unlock_lab',
+      method: 'POST',
+      body: data,
+    }),
+  }),
+
+  // Request to unlock a quiz
+  requestUnlockQuiz: builder.mutation({
+    query: (data) => ({
+      url: '/progress/request_unlock_quiz',
+      method: 'POST',
+      body: data,
+    })
+  }),
+
   // Get progress for a specific student
   getStudentProgress: builder.query({
     query: ({ classroomId, studentId }) => ({
@@ -96,4 +139,5 @@ export const progressService = (builder) => ({
       method: 'GET',
     }),
   }),
+  
 });

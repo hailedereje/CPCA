@@ -1,10 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   api,
+  useCompleteLessonMutation,
   useGetChaptersProgressQuery,
+  useGetLabsProgressQuery,
   useGetLessonsProgressQuery,
+  useGetQuizzesProgressQuery,
   useRequestUnlockChapterMutation,
+  useRequestUnlockLabMutation,
   useRequestUnlockLessonMutation,
+  useRequestUnlockQuizMutation,
 } from "@/api";
 import {
   FiChevronDown,
@@ -18,7 +23,7 @@ import {
   FiCheckCircle,
 } from "react-icons/fi";
 import { toast } from "react-toastify";
-import { Link, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import {
   useCourse,
   useLesson,
@@ -33,14 +38,20 @@ const CourseDetails = () => {
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [openChapters, setOpenChapters] = useState({});
   const [openLabs, setOpenLabs] = useState(false);
-  const [requestUnloackChapter] = useRequestUnlockChapterMutation();
+  const [requestUnlockChapter] = useRequestUnlockChapterMutation();
   const [requestUnlockLesson] = useRequestUnlockLessonMutation();
+  const [requestUnlockLab] = useRequestUnlockLabMutation();
+  const [requestUnlockQuiz] = useRequestUnlockQuizMutation();
+  const [completeLesson] = useCompleteLessonMutation();
   const [chapterId, setChapterId] = useState(null);
+  const navigate = useNavigate();
 
+  // get progress
   const {
     data: chapterProgressData,
     isLoading: chapterProgressLoading,
     isError: chapterProgressError,
+    refetch: refetchChapterProgress,
   } = useGetChaptersProgressQuery(
     {
       classroomId: classroom._id,
@@ -48,11 +59,11 @@ const CourseDetails = () => {
     },
     { refetchOnMountOrArgChange: true }
   );
-
   const {
     data: lessonProgressData,
     isLoading: lessonProgressLoading,
     isError: lessonProgressError,
+    refetch: refetchLessonProgress,
   } = useGetLessonsProgressQuery(
     {
       classroomId: classroom._id,
@@ -61,22 +72,45 @@ const CourseDetails = () => {
     },
     { refetchOnMountOrArgChange: true }
   );
-
-  console.log("lessonProgressData", lessonProgressData);
-
+  const {
+    data: labProgressData,
+    isLoading: labProgressLoading,
+    isError: labProgressError,
+    refetch: refetchLabProgress,
+  } = useGetLabsProgressQuery(
+    {
+      classroomId: classroom._id,
+      courseId: classroom.courseId,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
+  const {
+    data: quizProgressData,
+    isLoading: quizProgressLoading,
+    isError: quizProgressError,
+    refetch: refetchQuizProgress,
+  } = useGetQuizzesProgressQuery(
+    {
+      classroomId: classroom._id,
+      courseId: classroom.courseId,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
+  
+// request unlock
   const requestChapterUnlock = async (chapterId) => {
     try {
-      await requestUnloackChapter({
+      await requestUnlockChapter({
         classroomId: classroom._id,
         courseId: classroom.courseId,
         chapterId: chapterId,
       }).unwrap();
+      refetchChapterProgress();
       toast.success("Chapter unlocked successfully.");
     } catch (error) {
       toast.error(error.data.message);
     }
   };
-
   const requestLessonUnlock = async (lessonId) => {
     try {
       await requestUnlockLesson({
@@ -85,12 +119,42 @@ const CourseDetails = () => {
         chapterId: chapterId,
         lessonId: lessonId,
       }).unwrap();
+      refetchLessonProgress();
       toast.success("Lesson unlocked successfully.");
     } catch (error) {
       toast.error(error.data.message);
     }
   };
+  const requestLabUnlock = async (labId) => {
+    try {
+      await requestUnlockLab({
+        classroomId: classroom._id,
+        courseId: classroom.courseId,
+        labId: labId,
+      }).unwrap();
+      refetchLabProgress();
+      toast.success("Lab unlocked successfully.");
+    } catch (error) {
+      toast.error(error.data.message);
+    }
+  };
+  const requestQuizUnlock = async (quizId) => {
+    console.log("unlocking quiz", quizId);
+    try {
+      await requestUnlockQuiz({
+        classroomId: classroom._id,
+        courseId: classroom.courseId,
+        chapterId: chapterId,
+        quizId: quizId,
+      }).unwrap();
+      refetchQuizProgress();
+      toast.success("Quiz unlocked successfully.");
+    } catch (error) {
+      toast.error(error.data.message);
+    }
+  };
 
+// render progress
   const renderChapterProgress = (id) => {
     const itemProgress = chapterProgressData?.filter(
       (item) => item.chapterId === id
@@ -106,7 +170,6 @@ const CourseDetails = () => {
     }
     return null;
   };
-
   const renderLessonProgress = (id) => {
     const itemProgress = lessonProgressData?.filter(
       (item) => item.lessonId === id
@@ -122,7 +185,38 @@ const CourseDetails = () => {
     }
     return null;
   };
+  const renderLabProgress = (id) => {
+    const itemProgress = labProgressData?.filter(
+      (item) => item.labId === id
+    )[0];
+    if (itemProgress) {
+      if (itemProgress.completed) {
+        return <FiCheckCircle className="text-green-500 ml-2 h-6 w-6" />;
+      } else if (itemProgress.unlocked) {
+        return <FiUnlock className="text-yellow-500 ml-2 h-6 w-6" />;
+      } else {
+        return <FiLock className="text-gray-500 ml-2 h-6 w-6" />;
+      }
+    }
+    return null;
+  };
+  const renderQuizProgress = (id) => {
+    const itemProgress = quizProgressData?.filter(
+      (item) => item.quizId === id
+    )[0];
+    if (itemProgress) {
+      if (itemProgress.completed) {
+        return <FiCheckCircle className="text-green-500 ml-2 h-6 w-6" />;
+      } else if (itemProgress.unlocked) {
+        return <FiUnlock className="text-yellow-500 ml-2 h-6 w-6" />;
+      } else {
+        return <FiLock className="text-gray-500 ml-2 h-6 w-6" />;
+      }
+    }
+    return null;
+  };
 
+// toggle 
   const toggleChapter = (chapterId) => {
     const itemProgress = chapterProgressData?.filter(
       (item) => item.chapterId === chapterId
@@ -136,13 +230,44 @@ const CourseDetails = () => {
       [chapterId]: !prev[chapterId],
     }));
   };
-
   const toggleLabs = () => {
     setOpenLabs((prev) => !prev);
   };
 
+  // handle click
   const handleLessonClick = (id) => {
+    const itemProgress = lessonProgressData?.filter(
+      (item) => item.lessonId === id
+    )[0];
+    if (itemProgress && !itemProgress.unlocked) {
+      toast.error("Please unlock me first.");
+      return;
+    }
     setSelectedLesson(id);
+  };
+  const handleLabClick = (id) => {
+    const itemProgress = labProgressData?.filter(
+      (item) => item.labId === id
+    )[0];
+    if (itemProgress && !itemProgress.unlocked) {
+      toast.error("Please unlock me first.");
+      return;
+    }
+    navigate(`labs/${id}`);
+  };
+  const handleQuizClick = (id) => {
+    const itemProgress = quizProgressData?.filter(
+      (item) => item.quizId === id
+    )[0];
+    if (itemProgress && !itemProgress.unlocked) {
+      toast.error("Please unlock me first.");
+      return;
+    }
+    else if (itemProgress && itemProgress.completed) {
+      toast.error("Quiz already completed.");
+      return;
+    }
+    navigate(`quizzes/${id}`);
   };
 
   const {
@@ -150,6 +275,30 @@ const CourseDetails = () => {
     isLoading: contentLoading,
     isError: contentError,
   } = useLesson(selectedLesson);
+
+  useEffect(() => {
+    const lessonComplete = async () => {
+      const itemProgress = lessonProgressData?.filter(
+        (item) => item.lessonId === selectedLesson
+      )[0];
+      if (itemProgress && itemProgress.completed) return;
+      try {
+        await completeLesson({
+          classroomId: classroom._id,
+          courseId: classroom.courseId,
+          chapterId,
+          lessonId: selectedLesson,
+        }).unwrap();
+        refetchLessonProgress();
+      } catch (error) {
+        toast.error("internal error, please try again later.");
+      }
+    };
+
+    if (selectedLesson) {
+      lessonComplete();
+    }
+  },[selectedLesson, classroom, chapterId, lessonProgressData, completeLesson, refetchLessonProgress]);
 
   useEffect(() => {
     if (!contentLoading && !contentError && contentData) {
@@ -191,16 +340,20 @@ const CourseDetails = () => {
                     Labs
                   </button>
                   {openLabs && (
-                    <ul className="pl-6 space-y-2">
+                    <ul className="pl-6">
                       {course.labs.map((lab) => (
-                        <li key={lab._id}>
-                          <Link
+                        <li key={lab._id} className="flex gap-2 items-center">
+                          <button
                             className="flex items-center w-full p-2 text-left hover:bg-gray-400 rounded"
-                            to={`labs/${lab._id}`}
+                            onClick={() => handleLabClick(lab._id)}
+                            title={lab.title}
                           >
                             <FiFolder className="mr-2" />
-                            {lab.title}
-                          </Link>
+                            <span className="w-32 truncate">{lab.title}</span>
+                          </button>
+                          <button className="hover:bg-gray-400 rounded-full p-3 pl-1" onClick={() => requestLabUnlock(lab._id)}>
+                            {renderLabProgress(lab._id)}
+                          </button>
                         </li>
                       ))}
                     </ul>
@@ -220,8 +373,9 @@ const CourseDetails = () => {
                           className="flex items-center w-full p-2 text-left hover:bg-gray-400 rounded"
                           onClick={() => {
                             setChapterId(chapter._id),
-                              toggleChapter(chapter._id);
+                            toggleChapter(chapter._id);
                           }}
+                          title={chapter.title}
                         >
                           {openChapters[chapter._id] ? (
                             <FiChevronDown className="mr-2" />
@@ -229,26 +383,27 @@ const CourseDetails = () => {
                             <FiChevronRight className="mr-2" />
                           )}
                           <FiBook className="mr-2" />
-                          {chapter.title}
+                          <span className="w-32 truncate">{chapter.title}</span>
                         </button>
-                        <button
+                        <button className="hover:bg-gray-400 rounded-full p-3 pl-1"
                           onClick={() => requestChapterUnlock(chapter._id)}
                         >
                           {renderChapterProgress(chapter._id)}
                         </button>
                       </div>
                       {openChapters[chapter._id] && (
-                        <ul className="pl-6 space-y-2">
+                        <ul className="pl-6">
                           {chapter.lessons.map((lesson) => (
-                            <li key={lesson._id}>
+                            <li key={lesson._id} className="flex gap-2 itmes-center">
                               <button
                                 className="flex items-center w-full p-2 text-left hover:bg-gray-400 rounded"
                                 onClick={() => handleLessonClick(lesson._id)}
+                                title={lesson.title}
                               >
                                 <FiFileText className="mr-2" />
-                                {lesson.title}
+                                <span className="w-32 truncate">{lesson.title}</span>
                               </button>
-                              <button
+                              <button className="hover:bg-gray-400 rounded-full p-3 pl-1"
                                 onClick={() => requestLessonUnlock(lesson._id)}
                               >
                                 {renderLessonProgress(lesson._id)}
@@ -256,14 +411,22 @@ const CourseDetails = () => {
                             </li>
                           ))}
                           {chapter.quiz && (
-                            <li key={chapter.quiz._id}>
-                              <Link
+                            <li key={chapter.quiz._id} className="flex gap-2 items-center">
+                              <button
                                 className="flex items-center w-full p-2 text-left hover:bg-gray-400 rounded"
-                                to={`quizzes/${chapter.quiz._id}`}
+                                onClick={() => handleQuizClick(chapter.quiz._id)}
+                                title={chapter.quiz.title}
                               >
                                 <FiClipboard className="mr-2" />
-                                {chapter.quiz.title}
-                              </Link>
+                                <span className="w-32 truncate">{chapter.quiz.title}</span>
+                              </button>
+                              <button className="hover:bg-gray-400 rounded-full p-3 pl-1"
+                                onClick={() =>
+                                  requestQuizUnlock(chapter.quiz._id)
+                                }
+                              >
+                                {renderQuizProgress(chapter.quiz._id)}
+                              </button>
                             </li>
                           )}
                         </ul>
