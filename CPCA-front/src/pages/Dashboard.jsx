@@ -1,11 +1,15 @@
 import { useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AdminLinks, InstructLinks, StudentLinks } from "@/utils/links";
 import Notifications from "@/components/Notification";
 import { logoutUser } from "@/features/user/userSlice";
+import blankProfile from "@/assets/blank_profile.webp";
 
 function Dashboard() {
+  const location = useLocation();
+  const path = location.pathname.split("/").filter((path) => path !== "")
+  
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [toggleNotification, setToggleNotification] = useState(false);
   const [count, setCount] = useState(0);
@@ -25,74 +29,86 @@ function Dashboard() {
     dispatch(logoutUser());
     navigate("/");
   };
+
+  const QuickLinks = () => {
+    const links = user.role === "admin" ? AdminLinks : user.role === "instructor" ? InstructLinks : StudentLinks;
+
+    return (
+      <div className="flex space-x-4">
+        {links.map((link) => (
+          <div
+            key={link.id}
+            className={`flex items-center p-2 text-md font-light text-black hover:text-blue-500 transition-colors cursor-pointer ${path.indexOf(link.text) !== -1 && "text-blue-500"}`}
+            onClick={() => navigate(link.path)}
+          >
+            {link.text}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <>
-      <div className="flex flex-col  h-screen">
-        <div className="flex justify-between gap-3 h-12 items-center fixed top-0 z-10 shadow-md w-full p-2 bg-white">
+      <div className="flex flex-col h-screen">
+        <div className="flex justify-between gap-3 h-16 items-center fixed top-0 z-10 w-full p-4 bg-white z-40">
           <DropdownMenu />
-          <div className="">Dashboard</div>
-          <div className="flex gap-3">
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <button
-                  className="btn btn-ghost btn-circle"
-                  onClick={() => setToggleNotification(!toggleNotification)}
+          <div className="hidden md:flex w-full h-full">
+            <QuickLinks />
+          </div>
+          <div className="flex items-center gap-4">
+            <button
+              className="relative btn btn-ghost btn-circle"
+              onClick={() => setToggleNotification(!toggleNotification)}
+            >
+              <div className="indicator">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  <div className="indicator">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                      />
-                    </svg>
-                    <span className="badge badge-xs bg-red-500 indicator-item text-white">
-                      {count}
-                    </span>
-                  </div>
-                </button>
-                <div
-                  className={`absolute right-0 w-96 ${
-                    toggleNotification ? "block" : "hidden"
-                  }`}
-                >
-                  <Notifications
-                    onNotificationCount={handleNotificationCount}
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                   />
-                </div>
+                </svg>
+                <span className="badge badge-xs bg-red-500 indicator-item text-white">
+                  {count}
+                </span>
               </div>
-              {user && (
-                <div onClick={toggleDropdown} className="relative">
-                  <img
-                    src={user.profileImg}
-                    alt="profile"
-                    className="w-10 h-10 rounded-full mr-2 cursor-pointer"
-                  />
-                  <div
-                    className={`absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg overflow-hidden z-50 ${
-                      dropdownOpen ? "block" : "hidden"
-                    }`}
-                  >
+              {toggleNotification && (
+                <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg">
+                  <Notifications onNotificationCount={handleNotificationCount} />
+                </div>
+              )}
+            </button>
+            {user && (
+              <div className="relative">
+                <img
+                  src={user.profileImg ||blankProfile}
+                  alt="profile"
+                  className="w-10 h-10 rounded-full cursor-pointer"
+                  onClick={toggleDropdown}
+                />
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg">
                     <div
                       onClick={handleLogout}
-                      className="block px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                     >
                       Logout
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
-        <div className="flex h-full  pt-14">
+        <div className="flex flex-1 pt-16">
           <Outlet />
         </div>
       </div>
@@ -114,8 +130,8 @@ const DropdownMenu = () => {
       : StudentLinks;
 
   return (
-    <div className="relative inline-block">
-      <button className="" onClick={() => setIsMenuOpen((prev) => !prev)}>
+    <div className="relative inline-block md:hidden text-black">
+      <button onClick={() => setIsMenuOpen((prev) => !prev)}>
         <svg
           className="w-7"
           xmlns="http://www.w3.org/2000/svg"
@@ -134,18 +150,17 @@ const DropdownMenu = () => {
         ></div>
       )}
       {isMenuOpen && (
-        <div className="absolute top-10 left-0 w-48 bg-white border border-gray-200 rounded shadow-lg z-50 dark:bg-gray-600 dark:text-white dark:border-black">
+        <div className="absolute top-10 left-0 w-48 bg-white border border-gray-300 rounded shadow-lg z-50">
           <ul className="list-none p-0 m-0">
             {sidebarlinks.map((link) => (
               <li
                 key={link.id}
-                className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
+                className="px-4 py-2 flex items-center cursor-pointer hover:bg-blue-50"
                 onClick={() => {
                   navigate(link.path);
                   setIsMenuOpen(false);
                 }}
               >
-                <span className="mr-2">{link.icon}</span>
                 {link.text}
               </li>
             ))}

@@ -15,10 +15,10 @@ function ProfileInputElt({
       <label className="mb-3 block text-sm font-medium" htmlFor={name}>
         {label}
       </label>
-      <div className="flex items-center bg-base-200">
-        <div className="ml-2">{icon}</div>
+      <div className="flex gap-2 items-center relative">
+        <div className="absolute left-3">{icon}</div>
         <input
-          className="w-full rounded py-3 px-4 bg-base-200 focus:border-0"
+          className="ps-8 mt-1 p-2 w-full h-full text-sm border border-gray-300 rounded-md  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none dark "
           type={type}
           name={name}
           id={name}

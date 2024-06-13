@@ -15,6 +15,7 @@ import { JoinClass } from "./components";
 import adminRoutes from "./routes/adminRoutes";
 import instructorRoutes from "./routes/instructorRoutes";
 import studentRoutes from "./routes/studentRoutes";
+import { Quiz } from "./components/Quiz";
 
 const queryClient = new QueryClient();
 
@@ -38,11 +39,13 @@ function App() {
     {
       path: "/",
       element: <HomeLayout />,
+      errorElement: <ErrorPage />,
       children: [
         { index: true, element: <Landing /> },
         { path: "register/:token?", element: <Register />, action: registerAction(store) },
         { path: "login", element: <Login />, action: loginAction(store) },
         { path: "join/:token", element: <JoinClass /> },
+        { path: "/quiz",element: <Quiz /> },
       ],
     },
     {

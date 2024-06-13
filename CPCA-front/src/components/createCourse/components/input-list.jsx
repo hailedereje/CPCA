@@ -102,7 +102,7 @@ export const InputList = ({ items, type, courseId }) => {
                 <div className="w-full flex gap-1 items-center border border-gray-400 rounded-md p-1 flex-wrap max-h-32 overflow-auto editor">
                     <div className="flex items-center gap-2 flex-wrap">
                         {contents.length > 0 && contents.map((cont, idx) => (
-                            <div key={idx} className="flex gap-1 bg-green-300 p-2 rounded-md">
+                            <div key={idx} className="flex gap-1 bg-gray-100 p-2 rounded-md">
                                 <span className="text-xs text-left">{cont.title}</span>
                                 <button type="button" onClick={() => deleteContent(cont.id)}>
                                     <svg className="text-gray-500" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">

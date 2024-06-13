@@ -17,7 +17,7 @@ export const ScorePage = () => {
     dispatch(closeScoreDialog())
     navigate('/');
   };
-  console.log(score,totalQuestions)
+
   const getScoreMessage = () => {
     const percentage = (score / totalQuestions) * 100;
     if (percentage >= 90) return 'Excellent!';

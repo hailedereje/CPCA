@@ -14,17 +14,17 @@ export const InstructLinks = [
 ];
 
 export const StudentLinks = [
-  { id: 1, text: "Status", path: "/dashboard", icon: <IoBarChartSharp /> },
-  { id: 2, text: "Profile", path: "profile", icon: <ImProfile /> },
-  {id: 3, text: "All Courses", path: "courses", icon: <FaChalkboardTeacher/>},
-  {id: 4, text: "Classrooms", path: "classrooms", icon: <FaChalkboardTeacher/>}
+  { id: 1, text: "status", path: "/dashboard", icon: <IoBarChartSharp /> },
+  { id: 2, text: "profile", path: "profile", icon: <ImProfile /> },
+  {id: 3, text: "courses", path: "courses", icon: <FaChalkboardTeacher/>},
+  {id: 4, text: "classrooms", path: "classrooms", icon: <FaChalkboardTeacher/>}
 ];
 
 export const AdminLinks = [
   { id: 1, text: "status", path: "/dashboard", icon: <IoBarChartSharp /> },
   { id: 2, text: "profile", path: "profile", icon: <ImProfile /> },
-  { id: 3, text: "Users", path: "users", icon: <FaUsers /> },
-  { id: 4, text: "Create course",path: "course/create",icon: <RiSoundModuleLine />},
+  { id: 3, text: "users", path: "users", icon: <FaUsers /> },
+  { id: 4, text: "create course",path: "course/create",icon: <RiSoundModuleLine />},
   { id: 5, text: "courses", path: "course",icon: <RiDraftLine/>}
 ];
 
@@ -33,7 +33,7 @@ export const AdminLinks = [
 export const instructorActivities = [
   {
     id: "1",
-    text: "Create Classroom",
+    text: "create classroom",
     activity: "Go",
     icon: <FaChalkboardTeacher size={50} />,
     path: 'classroom'
@@ -41,7 +41,7 @@ export const instructorActivities = [
   },
   {
     id: "3",
-    text: "Manage Students",
+    text: "manage students",
     activity: "Go",
     icon: <BsFillPeopleFill size={50} />,
     path: ''
@@ -49,7 +49,7 @@ export const instructorActivities = [
   },
   {
     id: "4",
-    text: "Manage Instructors",
+    text: "manage instructors",
     activity: "Go",
     icon: <GiTeacher size={50} />,
     path: ''
