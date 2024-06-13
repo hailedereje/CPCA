@@ -25,7 +25,7 @@ const App = async (app) => {
   }));
   app.use(morgan("dev"));
   app.get("/", (req, res) => {
-    res.send("server running ...");
+    res.send("server running successfully ...");
   });
   app.use("/api/v1/user", userRoutes);
   app.use("/api/v1/courses", courseRoutes);
