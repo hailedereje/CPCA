@@ -85,16 +85,11 @@ const UpdateCourseBanner = ({ courseId, state }) => {
     await publish(courseId)
   }
   return (
-    <div className="flex justify-between items-center gap-4 px-6 py-3 bg-white  rounded-md border  transition duration-300">
-      <div className="flex items-center gap-2">
-        <h1 className="text-2xl font-bold capitalize text-gray-800 ">Course Details</h1>
-        {state.isPublished ? (
-          <MdCheckCircle size={24} className="text-green-500" title="Published" />
-        ) : (
-          <MdError size={24} className="text-yellow-500" title="Unpublished" />
-        )}
+    <div className="flex justify-between items-center gap-4 px-6 py-3 bg-gray-50  rounded-t-md  border  transition duration-300">
+      <div className="flex items-center gap-4">
+        <h1 className="text-2xl xxs:text-lg font-bold capitalize text-black">Update course details</h1>
       </div>
-      <MenuWrapper>
+      <MenuWrapper color={'text-'}>
         <button 
           onClick={onPublish}
           disabled = {state.isPublished || !state.isValid}

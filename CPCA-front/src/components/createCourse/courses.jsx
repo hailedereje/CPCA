@@ -78,15 +78,21 @@ export const Courses = () => {
 
   return (
     <div className="flex flex-col w-full h-fit p-4 gap-4">
-      <h1 className="text-5xl font-bold text-white dark:text-blue-600 mb-6 text-center">Courses</h1>
+      <div className="flex w-full items-center justify-between">
+        <div/>
+        <h1 className="text-3xl leading-relaxed font-bold text-gray-800">Courses</h1>
+        <button onClick={() => navigate('/dashboard/course/create')} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 justify-self-end">
+          Create Course
+        </button>
+      </div>
       <div className="flex justify-center space-x-4 mb-6">
-        <button onClick={() => setSelectedTab('all')} className={`px-4 py-2 ${selectedTab === 'all' ? ' text-blue-600 border-blue-700 border-b-2' : ' text-blue-400'}`}>
+        <button onClick={() => setSelectedTab('all')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'all' ? ' text-blue-600 border-blue-700 border-b-2' : ' text-blue-400'}`}>
           All Courses
         </button>
-        <button onClick={() => setSelectedTab('published')} className={`px-4 py-2 ${selectedTab === 'published' ? 'text-blue-600 border-blue-700 border-b-2' : ' text-blue-400'}`}>
+        <button onClick={() => setSelectedTab('published')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'published' ? 'text-blue-600 border-blue-700 border-b-2' : ' text-blue-400'}`}>
           Published Courses
         </button>
-        <button onClick={() => setSelectedTab('draft')} className={`px-4 py-2 ${selectedTab === 'draft' ? 'text-blue-600 border-blue-700 border-b-2' : ' text-blue-400'}`}>
+        <button onClick={() => setSelectedTab('draft')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'draft' ? 'text-blue-600 border-blue-700 border-b-2' : ' text-blue-400'}`}>
           Draft Courses
         </button>
       </div>

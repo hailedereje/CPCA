@@ -32,13 +32,15 @@ function Dashboard() {
 
   const QuickLinks = () => {
     const links = user.role === "admin" ? AdminLinks : user.role === "instructor" ? InstructLinks : StudentLinks;
-
+    const getActive = (link) => {
+      return path.includes(link);
+    };
     return (
       <div className="flex space-x-4">
         {links.map((link) => (
           <div
             key={link.id}
-            className={`flex items-center p-2 text-md font-light text-black hover:text-blue-500 transition-colors cursor-pointer ${path.indexOf(link.text) !== -1 && "text-blue-500"}`}
+            className={`flex items-center p-2 text-md text-gray-600 leading-relaxed hover:text-blue-300 transition-colors cursor-pointer ${getActive(link) && "text-blue-400"}`}
             onClick={() => navigate(link.path)}
           >
             {link.text}
@@ -51,7 +53,7 @@ function Dashboard() {
   return (
     <>
       <div className="flex flex-col h-screen">
-        <div className="flex justify-between gap-3 h-16 items-center fixed top-0 z-10 w-full p-4 bg-white z-40">
+        <div className="flex justify-between gap-3 h-16 items-center fixed top-0 w-full p-4 bg-white z-40 border">
           <DropdownMenu />
           <div className="hidden md:flex w-full h-full">
             <QuickLinks />
@@ -87,18 +89,18 @@ function Dashboard() {
               )}
             </button>
             {user && (
-              <div className="relative">
+              <div className="relative w-full">
                 <img
                   src={user.profileImg ||blankProfile}
                   alt="profile"
-                  className="w-10 h-10 rounded-full cursor-pointer"
+                  className="w-10 object-cover flex items-center rounded-full cursor-pointer"
                   onClick={toggleDropdown}
                 />
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg">
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md border shadow-sm">
                     <div
                       onClick={handleLogout}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100 cursor-pointer"
                     >
                       Logout
                     </div>

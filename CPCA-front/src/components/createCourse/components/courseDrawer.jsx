@@ -45,25 +45,25 @@ export const Drawer = ({ data }) => {
                 className={`fixed inset-0 z-10 ${isOpen ? "" : "hidden"}`}
                 onClick={toggleDrawer}
             ></div>
-            <div className={` fixed top-12 h-full left-0 bg-white dark:bg-gray-600 dark:text-white w-80 z-10 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
+            <div className={` fixed top-12 h-full left-0 bg-white w-80 z-10 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
                 <div className="w-full">
-                    <div className="bg-white h-screen max-h-[1024px] dark:bg-gray-600 shadow-lg overflow-auto editor">
-                        <div className="flex justify-between border gap-2 items-center p-4 bg-blue-500 text-white">
+                    <div className="h-screen max-h-[1024px] bg-gray-50 border shadow-sm overflow-auto editor">
+                        <div className="flex justify-between rounded z-50 gap-2 items-center p-6 bg-blue-400 text-white">
                             <h2 className="text-md flex items-center line-clamp-1 gap-2">
                                 <span><FaBook className="text-md" /> </span>
                                 <p className='text-left line-clamp-2'>{course.title}</p>
                             </h2>
-                            <div className="relative group ">
+                            <div className="relative group text-black">
                                 <MenuWrapper>
-                                    <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
+                                    <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-slate-50 rounded-t-md">
                                         <span className="mr-2"><MdModeEditOutline /></span>
                                         <span className='text-sm capitalize'>rename</span>
                                     </li>
-                                    <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500" onClick={() => dispatch(addChapter({ courseId: course._id, label: "create Chapter", actionType: ActionTypes.ADD_CHAPTER }))}>
+                                    <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-slate-50" onClick={() => dispatch(addChapter({ courseId: course._id, label: "create Chapter", actionType: ActionTypes.ADD_CHAPTER }))}>
                                         <span className="mr-2"><IoMdAddCircleOutline /></span>
                                         <span className='text-sm capitalize'>add chapter </span>
                                     </li>
-                                    <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
+                                    <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-slate-50">
                                         <span className="mr-2"><RiDeleteBin6Line className="text-red-400" /></span>
                                         <span className='text-sm capitalize'>delete</span>
                                     </li>
@@ -74,14 +74,14 @@ export const Drawer = ({ data }) => {
                             {course.chapters.map((chapter, index) => (
                                 
                                 <div key={chapter._id} className="flex flex-col gap-1">
-                                    <div className="flex justify-between items-start gap-2 p-2 bg-gray-100 dark:bg-gray-600  transition duration-300" >
-                                        <button className="flex items-start gap-2 w-full p-2  hover:bg-gray-200 dark:hover:bg-gray-700" onClick={() => toggleChapter(index)}>
+                                    <div className="flex justify-between items-start gap-2 p-2 bg-gray-100   transition duration-300" >
+                                        <button className="flex items-start gap-2 w-full p-2 text-black" onClick={() => toggleChapter(index)}>
                                             <span className=''>
                                                 {openChapterIndex === index ? <FaBookOpen className="text-md" /> : <FaBook className="text-md" />}
                                             </span>
-                                            <span className="text-sm dark:text-white  capitalize line-clamp-1 text-left">{chapter.title + '(' + chapter.lessons.length + ')'}</span>
+                                            <span className="text-sm  capitalize line-clamp-1 text-left">{chapter.title + '(' + chapter.lessons.length + ')'}</span>
                                         </button>
-                                        <MenuWrapper>
+                                        <MenuWrapper color={"text-black"}>
                                             <li
                                                 className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
                                                 onClick={() => {
@@ -130,7 +130,7 @@ export const Drawer = ({ data }) => {
                                                 navigate(`${chapter._id}/add-test/${chapter.quiz._id}`)
                                             }}
                                             key={chapter.quiz?._id}
-                                            className={`flex items-center justify-between gap-2 p-2 bg-gray-50 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-300 ${!!chapter.quiz?._id ? "" : "hidden"}`}
+                                            className={`flex items-center justify-between gap-2 p-2 bg-gray-50  rounded-lg cursor-pointer hover:bg-gray-100 transition duration-300 ${!!chapter.quiz?._id ? "" : "hidden"}`}
                                         >
                                             <div className='flex gap-2 ml-2'>
                                                 <span>
@@ -159,15 +159,15 @@ const Lessons = ({ courseId, lessons, chapterId }) => {
     return (
         <div className="ml-2 space-y-2 transition duration-300">
             {
-                lessons.length === 0 ? <span className='text-xs pl-5 dark:text-gray-400'>no lessons create one</span> : lessons.map((lesson) => (
+                lessons.length === 0 ? <span className='text-xs pl-5 '>no lessons create one</span> : lessons.map((lesson) => (
                     <div
                         onClick={() => {
                             navigate(`${chapterId}/lessons/${lesson._id}`)
                         }}
                         key={lesson._id}
-                        className="flex items-center justify-between gap-2 p-2 bg-gray-50 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-300"
+                        className="flex items-center justify-between gap-2 p-2 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-300"
                     >
-                        <div className='flex gap-2'>
+                        <div className='flex gap-2 text-black'>
                             <span>
                                 <svg className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path fill="currentColor" d="M4 21V3h14v8.735q-.22-.031-.5-.031t-.5.03V4h-5.5v6.192L9.5 9l-2 1.192V4H5v16h6.992q.073.27.201.528q.128.259.288.472zm13.5.692q-1.671 0-2.835-1.164q-1.165-1.164-1.165-2.836q0-1.67 1.165-2.835q1.164-1.165 2.835-1.165t2.836 1.165t1.164 2.835t-1.164 2.836t-2.836 1.164m-.865-2.115l2.73-1.923l-2.73-1.923zM7.5 4h4zM5 4h12h-5.5h.492z" />
@@ -259,12 +259,12 @@ const Menu = ({ ids, value }) => {
     );
 };
 
-export const MenuWrapper = ({ children }) => {
+export const MenuWrapper = ({ children,color }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     return (
         <div className="relative">
             <button className="w-fit h-fit" onClick={() => setIsMenuOpen(prev => !prev)}>
-                <SlOptions size={20} />
+                <SlOptions size={20} className={color}/>
             </button>
             {isMenuOpen && (
                 <div className="fixed h-screen w-screen inset-0 z-40 cursor-default " onClick={() => setIsMenuOpen(false)}></div>
