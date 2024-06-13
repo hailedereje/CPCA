@@ -389,13 +389,14 @@ export const calculateChapterProgress = async (req, res) => {
     if (!classroom.students.includes(studentId)) {
       return res.status(403).json({ success: false, message: 'You are not enrolled in this classroom.' });
     }
-
     const chapterProgress = await getProgress(classroomId, studentId, req.body.courseId, chapterId);
     res.status(200).json({ progress: chapterProgress });
   } catch (error) {
     res.status(500).json({ message: 'Error calculating chapter progress', error });
   }
 };
+
+
 export const getStudentProgress = async (req, res) => {
   const { classroomId, studentId } = req.params;
 
@@ -410,8 +411,12 @@ export const getStudentProgress = async (req, res) => {
     }
 
     let progress = await Progress.find({ classroomId, studentId })
+      .populate('classroomId')
+      .populate('studentId')
+      .populate('courseId')
+      .populate('chapterId').exec()
 
-    if (!progress) {
+    if (!progress || progress.length === 0) {
       return res.status(404).json({ message: 'Progress not found' });
     }
 
