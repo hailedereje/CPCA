@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/footer/Footer";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Landing() {
+
+
+  // 
   return (
     <>
       <Navbar transparent />
