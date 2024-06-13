@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useCloseQuiz, useCompleteQuiz, useGetQuiz } from "./createCourse/hooks/quiz-hooks"
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView"
 import { Loading } from "./createCourse/components/loader"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 import { CheckIcon, LucideLoader2 } from "lucide-react"
 import { showErrorToast } from "@/toasts/toast"
 import { QuizError } from "./createCourse/error/editCourseError"
@@ -13,8 +13,8 @@ import { MdWarning } from "react-icons/md"
 import { ScorePage } from "./quiz-score"
 
 export const Quiz = () => {
-
-  const quizId = "6665ae03dfe74982e0fe9c52"
+  const params = useParams();
+  const quizId = params.quizId;
   const { data, isSuccess, isError, error } = useGetQuiz(quizId)
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export const Quiz = () => {
 
   return (
     <div className="flex flex-col gap-6  w-full min-h-screen h-full dark:bg-gray-600 dark:text-white bg-gray-100">
-      {isSuccess ?<Question questions={data.data.questions} quizId={"6665ae03dfe74982e0fe9c52"} duration={data.data.duration}/> : <Loading />}
+      {isSuccess ?<Question questions={data.data.questions} quizId={quizId} duration={data.data.duration}/> : <Loading />}
     </div>
   )
 }
@@ -40,6 +40,7 @@ export const Quiz = () => {
 const Question = ({ questions,quizId,duration }) => {
 
   const user = useSelector(state => state.userState.user);
+  const {classroom} = useOutletContext();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
@@ -85,7 +86,7 @@ const Question = ({ questions,quizId,duration }) => {
 
   return (
     <div className="grid grid-cols-2 xxs:grid-cols-1 md:grid-cols-2 p-4 w-full min-h-screen">
-      <QuizDialog />
+      <QuizDialog quizId={quizId} />
       <ScorePage />
       <div className="md:px-10 md:py-5 flex flex-col gap-6 md:border-r">
         <div className="flex flex-col gap-8">
@@ -108,7 +109,7 @@ const Question = ({ questions,quizId,duration }) => {
             <button onClick={() => dispatch(openQuizDialog({
               label: "submit quiz",actionType:ActionTypes.SUBMIT_QUIZ,
               message: "Are you sure you want to submit the quiz?",
-              data: { studentId: user._id,quizId,questions: selectedAnswers }}))} type="button" className={`bg-blue-500 max-w-sm  text-white px-4 py-2 text-sm rounded max-h-10 md:hidden ${currentPage === questions.length ? '':'hidden'}`}>
+              data: { classroomId: classroom._id,studentId: user._id,quizId,questions: selectedAnswers }}))} type="button" className={`bg-blue-500 max-w-sm  text-white px-4 py-2 text-sm rounded max-h-10 md:hidden ${currentPage === questions.length ? '':'hidden'}`}>
               Submit quiz
             </button>
           </div>
@@ -156,7 +157,7 @@ const Question = ({ questions,quizId,duration }) => {
           <button onClick={() => dispatch(openQuizDialog({
               label: "submit quiz",actionType:ActionTypes.SUBMIT_QUIZ,
               message: "Are you sure you want to submit the quiz?",
-              data: { studentId: user._id,quizId,questions: selectedAnswers }}))} type="button" className={`bg-blue-500 max-w-sm  text-white px-4 py-2 text-sm rounded max-h-10 xxs:invisible  ${currentPage === questions.length ? 'md:visible':'invisible'}`}>
+              data: { classroomId: classroom._id,studentId: user._id,quizId,questions: selectedAnswers }}))} type="button" className={`bg-blue-500 max-w-sm  text-white px-4 py-2 text-sm rounded max-h-10 xxs:invisible  ${currentPage === questions.length ? 'md:visible':'invisible'}`}>
               Submit quiz
           </button>
           <div className="xxs:flex w-full justify-center md:hidden ">
@@ -174,10 +175,8 @@ const Question = ({ questions,quizId,duration }) => {
 };
 
 
-const QuizDialog = () => {
-  
+const QuizDialog = ({quizId}) => {
   const navigate = useNavigate();
-  const quizId = "6665ae03dfe74982e0fe9c52" 
   const { quizModal } = useSelector(state => state.quizState);
   const dispatch = useDispatch();
 
@@ -192,11 +191,9 @@ const QuizDialog = () => {
         case ActionTypes.CLOSE_QUIZ:
           await closeQuiz();
           dispatch(closeQuizDialog());
-          navigate("/");
           break;
         case ActionTypes.SUBMIT_QUIZ:
           await submitQuiz(data).then(response => {
-            console.log(response.data)
             dispatch(closeQuizDialog());
             dispatch(showScoreDialog({score:response.data.score,totalQuestions:response.data.totalScore }))
           })

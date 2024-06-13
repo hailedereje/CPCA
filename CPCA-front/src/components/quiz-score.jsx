@@ -10,12 +10,12 @@ export const ScorePage = () => {
   const {score, totalQuestions,showScore} = useSelector(state => state.quizState.quizModal);
   const handleRetakeQuiz = () => {
     dispatch(closeScoreDialog())
-    navigate('/quiz'); 
+    navigate(-1); 
   };
 
   const handleGoHome = () => {
     dispatch(closeScoreDialog())
-    navigate('/');
+    navigate(-2);
   };
   console.log(score,totalQuestions)
   const getScoreMessage = () => {
@@ -31,7 +31,7 @@ export const ScorePage = () => {
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full relative">
           <button onClick={() => {
             dispatch(closeScoreDialog())
-            navigate('/') 
+            navigate(-1) 
           }}
             type="button" className="absolute top-4 right-5 text-red-500 hover:text-red-400 hover:border-red-300 transition-colors border rounded-md p-1">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

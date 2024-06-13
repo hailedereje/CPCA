@@ -58,12 +58,17 @@ export const {
   // progress endpoints 
   useGetChaptersProgressQuery, 
   useGetLessonsProgressQuery,
+  useGetLabsProgressQuery,
+  useGetQuizzesProgressQuery,
   useCalculateChapterProgressMutation,
   useCalculateCourseProgressMutation, 
   useCompleteLessonMutation,
+  useCompleteLabMutation,
   useTrackTimeMutation,
   useSubmitQuizProgressMutation,
   useSubmitPracticeProgressMutation,
   useRequestUnlockChapterMutation,
   useRequestUnlockLessonMutation,
+  useRequestUnlockLabMutation,
+  useRequestUnlockQuizMutation,
 } = api;
