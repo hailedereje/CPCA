@@ -1,9 +1,11 @@
 import newRequests from '@/utils/newRequest';
 
+export const getCourses = () => newRequests.get("/courses/all")
 export const createCourse = (data) => newRequests.post("/courses/new",data)
-export const getCourse = (courseId) => newRequests.get(`/courses/course`, { params: { id: courseId }})
+export const getCourse = (courseId) => newRequests.get(`/courses/course/${courseId}`)
 export const updateCourse = ({data,courseId}) => newRequests.put(`/courses/course/${courseId}`,data)
 export const deleteCourse = ({courseId}) => newRequests.delete(`/courses/course/${courseId}`)
+export const publishCourse = (courseId) => newRequests.put(`/courses/course/publish/${courseId}`)
 
 export const createLab = (data) => newRequests.post("/courses/course/labs",data)
 export const updateLab = (data) => newRequests.put(`/courses/course/labs/lab/${data.labId}`,data.labForm)

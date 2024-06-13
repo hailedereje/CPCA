@@ -1,11 +1,17 @@
-import { addTagsService } from "../../services/course/addTagService.js"
+import Course from "../../models/course.js"
 
 export const addTagsController = async (req,res) => {
-    try { 
-        await addTagsService({...req.body})
-            .then(() => res.status(201).send({ message: "tags add successfully" , title: "course updated successfully"}))
-            .catch((err) => res.status(500).send({ message: "something went wrong", title: "internal server error", ...err }))
-    } catch(err) {
-        return res.status(500).send({ message: "something went wrong", title: "internal server error", err })
+    try {
+        const { courseId, tags } = req.body
+        const course = await Course.findById(courseId)
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" })
+        }
+        course.tags = req.body.tags
+        await course.save()
+        res.status(200).json({ message: "Tags added successfully" })
+
+    }catch (error) {
+        res.status(500).json({ message: error.message })
     }
 }

@@ -22,3 +22,17 @@ export const createCourseController = async (req, res) => {
         return res.status(500).send({ message: "something went wrong", title: "internal server error",err })
     }
     }
+
+export const publishCourseController = async (req,res) => {
+    try {
+        const { id } = req.params
+        const course = await Course.findById(id)
+        if(!course) return res.status(404).send({ message: "course not found", title: "not found" })
+        course.isPublished = true
+        await course.save()
+        return res.status(201).json({message: "course published"})
+    } catch(err) {
+        console.error(err)
+        return res.status(500).send({ message: "something went wrong", title: "internal server error",err })
+    }
+}

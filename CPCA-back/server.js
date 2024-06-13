@@ -23,7 +23,7 @@ const startServer = async () => {
   
   await App(app);
   
-  server.listen(5000, () => {
+  server.listen(port, () => {
     console.log(`Server running on port ${port}`);
   });
 };

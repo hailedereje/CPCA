@@ -97,12 +97,12 @@ export const InputList = ({ items, type, courseId }) => {
     useClickOutside(formRef, () => setToggle(false));
 
     return (
-        <form onSubmit={onSubmit} className="flex gap-2 items-end dark:bg-gray-600 z-10 dark:text-black" ref={formRef}>
+        <form onSubmit={onSubmit} className="flex gap-2 items-end  z-10" ref={formRef}>
             <div className="relative w-full">
                 <div className="w-full flex gap-1 items-center border border-gray-400 rounded-md p-1 flex-wrap max-h-32 overflow-auto editor">
                     <div className="flex items-center gap-2 flex-wrap">
                         {contents.length > 0 && contents.map((cont, idx) => (
-                            <div key={idx} className="flex gap-1 bg-green-300 p-2 rounded-md">
+                            <div key={idx} className="flex gap-1 bg-gray-100 p-2 rounded-md">
                                 <span className="text-xs text-left">{cont.title}</span>
                                 <button type="button" onClick={() => deleteContent(cont.id)}>
                                     <svg className="text-gray-500" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -118,17 +118,17 @@ export const InputList = ({ items, type, courseId }) => {
                         value={content}
                         onChange={handleFilterChange}
                         onFocus={() => setToggle(true)}
-                        className="text-xs p-2 w-full rounded-md focus:outline-none appearance-none dark:text-white dark:bg-transparent dark:placeholder:text-white"
+                        className="text-xs p-2 w-full rounded-md focus:outline-none appearance-none dark:bg-transparent "
                         ref={inputRef}
                     />
                 </div>
-                <div className={`absolute bg-white dark:bg-gray-500 text-white z-30 top-full left-0 mt-2 flex flex-col max-h-32 overflow-auto editor p-1 gap-y-1 items-center w-full shadow-md ${toggle && filteredCourses.length ? "" : "hidden"}`} hidden={filteredCourses.length === 0}>
+                <div className={`absolute bg-white  z-30 top-full left-0 mt-2 flex flex-col max-h-32 overflow-auto editor p-1 gap-y-1 items-center w-full shadow-md ${toggle && filteredCourses.length ? "" : "hidden"}`} hidden={filteredCourses.length === 0}>
                     {filteredCourses.map((course, idx) => (
                         <button
                             key={course.id}
                             type="button"
                             onClick={() => addContent(course)}
-                            className="flex p-2 hover:bg-blue-200 dark:hover:bg-gray-600 w-full rounded-sm"
+                            className="flex p-2 hover:bg-blue-200  w-full rounded-sm"
                         >
                             <span className="text-sm text-left">{course.title}</span>
                         </button>

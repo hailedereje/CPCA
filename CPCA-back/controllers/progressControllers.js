@@ -504,7 +504,6 @@ export const calculateChapterProgress = async (req, res) => {
     if (!classroom.students.includes(studentId)) {
       return res.status(403).json({ success: false, message: 'You are not enrolled in this classroom.' });
     }
-
     const chapterProgress = await getProgress(classroomId, studentId, req.body.courseId, chapterId);
     res.status(200).json({ progress: chapterProgress });
   } catch (error) {
@@ -512,7 +511,7 @@ export const calculateChapterProgress = async (req, res) => {
   }
 };
 
-// New endpoint for instructors to get student progress
+
 export const getStudentProgress = async (req, res) => {
   const { classroomId, studentId } = req.params;
 
@@ -526,13 +525,18 @@ export const getStudentProgress = async (req, res) => {
       return res.status(403).json({ success: false, message: 'Student is not enrolled in this classroom.' });
     }
 
-    let progress = await Progress.find({ classroomId, studentId });
-    if (!progress) {
-      return res.status(404).json({ success: false, message: 'No progress found for this student.' });
+    let progress = await Progress.find({ classroomId, studentId })
+      .populate('classroomId')
+      .populate('studentId')
+      .populate('courseId')
+      .populate('chapterId').exec()
+
+    if (!progress || progress.length === 0) {
+      return res.status(404).json({ message: 'Progress not found' });
     }
 
     res.json(progress);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: 'Error getting student progress', error });
   }
 };

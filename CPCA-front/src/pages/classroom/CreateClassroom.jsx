@@ -51,7 +51,7 @@ function CreateClassroom() {
             </label>
             <select id="courseId" name="courseId" className="select select-bordered select-text capitalize">
               <option key={"0"} className="capitalize" value="">Select a course</option>
-              {courses.map((course) => (
+              {courses && courses.map((course) => (
                 <option className="capitalize" key={course._id} value={course._id}>
                   {course.title}
                 </option>

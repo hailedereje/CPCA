@@ -129,6 +129,15 @@ export const progressService = (builder) => ({
       url: '/progress/request_unlock_quiz',
       method: 'POST',
       body: data,
+    })
+  }),
+
+  // Get progress for a specific student
+  getStudentProgress: builder.query({
+    query: ({ classroomId, studentId }) => ({
+      url: `/progress/${classroomId}/student/${studentId}`,
+      method: 'GET',
     }),
   }),
+  
 });

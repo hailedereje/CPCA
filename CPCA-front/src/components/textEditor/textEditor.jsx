@@ -20,7 +20,6 @@ function RichTextExample() {
   const { data, isSuccess, isError,error } = useLesson(param.lessonId)
 
   if(isError) {
-    console.log(error)
     return (
       <div className="flex flex-col items-center justify-center h</svg>-full p-4 text-center">
         <p className="text-2xl font-bold dark:text-white mb-4">Failed to Load Lesson</p>

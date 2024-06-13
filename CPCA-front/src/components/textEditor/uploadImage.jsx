@@ -48,19 +48,19 @@ export const UploadImage = ({id,img}) => {
 
 
   return (
-    <div className="flex flex-col items-center gap-4 bg-gray-600 rounded-md p-4 max-w-md">
+    <div className="flex flex-col items-center gap-4 border rounded-md p-4 max-w-md">
       <span className="flex flex-col gap-2">
           <span className="text-xl capitalize font-medium flex gap-4 items-center">
             <IconWrapper bg="bg-blue-500" color="text-white" icon={<CiImageOn />} />
             <span >course image</span>
           </span>
-          <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500 dark:text-gray-200"> add course image that appears in the course list that students to see </span>
+          <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500"> add course image that appears in the course list that students to see </span>
         </span>
       {!imageUrl ? (
         <>
-          <label htmlFor="image-file" className="cursor-pointer p-2 flex flex-col items-center justify-center w-full border border-dashed border-white rounded-lg  transition-colors duration-300">
-            <AiOutlineCloudUpload size={40} className="text-blue-500 dark:text-white" />
-            <span className="mt-2 text-blue-500 dark:text-white">Upload Image</span>
+          <label htmlFor="image-file" className="cursor-pointer p-2 flex flex-col items-center justify-center w-full border border-dashed border-blue-500 rounded-lg  transition-colors duration-300">
+            <AiOutlineCloudUpload size={40} className="text-blue-500 " />
+            <span className="mt-2 text-blue-500">Upload Image</span>
           </label>
           <input type="file" id="image-file" hidden onChange={handleFileChange} />
         </>

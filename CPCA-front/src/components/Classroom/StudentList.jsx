@@ -10,7 +10,7 @@ const StudentList = ({ students }) => {
   };
 
   return (
-    <div className="mt-4">
+    <div className="mt-4  p-4">
       <div className="flex justify-between items-center mb-4">
         <div className="space-x-2">
           <button
@@ -34,39 +34,29 @@ const StudentList = ({ students }) => {
         </NavLink>
       </div>
       {view === "detailed" ? (
-        <ul className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6  p-3">
           {students.map((student) => (
             <NavLink to={`${student._id}`} key={student._id}>
-              <article className="flex border border-base-200 shadow-sm items-center flex-col gap-y-4 sm:flex-row flex-wrap p-3 hover:bg-gray-100 cursor-pointer">
-                <img
-                  src={student.profileImg || "https://via.placeholder.com/150"}
-                  alt={student.username}
-                  className="h-24 w-24 rounded-lg object-cover mr-4"
-                />
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold">
-                    {student.fullName || "N/A"}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    {student.email || "N/A"}
-                  </p>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    {student.studentId || "N/A"}
-                  </p>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    {student.username || "N/A"}
-                  </p>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    {student.phoneNumber || "N/A"}
-                  </p>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    {student.bio || "N/A"}
-                  </p>
+              <article className="border border-base-200 shadow-sm p-4 rounded-lg hover:bg-gray-100 cursor-pointer">
+                <div className="flex flex-col items-center">
+                  <img
+                    src={student.profileImg || "https://via.placeholder.com/150"}
+                    alt={student.username}
+                    className="h-24 w-24 rounded-lg object-cover mb-4"
+                  />
+                  <div className="text-center">
+                    <h3 className="text-xl font-semibold">{student.fullName || "N/A"}</h3>
+                    <p className="text-gray-600 dark:text-gray-400">{student.email || "N/A"}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{student.studentId || "N/A"}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{student.username || "N/A"}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{student.phoneNumber || "N/A"}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{student.bio || "N/A"}</p>
+                  </div>
                 </div>
               </article>
             </NavLink>
           ))}
-        </ul>
+        </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="table table-zebra w-full">
@@ -100,27 +90,27 @@ const StudentList = ({ students }) => {
                     </NavLink>
                   </td>
                   <td>
-                    <NavLink to={`/students/${student.studentId}`}>
+                    <NavLink to={`${student._id}`}>
                       {student.fullName || "N/A"}
                     </NavLink>
                   </td>
                   <td>
-                    <NavLink to={`/students/${student.studentId}`}>
+                    <NavLink to={`${student._id}`}>
                       {student.email || "N/A"}
                     </NavLink>
                   </td>
                   <td>
-                    <NavLink to={`/students/${student.studentId}`}>
+                    <NavLink to={`${student._id}`}>
                       {student.studentId || "N/A"}
                     </NavLink>
                   </td>
                   <td>
-                    <NavLink to={`/students/${student.studentId}`}>
+                    <NavLink to={`${student._id}`}>
                       {student.username || "N/A"}
                     </NavLink>
                   </td>
                   <td>
-                    <NavLink to={`/students/${student.studentId}`}>
+                    <NavLink to={`${student._id}`}>
                       {student.phoneNumber || "N/A"}
                     </NavLink>
                   </td>

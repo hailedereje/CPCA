@@ -72,10 +72,10 @@ export const CreateLab = ({data,title}) => {
     }
 
     return (
-        <div className="flex flex-col items-center overflow-auto editor gap-6 w-full h-full dark:bg-gray-600 py-4">
+        <div className="flex flex-col items-center overflow-auto editor gap-6 w-full h-full  py-4">
             <h1 className="text-center text-4xl font-bold capitalize">{title || "Create Lab"}</h1>
-            <div className="max-w-4xl p-2 rounded-md flex xxs:flex-col md:flex-row gap-4 justify-between shadow-md">
-                <div className="flex flex-col gap-4">
+            <div className="max-w-4xl w-full p-2 rounded-md flex xxs:flex-col md:flex-row gap-4 justify-between shadow-md">
+                <div className="flex flex-col gap-4 w-full">
                     <span className="flex flex-col gap-4">
                         <span className="flex justify-between items-center gap-4">
                             <span className="text-xl capitalize font-medium flex gap-4 items-center">
@@ -83,17 +83,19 @@ export const CreateLab = ({data,title}) => {
                                 <span >Title</span>
                             </span>
                         </span>
-                        <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500 dark:text-white">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+                        <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 ">
+                            give your lab a title that best describes the lab. 
+                        </span>
                     </span>
                     <input
                         type="text"
                         name="title"
                         value={labForm.title}
                         onChange={(e) => setLabForm({ ...labForm, title: e.target.value })}
-                        className="max-w-xs dark:bg-transparent mt-1 p-2 w-full text-sm border border-gray-200 rounded-md dark:text-white  focus:outline-none focus:ring-blue-700 focus:border-blue-500 appearance-none dark "
+                        className="dark:bg-transparent mt-1 p-2 w-full text-sm border border-gray-300 rounded-md text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none dark "
                             />
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 w-full">
                     <span className="flex flex-col gap-4">
                         <span className="flex justify-between items-center gap-4">
                             <span className="text-xl capitalize font-medium flex gap-4 items-center">
@@ -101,10 +103,12 @@ export const CreateLab = ({data,title}) => {
                                 <span >Description</span>
                             </span>
                         </span>
-                        <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500 dark:text-white">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+                        <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 ">
+                            describe the lab in detail. try to be as descriptive as possible.
+                        </span>
                     </span>
                     <textarea
-                        className="textarea max-w-sm dark:bg-transparent mt-1 p-2 w-full text-sm border border-gray-200 rounded-md dark:text-white  focus:outline-none focus:ring-blue-700 focus:border-blue-500 appearance-none dark"
+                        className="dark:bg-transparent mt-1 p-2 w-full text-sm border border-gray-300 rounded-md text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none dark "
                         value={labForm.description}
                         onChange={(e) => setLabForm({ ...labForm, description: e.target.value })}
                         placeholder="Lab Description"
@@ -118,7 +122,10 @@ export const CreateLab = ({data,title}) => {
                         <span >Lab Manual</span>
                     </span>
 
-                    <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500 dark:text-white">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+                    <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2">
+                        write a detailed lab manual that will guide students through the lab.
+                        the content may include the lab objectives, materials, procedures, and expected outcomes and code snippets. 
+                    </span>
                 </span>
                 <FroalaEditor
                     tag='div'
@@ -127,7 +134,7 @@ export const CreateLab = ({data,title}) => {
                     onModelChange={(model) => setLabForm({ ...labForm, labManual: model })}
                 />
             </div>
-            <button onClick={onSubmit} className="flex w-full max-w-xs justify-center items-center bg-blue-500 p-2 rounded-md w">
+            <button onClick={onSubmit} className="flex w-full max-w-xs justify-center items-center bg-blue-500 p-2 rounded-md text-white">
                 <span className="xxs:text-sm md:text-lg capitalize">{loading ? "saving ...": "save Lab"}</span>
             </button>
         </div>

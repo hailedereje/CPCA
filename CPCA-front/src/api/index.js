@@ -71,4 +71,5 @@ export const {
   useRequestUnlockLessonMutation,
   useRequestUnlockLabMutation,
   useRequestUnlockQuizMutation,
+  useGetStudentProgressQuery, // Add this line
 } = api;

@@ -13,7 +13,7 @@ const studentCheck = async (req, res, next) => {
   const user = await User.findById(req.user._id);
   if (!user || user.role !== "student") {
     throw new UnautorizedError(
-      "Access denied: Only students can enroll in courses"
+      "Access denied: Only students access"
     );
   }
   next();

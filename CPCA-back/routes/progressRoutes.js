@@ -23,6 +23,8 @@ const router = express.Router();
 
 router.use(authenticate);
 
+// Instructor routes
+router.get("/:classroomId/student/:studentId", isInstructor, getStudentProgress);
 // Student routes
 router.get("/chapters/:classroomId/:courseId", studentCheck, getChaptersProgress);
 router.get("/lessons/:classroomId/:courseId/:chapterId", studentCheck, getLessonsProgress);
@@ -41,7 +43,5 @@ router.post("/request_unlock_lesson", studentCheck, requestUnlockLesson);
 router.post("/request_unlock_quiz", studentCheck, requestUnlockQuiz);
 router.post("/request_unlock_lab", studentCheck, requestUnlockLab);
 
-// Instructor routes
-router.get("/:classroomId/student/:studentId", isInstructor, getStudentProgress);
 
 export default router;

@@ -4,13 +4,15 @@ import { IconWrapper } from "./icon-wrapper";
 
 export const AddDescription = ({ courseId }) => {  
   return (
-    <div className=" flex flex-col gap-4 mt-4 w-fit dark:bg-gray-600 p-4 rounded-md bg-slate-50">
+    <div className=" flex flex-col gap-4 mt-4 w-fit p-4 rounded-md max-w-3xl">
       <span className="flex flex-col gap-2">
         <span className="text-xl capitalize font-medium flex gap-4 items-center">
           <IconWrapper bg="bg-blue-500" color="text-white" icon={<MdOutlineDescription />} />
-          <span >description</span>
+          <span className="" >description</span>
         </span>
-        <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500 dark:text-white">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+        <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500 ">
+          add course description that appears in the course list that students to see with a brief overview of the course
+        </span>
       </span>
       <ContentEditor courseId={courseId}/>
     </div>

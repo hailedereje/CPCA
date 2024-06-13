@@ -53,15 +53,24 @@ const Question = ({ questions,quizId,duration }) => {
 
   const handleAnswerSelect = (questionId, answerId) => {
     setSelectedAnswers(prevAnswers => {
-      const updatedAnswers = [...prevAnswers];
-      const answerIndex = updatedAnswers.findIndex(answer => answer.questionId === questionId);
+      // Find if the questionId already exists in selectedAnswers
+      const answerIndex = prevAnswers.findIndex(answer => answer.questionId === questionId);
+  
       if (answerIndex >= 0) {
-        updatedAnswers[answerIndex].answerId = answerId;
-        
+        // If questionId exists, create a new array with updated answerId
+        const updatedAnswers = [
+          ...prevAnswers.slice(0, answerIndex), // before the updated answer
+          { ...prevAnswers[answerIndex], answerId }, // updated answer
+          ...prevAnswers.slice(answerIndex + 1), // after the updated answer
+        ];
+        return updatedAnswers;
       } else {
-        updatedAnswers.push({ questionId, answerId });
+        // If questionId does not exist, add a new answer object
+        return [
+          ...prevAnswers,
+          { questionId, answerId },
+        ];
       }
-      return updatedAnswers;
     });
   };
  
