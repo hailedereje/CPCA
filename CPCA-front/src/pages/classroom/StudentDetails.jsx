@@ -3,7 +3,7 @@ import { useParams, useOutletContext } from "react-router-dom";
 import { useGetStudentProgressQuery } from "@/api";
 import { BiLoaderCircle } from "react-icons/bi";
 import { MdLockOpen, MdLock, MdDone, MdClose } from "react-icons/md";
-import { FiClock, FiFileText } from "react-icons/fi";
+import { FiClock } from "react-icons/fi";
 
 function StudentDetails() {
   const { studentId } = useParams();
@@ -107,16 +107,6 @@ function StudentDetails() {
                 : `Lab : ${progress.labId}`}
             </h3>
             <div className="flex items-center mb-3">
-              {progress.completed ? (
-                <MdDone className="mr-2 text-green-500" />
-              ) : (
-                <MdClose className="mr-2 text-red-500" />
-              )}
-              <p className="text-sm">
-                Completed: {progress.completed ? "Yes" : "No"}
-              </p>
-            </div>
-            <div className="flex items-center mb-3">
               {progress.unlocked ? (
                 <MdLockOpen className="mr-2 text-green-500" />
               ) : (
@@ -127,21 +117,22 @@ function StudentDetails() {
               </p>
             </div>
             <div className="flex items-center mb-3">
+              {progress.completed ? (
+                <MdDone className="mr-2 text-green-500" />
+              ) : (
+                <MdClose className="mr-2 text-red-500" />
+              )}
+              <p className="text-sm">
+                Completed: {progress.completed ? "Yes" : "No"}
+              </p>
+            </div>
+            <div className="flex items-center mb-3">
               <FiClock className="mr-2" />
               <p className="text-sm">
                 Last Accessed:{" "}
                 {progress.lastAccessed
                   ? new Date(progress.lastAccessed).toLocaleString()
                   : "N/A"}
-              </p>
-            </div>
-            <div className="flex items-center">
-              <FiFileText className="mr-2" />
-              <p className="text-sm">
-                Answers:{" "}
-                {progress.answers.length > 0
-                  ? JSON.stringify(progress.answers)
-                  : "No answers submitted"}
               </p>
             </div>
           </div>

@@ -24,7 +24,7 @@ const router = express.Router();
 router.use(authenticate);
 
 // Instructor routes
-router.get("/:classroomId/student/:studentId", isInstructor, getStudentProgress);
+router.get("/:classroomId/student/:studentId", getStudentProgress);
 // Student routes
 router.get("/chapters/:classroomId/:courseId", studentCheck, getChaptersProgress);
 router.get("/lessons/:classroomId/:courseId/:chapterId", studentCheck, getLessonsProgress);
