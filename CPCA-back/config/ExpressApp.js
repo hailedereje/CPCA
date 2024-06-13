@@ -12,7 +12,6 @@ import { userRoutes, courseRoutes, lessonRoutes,
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { analyticsRouter } from "../routes/analyticsRoutes.js";
-
 const App = async (app) => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));

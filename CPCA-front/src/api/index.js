@@ -6,10 +6,12 @@ import { profileService } from "./services/profileServices";
 import { classroomService } from "./services/classroomService";
 import { progressService } from "./services/progressService";
 
+const API_URL = import.meta.env.VITE_PUBLIC_API_URL;
+
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-     baseUrl: "http://localhost:5000/api/v1",
+    baseUrl: `${API_URL}/api/v1`,
     credentials: 'include', 
     prepareHeaders: (headers) => {
       headers.set('Access-Control-Allow-Origin', '*')
