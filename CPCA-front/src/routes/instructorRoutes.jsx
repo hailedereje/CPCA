@@ -52,7 +52,7 @@ const instructorRoutes = (store) => [
             path: "discussions",
             element: <ForumLayout />,
             children: [
-              { path: "content", element: <Forum /> },
+              { index:true, element: <Forum /> },
               { path: "myqns", element: <MyQuestions /> },
               { path: "ask", element: <Askquestion /> },
             ],
