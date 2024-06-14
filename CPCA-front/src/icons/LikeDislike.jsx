@@ -59,13 +59,13 @@ const LikeDislikeComponent = ({ question }) => {
   return (
     <div>
       <button onClick={handleLikeClick} className="w-4 h-4 md:w-5 md:h-5 cursor-pointer dark:text-white">
-        {liked ? <AiFillLike style={{ color: 'blue' }} /> : <AiOutlineLike style={{ color: 'blue' }} />}
+        {liked ? <AiFillLike style={{ color: 'black' }} /> : <AiOutlineLike style={{ color: 'black' }} />}
       </button>
       <h3 className="text-sm md:text-base">
         {question?.upvote?.length || 0}
       </h3>
       <button onClick={handleDislikeClick}>
-        {disliked ? <AiFillDislike style={{ color: 'red' }} /> : <AiOutlineDislike style={{ color: 'red' }} />}
+        {disliked ? <AiFillDislike style={{ color: 'black' }} /> : <AiOutlineDislike style={{ color: 'black' }} />}
       </button>
       <h3 className="text-sm md:text-base">
         {question?.downvote?.length || 0}

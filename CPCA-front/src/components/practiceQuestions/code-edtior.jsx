@@ -1,7 +1,7 @@
 import { LANGUAGES, LANGUAGE_List, SNIPTS } from "@/assets/constants"
 import { Editor } from "@monaco-editor/react"
 import { useEffect, useRef, useState } from "react"
-import { FaPlay } from "react-icons/fa"
+import { FaBook, FaCheckCircle, FaPlay } from "react-icons/fa"
 import { RiArrowDropDownLine } from "react-icons/ri"
 import { SidebarDrawer } from "../createCourse/updateCourse"
 import { excuteCode } from "@/EditorApi"
@@ -13,6 +13,7 @@ import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView"
 import { defaultFroalaConfig } from "@/constants"
 import { useOutletContext, useParams } from "react-router-dom"
 import { useCompleteLabMutation } from "@/api"
+import { MdDescription } from "react-icons/md"
 
 export const LabPractice = () => {
     const editorRef = useRef();
