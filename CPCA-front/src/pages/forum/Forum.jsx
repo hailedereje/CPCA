@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useQuery } from "react-query";
 import DiscussionContext from "@/context/DiscussionContext";
 
+
 const Forum = () => {
   const user = useSelector((state) => state.userState.user);
   const {socket, classroomId} = useContext(DiscussionContext);
@@ -33,14 +34,19 @@ const Forum = () => {
     }
   });
 
-  const handleAnswerAdded = async () => {
-    const res = await newRequests.get(`/classroom/discussion/${classroomId}`);
-    if(res.data){
-      setQuestions(res.data.discussion);
-    }
+  const handleAnswerAdded = async (questionId, newAnswer) => {
+    const updatedQuestions = questions.map((q) => {
+      if (q._id === questionId) {
+        return {
+          ...q,
+          replies: [...q.replies, newAnswer],
+        };
+      }
+      return q;
+    });
+    setQuestions(updatedQuestions);
   }
   
-
   useEffect(() => {
     if (data && data.discussion) {
       setQuestions(data.discussion);
@@ -48,18 +54,36 @@ const Forum = () => {
   }, [data]);
 
   useEffect(() => {
-    const handleReceiveQuestion = async ({ question, user, room }) => {
-      console.log(`Received question from ${user._id} in room ${room}: ${JSON.stringify(question)}`);
+    const handleReceiveQuestion = async ({ question }) => {
       setQuestions((prevQuestions) => [...prevQuestions, question]);
-      await newRequests.get(`/seen-question/${question._id}`, {userId: user._id});
     };
-
     if(socket){
-      socket.emit("join-room", { room: "discussion", user });
       socket.on('receive-question', handleReceiveQuestion);
       
       return () => {
         socket.off('receive-question', handleReceiveQuestion);
+      };
+    }
+  }, [user, dispatch, socket]);
+
+  useEffect(() => {
+    const handleReceiveAnswer = async ({ questionId, newAnswer }) => {
+      const updatedQuestions = questions.map((q) => {
+        if (q._id === questionId) {
+          return {
+            ...q,
+            replies: [...q.replies, newAnswer],
+          };
+        }
+        return q;
+      });
+      setQuestions(updatedQuestions);
+    };
+    if(socket){
+      socket.on('receive-answer', handleReceiveAnswer);
+      
+      return () => {
+        socket.off('receive-answer', handleReceiveAnswer);
       };
     }
   }, [user, dispatch, socket]);
@@ -132,6 +156,9 @@ const Forum = () => {
                       placeholder="Write a comment"
                     />
                     <Send
+                      socket={socket}
+                      classroomId={classroomId}
+                      author={user}
                       questionId={question._id}
                       answer={answer}
                       setAnswer={setAnswer}

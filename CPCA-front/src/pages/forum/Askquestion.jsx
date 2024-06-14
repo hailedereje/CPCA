@@ -11,6 +11,7 @@ const Askquestion = () => {
   const user = useSelector((state) => state.userState.user);
   const navigate = useNavigate();
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { title, description, tags } = e.target;
@@ -24,9 +25,11 @@ const Askquestion = () => {
     try {
       const res = await newRequests.post("/discussion/ask-question", question);
       if (res.status === 201) {
-        socket.emit("send-question", { question, room: "discussion", user });
+        if (socket) {
+          socket.emit("send-question", { question: res.data, roomId: classroomId });
+        }
         toast.success("Question added successfully");
-        navigate("myqns");
+        navigate(-1);
       }
     } catch (error) {
       toast.error("Failed to add question. Please try again.");
