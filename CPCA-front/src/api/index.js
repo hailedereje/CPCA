@@ -15,7 +15,6 @@ export const api = createApi({
     credentials: 'include', 
     prepareHeaders: (headers) => {
       headers.set('Access-Control-Allow-Origin', '*')
-      
       return headers
     },
   }),
@@ -74,4 +73,10 @@ export const {
   useRequestUnlockLabMutation,
   useRequestUnlockQuizMutation,
   useGetStudentProgressQuery, // Add this line
+
+  // progress enpoints for the instructor
+  useGetStudentChaptersProgressQuery, 
+  useGetStudentLessonsProgressQuery, 
+  useGetStudentLabsProgressQuery, 
+  useGetStudentQuizzesProgressQuery
 } = api;

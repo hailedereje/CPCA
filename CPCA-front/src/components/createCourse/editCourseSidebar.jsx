@@ -77,7 +77,6 @@ export const EditCourseSidebar = ({course, activeLesson,courseId }) => {
                                 </button>
                                 <Menu menuItems={chapterMenuItems} id={{ chapterId: chapter.id, lessonId: '', index: idx }} />
                             </div>
-
                             <div className={`${show.renameChapter && show.index === chapter.id ? "" : "hidden"}`}>
                                 <Input close={() => setShow({ ...show, renameChapter: false, index: '' })}
                                     id={show.index} icon={<span>

@@ -1,3 +1,4 @@
+import { NotFoundError } from "../errors/index.js";
 import { Chapter, Classroom, Lab, Lesson, PracticeQuestion, Progress, Quiz, QuizQuestion } from "../models/index.js";
 
 // Helper function to get progress
@@ -365,6 +366,7 @@ export const getChaptersProgress = async (req, res) => {
     if (!classroom.students.includes(studentId)) {
       return res.status(403).json({ success: false, message: 'You are not enrolled in this classroom.' });
     }
+  
     let progress = []
     const chapters = await Chapter.find({ courseId: courseId });
     for (let chapter of chapters) {
@@ -526,10 +528,10 @@ export const getStudentProgress = async (req, res) => {
     }
 
     let progress = await Progress.find({ classroomId, studentId })
-      .populate('classroomId')
-      .populate('studentId')
-      .populate('courseId')
-      .populate('chapterId').exec()
+      // .populate('classroomId')
+      // .populate('studentId')
+      // .populate('courseId')
+      // .populate('chapterId').exec()
 
     if (!progress || progress.length === 0) {
       return res.status(404).json({ message: 'Progress not found' });
@@ -538,5 +540,205 @@ export const getStudentProgress = async (req, res) => {
     res.json(progress);
   } catch (error) {
     res.status(500).json({ message: 'Error getting student progress', error });
+  }
+};
+export const getStudentChaptersProgress = async (req, res) => {
+  const { classroomId, studentId } = req.params;
+  
+  try {
+    const classroom = await Classroom.findById(classroomId);
+    if (!classroom) {
+      return res.status(404).json({ success: false, message: 'Classroom not found.' });
+    }
+
+    if (!classroom.students.includes(studentId)) {
+      return res.status(403).json({ success: false, message: 'Student is not enrolled in this classroom.' });
+    }
+
+    const chapters = await Chapter.find({ courseId: classroom.courseId });
+    const progress = await Promise.all(chapters.map(async (chapter) => {
+      const chapterProgress = await Progress.findOne({ classroomId, studentId, courseId: classroom.courseId, chapterId: chapter._id })
+        .populate('chapterId')
+        .populate('studentId')
+        // .populate('courseId');
+      return chapterProgress || new Progress({ classroomId, studentId, courseId: classroom.courseId, chapterId: chapter._id, completed: false });
+    }));
+
+    res.json(progress);
+  
+  } catch (error) {
+    res.status(500).json({ message: 'Error getting student chapters progress', error });
+  }
+};
+
+// Function to get progress of lessons for a student in a specific chapter
+export const getStudentLessonsProgress = async (req, res) => {
+  const { classroomId, studentId, chapterId } = req.params;
+  
+  try {
+    const classroom = await Classroom.findById(classroomId);
+    if (!classroom) {
+      return res.status(404).json({ success: false, message: 'Classroom not found.' });
+    }
+
+    if (!classroom.students.includes(studentId)) {
+      return res.status(403).json({ success: false, message: 'Student is not enrolled in this classroom.' });
+    }
+
+    const lessons = await Lesson.find({ chapterId });
+    const progress = await Promise.all(lessons.map(async (lesson) => {
+      const lessonProgress = await Progress.findOne({ classroomId, studentId, chapterId, lessonId: lesson._id }).populate('lessonId');
+      return lessonProgress || new Progress({ classroomId, studentId, chapterId, lessonId: lesson._id, completed: false });
+    }));
+
+    res.json(progress);
+  } catch (error) {
+    res.status(500).json({ message: 'Error getting student lessons progress', error });
+  }
+};
+
+// Function to get progress of labs for a student in a classroom
+export const getStudnetLabsProgress = async (req, res) => {
+  const { classroomId, studentId } = req.params;
+  
+  try {
+    const classroom = await Classroom.findById(classroomId);
+    if (!classroom) {
+      return res.status(404).json({ success: false, message: 'Classroom not found.' });
+    }
+
+    if (!classroom.students.includes(studentId)) {
+      return res.status(403).json({ success: false, message: 'Student is not enrolled in this classroom.' });
+    }
+
+    const labs = await Lab.find({ courseId: classroom.courseId });
+    const progress = await Promise.all(labs.map(async (lab) => {
+      const labProgress = await Progress.findOne({ classroomId, studentId, courseId: classroom.courseId, labId: lab._id }).populate('labId');
+      return labProgress || new Progress({ classroomId, studentId, courseId: classroom.courseId, labId: lab._id, completed: false });
+    }));
+
+    res.json(progress);
+
+    // sample response
+    // [
+    //   {
+    //     "_id": "666b52c49f39d9789cd369fe",
+    //     "classroomId": "666967092ad3d3b4c5a12ed7",
+    //     "studentId": "6659ba2263485025e6fcec2b",
+    //     "courseId": "666963372ad3d3b4c5a12dfc",
+    //     "labId": "666963a62ad3d3b4c5a12e04",
+    //     "completed": true,
+    //     "unlocked": true,
+    //     "answers": [],
+    //     "__v": 0
+    //   },
+    //   {
+    //     "_id": "666b52c59f39d9789cd36a04",
+    //     "classroomId": "666967092ad3d3b4c5a12ed7",
+    //     "studentId": "6659ba2263485025e6fcec2b",
+    //     "courseId": "666963372ad3d3b4c5a12dfc",
+    //     "labId": "666963c32ad3d3b4c5a12e0c",
+    //     "completed": true,
+    //     "unlocked": true,
+    //     "answers": [],
+    //     "__v": 0
+    //   },
+    //   {
+    //     "_id": "666b52c59f39d9789cd36a0b",
+    //     "classroomId": "666967092ad3d3b4c5a12ed7",
+    //     "studentId": "6659ba2263485025e6fcec2b",
+    //     "courseId": "666963372ad3d3b4c5a12dfc",
+    //     "labId": "666963db2ad3d3b4c5a12e14",
+    //     "completed": true,
+    //     "unlocked": true,
+    //     "answers": [],
+    //     "__v": 0
+    //   },
+    //   {
+    //     "_id": "666b52c69f39d9789cd36a10",
+    //     "classroomId": "666967092ad3d3b4c5a12ed7",
+    //     "studentId": "6659ba2263485025e6fcec2b",
+    //     "courseId": "666963372ad3d3b4c5a12dfc",
+    //     "labId": "666963f22ad3d3b4c5a12e1c",
+    //     "completed": false,
+    //     "unlocked": true,
+    //     "answers": [],
+    //     "__v": 0
+    //   }
+    // ]
+  } catch (error) {
+    res.status(500).json({ message: 'Error getting student labs progress', error });
+  }
+};
+
+// Function to get progress of quizzes for a student in a classroom
+export const getStudentQuizzesProgress = async (req, res) => {
+  const { classroomId, studentId } = req.params;
+  
+  try {
+    const classroom = await Classroom.findById(classroomId);
+    if (!classroom) {
+      return res.status(404).json({ success: false, message: 'Classroom not found.' });
+    }
+
+    if (!classroom.students.includes(studentId)) {
+      return res.status(403).json({ success: false, message: 'Student is not enrolled in this classroom.' });
+    }
+
+    const quizzes = await Quiz.find({ courseId: classroom.courseId });
+    const progress = await Promise.all(quizzes.map(async (quiz) => {
+      const quizProgress = await Progress.findOne({ classroomId, studentId, courseId: classroom.courseId, quizId: quiz._id }).populate('quizId');
+      return quizProgress || new Progress({ classroomId, studentId, courseId: classroom.courseId, quizId: quiz._id, completed: false });
+    }));
+
+    res.json(progress);
+
+    // sample response
+    // [
+    //   {
+    //     "_id": "666b6a531f5425ed7528cb05",
+    //     "classroomId": "666967092ad3d3b4c5a12ed7",
+    //     "studentId": "6659ba2263485025e6fcec2b",
+    //     "courseId": "666963372ad3d3b4c5a12dfc",
+    //     "chapterId": "666964142ad3d3b4c5a12e24",
+    //     "quizId": "666964e02ad3d3b4c5a12e4a",
+    //     "completed": true,
+    //     "unlocked": true,
+    //     "answers": [],
+    //     "__v": 0,
+    //     "score": 1,
+    //     "totalScore": 1
+    //   },
+    //   {
+    //     "_id": "666b52c79f39d9789cd36a18",
+    //     "classroomId": "666967092ad3d3b4c5a12ed7",
+    //     "studentId": "6659ba2263485025e6fcec2b",
+    //     "courseId": "666963372ad3d3b4c5a12dfc",
+    //     "chapterId": "666965aa2ad3d3b4c5a12e68",
+    //     "quizId": "666965f62ad3d3b4c5a12e85",
+    //     "completed": true,
+    //     "unlocked": true,
+    //     "answers": [],
+    //     "__v": 0,
+    //     "score": 1,
+    //     "totalScore": 1
+    //   },
+    //   {
+    //     "_id": "666b805fc56cc0239912473e",
+    //     "classroomId": "666967092ad3d3b4c5a12ed7",
+    //     "studentId": "6659ba2263485025e6fcec2b",
+    //     "courseId": "666963372ad3d3b4c5a12dfc",
+    //     "chapterId": "666966652ad3d3b4c5a12e9f",
+    //     "quizId": "666b7f73c56cc023991246f5",
+    //     "completed": true,
+    //     "unlocked": true,
+    //     "answers": [],
+    //     "__v": 0,
+    //     "score": 2,
+    //     "totalScore": 2
+    //   }
+    // ]
+  } catch (error) {
+    res.status(500).json({ message: 'Error getting student quizzes progress', error });
   }
 };
