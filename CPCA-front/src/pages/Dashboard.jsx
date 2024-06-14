@@ -5,6 +5,7 @@ import { AdminLinks, InstructLinks, StudentLinks } from "@/utils/links";
 import Notifications from "@/components/Notification";
 import { logoutUser } from "@/features/user/userSlice";
 import blankProfile from "@/assets/blank_profile.webp";
+import logo from "@/assets/logo.png"
 
 function Dashboard() {
   const location = useLocation();
@@ -55,6 +56,7 @@ function Dashboard() {
       <div className="flex flex-col h-screen">
         <div className="flex justify-between gap-3 h-16 items-center fixed top-0 w-full p-4 bg-white z-40 border">
           <DropdownMenu />
+          <img src={logo} alt="logo" className="object-contain w-24" />
           <div className="hidden md:flex w-full h-full">
             <QuickLinks />
           </div>
