@@ -1,6 +1,8 @@
 // src/services/progressService.js
 
 export const progressService = (builder) => ({
+  // Existing methods...
+
   // Get chapters progress for a specific course in a classroom
   getChaptersProgress: builder.query({
     query: ({ classroomId, courseId }) => ({
@@ -17,7 +19,7 @@ export const progressService = (builder) => ({
     }),
   }),
 
-  // Get lessons progress for a specific chapter in a course
+  // Get labs progress for a specific chapter in a course
   getLabsProgress: builder.query({
     query: ({ classroomId, courseId }) => ({
       url: `/progress/labs/${classroomId}/${courseId}`,
@@ -139,5 +141,34 @@ export const progressService = (builder) => ({
       method: 'GET',
     }),
   }),
-  
+
+  // New methods for individual student progress
+  getStudentChaptersProgress: builder.query({
+    query: ({ classroomId, studentId }) => ({
+      url: `/progress/${classroomId}/student/${studentId}/chapters`,
+      method: 'GET',
+    }),
+  }),
+
+  getStudentLessonsProgress: builder.query({
+    query: ({ classroomId, studentId, chapterId }) => ({
+      url: `/progress/${classroomId}/student/${studentId}/lessons/${chapterId}`,
+      method: 'GET',
+    }),
+  }),
+
+  getStudentLabsProgress: builder.query({
+    query: ({ classroomId, studentId }) => ({
+      url: `/progress/${classroomId}/student/${studentId}/labs`,
+      method: 'GET',
+    }),
+  }),
+
+  getStudentQuizzesProgress: builder.query({
+    query: ({ classroomId, studentId }) => ({
+      url: `/progress/${classroomId}/student/${studentId}/quizzes`,
+      method: 'GET',
+    }),
+  }),
+
 });

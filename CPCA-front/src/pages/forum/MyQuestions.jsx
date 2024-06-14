@@ -8,28 +8,39 @@ import NothingHere from "../../components/NothingHere";
 import { useContext, useState } from "react";
 import LikeDislikeComponent from "../../icons/LikeDislike";
 import DiscussionContext from "@/context/DiscussionContext";
+import Write from "@/icons/Write";
+import Send from "@/icons/Send";
 
 const Content = () => {
   const [openId, setOpenId] = useState([]);
   const {socket, classroomId} = useContext(DiscussionContext);
+  const [questions, setQuestions] = useState([]);
+  const [answer, setAnswer] = useState("");
 
   const { isLoading, data } = useQuery("getMyQuestions", () =>
     newRequests
       .get(`/classroom/discussion/my-questions/${classroomId}`)
-      .then((res) => res.data)
+      .then((res) => setQuestions(res.data.discussion))
   );
   if (isLoading) return <Loading />;
+
+  const handleAnswerAdded = async () => {
+    const res = await newRequests.get(`/classroom/discussion/my-questions/${classroomId}`);
+    if(res.data){
+      setQuestions(res.data.discussion);
+    }
+  }
 
   return (
     <div
     className="flex flex-col items-center bg-slate-100 w-1/2 h-[82vh] overflow-y-auto"
     >
-      {data?.discussion.length > 0 &&
-        data.discussion.map((question, index) => {
+      {questions.length > 0 &&
+        questions.map((question, index) => {
           return (
             <div
               key={index}
-              className="flex flex-col items-end p-2 md:p-4 border-b border-gray-200 w-full" 
+              className="flex flex-col items-end p-2 md:p-4 w-full" 
           >
               <div
                 className="w-full bg-white dark:bg-[#1E212A] p-4 md:p-5 rounded-lg shadow-md flex items-start gap-5"
@@ -44,7 +55,7 @@ const Content = () => {
                   <p className="text-sm md:text-base">
                     {question?.description}
                   </p>
-                  <hr />
+                  <hr className="my-2"/>
                   <UserInfo
                     openId={openId}
                     index={index + 1}
@@ -56,7 +67,6 @@ const Content = () => {
               {openId.find((ele) => ele === index + 1) && (
                 <>
                   {question?.replies?.map((answer) => {
-                    console.log("answer", answer);
                     return (
                       <div key={answer._id} className="flex items-center gap-4">
                         <img
@@ -71,12 +81,32 @@ const Content = () => {
                       </div>
                     );
                   })}
+                  <div
+                    className="w-full bg-white dark:bg-slate-900 flex items-center gap-4
+       px-5 py-2 rounded-lg shadow-md  mt-2"
+                  >
+                    <Write />
+                    <input
+                      onChange={(e) => setAnswer(e.target.value)}
+                      className="w-full h-10 border-none outline-none rounded-md py-1 px-2 "
+                      type="text"
+                      value={answer}
+                      placeholder="Write a comment"
+                    />
+                    <Send
+                      questionId={question._id}
+                      answer={answer}
+                      setAnswer={setAnswer}
+                      onAnswerAdded={handleAnswerAdded}
+                    />
+                  </div>
                 </>
               )}
             </div>
           );
+          <hr />
         })}
-      {data?.discussion.length === 0 && <NothingHere />}
+      {questions.length === 0 && <NothingHere />}
     </div>
   );
 };

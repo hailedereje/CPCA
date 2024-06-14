@@ -15,20 +15,30 @@ import {
   getLabsProgress,
   getQuizzesProgress,
   completeLab,
-  getQuizStatistics,
+  getChaptersProgress,
+  getStudentChaptersProgress , 
+  getStudentLessonsProgress, 
+  getStudnetLabsProgress, 
+  getStudentQuizzesProgress
 } from "../controllers/progressControllers.js";
 import { authenticate, studentCheck, isInstructor } from "../middlewares/authenticate.js";
-import { getChaptersProgress } from "../controllers/progressControllers.js";
 
 const router = express.Router();
 
 router.use(authenticate);
 
 // Instructor routes
-router.get("/:classroomId/student/:studentId", getStudentProgress);
+router.get("/:classroomId/student/:studentId", isInstructor, getStudentProgress);
+
+// Add new instructor routes to track individual student progress
+router.get("/:classroomId/student/:studentId/chapters", isInstructor, getStudentChaptersProgress);
+router.get("/:classroomId/student/:studentId/lessons/:chapterId", isInstructor, getStudentLessonsProgress);
+router.get("/:classroomId/student/:studentId/labs", isInstructor, getStudnetLabsProgress);
+router.get("/:classroomId/student/:studentId/quizzes", isInstructor, getStudentQuizzesProgress);
+
 // Student routes
 router.get("/chapters/:classroomId/:courseId", studentCheck, getChaptersProgress);
-router.get("/lessons/:classroomId/:courseId/:chapterId", studentCheck, getLessonsProgress);
+router.get("/lessons/:classroomId/:courseId/:chapterId", getLessonsProgress);
 router.get("/labs/:classroomId/:courseId", studentCheck, getLabsProgress);
 router.get("/quizzes/:classroomId/:courseId", studentCheck, getQuizzesProgress);
 router.post("/chapter/:classroomId/:chapterId", studentCheck, calculateChapterProgress);
@@ -44,5 +54,4 @@ router.post("/request_unlock_lesson", studentCheck, requestUnlockLesson);
 router.post("/request_unlock_quiz", studentCheck, requestUnlockQuiz);
 router.post("/request_unlock_lab", studentCheck, requestUnlockLab);
 
-router.get("/quiz-stats", getQuizStatistics);
 export default router;

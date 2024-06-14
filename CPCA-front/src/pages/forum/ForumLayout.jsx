@@ -52,7 +52,6 @@ export const Layout = () => {
             <h2 className="text-gray-600 font-bold text-start">Online Users</h2>
             {users.length > 0 &&
               users.map((user, index) => {
-                console.log("user", user);
                 return (
                   <div key={index} className="flex items-center cursor-pointer">
                     <img
