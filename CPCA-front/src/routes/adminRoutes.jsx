@@ -8,13 +8,14 @@ import { AddQuestion } from "@/components/createCourse/quiz/add-questions";
 import { UpdataCourse } from "@/components/createCourse/updateCourse";
 import { LabPractice } from "@/components/practiceQuestions/code-edtior";
 import RichTextExample from "@/components/textEditor/textEditor";
-import { Profile, Status } from "@/pages/dashboard";
+import { Profile } from "@/pages/dashboard";
 import UsersList from "@/pages/dashboard/UsersList";
 import QuizQuestionsList, { QuizQuestionsWrapper } from "@/pages/quiz/QuizQuestionsList";
 import React from "react";
+import StatisticsPage from "@/pages/dashboard/Status";
 
 const adminRoutes = [
-  { index: true, element: <Status /> },
+  { index: true, element: <StatisticsPage /> },
   { path: "profile", element: <Profile /> },
   { path: "users", element: <UsersList /> },
   { path: "course", children: [

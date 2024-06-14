@@ -12,7 +12,7 @@ const Sidebar = () => {
     text-gray-700 text-sm space-y-1 py-8 md:py-0`}
     >
       <li
-        onClick={() => navigate("content")}
+        onClick={() => navigate("")}
         className={
           `w-48 flex items-center gap-2 px-4 py-2 hover:cursor-pointer rounded-md bg-gray-100
           ${location.includes("content") ? active : ""}

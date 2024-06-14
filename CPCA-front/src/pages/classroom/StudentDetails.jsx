@@ -7,7 +7,6 @@ import {
 } from "@/api";
 import { BiLoaderCircle } from "react-icons/bi";
 import { MdCheckCircle, MdCancel } from "react-icons/md";
-import "tailwindcss/tailwind.css";
 
 const StudentDetails = () => {
   const { studentId } = useParams();
@@ -113,7 +112,7 @@ const StudentDetails = () => {
                 </p>
               </div>
               <p className="text-sm mb-2">
-                <span className="font-semibold">Lessons:</span> {chapter.chapterId.lessons && chapter.chapterId.lessons.length}
+                <span className="font-semibold">Lessons:</span> {chapter.chapterId.lessons &&chapter.chapterId.lessons.length}
               </p>
               <p className="text-sm">
                 <span className="font-semibold">Quiz:</span> {chapter.chapterId.quiz ? "Available" : "Not available"}

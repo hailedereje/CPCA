@@ -3,7 +3,6 @@ import { Classroom, Discussion, DiscussionQuestion, Notification, Reply } from "
 // ask questions
 export const askDiscussionQuestion = async (req, res) => {
     const { title, description, tags, classroomId } = req.body;
-    console.log('c-id', classroomId)
     try {
       const newDiscussionQuestion = await DiscussionQuestion.create({
         title,
@@ -15,10 +14,12 @@ export const askDiscussionQuestion = async (req, res) => {
       const classroom = await Classroom.findById(classroomId);
       console.log(classroom);
       const discussion = await Discussion.findOne({classroomId: classroomId});
-      console.log('discussion', discussion)
+      if(!discussion){
+        await Discussion.create({classroomId: classroomId, discussion: [newDiscussionQuestion._id]});
+      } else {
       await discussion.updateOne({
         $push: { discussion: newDiscussionQuestion._id },
-      });
+      })};
       classroom.students.forEach(async (student) => {
         if (student.toString() !== req.user._id.toString()) {
           console.log(student._id.toString(), req.user._id.toString());

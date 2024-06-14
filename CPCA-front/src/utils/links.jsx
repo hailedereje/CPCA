@@ -7,7 +7,7 @@ import { BsFillPeopleFill } from "react-icons/bs";
 import { GiTeacher } from "react-icons/gi";
 
 export const InstructLinks = [
-  { id: 1, text: "Activities", path: "/dashboard", icon: <IoBarChartSharp /> },
+  // { id: 1, text: "Activities", path: "/dashboard", icon: <IoBarChartSharp /> },
   { id: 4, text: "profile", path: "profile", icon: <ImProfile /> },
   {id: 5, text: "classrooms", path: "classrooms", icon: <FaChalkboardTeacher/>
 }

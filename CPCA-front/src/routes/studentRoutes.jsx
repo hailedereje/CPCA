@@ -13,6 +13,7 @@ import { Navigate } from "react-router-dom";
 import { LabPractice } from "@/components/practiceQuestions/code-edtior";
 import CourseDetails from "@/pages/course/CourseDetails";
 import { Quiz } from "@/components/Quiz";
+import StudentDetails from "@/pages/classroom/StudentDetails";
 
 const studentRoutes = (store) => [
   { index: true, element: <Status /> },
@@ -31,7 +32,7 @@ const studentRoutes = (store) => [
           { path: "content", element: <CourseDetails /> },
           { path: "content/labs/:labId", element: <LabPractice /> },
           { path: "content/quizzes/:quizId", element: <Quiz /> },
-          { path: "progress", element: <div>Progress</div> },
+          { path: "progress/:studentId", element: <StudentDetails /> },
           { path: "discussions", element: <ForumLayout />, children: [
             { path: "", element: <Navigate to="content" /> }, 
             {path: "content", element: <Forum />},

@@ -3,9 +3,9 @@ import {
   useGetClassroomsByUserIdQuery,
 } from "@/api";
 import { useSelector } from "react-redux";
-import { Loading } from "@/components";
 import { FiBookOpen, FiInfo, FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { Loading } from "@/components/createCourse/components/loader";
 
 function Classrooms() {
   const { user } = useSelector((store) => store.userState);

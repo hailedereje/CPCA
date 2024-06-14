@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import newRequests from "../utils/newRequest";
 
 // eslint-disable-next-line react/prop-types
-const Send = ({ answer, questionId, setAnswer }) => {
+const Send = ({ answer, questionId, setAnswer, onAnswerAdded }) => {
   const queryClient = useQueryClient();
 
   const handleSubmit = async (e) => {
@@ -22,7 +22,8 @@ const Send = ({ answer, questionId, setAnswer }) => {
       );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["getAllQuestions"]);
+      queryClient.invalidateQueries("getDiscussionByClassroomId");
+      onAnswerAdded();
       setAnswer("");
     },
   });

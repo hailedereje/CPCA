@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
     const studentLinks = [
       { id: 1, url: "", text: "Details" },
       { id: 3, url: "content", text: "Content" },
-      { id: 5, url: "progress", text: "Progress" },
+      { id: 5, url: `progress/${user._id}`, text: "Progress" },
       { id: 6, url: "discussions", text: "Discussions" },
     ];
     if (user && user.role === "instructor") {

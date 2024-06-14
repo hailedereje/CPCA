@@ -32,6 +32,13 @@ const Forum = () => {
       return res.data;
     }
   });
+
+  const handleAnswerAdded = async () => {
+    const res = await newRequests.get(`/classroom/discussion/${classroomId}`);
+    if(res.data){
+      setQuestions(res.data.discussion);
+    }
+  }
   
 
   useEffect(() => {
@@ -86,7 +93,7 @@ const Forum = () => {
                   <p className="text-sm md:text-base">
                     {question?.description}
                   </p>
-                  <hr />
+                  <hr className="my-2"/>
                   <UserInfo
                     openId={openId}
                     index={index + 1}
@@ -95,14 +102,11 @@ const Forum = () => {
                   />
                 </div>
               </div>
-              {/* nested comment       */}
               {openId.find((ele) => ele === index + 1) && (
                 <>
                   {question?.replies?.map((answer) => {
-                    console.log("answer", answer);
                     return (
                       <div key={answer._id} className="flex items-center gap-4">
-                        {/* fix this */}
                         <img
                           className="h-4 md:h-6 w-4 md:w-6"
                           src="https://cdn.icon-icons.com/icons2/2596/PNG/512/nested_arrows_icon_155086.png"
@@ -115,7 +119,6 @@ const Forum = () => {
                       </div>
                     );
                   })}
-                  {/* nested comment       */}
                   <div
                     className="w-full bg-white dark:bg-slate-900 flex items-center gap-4
        px-5 py-2 rounded-lg shadow-md  mt-2"
@@ -132,6 +135,7 @@ const Forum = () => {
                       questionId={question._id}
                       answer={answer}
                       setAnswer={setAnswer}
+                      onAnswerAdded={handleAnswerAdded}
                     />
                   </div>
                 </>
