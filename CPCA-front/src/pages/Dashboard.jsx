@@ -41,7 +41,7 @@ function Dashboard() {
         {links.map((link) => (
           <div
             key={link.id}
-            className={`flex items-center p-2 text-md text-gray-600 leading-relaxed hover:text-blue-300 transition-colors cursor-pointer ${getActive(link) && "text-blue-400"}`}
+            className={`flex items-center p-2 text-lg text-blue-900 font-medium leading-relaxed hover:text-blue-500 transition-colors cursor-pointer ${getActive(link) && "text-blue-400"}`}
             onClick={() => navigate(link.path)}
           >
             {link.text}
@@ -53,7 +53,7 @@ function Dashboard() {
 
   return (
     <>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col min-h-screen">
         <div className="flex justify-between gap-3 h-16 items-center fixed top-0 w-full p-4 bg-white z-40 border">
           <DropdownMenu />
           <img src={logo} alt="logo" className="object-contain w-24" />
@@ -112,7 +112,7 @@ function Dashboard() {
             )}
           </div>
         </div>
-        <div className="flex flex-1 pt-16">
+        <div className="flex flex-1 pt-16 bg-gray-200">
           <Outlet />
         </div>
       </div>

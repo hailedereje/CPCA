@@ -262,7 +262,7 @@ const Menu = ({ ids, value }) => {
 export const MenuWrapper = ({ children,color }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     return (
-        <div className="relative">
+        <div className="relative text-gray-600">
             <button className="w-fit h-fit" onClick={() => setIsMenuOpen(prev => !prev)}>
                 <SlOptions size={20} className={color}/>
             </button>
@@ -270,7 +270,7 @@ export const MenuWrapper = ({ children,color }) => {
                 <div className="fixed h-screen w-screen inset-0 z-40 cursor-default " onClick={() => setIsMenuOpen(false)}></div>
             )}
             {isMenuOpen && (
-                <div className="absolute  right-0 w-48 bg-white border-gray-200 z-40 rounded shadow-lg ">
+                <div className="absolute  right-0 w-48 bg-white border-gray-200 border z-40 rounded">
                     <ul className="list-none p-0 m-0" onClick={() => setIsMenuOpen(false)}>
                         {children}
                     </ul>

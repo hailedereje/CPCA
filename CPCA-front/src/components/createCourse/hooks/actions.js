@@ -1,5 +1,8 @@
 import newRequests from '@/utils/newRequest';
 
+
+export const getQuizStats = () => newRequests.get("/progress/quiz-stats")
+
 export const getCourses = () => newRequests.get("/courses/all")
 export const createCourse = (data) => newRequests.post("/courses/new",data)
 export const getCourse = (courseId) => newRequests.get(`/courses/course/${courseId}`)

@@ -72,9 +72,9 @@ export const CreateLab = ({data,title}) => {
     }
 
     return (
-        <div className="flex flex-col items-center overflow-auto editor gap-6 w-full h-full  py-4">
+        <div className="flex flex-col items-center overflow-auto editor gap-6 w-full h-full p-4">
             <h1 className="text-center text-4xl font-bold capitalize">{title || "Create Lab"}</h1>
-            <div className="max-w-4xl w-full p-2 rounded-md flex xxs:flex-col md:flex-row gap-4 justify-between shadow-md">
+            <div className="max-w-4xl w-full p-2 rounded-md flex  xxs:flex-col md:flex-row gap-4 justify-between shadow-md bg-white">
                 <div className="flex flex-col gap-4 w-full">
                     <span className="flex flex-col gap-4">
                         <span className="flex justify-between items-center gap-4">
@@ -92,7 +92,7 @@ export const CreateLab = ({data,title}) => {
                         name="title"
                         value={labForm.title}
                         onChange={(e) => setLabForm({ ...labForm, title: e.target.value })}
-                        className="dark:bg-transparent mt-1 p-2 w-full text-sm border border-gray-300 rounded-md text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none dark "
+                        className=" mt-1 p-2 w-full text-sm border border-gray-600 rounded-md text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none dark "
                             />
                 </div>
                 <div className="flex flex-col gap-4 w-full">
@@ -108,14 +108,14 @@ export const CreateLab = ({data,title}) => {
                         </span>
                     </span>
                     <textarea
-                        className="dark:bg-transparent mt-1 p-2 w-full text-sm border border-gray-300 rounded-md text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none dark "
+                        className=" mt-1 p-2 w-full text-sm border border-gray-600 rounded-md text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none dark "
                         value={labForm.description}
                         onChange={(e) => setLabForm({ ...labForm, description: e.target.value })}
                         placeholder="Lab Description"
                     />
                 </div>
             </div>
-            <div className="flex flex-col rounded-md gap-4 relative h-fit w-fit max-w-4xl p-2 shadow-md">
+            <div className="flex flex-col rounded-md gap-4 relative h-fit w-fit max-w-4xl p-2 shadow-md bg-white">
                 <span className="flex flex-col gap-4">
                     <span className="text-xl capitalize font-medium flex gap-4 items-center">
                         <IconWrapper bg="bg-blue-500" color="text-white" icon={<MdOutlineIntegrationInstructions />} />

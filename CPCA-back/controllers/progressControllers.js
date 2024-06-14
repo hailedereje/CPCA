@@ -1,6 +1,42 @@
 import { Chapter, Classroom, Lab, Lesson, PracticeQuestion, Progress, Quiz, QuizQuestion } from "../models/index.js";
 
-// Helper function to get progress
+export const getQuizStatistics = async (req, res) => {
+  try {
+    const completedQuizzes = await Progress.find({ quizId: { $exists: true }, completed: true });
+
+    const quizScoresMap = new Map();
+
+    for (let progress of completedQuizzes) {
+      const quizId = progress.quizId.toString();
+      if (!quizScoresMap.has(quizId)) {
+        quizScoresMap.set(quizId, { totalScore: 0, count: 0 });
+      }
+      const quizData = quizScoresMap.get(quizId);
+      quizData.totalScore += (progress.score / progress.totalScore) * 100; // convert to percentile
+      quizData.count += 1;
+    }
+
+    const quizStatistics = [];
+    for (let [quizId, data] of quizScoresMap) {
+      const quiz = await Quiz.findById(quizId).select('name');
+      if (quiz) {
+        quizStatistics.push({
+          name: quiz.name,
+          averageScore: data.totalScore / data.count
+        });
+      }
+    }
+
+    // quizStatistics.sort((a, b) => a.name.localeCompare(b.name));
+
+    return res.status(200).json(quizStatistics);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+
+
 const getProgress = async (classroomId, studentId, courseId, chapterId) => {
   const chapters = await Chapter.find({ courseId });
   const lessons = await Lesson.find({ chapterId });

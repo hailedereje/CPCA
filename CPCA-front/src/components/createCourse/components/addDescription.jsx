@@ -4,7 +4,7 @@ import { IconWrapper } from "./icon-wrapper";
 
 export const AddDescription = ({ courseId }) => {  
   return (
-    <div className=" flex flex-col gap-4 mt-4 w-fit p-4 rounded-md max-w-3xl">
+    <div className=" flex flex-col gap-4 mt-4 w-full p-4 rounded-md  bg-white">
       <span className="flex flex-col gap-2">
         <span className="text-xl capitalize font-medium flex gap-4 items-center">
           <IconWrapper bg="bg-blue-500" color="text-white" icon={<MdOutlineDescription />} />

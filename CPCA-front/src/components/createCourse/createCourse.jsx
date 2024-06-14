@@ -33,10 +33,10 @@ export const CreateCourse = () => {
     const { errors ,isSubmitting ,} = formState
 
     return (
-        <div className="flex w-full justify-center">
+        <div className="flex w-full justify-center p-4">
             <form 
                 onSubmit={handleSubmit(onSubmite)} 
-                className="w-full h-fit  max-w-2xl max-h-xl rounded-lg space-y-6 shadow-md border">
+                className="w-full h-fit  max-w-2xl max-h-xl rounded-lg space-y-6 shadow-md border bg-white">
                 <div className="flex items-center justify-center w-full rounded-t-md bg--50 p-2">
                     <h2 className="text-3xl font-semibold text-center ">Create a New Course</h2>
                 </div>
@@ -134,7 +134,7 @@ export const UpdatebasicInFormation = ({courseId,initialData}) => {
     const { errors ,isSubmitting ,isDirty } = formState
 
     return (
-        <div className="flex w-full border">
+        <div className="flex w-full border bg-white">
             <form 
                 onSubmit={handleSubmit(onSubmite)} 
                 className="w-full h-fit  max-w-2xl max-h-xl rounded-lg p-5 space-y-10">

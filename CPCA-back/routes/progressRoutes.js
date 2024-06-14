@@ -15,6 +15,7 @@ import {
   getLabsProgress,
   getQuizzesProgress,
   completeLab,
+  getQuizStatistics,
 } from "../controllers/progressControllers.js";
 import { authenticate, studentCheck, isInstructor } from "../middlewares/authenticate.js";
 import { getChaptersProgress } from "../controllers/progressControllers.js";
@@ -43,5 +44,5 @@ router.post("/request_unlock_lesson", studentCheck, requestUnlockLesson);
 router.post("/request_unlock_quiz", studentCheck, requestUnlockQuiz);
 router.post("/request_unlock_lab", studentCheck, requestUnlockLab);
 
-
+router.get("/quiz-stats", getQuizStatistics);
 export default router;
