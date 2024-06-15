@@ -12,7 +12,8 @@ const initialState = {
     draftCourses: await db.table(table).toArray().then(data => data),
     activeLesson:{},
     prerequisites:[],
-    tags:[]
+    tags:[],
+    instructors:[]
 }
 
 
@@ -38,6 +39,11 @@ export const createCourseSlice = createSlice({
             const { tags } = action.payload
             state.tags = tags
         },
+        setInstructors: (state,action) => {
+            const { instructors } = action.payload
+            state.instructors = instructors
+        },
+
         deleteTag: (state,action) => {
             const {id} = action.payload
             state.tags= state.tags.filter(tag => tag.id !== id)
@@ -72,5 +78,6 @@ export const createCourseSlice = createSlice({
 })
 
 export const { toggleShow
-                ,setActiveLesson,createCourse,setPrerequistes,setTags ,deletePrerequisite,deleteTag} = createCourseSlice.actions;
+                ,setActiveLesson,createCourse,setPrerequistes,setTags ,
+                deletePrerequisite,deleteTag, setInstructors} = createCourseSlice.actions;
 export default createCourseSlice.reducer;

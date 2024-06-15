@@ -19,6 +19,7 @@ import { openConfirmationDialog } from "@/features/course/coursSidebarSlice";
 import { ActionTypes } from "./action.Types";
 import { Confirmation } from "./components/confirmationDialog";
 import { EditCourseError, QuizError } from "./error/editCourseError";
+import { Instructors } from "./components/addInstructors"
 
 
 
@@ -64,7 +65,8 @@ export const UpdataCourse = () => {
 
             <div className="flex gap-4 flex-col md:flex-row">
               <UploadImage id={param.id} img={data.data.course?.templateImg} />
-              <Tags courseId={param.id} />
+              {/* <Tags courseId={param.id} /> */}
+              <Instructors courseId={param.id} />
             </div>
             <div className="max-w-4xl">
               <AddDescription courseId={param.id} />
@@ -132,9 +134,9 @@ export const CourseLabs = ({ data }) => {
         </span>
       </span>
       <div className="grid min-h-[200px] md:grid-cols-3 xxs:grid-cols-2 gap-2 overflow-auto editor p-2">
-        {data?.map((lab) => (
+        {data.length !== 0 ? data?.map((lab) => (
           <Lab lab={lab} key={lab._id} />
-        ))}
+        )) : <span className="text-black text-md">No labs added yet</span>}
       </div>
     </div>
   )
@@ -178,7 +180,7 @@ const CourseComponent = ({ course }) => {
       <div className="w-full p-4 flex justify-between items-center bg-blue-400 ">
         <div className="flex items-center gap-2">
           <FaBook className="text-white text-xl" />
-          <h1 className="text-lg font-semibold capitalize text-white">{course.title}</h1>
+          <h1 className="text-sm font-medium capitalize text-white">{course.title}</h1>
         </div>
         <Link to={"chapters"}>
           <FaEdit className="text-white text-xl hover:text-blue-200 transition-colors" />
@@ -189,7 +191,7 @@ const CourseComponent = ({ course }) => {
         <div key={chapter._id} className="border-b last:border-b-0">
           <details className="group">
             <summary className="flex justify-between items-center cursor-pointer text-md capitalize font-medium p-3 hover:bg-blue-100 transition-colors">
-              <span>{chapter.title} ({chapter.lessons.length})</span>
+              <span className="text-sm">{chapter.title} ({chapter.lessons.length})</span>
               <svg
                 className="w-5 h-5 text-blue-500 transform transition-transform duration-200 group-open:rotate-180"
                 xmlns="http://www.w3.org/2000/svg"

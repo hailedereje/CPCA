@@ -31,7 +31,7 @@ export const CourseLayout = () => {
 export const BackButton = () => {
     const navigate = useNavigate()
     return (
-        <div className="flex items-center gap-2 cursor-pointer z-40 bg-blue-400 p-2 rounded-md text-white absolute top-2 left-2" onClick={() => navigate(-1)}>
+        <div className="flex items-center gap-2 cursor-pointer z-20 bg-blue-400 p-2 rounded-md text-white absolute top-2 left-2" onClick={() => navigate(-1)}>
             <AiFillBackward className="text-lg"/>
             <span>Back</span>
         </div>

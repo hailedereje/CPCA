@@ -1,8 +1,6 @@
 import "react-toastify/dist/ReactToastify.css";
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
 import { Dashboard, ErrorPage, ForumLayout, HomeLayout, Landing, Login, MyQuestions, Register } from "./pages";
-import { action as loginAction } from "./pages/Login";
-import { action as registerAction } from "./pages/Register";
 import { store } from "./store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -54,8 +52,8 @@ const App = () => {
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <Landing /> },
-        { path: "register/:token?", element: <Register />, action: registerAction(store) },
-        { path: "login", element: <Login />, action: loginAction(store) },
+        { path: "register/:token?", element: <Register />},
+        { path: "login", element: <Login /> },
         { path: "join/:token", element: <JoinClass /> },
         { path: "quiz", element: <Quiz /> },
       ],

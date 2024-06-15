@@ -99,8 +99,8 @@ export const useDeleteCourse = (courseId) => {
     mutationFn: deleteCourse,
     onSuccess: () => {
       queryClient.removeQueries({queryKey:['course',courseId]})
-      queryClient.invalidateQueries({queryKey:['draftCourses']})
-      navigate('/dashboard/courses/draft')
+      queryClient.invalidateQueries({queryKey:['courses']})
+      navigate('/dashboard/course')
       showSuccessToast("course deleted successfully")
     },
     onError: () => {

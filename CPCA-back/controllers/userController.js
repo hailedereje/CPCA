@@ -1,37 +1,28 @@
 import { StatusCodes } from "http-status-codes";
-import { User } from "../models/index.js";
+import { Course, User } from "../models/index.js";
 import { GenerateJWT } from "../utils/tokenUtilities.js";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
 
 const userRegister = async (req, res) => {
   const { username, email, password } = req.body;
-  if (!username || !email || !password) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ msg: "Please provide all required fields" });
-  }
-  // Check if the email is already registered
+ 
   const existingUser = await User.findOne({ email });
   if (existingUser) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ msg: "Email already registered" });
+    return res.status(StatusCodes.BAD_REQUEST).json({ msg: "Email already registered" });
   }
 
   const newUser = await User.create({
     username,
     email,
     password,
-    role: "student", // Assuming all registrations are for students by default
+    role: "student"
   });
 
   if (newUser) {
     const tokenData = { _id: newUser._id };
     await GenerateJWT(res, tokenData);
-    // console.log(newUser);
-    return res
-      .status(StatusCodes.CREATED)
-      .json({ msg: "User registered successfully" });
+
+    return res.status(StatusCodes.CREATED).json({ msg: "User registered successfully" });
   }
   throw new BadRequestError("Invalid user data");
 };
@@ -45,6 +36,39 @@ const userLogin = async (req, res) => {
     }
     throw new NotFoundError("Invalid email or password");
 }
+
+export const getInstructors = async (req, res) => {
+  try {
+    const instructors = await User.find({ role: "instructor" }).select("_id email");
+    return res.status(200).json(instructors);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching instructors' });
+  }
+}
+
+export const setInstructorscToCourse = async (req, res) => {
+  const { courseId, instructors } = req.body;
+
+  try {
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+    instructors.forEach(instructor => {
+      if (!course.instructors.includes(instructor)) {
+        course.instructors.push(instructor);
+      }
+    });
+
+    await course.save();
+    return res.status(200).json(course);
+  } catch (error) {
+    res.status(500).json({ msg: 'Error setting instructors', error });
+  }
+    
+  }
+
+
 
 
 const userLogout = async (req, res) => {

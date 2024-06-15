@@ -20,7 +20,7 @@ const studentRoutes = (store) => [
   // { index: true, element: <Status /> },
   { index: true, element: <StudentLandingPage />},
   { path: "profile", element: <Profile /> },
-  { path: "courses", element: <AllCourses />, loader: CoursesLoader(store), errorElement: <div>Failed to load courses</div> },
+  // { path: "courses", element: <AllCourses />, loader: CoursesLoader(store), errorElement: <div>Failed to load courses</div> },
   {
     path: "classrooms",
     element: <ClassroomLayout />,

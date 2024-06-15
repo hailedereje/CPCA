@@ -18,21 +18,6 @@ const schema = yup.object().shape({
   password: yup.string().min(5, 'Password must be at least 6 characters').required('Password is required'),
 });
 
-export const action = (store) => async ({ request }) => {
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData); // convert to plain js
-  try {
-    const result = await store.dispatch(api.endpoints.loginUser.initiate(data)).unwrap();
-    if (result) {
-      toast.success('User Logged in successfully');
-      return redirect('/dashboard');
-    }
-  } catch (err) {
-    const errorMessage = err?.data?.msg || 'Server Error. Please try again later.';
-    toast.error(errorMessage);
-  }
-  return null;
-};
 
 function Login() {
   const { control, handleSubmit, formState: { errors, isSubmitting }, } = useForm({ resolver: yupResolver(schema), });
@@ -99,7 +84,7 @@ function Login() {
             <div className="mt-4">
               <button
                 type="submit"
-                className="w-full bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-150"
+                className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-150"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? 'Logging in...' : 'Login'}
@@ -107,7 +92,7 @@ function Login() {
             </div>
             <p className="text-center">
               Not a member yet?{' '}
-              <Link to="/register" className="ml-2 text-green-600 hover:underline">
+              <Link to="/register" className="ml-2 text-blue-600 hover:underline">
                 Register
               </Link>
             </p>
