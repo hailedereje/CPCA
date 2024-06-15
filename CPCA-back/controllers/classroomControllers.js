@@ -227,7 +227,7 @@ export const getDiscussionByClassroomId = async (req, res) => {
           path: "author",
         },
       ],
-      options: { sort: { createdAt: 1 } },
+      options: { sort: { createdAt: -1 } },
     });
 
     if (!discussion) {
@@ -261,7 +261,7 @@ export const getMyQuestionsByClassroomId = async (req, res) => {
           path: "author",
         },
       ],
-      options: { sort: { createdAt: 1 } },
+      options: { sort: { createdAt: -1 } },
     });
     res.status(200).json(discussion);
   } catch (error) {
