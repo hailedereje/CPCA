@@ -78,5 +78,7 @@ export const {
   useGetStudentChaptersProgressQuery, 
   useGetStudentLessonsProgressQuery, 
   useGetStudentLabsProgressQuery, 
-  useGetStudentQuizzesProgressQuery
+  useGetStudentQuizzesProgressQuery, 
+  useCalculateStudentCourseProgressMutation,
+  useCalculateStudentChapterProgressMutation,
 } = api;

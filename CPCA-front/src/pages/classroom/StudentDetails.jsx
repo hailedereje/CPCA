@@ -7,12 +7,13 @@ import {
   useGetStudentLessonsProgressQuery,
 } from "@/api";
 import { BiLoaderCircle } from "react-icons/bi";
-import { MdCheckCircle, MdCancel } from "react-icons/md";
+import { MdCheckCircle, MdCancel, MdOutlineSchool } from "react-icons/md";
+import CourseProgressBar from "@/components/Classroom/CourseProgressBar";
 
 const StudentDetails = () => {
   const { studentId } = useParams();
   const { classroom } = useOutletContext();
-  const { _id: classroomId } = classroom;
+  const { _id: classroomId, courseId } = classroom;
 
   const {
     data: chaptersProgress,
@@ -32,7 +33,13 @@ const StudentDetails = () => {
     error: errorQuizzes,
   } = useGetStudentQuizzesProgressQuery({ classroomId, studentId });
 
-  if (isLoadingChapters || isLoadingLabs || isLoadingQuizzes) {
+  // Combined loading state
+  const isLoading = isLoadingChapters || isLoadingLabs || isLoadingQuizzes;
+
+  // Combined error state
+  const error = errorChapters || errorLabs || errorQuizzes;
+
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center text-gray-500 dark:text-gray-400">
         <BiLoaderCircle className="animate-spin h-6 w-6 mr-2" />
@@ -41,7 +48,7 @@ const StudentDetails = () => {
     );
   }
 
-  if (errorChapters || errorLabs || errorQuizzes) {
+  if (error) {
     return (
       <div className="flex justify-center items-center h-full text-red-500">
         Error loading progress
@@ -49,7 +56,23 @@ const StudentDetails = () => {
     );
   }
 
-  const { studentId: student } = chaptersProgress[0];
+  if (!chaptersProgress || !labsProgress || !quizzesProgress) {
+    return (
+      <div className="flex justify-center items-center h-full text-gray-500">
+        Data not available
+      </div>
+    );
+  }
+
+  const student = chaptersProgress[0]?.studentId;
+
+  if (!student) {
+    return (
+      <div className="flex justify-center items-center h-full text-gray-500">
+        Student data not available
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -73,7 +96,17 @@ const StudentDetails = () => {
             <span className="font-semibold">Phone:</span> {student.phoneNumber}
           </p>
 
-          <p>Progress Ui here</p>
+          {/* Include the CourseProgressBar component */}
+          {/* <div className="mt-4">
+            <h3 className="text-xl font-bold mb-2 flex items-center">
+              <MdOutlineSchool className="mr-2 text-blue-500" /> Course Progress
+            </h3>
+            <CourseProgressBar 
+              classroomId={classroomId} 
+              studentId={studentId} 
+              courseId={courseId} 
+            />
+          </div> */}
         </div>
       </div>
 
@@ -166,7 +199,7 @@ const ChapterWithLessonsProgress = ({ classroomId, studentId, chapter }) => {
 
   return (
     <div
-      className={`p-4 border  grid rounded-lg shadow-md ${
+      className={`p-4 border grid rounded-lg shadow-md ${
         chapter.completed
           ? "bg-green-50 border-green-200"
           : chapter.unlocked
@@ -174,7 +207,7 @@ const ChapterWithLessonsProgress = ({ classroomId, studentId, chapter }) => {
           : "bg-gray-50 border-gray-200"
       }`}
     >
-      <div  className="grid grid-cols-1  md:grid-cols-2 gap-2 ">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div>
           <h4 className="text-lg font-semibold mb-2">{chapter.chapterId.title}</h4>
           <div className="flex items-center mb-2">
