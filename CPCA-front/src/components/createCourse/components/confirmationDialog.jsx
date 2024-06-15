@@ -1,7 +1,7 @@
 import { close } from "@/features/course/coursSidebarSlice";
 import { TiWarningOutline } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
-import { useDeleteChapter, useDeleteCourse, useDeleteLessonItem } from "../hooks/course-hooks";
+import { useDeletUser, useDeleteChapter, useDeleteCourse, useDeleteLessonItem } from "../hooks/course-hooks";
 import { useState } from "react";
 import { ActionTypes } from "../action.Types";
 import { showSuccessToast } from "@/toasts/toast";
@@ -14,11 +14,12 @@ export const Confirmation = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false)
 
-    const { actionType, courseId, chapterId, lessonId, lessonIds, lessonItemId, showConfirmation, message } = useSelector(x => x.courseInputState.formState);
-
+    const { actionType, courseId, chapterId, lessonId, lessonIds, lessonItemId,userId, showConfirmation, message } = useSelector(x => x.courseInputState.formState);
+    console.log(userId)
     const { mutateAsync: deleteLessonItem } = useDeleteLessonItem(lessonId)
     const { mutateAsync: deleteChapter } = useDeleteChapter(courseId, lessonIds)
     const { mutateAsync: deleteCourse } = useDeleteCourse(courseId)
+    const { mutateAsync: deleteUser } = useDeletUser()
 
     const actions = {
         deleteLessonItem: async () => await deleteLessonItem({ lessonId, lessonItemId, chapterId }),
@@ -39,6 +40,9 @@ export const Confirmation = () => {
                 case ActionTypes.DELETE_COURSE:
                     await deleteCourse({ courseId })
                     break;
+                case ActionTypes.DELETE_USER:
+                    await deleteUser(userId)
+                    break
             }
             
         } catch (err) {

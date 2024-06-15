@@ -27,7 +27,22 @@ import {
 import { showErrorToast, showSuccessToast } from '@/toasts/toast';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import newRequests from '@/utils/newRequest';
  
+export const useDeletUser = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id) => newRequests.delete(`/user/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:['users']})
+      showSuccessToast("user deleted successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to delete user")
+    }
+  })
+
+}
 export const useCourses = () => {
   return useQuery({
     queryKey: ['courses'],
@@ -99,8 +114,8 @@ export const useDeleteCourse = (courseId) => {
     mutationFn: deleteCourse,
     onSuccess: () => {
       queryClient.removeQueries({queryKey:['course',courseId]})
-      queryClient.invalidateQueries({queryKey:['draftCourses']})
-      navigate('/dashboard/courses/draft')
+      queryClient.invalidateQueries({queryKey:['courses']})
+      navigate('/dashboard/course')
       showSuccessToast("course deleted successfully")
     },
     onError: () => {

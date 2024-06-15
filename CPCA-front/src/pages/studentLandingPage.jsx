@@ -38,7 +38,7 @@ const StudentLandingPage = () => {
       <main className="container mx-auto mt-8 p-6 rounded-md flex flex-col justify-between gap-8">
       <section className="mb-8 shadow rounded-lg p-8 bg-white">
   <h2 className="text-5xl font-bold text-gray-600 mb-8 text-center">
-    About Our LMS
+    information regarding LMS and how to use it
   </h2>
   <p className="text-lg text-gray-700  mb-4 leading-loose">
     Our Learning Management System (LMS) is designed to provide students with an easy-to-use and engaging platform to enhance their learning experience.
@@ -64,7 +64,7 @@ const StudentLandingPage = () => {
     <div className="ml-4">
       <h3 className="text-2xl font-semibold text-green-700">Track Progress</h3>
       <p className="text-lg text-gray-600 leading-relaxed">
-        Keep tabs on your achievements and milestones with our detailed progress tracking tools.
+        Keep tabs on your on what u completed. such as quizes , lap practices and lessons
       </p>
     </div>
   </div>

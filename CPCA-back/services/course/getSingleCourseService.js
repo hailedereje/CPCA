@@ -23,6 +23,10 @@ export const getSingleCourseService = async (id) => {
                     select:"_id title"
                 }
             ]
+        }).populate({
+            path: "instructors",
+            model:"User",
+            select:"_id email"
         })
 
     return course   

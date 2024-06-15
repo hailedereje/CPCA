@@ -83,13 +83,13 @@ export const Courses = () => {
         </button>
       </div>
       <div className="flex justify-center space-x-4 mb-6">
-        <button onClick={() => setSelectedTab('all')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'all' ? 'text-blue-600 border-blue-700 border-b-2' : 'text-blue-400'}`}>
+        <button onClick={() => setSelectedTab('all')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'all' ? ' border-blue-700 border-b-2' : ''}`}>
           All Courses
         </button>
-        <button onClick={() => setSelectedTab('published')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'published' ? 'text-blue-600 border-blue-700 border-b-2' : 'text-blue-400'}`}>
+        <button onClick={() => setSelectedTab('published')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'published' ? ' border-blue-700 border-b-2' : ''}`}>
           Published Courses
         </button>
-        <button onClick={() => setSelectedTab('draft')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'draft' ? 'text-blue-600 border-blue-700 border-b-2' : 'text-blue-400'}`}>
+        <button onClick={() => setSelectedTab('draft')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'draft' ? ' border-blue-700 border-b-2' : ''}`}>
           Draft Courses
         </button>
       </div>

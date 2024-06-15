@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import Fuse from "fuse.js";
 import { ActionTypes } from "../action.Types";
 import { useDispatch } from "react-redux";
-import { setPrerequistes, setTags } from "@/features/course/createCourse";
+import { setInstructors, setPrerequistes, setTags } from "@/features/course/createCourse";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { useQueryClient } from "@tanstack/react-query";
@@ -13,8 +13,8 @@ export const InputList = ({ items, type, courseId }) => {
     const course = client.getQueryData(['course', courseId]).data.course;
     const dispatch = useDispatch();
     
-    const { prerequisites,tags } = course
-    const [contents, setContents] = useState(type === ActionTypes.ADD_PREREQUISITES ? prerequisites : tags);
+    const { instructors,tags } = course
+    const [contents, setContents] = useState(type === ActionTypes.ADD_INSTUCTOR ? instructors.map(ins => ({id:ins._id,title:ins.email})) : tags);
     const [content, setContent] = useState("");
 
     const [toggle, setToggle] = useState(false);
@@ -53,6 +53,9 @@ export const InputList = ({ items, type, courseId }) => {
                 dispatch(setPrerequistes({ prerequisites: newContents }));
             } else if (type === ActionTypes.ADD_TAGS) {
                 dispatch(setTags({ tags: newContents }));
+            }
+            else if (type === ActionTypes.ADD_INSTUCTOR) {
+                dispatch(setInstructors({ instructors: newContents }));
             }
             return newContents;
         });
@@ -102,10 +105,10 @@ export const InputList = ({ items, type, courseId }) => {
                 <div className="w-full flex gap-1 items-center border border-gray-400 rounded-md p-1 flex-wrap max-h-32 overflow-auto editor">
                     <div className="flex items-center gap-2 flex-wrap">
                         {contents.length > 0 && contents.map((cont, idx) => (
-                            <div key={idx} className="flex gap-1 bg-gray-100 p-2 rounded-md">
-                                <span className="text-xs text-left">{cont.title}</span>
+                            <div key={idx} className="flex gap-1 bg-blue-500 p-2 rounded-md">
+                                <span className="text-xs text-left text-white">{cont.title}</span>
                                 <button type="button" onClick={() => deleteContent(cont.id)}>
-                                    <svg className="text-gray-500" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                    <svg className="text-white" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                         <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M6.758 17.243L12.001 12m5.243-5.243L12 12m0 0L6.758 6.757M12.001 12l5.243 5.243" />
                                     </svg>
                                 </button>

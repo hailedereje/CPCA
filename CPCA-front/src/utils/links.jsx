@@ -16,7 +16,7 @@ export const InstructLinks = [
 export const StudentLinks = [
   // { id: 1, text: "status", path: "/dashboard", icon: <IoBarChartSharp /> },
   { id: 2, text: "profile", path: "profile", icon: <ImProfile /> },
-  {id: 3, text: "courses", path: "courses", icon: <FaChalkboardTeacher/>},
+  // {id: 3, text: "courses", path: "courses", icon: <FaChalkboardTeacher/>},
   {id: 4, text: "classrooms", path: "classrooms", icon: <FaChalkboardTeacher/>}
 ];
 
