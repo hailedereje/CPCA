@@ -19,7 +19,9 @@ import {
   getStudentChaptersProgress , 
   getStudentLessonsProgress, 
   getStudnetLabsProgress, 
-  getStudentQuizzesProgress
+  getStudentQuizzesProgress,
+  calculateStudentCourseProgress,
+  calculateStudentChapterProgress
 } from "../controllers/progressControllers.js";
 import { authenticate, studentCheck, isInstructor } from "../middlewares/authenticate.js";
 
@@ -35,6 +37,8 @@ router.get("/:classroomId/student/:studentId/chapters", isInstructor, getStudent
 router.get("/:classroomId/student/:studentId/lessons/:chapterId", isInstructor, getStudentLessonsProgress);
 router.get("/:classroomId/student/:studentId/labs", isInstructor, getStudnetLabsProgress);
 router.get("/:classroomId/student/:studentId/quizzes", isInstructor, getStudentQuizzesProgress);
+router.post("/:classroomId/student/:studentId/course/:courseId", isInstructor, calculateStudentCourseProgress);
+router.post("/:classroomId/student/:studentId/chapter/:chapterId", isInstructor, calculateStudentChapterProgress);
 
 // Student routes
 router.get("/chapters/:classroomId/:courseId", studentCheck, getChaptersProgress);
@@ -55,3 +59,4 @@ router.post("/request_unlock_quiz", studentCheck, requestUnlockQuiz);
 router.post("/request_unlock_lab", studentCheck, requestUnlockLab);
 
 export default router;
+  

@@ -778,3 +778,77 @@ export const getStudentQuizzesProgress = async (req, res) => {
     res.status(500).json({ message: 'Error getting student quizzes progress', error });
   }
 };
+
+// Endpoint to calculate student course progress
+export const calculateStudentCourseProgress = async (req, res) => {
+  const { classroomId, studentId, courseId } = req.params;
+
+  try {
+    const chapters = await Chapter.find({ courseId });
+    const lessons = await Lesson.find({ courseId });
+    const labs = await Lab.find({ courseId });
+    const quizzes = await Quiz.find({ courseId });
+
+    const totalItems = chapters.length + lessons.length + labs.length + quizzes.length;
+    let completedItems = 0;
+
+    for (const chapter of chapters) {
+      const progress = await Progress.findOne({ classroomId, studentId, chapterId: chapter._id });
+      if (progress && progress.completed) completedItems++;
+    }
+
+    for (const lesson of lessons) {
+      const progress = await Progress.findOne({ classroomId, studentId, lessonId: lesson._id });
+      if (progress && progress.completed) completedItems++;
+    }
+
+    for (const lab of labs) {
+      const progress = await Progress.findOne({ classroomId, studentId, labId: lab._id });
+      if (progress && progress.completed) completedItems++;
+    }
+
+    for (const quiz of quizzes) {
+      const progress = await Progress.findOne({ classroomId, studentId, quizId: quiz._id });
+      if (progress && progress.completed) completedItems++;
+    }
+
+    const courseProgress = (completedItems / totalItems) * 100;
+    res.json({ progress: courseProgress });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Endpoint to calculate student chapter progress
+export const calculateStudentChapterProgress = async (req, res) => {
+  const { classroomId, studentId, chapterId } = req.params;
+
+  try {
+    const lessons = await Lesson.find({ chapterId });
+    const quizzes = await Quiz.find({ chapterId });
+    const practiceQuestions = await PracticeQuestion.find({ chapterId });
+
+    const totalItems = lessons.length + quizzes.length + practiceQuestions.length;
+    let completedItems = 0;
+
+    for (const lesson of lessons) {
+      const progress = await Progress.findOne({ classroomId, studentId, chapterId, lessonId: lesson._id });
+      if (progress && progress.completed) completedItems++;
+    }
+
+    for (const quiz of quizzes) {
+      const progress = await Progress.findOne({ classroomId, studentId, chapterId, quizId: quiz._id });
+      if (progress && progress.completed) completedItems++;
+    }
+
+    for (const practiceQuestion of practiceQuestions) {
+      const progress = await Progress.findOne({ classroomId, studentId, chapterId, practiceQuestionId: practiceQuestion._id });
+      if (progress && progress.completed) completedItems++;
+    }
+
+    const chapterProgress = (completedItems / totalItems) * 100;
+    res.json({ progress: chapterProgress });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

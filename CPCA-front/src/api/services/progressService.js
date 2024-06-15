@@ -171,4 +171,20 @@ export const progressService = (builder) => ({
     }),
   }),
 
+  calculateStudentChapterProgress: builder.mutation({
+    query: ({ classroomId, studentId, chapterId }) => ({
+      url: `/progress/${classroomId}/student/${studentId}/chapter/${chapterId}`,
+      method: 'POST',
+      body: data,
+    }),
+  }),
+
+  calculateStudentCourseProgress: builder.mutation({
+    query: ({ classroomId, studentId, courseId }) => ({
+      url: `/progress/${classroomId}/student/${studentId}/course/${courseId}`,
+      method: 'POST',
+      body: data,
+    }),
+  }),
+
 });
