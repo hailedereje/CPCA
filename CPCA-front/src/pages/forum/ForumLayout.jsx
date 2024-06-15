@@ -15,22 +15,23 @@ export const Layout = () => {
   const users = useSelector((state) => state.socketState.onlineUsers);
   const dispatch = useDispatch();
   const {classroom} = useOutletContext()
+  
   useEffect(() => {
-    if(socket){
+    if (socket && classroom._id && user) {
       socket.connect();
       socket.auth = user;
-      socket.on("user-connected", (users) => {
+      socket.emit("joinRoom", { roomId: classroom._id, user: user });
+  
+      socket.on("roomUpdate", (users) => {
         dispatch(addUsers(users));
       });
-      socket.on("user-disconnected", (users) => {
-        dispatch(addUsers(users));
-      });
-
+  
       return () => {
+        socket.emit("leaveRoom", { roomId: classroom._id, user: user });
         socket.disconnect();
       };
     }
-  }, [dispatch, socket, user]);
+  }, [socket, classroom._id, user, dispatch]);
 
   return (
     <QueryClientProvider client={queryClient} contextSharing={true}>

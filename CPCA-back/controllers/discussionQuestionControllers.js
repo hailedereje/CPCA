@@ -9,10 +9,11 @@ export const askDiscussionQuestion = async (req, res) => {
         description,
         author: req.user._id,
         tags,
-        seen: [req.user._id],
       });
       const classroom = await Classroom.findById(classroomId);
-      console.log(classroom);
+      if(!classroom){
+        return res.status(404).json({message: "Classroom not found"});
+      }
       const discussion = await Discussion.findOne({classroomId: classroomId});
       if(!discussion){
         await Discussion.create({classroomId: classroomId, discussion: [newDiscussionQuestion._id]});
@@ -20,18 +21,7 @@ export const askDiscussionQuestion = async (req, res) => {
       await discussion.updateOne({
         $push: { discussion: newDiscussionQuestion._id },
       })};
-      classroom.students.forEach(async (student) => {
-        if (student.toString() !== req.user._id.toString()) {
-          console.log(student._id.toString(), req.user._id.toString());
-          const notification = new Notification({
-            message: `New question in your classroom: ${title}`,
-            user: student,
-            read: false
-          });
-          await notification.save();
-          req.io.to(student.toString()).emit('new_notification', notification);
-        }
-      })
+
       return res.status(201).json(newDiscussionQuestion);
     } catch (error) {
       console.log(error);
@@ -50,12 +40,6 @@ export const answerDiscussionQuestion = async (req, res) => {
       await findDiscussionQuestion.updateOne({
         $push: { replies: reply._id },
       });
-      const notification = new Notification({
-        message: `Someone replied to your question: ${findDiscussionQuestion.title}`,
-        user: findDiscussionQuestion.author
-      });
-      await notification.save();
-      req.io.to(findDiscussionQuestion.author.toString()).emit('new_notification', notification);
       return res.status(201).json(reply);
     } catch (error) {
       res.status(500).json({ message: "Server Error" });

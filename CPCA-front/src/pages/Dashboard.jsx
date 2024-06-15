@@ -1,22 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AdminLinks, InstructLinks, StudentLinks } from "@/utils/links";
 import Notifications from "@/components/Notification";
 import { logoutUser } from "@/features/user/userSlice";
 import blankProfile from "@/assets/blank_profile.webp";
-import logo from "@/assets/logo.png"
+import logo from "@/assets/logo.png";
+import newRequests from "@/utils/newRequest";
 
 function Dashboard() {
   const location = useLocation();
-  const path = location.pathname.split("/").filter((path) => path !== "")
-  
+  const path = location.pathname.split("/").filter((path) => path !== "");
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [toggleNotification, setToggleNotification] = useState(false);
   const [count, setCount] = useState(0);
   const { user } = useSelector((state) => state.userState);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      newRequests.get(`/notifications`).then((response) => {
+        setCount(response.data.length);
+      });
+    }
+  }, [user]);
 
   const handleNotificationCount = (count) => {
     setCount(count);
@@ -32,7 +41,12 @@ function Dashboard() {
   };
 
   const QuickLinks = () => {
-    const links = user.role === "admin" ? AdminLinks : user.role === "instructor" ? InstructLinks : StudentLinks;
+    const links =
+      user.role === "admin"
+        ? AdminLinks
+        : user.role === "instructor"
+        ? InstructLinks
+        : StudentLinks;
     const getActive = (link) => {
       return path.includes(link);
     };
@@ -41,7 +55,9 @@ function Dashboard() {
         {links.map((link) => (
           <div
             key={link.id}
-            className={`flex items-center p-2 text-lg text-blue-900 font-medium leading-relaxed hover:text-blue-500 transition-colors cursor-pointer ${getActive(link) && "text-blue-400"}`}
+            className={`flex items-center p-2 text-lg text-blue-900 font-medium leading-relaxed hover:text-blue-500 transition-colors cursor-pointer ${
+              getActive(link) && "text-blue-400"
+            }`}
             onClick={() => navigate(link.path)}
           >
             {link.text}
@@ -62,7 +78,7 @@ function Dashboard() {
           </div>
           <div className="flex items-center gap-4">
             <button
-              className="relative btn btn-ghost btn-circle"
+              className="btn btn-ghost btn-circle"
               onClick={() => setToggleNotification(!toggleNotification)}
             >
               <div className="indicator">
@@ -80,20 +96,26 @@ function Dashboard() {
                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                   />
                 </svg>
-                <span className="badge badge-xs bg-red-500 indicator-item text-white">
-                  {count}
-                </span>
+                {count > 0 && (
+                  <div className="relative">
+                    <span className="badge badge-xs bg-red-500 indicator-item text-white">
+                      {count}
+                    </span>
+                    {toggleNotification && (
+                      <div className="absolute right-0 top-10 w-96 bg-white rounded-lg shadow-lg">
+                        <Notifications
+                          onNotificationCount={handleNotificationCount}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-              {toggleNotification && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg">
-                  <Notifications onNotificationCount={handleNotificationCount} />
-                </div>
-              )}
             </button>
             {user && (
               <div className="relative w-full">
                 <img
-                  src={user.profileImg ||blankProfile}
+                  src={user.profileImg || blankProfile}
                   alt="profile"
                   className="w-10 object-cover flex items-center rounded-full cursor-pointer"
                   onClick={toggleDropdown}
@@ -119,6 +141,7 @@ function Dashboard() {
     </>
   );
 }
+
 export default Dashboard;
 
 const DropdownMenu = () => {

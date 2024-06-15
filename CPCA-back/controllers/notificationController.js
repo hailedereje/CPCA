@@ -12,9 +12,17 @@ export const readNotification =  async (req, res) => {
     res.json(notification);
 };
 
+export const readAllNotifications = async (req, res) => {
+    const { classroomId } = req.params;
+    await Notification.updateMany({ user: req.user._id, classroom: classroomId }, { read: true });
+    res.json({ message: "All notifications read" });
+}
+
 export const deleteNotification = async (req, res) => {
     const { id } = req.params;
     await Notification.findByIdAndDelete(id);
     res.json({ message: "Notification deleted" });
 }
+
+
   
