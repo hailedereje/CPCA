@@ -48,7 +48,7 @@ export const UploadImage = ({id,img}) => {
 
 
   return (
-    <div className="flex flex-col items-center gap-4 border rounded-md p-4 max-w-md">
+    <div className="flex flex-col items-center gap-4 border rounded-md p-4 max-w-md bg-white">
       <span className="flex flex-col gap-2">
           <span className="text-xl capitalize font-medium flex gap-4 items-center">
             <IconWrapper bg="bg-blue-500" color="text-white" icon={<CiImageOn />} />

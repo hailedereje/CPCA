@@ -1,3 +1,4 @@
+import { useGetQuizStats } from '@/components/createCourse/hooks/statistics-hooks';
 import React from 'react';
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -30,9 +31,13 @@ const data = {
 const COLORS = ['#4A90E2', '#50E3C2', '#FFBB28', '#FF8042'];
 
 const StatisticsPage = () => {
+  // const {data: quizStates,isSuccess} = useGetQuizStats()
+  // if(isSuccess){
+  //   console.log(quizStates)
+  // }
   return (
     <div className="p-6 bg-gray-100 min-h-screen w-full">
-      <h1 className="text-4xl font-bold text-center text-primary mb-10">Dashboard Statistics</h1>
+      <h1 className="text-4xl font-bold text-center  mb-10">Dashboard Statistics</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Student Performance Chart */}

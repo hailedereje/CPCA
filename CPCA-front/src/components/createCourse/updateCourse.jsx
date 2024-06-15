@@ -42,13 +42,13 @@ export const UpdataCourse = () => {
     )
   }
   return (
-    <div className="flex w-full h-full flex-col gap-4">
+    <div className="flex w-full min-h-screen flex-col gap-4">
       <Confirmation />
       {isLoading ?
         <Loading />
         :
-        <div className="w-full h-screen  flex  gap-6 p-2 lg:pl-[30%] ">
-          <div className="flex flex-col max-w-xs w-1/3 h-full xxs:hidden lg:block fixed top-12 left-0 ">
+        <div className="w-full min-h-screen  flex  gap-6 p-2 lg:pl-[30%] ">
+          <div className="flex flex-col max-w-xs w-1/3 h-full xxs:hidden lg:block fixed top-12 left-0 bg-white">
             <CourseComponent course={data.data.course} />
           </div>
           <div className="xxs:block lg:hidden">
@@ -56,7 +56,7 @@ export const UpdataCourse = () => {
               <CourseComponent course={data.data.course} />
             </SidebarDrawer>
           </div>
-          <div className="w-full h-full flex flex-col gap-2">
+          <div className="w-full h-full flex flex-col gap-4">
             <UpdateCourseBanner courseId={param.id} state={state} />
             <div className="flex gap-4 flex-col md:flex-row">
               <UpdatebasicInFormation courseId={param.id} initialData={data.data.course} />
@@ -85,7 +85,7 @@ const UpdateCourseBanner = ({ courseId, state }) => {
     await publish(courseId)
   }
   return (
-    <div className="flex justify-between items-center gap-4 px-6 py-3 bg-gray-50  rounded-t-md  border  transition duration-300">
+    <div className="flex justify-between items-center gap-4 px-6 py-3 bg-white  rounded-t-md  border  transition duration-300">
       <div className="flex items-center gap-4">
         <h1 className="text-2xl xxs:text-lg font-bold capitalize text-black">Update course details</h1>
       </div>
@@ -113,7 +113,7 @@ const UpdateCourseBanner = ({ courseId, state }) => {
 export const CourseLabs = ({ data }) => {
   const navigate = useNavigate()
   return (
-    <div className=" p-4 rounded-md max-w-4xl flex flex-col gap-4 border">
+    <div className=" p-4 rounded-md max-w-4xl flex flex-col gap-4 border bg-white">
       <span className="flex flex-col gap-4">
         <span className="flex justify-between items-center gap-4">
           <span className="text-xl capitalize font-medium flex gap-4 items-center">
@@ -126,14 +126,14 @@ export const CourseLabs = ({ data }) => {
           </button>
         </span>
 
-        <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500">
+        <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-slate-600 italic">
           add labs to the course that students can perform to test their understanding of the course content make it interactive and fun
           as students can learn by doing and not just reading or watching videos 
         </span>
       </span>
-      <div className="grid md:grid-cols-2 xxs:grid-cols-1 gap-2 h-[200px] overflow-auto editor p-2">
+      <div className="grid min-h-[200px] md:grid-cols-3 xxs:grid-cols-2 gap-2 overflow-auto editor p-2">
         {data?.map((lab) => (
-          <Lab lab={lab} />
+          <Lab lab={lab} key={lab._id} />
         ))}
       </div>
     </div>
@@ -148,25 +148,25 @@ const Lab = ({ lab }) => {
     await deleteLab({ courseId: param.id, labId: lab._id })
   }
   return (
-    <div className="flex flex-col gap-2 max-h-20 p-2 border rounded-md  relative">
+    <div className="flex flex-col gap-2 max-h-20 p-2 border border-blue-400 rounded-md  relative">
       <div className="flex justify-between items-start gap-x-4 relative">
-        <span className="text-sm capitalize font-medium line-clamp-1">{lab.title}</span>
+        <span className="text-sm capitalize font-medium line-clamp-1 text-blue-600 ">{lab.title}</span>
         <MenuWrapper >
-          <li onClick={() => navigate(`lab/${lab._id}/view`)} className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
+          {/* <li onClick={() => navigate(`lab/${lab._id}/view`)} className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 ">
             <span className="mr-2"><CiViewTimeline /></span>
             <span className='text-sm capitalize'>view</span>
-          </li>
-          <li onClick={() => navigate(`lab/${lab._id}`)} className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
+          </li> */}
+          <li onClick={() => navigate(`lab/${lab._id}`)} className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100">
             <span className="mr-2"><MdModeEditOutline /></span>
             <span className='text-sm capitalize'>update</span>
           </li>
-          <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500" onClick={handleDelete}>
+          <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 " onClick={handleDelete}>
             <span className="mr-2"><RiDeleteBin6Line className="text-red-400" /></span>
             <span className='text-sm capitalize'>delete</span>
           </li>
         </MenuWrapper>
       </div>
-      <span className="text-xs text-gray-700  md:line-clamp-2 line-clamp-1">{lab.description}</span>
+      {/* <span className="text-xs text-gray-700  md:line-clamp-2 line-clamp-1">{lab.description}</span> */}
     </div>
   )
 }
@@ -174,8 +174,8 @@ const Lab = ({ lab }) => {
 
 const CourseComponent = ({ course }) => {
   return (
-    <div className="max-w-4xl max-h-screen overflow-auto w-full h-full  rounded-lg shadow-lg pt-4">
-      <div className="w-full p-4 flex justify-between items-center bg-blue-400 rounded-t-lg">
+    <div className="max-w-4xl max-h-screen overflow-auto w-full h-full shadow-lg pt-4">
+      <div className="w-full p-4 flex justify-between items-center bg-blue-400 ">
         <div className="flex items-center gap-2">
           <FaBook className="text-white text-xl" />
           <h1 className="text-lg font-semibold capitalize text-white">{course.title}</h1>
@@ -239,7 +239,7 @@ export const SidebarDrawer = ({ children }) => {
     setIsOpen(!isOpen);
   };
   return (
-    <div className="">
+    <div className="z-30">
       <div
         className={`fixed inset-0 z-10 ${isOpen ? "" : "hidden"}`}
         onClick={toggleDrawer}

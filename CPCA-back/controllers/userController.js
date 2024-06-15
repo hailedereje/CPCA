@@ -59,7 +59,7 @@ const userLogout = async (req, res) => {
 const getAllUsers = async (req, res) => {
   console.log(req.query);
   const { page = 1, search = '', role = '' } = req.query;
-  const limit = 5;
+  const limit = 20;
   const skip = (page - 1) * limit;
 
   const query = {

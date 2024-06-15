@@ -28,7 +28,7 @@ const addTags = async (data) => {
       }).catch(err => console.error(err))
     }
     return (
-      <div className="flex flex-col max-w-md items-start  gap-4 border p-4 rounded-md">
+      <div className="flex flex-col max-w-md items-start  gap-4 border p-4 rounded-md bg-white">
           <span className="flex flex-col gap-2">
             <span className="text-xl capitalize font-medium flex gap-4 items-center">
               <IconWrapper bg="bg-blue-500" color="text-white" icon={<FaHashtag />} />

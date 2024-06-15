@@ -31,7 +31,7 @@ export const ContentEditor = ({courseId }) => {
     return (
       <div className="flex flex-col w-full editor gap-3">
           <div className={` flex items-center justify-center `}>
-            <div className="w-full relative">
+            <div className="w-full relative max-w-3xl">
               <FroalaEditor tag='div'
                 model={value}
                 config={defaultFroalaConfig}

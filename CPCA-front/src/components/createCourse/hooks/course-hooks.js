@@ -20,7 +20,8 @@ import {
     updateCourse,
     deleteCourse,
     getCourses,
-    publishCourse
+    publishCourse,
+    renameLesson
   } from './actions';
 
 import { showErrorToast, showSuccessToast } from '@/toasts/toast';
@@ -278,6 +279,19 @@ export const useCreateLesson = (chapterId,courseId) => {
     onSuccess: () => {
       // queryClient.invalidateQueries({queryKey: ['lessons',chapterId]})
       queryClient.invalidateQueries({queryKey: ['course',courseId]})
+    }
+  })
+}
+
+export const useRenameLesson = (courseId) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: renameLesson,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ['course',courseId]})
+    },
+    onError: () => {
+      showErrorToast("failed to rename lesson")
     }
   })
 }
