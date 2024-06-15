@@ -1,6 +1,6 @@
 import "react-toastify/dist/ReactToastify.css";
-import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
-import { Dashboard, ErrorPage, ForumLayout, HomeLayout, Landing, Login, MyQuestions, Register } from "./pages";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
+import { Dashboard, ErrorPage, HomeLayout, Landing, Login, Register } from "./pages";
 import { store } from "./store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -13,7 +13,6 @@ import { JoinClass } from "./components";
 import adminRoutes from "./routes/adminRoutes";
 import instructorRoutes from "./routes/instructorRoutes";
 import studentRoutes from "./routes/studentRoutes";
-import { Quiz } from "./components/Quiz";
 import React from "react";
 
 const queryClient = new QueryClient();
@@ -52,12 +51,11 @@ const App = () => {
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <Landing /> },
-        { path: "register/:token?", element: <Register />},
         { path: "login", element: <Login /> },
-        { path: "join/:token", element: <JoinClass /> },
-        { path: "quiz", element: <Quiz /> },
       ],
     },
+    { path: "register/:token?", element: <Register /> },
+    { path: "join/:token", element: <JoinClass /> },
     {
       path: "/dashboard",
       element: <Dashboard />,
