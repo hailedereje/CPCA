@@ -3,22 +3,23 @@ import { COOKIE_DOMAIN, NODE_ENV, TOKEN_EXPIRY, TOKEN_KEY } from "../config/cons
 import { UnautorizedError } from "../errors/index.js";
 import path from "path";
 
+
 const GenerateJWT = async (res, tokenData) => {
-  const token = await jwt.sign(tokenData, TOKEN_KEY, {
+  const token = jwt.sign(tokenData, TOKEN_KEY, {
     expiresIn: TOKEN_EXPIRY,
   });
+
   res.cookie("jwt", token, {
-    //security  options
     httpOnly: true,
-    secure: NODE_ENV !== "developement",
-    sameSite: "strict",
-    domain: COOKIE_DOMAIN,
-    maxAge: 30 * 24 * 60 * 1000,
+    secure: NODE_ENV !== "development", // ensure HTTPS in production
+    sameSite: NODE_ENV !== "development" ? "None" : "Lax", // Allow cross-origin in production
+    domain: NODE_ENV !== "development" ? "cpca-front.vercel.app" : "localhost", // Set domain for production
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     path: "/", // root path
   });
+
   return token;
 };
-
 const ValidateJWT = async (res) => {
   let token = await res.cookies.jwt;
   if (token ) {
