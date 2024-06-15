@@ -37,6 +37,19 @@ const userLogin = async (req, res) => {
     throw new NotFoundError("Invalid email or password");
 }
 
+export const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: 'Error deleting user' });
+  }
+}
+
 export const getInstructors = async (req, res) => {
   try {
     const instructors = await User.find({ role: "instructor" }).select("_id email");

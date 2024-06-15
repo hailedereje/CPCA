@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -11,6 +11,8 @@ import newRequests from '@/utils/newRequest';
 import { showErrorToast, showSuccessToast } from '@/toasts/toast';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@/features/user/userSlice';
+import { BiHide } from 'react-icons/bi';
+import { GrView } from 'react-icons/gr';
 
 // Define the validation schema using yup
 const schema = yup.object().shape({
@@ -22,6 +24,7 @@ const schema = yup.object().shape({
 function Login() {
   const { control, handleSubmit, formState: { errors, isSubmitting }, } = useForm({ resolver: yupResolver(schema), });
   const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
 
   const { mutateAsync: postUser, isPending } = useMutation({
     mutationFn: (data) => newRequests.post("/user/login", data),
@@ -72,11 +75,26 @@ function Login() {
               render={({ field }) => (
                 <div>
                   <label className="block text-gray-700">Password</label>
-                  <input
-                    type="password"
-                    {...field}
-                    className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      {...field}
+                      className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                    <div className="absolute top-3 right-0 pr-3 flex items-center text-sm leading-5">
+                      <button
+                        type="button"
+                        className="focus:outline-none"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <BiHide className="h-5 w-5 text-gray-500" />
+                        ) : (
+                          <GrView className="h-5 w-5 text-gray-500" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
                   {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
                 </div>
               )}
