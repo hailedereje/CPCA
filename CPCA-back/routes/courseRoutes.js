@@ -25,7 +25,7 @@ import { createChapterController } from "../controllers/chapter/createChapterCon
 import { getChaptersController } from "../controllers/chapter/getAllChaptersController.js";
 import { renameChapterController } from "../controllers/chapter/renameChapterController.js";
 import { createLessonSchema } from "../validation/lesson/createLessonValidation.js";
-import { createLessonController } from "../controllers/lesson/createLessonController.js";
+import { createLessonController, renameLesson } from "../controllers/lesson/createLessonController.js";
 import { getLessonController } from "../controllers/lesson/getLessonController.js";
 import { addLessonItemSchema } from "../validation/lesson/addLessonItemValidator.js";
 import { addLessonItemController } from "../controllers/lesson/addLessonItemController.js";
@@ -72,7 +72,7 @@ router.delete("/course/chapters/chapter",deletChapterController)
 router.get("/course/chapters/chapter/lessons/lesson",getLessonController)
 router.post("/course/chapters/chapter/lessons",validateRequest(createLessonSchema),createLessonController)
 router.delete("/course/chapters/chapter/lessons/lesson",deleteLessonController)
-
+router.post("/course/chapters/chapter/lessons/lesson/rename",renameLesson) 
 //lesson item
 router.post("/course/chapters/chapter/lessons/lesson/add-lesson-item",validateRequest(addLessonItemSchema),addLessonItemController)
 router.post("/course/chapters/chapter/lessons/lesson/update-lesson-item",updateLessonItemController)

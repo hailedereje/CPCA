@@ -1,4 +1,4 @@
-import { addChapter, addLesson, close, deleteChapterConfirmation, openConfirmationDialog, renameChapter, setActiveLesson, setTitle } from '@/features/course/coursSidebarSlice';
+import { addChapter, addLesson, close, deleteChapterConfirmation, openConfirmationDialog, renameChapter, renameLesson, setActiveLesson, setTitle } from '@/features/course/coursSidebarSlice';
 import React, { useState } from 'react';
 
 import { FaBook, FaBookOpen, FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import * as yup from "yup"
 import { ActionTypes } from '../action.Types';
-import { useCreateChapter, useCreateLesson, useRenameChapter } from '../hooks/course-hooks';
+import { useCreateChapter, useCreateLesson, useRenameChapter, useRenameLesson } from '../hooks/course-hooks';
 import { Confirmation } from './confirmationDialog';
 import { BsQuestionOctagonFill } from 'react-icons/bs';
 
@@ -83,9 +83,9 @@ export const Drawer = ({ data }) => {
                                         </button>
                                         <MenuWrapper color={"text-black"}>
                                             <li
-                                                className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
+                                                className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100"
                                                 onClick={() => {
-                                                    dispatch(renameChapter({ ...ids, label: "rename chapter", actionType: ActionTypes.RENAME_CHAPTER, value }))
+                                                    dispatch(renameChapter({ courseId:course._id,chapterId:chapter._id, label: "rename chapter", actionType: ActionTypes.RENAME_CHAPTER, value:chapter.title }))
                                                 }}
                                             >
                                                 <span className="mr-2"><MdModeEditOutline /></span>
@@ -93,7 +93,7 @@ export const Drawer = ({ data }) => {
                                             </li>
 
                                             <li
-                                                className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
+                                                className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100"
                                                 onClick={() => {
                                                     dispatch(addLesson({ courseId:course._id,chapterId:chapter._id, label: "add lesson", actionType: ActionTypes.ADD_LESSON, value: ""}))
                                                 }}
@@ -102,7 +102,7 @@ export const Drawer = ({ data }) => {
                                                 <span className='text-sm capitalize'>add lesson </span>
                                             </li>
                                             <li
-                                                className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
+                                                className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100"
                                                 onClick={() => {
                                                     navigate(`${chapter._id}/add-test`)
                                                 }}
@@ -113,7 +113,7 @@ export const Drawer = ({ data }) => {
                                             </li>
 
                                             <li
-                                                className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
+                                                className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100"
                                                 onClick={() => {
                                                     dispatch(openConfirmationDialog({ courseId:course._id,chapterId:chapter._id, lessonIds:chapter.lessons.map(lesson => (lesson._id)), message: deleteMessage, actionType: ActionTypes.DELETE_CHAPTER }))
                                                 }}
@@ -176,12 +176,15 @@ const Lessons = ({ courseId, lessons, chapterId }) => {
                             <span className="text-sm line-clamp-1 capitalize">{lesson.title}</span>
                         </div>
                         <MenuWrapper>
-                            <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
+                            <li   onClick={() => {
+                                                    dispatch(renameLesson({ lessonId: lesson._id, label: "rename lesson", actionType: ActionTypes.RENAME_LESSON,message: "", value:lesson.title }))
+                                                }}
+                                className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 ">
                                 <span className="mr-2"><MdModeEditOutline /></span>
                                 <span className='text-sm capitalize'>rename</span>
                             </li>
 
-                            <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500">
+                            <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100">
                                 <span className="mr-2"><RiDeleteBin6Line className="text-red-400" /></span>
                                 <span className='text-sm capitalize'>delete</span>
                             </li>
@@ -193,71 +196,6 @@ const Lessons = ({ courseId, lessons, chapterId }) => {
     )
 }
 
-const Menu = ({ ids, value }) => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const dispatch = useDispatch();
-    const navigate = useNavigate()
-    return (
-        <div className="relative inline-block border">
-            <button className="z-20" onClick={() => setIsMenuOpen(prev => !prev)}>
-                <SlOptions size={20} />
-            </button>
-            {isMenuOpen && (
-                <div className="fixed h-screen w-screen inset-0 z-30 cursor-default" onClick={() => setIsMenuOpen(false)}></div>
-            )}
-            {isMenuOpen && (
-                <div className="absolute top-10 right-0 w-48 bg-white border-gray-200 z-30 rounded shadow-lg dark:bg-gray-700 dark:text-white">
-                    <ul className="list-none p-0 m-0">
-                        <li
-                            className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
-                            onClick={() => {
-                                dispatch(renameChapter({ ...ids, label: "rename chapter", actionType: ActionTypes.RENAME_CHAPTER, value }))
-                                setIsMenuOpen(false)
-                            }}
-                        >
-                            <span className="mr-2"><MdModeEditOutline /></span>
-                            <span className='text-sm capitalize'>rename</span>
-                        </li>
-
-                        <li
-                            className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
-                            onClick={() => {
-                                dispatch(addLesson({ ...ids, label: "add lesson", actionType: ActionTypes.ADD_LESSON, value }))
-                                setIsMenuOpen(false)
-                            }}
-                        >
-                            <span className="mr-2"><IoMdAddCircleOutline /></span>
-                            <span className='text-sm capitalize'>add lesson </span>
-                        </li>
-                        <li
-                            className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
-                            onClick={() => {
-                                navigate(`${ids.chapterId}/add-test`)
-                                setIsMenuOpen(false)
-                            }}
-                        >
-
-                            <span className="mr-2"><RiQuestionAnswerLine /></span>
-                            <span className='text-sm capitalize'>add quiz</span>
-                        </li>
-
-                        <li
-                            className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500"
-                            onClick={() => {
-                                dispatch(openConfirmationDialog({ ...ids, lessonIds: [], message: deleteMessage, actionType: ActionTypes.DELETE_CHAPTER, value }))
-                                setIsMenuOpen(false)
-                            }}
-                        >
-                            <span className="mr-2"><RiDeleteBin6Line className="text-red-400" /></span>
-                            <span className='text-sm capitalize'>delete</span>
-                        </li>
-
-                    </ul>
-                </div>
-            )}
-        </div>
-    );
-};
 
 export const MenuWrapper = ({ children,color }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -297,6 +235,7 @@ const PopupForm = () => {
     const { mutateAsync: postChapter } = useCreateChapter(courseId);
     const { mutateAsync: updateChapter } = useRenameChapter(courseId);
     const { mutateAsync: postLesson } = useCreateLesson(chapterId, courseId)
+    const { mutateAsync: renameLesson } = useRenameLesson(courseId)
 
     const actions = {
         addChapter: {
@@ -319,21 +258,25 @@ const PopupForm = () => {
     const onSubmit = async () => {
         try {
             await titleSchema.validate({ title: value }).catch(err => {
-                setError(error.message);
-                return;
+                setError(err.message);
+                throw new Error(err.message);
             });
             setLoading(true);
 
             switch (actionType) {
                 case ActionTypes.ADD_CHAPTER:
-                    await actions.addChapter.action(value, courseId);
+                    await postChapter({title: value, courseId});
                     break;
                 case ActionTypes.RENAME_CHAPTER:
-                    await actions.renameChapter.action(value, chapterId);
+                    await updateChapter({ chapterId, title: value })
                     break;
                 case ActionTypes.ADD_LESSON:
-                    await actions.addLesson.action(value, chapterId)
+                    await postLesson({ title: value, chapterId })
                     break
+                case ActionTypes.RENAME_LESSON:
+                    await renameLesson({ lessonId, title: value })
+                    break
+                    
                 default:
                     throw new Error('Unknown action type');
 

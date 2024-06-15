@@ -60,7 +60,7 @@ export const deleteLesson = ({chapterId,lessonId}) => newRequests.delete(`/cours
         chapterId
     }
 });
-
+export const renameLesson = (data) => newRequests.post(`/courses/course/chapters/chapter/lessons/lesson/rename`,data)
 export const createLesson = (data) => newRequests.post(`/courses/course/chapters/chapter/lessons`, data);
 export const addLessonItem = (data) => newRequests.post("/courses/course/chapters/chapter/lessons/lesson/add-lesson-item",data)
 export const updateLessonItem = (data) => {

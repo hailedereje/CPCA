@@ -20,9 +20,9 @@ export const Confirmation = () => {
     const {mutateAsync: deleteLessonItem } = useDeleteLessonItem(lessonId)
     const {mutateAsync: deleteChapter } = useDeleteChapter(courseId,lessonIds)
     const {mutateAsync: deleteCourse } = useDeleteCourse(courseId)
-
+  
     const actions = {
-        deleteLessonItem: async() => await deleteLessonItem({lessonId,lessonItemId}),
+        deleteLessonItem: async() => await deleteLessonItem({lessonId,lessonItemId,chapterId}),
         deleteChapter: async() => await deleteChapter({courseId,chapterId,lessonIds}) 
     }
     const onSubmit = async() => {

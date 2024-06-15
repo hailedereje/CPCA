@@ -52,122 +52,8 @@ export const createCourseSlice = createSlice({
             state.course.chapters.push(chapter)
 
         },
-        addLesson: (state, action) => {
-            const { name,id } = action.payload
-            const lesson = { id: nanoid(), name: name, topics:[]}
-            state.course.chapters.find(chapter => chapter.id === id).lessons.push(lesson)
-        },
-        removeLesson: (state, action) => {
-            const { chapterId, lessonId, index } = action.payload;
-            let newActiveLesson = state.activeLesson;
-        
-            const chapter = state.course.chapters.find(chapter => chapter.id === chapterId);
-            if (!chapter) return;
-        
-            const updatedLessons = chapter.lessons.filter((lesson, i) => i !== index);
-        
-            const updatedChapters = state.course.chapters.map(chapter => {
-                if (chapter.id === chapterId) {
-                    return { ...chapter, lessons: updatedLessons };
-                }
-                return chapter;
-            });
-            
-            state.course.chapters = updatedChapters;
-        
-            if (newActiveLesson.lessonId === lessonId) {
-                let nextLessonIndex = index;
-                if (nextLessonIndex < updatedLessons.length) {
-                    newActiveLesson = {
-                        lesson: updatedLessons[nextLessonIndex],
-                        chapterId: chapterId,
-                        lessonId: updatedLessons[nextLessonIndex].id
-                    };
-                } else if (nextLessonIndex > 0) { 
-                    nextLessonIndex -= 1;
-                    newActiveLesson = {
-                        lesson: updatedLessons[nextLessonIndex],
-                        chapterId: chapterId,
-                        lessonId: updatedLessons[nextLessonIndex].id
-                    };
-                } else { 
-                    newActiveLesson = {
-                        lesson: {},
-                        chapterId: "",
-                        lessonId: ""
-                    };
-                }
-            }
-        
-            state.activeLesson = newActiveLesson;
-        }, 
-        renameChapter: (state, action) => {
-            var { name, id } = action.payload
-            state.course.chapters.find(chapter => chapter.id === id).name = name
-            if (state.activeLesson.chapterId === id) {
-                state.activeLesson.chapterName = name
-            }
-        },
-        renameLesson: (state, action) => {
-            var { name, id, lessonId } = action.payload
-            state.course.chapters.find(chapter => chapter.id === id).lessons.find(lesson => lesson.id === lessonId).name = name
-            if(state.activeLesson.lessonId === lessonId) {
-                state.activeLesson.lesson.name = name
-            }
-        },
-        removeChapter: (state, action) => {
-            const { chapterId } = action.payload
-            state.course.chapters = state.course.chapters.filter(chapter => chapter.id !== chapterId);
-        },
-        updateChapter: (state, action) => {
-            const { id, content } = action.payload;
-            const chapter = state.course.chapters.find(chapter => chapter.id === id);
-            if (chapter) {
-                chapter.name = content;
-            }
-        },
-        addQuiz: (state,action) => {
-            const { name,id } = action.payload
-            const quiz = { 
-                id:nanoid(),
-                chapterId:id,
-                name,duration:0,
-                instruction:"",
-                questions:[]
-            }
-            state.course.chapters.find(chapter => chapter.id === id).quiz = {...quiz}
-        },
-        addTopic: (state, action) => {
-            const {chapterId,lessonId,idx,topic} = action.payload;
-            const topics = state.course.chapters.find(chapter => chapter.id === chapterId)
-                .lessons.find(lesson => lesson.id === lessonId)
-            if(topics) {
-                topics.topics.splice(idx+1,0,topic)
-                state.activeLesson.lesson = topics
-            }
-            
-        },
-        removeTopic: (state, action) => {
-            const { chapterId, lessonId, topicId } = action.payload;
-            const chapter = state.course.chapters.find(chapter => chapter.id === chapterId);
-            if (chapter) {
-                const lesson = chapter.lessons.find(lesson => lesson.id === lessonId);
-                if (lesson) {
-                    lesson.topics = lesson.topics.filter(topic => topic.id !== topicId);
-                    state.activeLesson.lesson = lesson
-                }
-            }
-        },
-        updateTopic: (state, action) => {
-            const { chapterId,lessonId,topicId,content } = action.payload;
-            const topic = state.course.chapters.find(chapter => chapter.id === chapterId).lessons
-                .find(lesson => lesson.id === lessonId).topics.find(topic => topic.id === topicId)
-            
-            if(topic) {
-                topic.content = content
-                state.activeLesson.lesson.topics.find(topic => topic.id === topicId).content = content
-            }
-        },
+     
+      
         setActiveLesson: (state,action) => {
             const { chapterId,lessonId } = action.payload;
             const chapter = state.course.chapters.find(chapter => chapter.id === chapterId)
@@ -185,8 +71,6 @@ export const createCourseSlice = createSlice({
     }
 })
 
-export const { addChapter, removeChapter, updateChapter, 
-                renameChapter, renameLesson, addLesson ,
-                addTopic,removeTopic,toggleShow,updateTopic
-                ,setActiveLesson, removeLesson,addQuiz,createCourse,setPrerequistes,setTags ,deletePrerequisite,deleteTag} = createCourseSlice.actions;
+export const { toggleShow
+                ,setActiveLesson,createCourse,setPrerequistes,setTags ,deletePrerequisite,deleteTag} = createCourseSlice.actions;
 export default createCourseSlice.reducer;

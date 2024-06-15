@@ -31,10 +31,10 @@ const data = {
 const COLORS = ['#4A90E2', '#50E3C2', '#FFBB28', '#FF8042'];
 
 const StatisticsPage = () => {
-  const {data: quizStates,isSuccess} = useGetQuizStats()
-  if(isSuccess){
-    console.log(quizStates)
-  }
+  // const {data: quizStates,isSuccess} = useGetQuizStats()
+  // if(isSuccess){
+  //   console.log(quizStates)
+  // }
   return (
     <div className="p-6 bg-gray-100 min-h-screen w-full">
       <h1 className="text-4xl font-bold text-center  mb-10">Dashboard Statistics</h1>

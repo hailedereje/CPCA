@@ -1,10 +1,9 @@
-import newRequests from '@/utils/newRequest';
-import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
-import { RiDraftLine, RiCheckLine } from 'react-icons/ri';
+import { RiEdit2Line, RiCheckLine } from 'react-icons/ri'; // Icons for editing and done status
 import { useNavigate } from 'react-router-dom';
 import { Loading } from './components/loader';
 import { useCourses } from './hooks/course-hooks';
+import DefaultImage from '@/assets/coursePlaceholder.jpg'; // Path to your default image
+import { useState } from 'react';
 
 export const Courses = () => {
   const [selectedTab, setSelectedTab] = useState('all');
@@ -32,26 +31,29 @@ export const Courses = () => {
         <div
           key={course._id}
           onClick={() => navigate(`/dashboard/course/update/${course._id}`)}
-          className="relative bg-slate-50 p-6 rounded-xl shadow-sm border transform hover:-translate-y-1 hover:shadow-md transition-transform duration-300 cursor-pointer"
+          className="relative bg-white p-4 rounded-xl shadow-sm border transform hover:-translate-y-1 hover:shadow-md transition-transform duration-300 cursor-pointer"
         >
-          <div className="absolute bottom-2 right-2">
-            <span className={`px-2 py-1 rounded-full text-xs font-bold ${course.isPublished ? 'bg-green-200 text-green-800' : 'bg-blue-200 text-blue-800'}`}>
-              {course.isPublished ? 'Published' : 'Draft'}
-            </span>
+          <div className="w-full h-40 bg-gray-100 rounded-t-md overflow-hidden">
+            <img src={course.templateImg || DefaultImage} alt={course.title} className="w-full h-full object-cover" />
           </div>
-          <div className="flex items-start gap-3">
-            <span>
-            {course.isPublished ? (
-              <RiCheckLine size={24} className="text-green-700" />
-            ) : (
-              <RiDraftLine size={24} className="text-blue-700" />
-            )}
-            </span>
-            <span className="text-lg font-medium capitalize text-gray-800">
+          <div className="mt-4">
+            <h2 className="text-xl font-semibold capitalize text-gray-800">
               {course.title}
-            </span>
+            </h2>
+            <div className="mt-2 flex items-center text-gray-600 text-xs">
+              {course.isPublished ? (
+                <RiCheckLine size={16} className="text-green-700 mr-1" />
+              ) : (
+                <RiEdit2Line size={16} className="text-blue-700 mr-1" />
+              )}
+              <span>Click to edit</span>
+            </div>
+            <div className="absolute bottom-2 right-2">
+              <span className={`px-2 py-1 rounded-full text-xs font-bold ${course.isPublished ? 'bg-green-200 text-green-800' : 'bg-blue-200 text-blue-800'}`}>
+                {course.isPublished ? 'Published' : 'Draft'}
+              </span>
+            </div>
           </div>
-          <p className="mt-2 text-gray-600 text-xs">Click to edit</p>
         </div>
       ))
     ) : (
@@ -63,7 +65,7 @@ export const Courses = () => {
     if (isError) {
       return (
         <div className="text-red-500 text-center mt-8 fixed inset-0 h-full flex items-center justify-center">
-          <span className='text-xl font-bold capitalize '>Error Loading Courses...</span>
+          <span className='text-xl font-bold capitalize'>Error Loading Courses...</span>
         </div>
       );
     }
@@ -86,13 +88,13 @@ export const Courses = () => {
         </button>
       </div>
       <div className="flex justify-center space-x-4 mb-6">
-        <button onClick={() => setSelectedTab('all')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'all' ? ' text-blue-600 border-blue-700 border-b-2' : ' text-blue-400'}`}>
+        <button onClick={() => setSelectedTab('all')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'all' ? 'text-blue-600 border-blue-700 border-b-2' : 'text-blue-400'}`}>
           All Courses
         </button>
-        <button onClick={() => setSelectedTab('published')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'published' ? 'text-blue-600 border-blue-700 border-b-2' : ' text-blue-400'}`}>
+        <button onClick={() => setSelectedTab('published')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'published' ? 'text-blue-600 border-blue-700 border-b-2' : 'text-blue-400'}`}>
           Published Courses
         </button>
-        <button onClick={() => setSelectedTab('draft')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'draft' ? 'text-blue-600 border-blue-700 border-b-2' : ' text-blue-400'}`}>
+        <button onClick={() => setSelectedTab('draft')} className={`xxs:text-sm md:text-lg px-4 py-2 ${selectedTab === 'draft' ? 'text-blue-600 border-blue-700 border-b-2' : 'text-blue-400'}`}>
           Draft Courses
         </button>
       </div>

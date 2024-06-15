@@ -57,6 +57,10 @@ const uiSlice = createSlice({
       const { courseId,chapterId,label,actionType } = action.payload
       state.formState = {...state.formState,chapterId,courseId,label,actionType,show:true}
     },
+    renameLesson : (state,action) => {
+      const { lessonId,actionType,label,value } = action.payload
+      state.formState = {...state.formState,lessonId,actionType,label,value,show:true}
+    },
     deleteChapterConfirmation:(state,action) => {
       const {courseId,chapterId,message } = action.payload
       state.formState = {...state.formState,courseId,chapterId,message,showConfirmation:true}
@@ -123,7 +127,7 @@ const uiSlice = createSlice({
 
 export const {
   addChapter,close,renameChapter,
-  setTitle,addLesson,deleteChapterConfirmation,openConfirmationDialog,
+  setTitle,addLesson,deleteChapterConfirmation,openConfirmationDialog,renameLesson,
   addLessonItem,closeEditor,createLessonItem,updateLessonItem,setLessonItemValue,setActiveLesson
   
 } = uiSlice.actions;

@@ -3,18 +3,14 @@ import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/themes/gray.min.css';
 
 import { useDispatch, useSelector } from "react-redux";
-import { toggleShow, updateTopic } from "../../features/course/createCourse";
 import { Editor } from "@monaco-editor/react";
-import { useEffect, useRef, useState } from "react";
+import {  useRef, useState } from "react";
 import {  LANGUAGES, LANGUAGE_List } from '../../assets/constants';
-import { IoLogoJavascript } from 'react-icons/io';
-import { SlOptions } from 'react-icons/sl';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import { closeEditor, setLessonItemValue } from '@/features/course/coursSidebarSlice';
 import { useAddLessonItem, useUpdateLessonItem } from '../createCourse/hooks/course-hooks';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { ActionTypes } from '../createCourse/action.Types';
-import language from 'react-syntax-highlighter/dist/esm/languages/hljs/1c';
 
 const CodeMenu = ({code}) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
