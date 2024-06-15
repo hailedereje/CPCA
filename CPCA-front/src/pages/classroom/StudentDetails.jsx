@@ -3,11 +3,11 @@ import { useParams, useOutletContext } from "react-router-dom";
 import {
   useGetStudentChaptersProgressQuery,
   useGetStudentLabsProgressQuery,
-  useGetStudentQuizzesProgressQuery
+  useGetStudentQuizzesProgressQuery,
+  useGetStudentLessonsProgressQuery,
 } from "@/api";
 import { BiLoaderCircle } from "react-icons/bi";
 import { MdCheckCircle, MdCancel } from "react-icons/md";
-import useLessonsProgress from "@/hooks/useLessonsProgress";
 
 const StudentDetails = () => {
   const { studentId } = useParams();
@@ -31,9 +31,6 @@ const StudentDetails = () => {
     isLoading: isLoadingQuizzes,
     error: errorQuizzes,
   } = useGetStudentQuizzesProgressQuery({ classroomId, studentId });
-
-  const chapterIds = chaptersProgress ? chaptersProgress.map(chapter => chapter.chapterId._id) : [];
-  const lessonsProgress = useLessonsProgress(classroomId, studentId, chapterIds);
 
   if (isLoadingChapters || isLoadingLabs || isLoadingQuizzes) {
     return (
@@ -73,86 +70,24 @@ const StudentDetails = () => {
             <span className="font-semibold">Email:</span> {student.email}
           </p>
           <p className="mt-2">
-            <span className="font-semibold">Phone:</span>{" "}
-            {student.phoneNumber}
+            <span className="font-semibold">Phone:</span> {student.phoneNumber}
           </p>
+
+          <p>Progress Ui here</p>
         </div>
       </div>
 
-      {/* Chapters Progress */}
+      {/* Chapters and Lessons Progress */}
       <section className="mb-8">
-        <h3 className="text-xl font-bold mb-4">Chapters</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <h3 className="text-xl font-bold mb-4">Chapters and Lessons</h3>
+        <div className="grid grid-cols-2 gap-4">
           {chaptersProgress.map((chapter) => (
-            <div
+            <ChapterWithLessonsProgress
               key={chapter.chapterId._id}
-              className={`p-4 border rounded-lg shadow-md ${
-                chapter.completed
-                  ? "bg-green-50 border-green-200"
-                  : chapter.unlocked
-                  ? "bg-blue-50 border-blue-200"
-                  : "bg-gray-50 border-gray-200"
-              }`}
-            >
-              <h4 className="text-lg font-semibold mb-2">
-                {chapter.chapterId.title}
-              </h4>
-              <div className="flex items-center mb-2">
-                {chapter.completed ? (
-                  <MdCheckCircle className="text-green-500 mr-2" />
-                ) : (
-                  <MdCancel className="text-red-500 mr-2" />
-                )}
-                <p className="text-sm">
-                  {chapter.completed
-                    ? "Completed"
-                    : chapter.unlocked
-                    ? "Unlocked"
-                    : "Locked"}
-                </p>
-              </div>
-              <p className="text-sm mb-2">
-                <span className="font-semibold">Lessons:</span> {chapter.chapterId.lessons.length}
-              </p>
-              <p className="text-sm mb-2">
-                <span className="font-semibold">Quiz:</span> {chapter.chapterId.quiz ? "Available" : "Not available"}
-              </p>
-              {lessonsProgress[chapter.chapterId._id] ? (
-                <div className="mt-4">
-                  <h5 className="text-md font-bold">Lessons Progress:</h5>
-                  {lessonsProgress[chapter.chapterId._id].map((lesson) => (
-                    <div
-                      key={lesson.lessonId._id}
-                      className={`p-2 border rounded-lg mb-2 ${
-                        lesson.completed
-                          ? "bg-green-50 border-green-200"
-                          : lesson.unlocked
-                          ? "bg-blue-50 border-blue-200"
-                          : "bg-gray-50 border-gray-200"
-                      }`}
-                    >
-                      <h6 className="text-sm font-semibold">{lesson.lessonId.title}</h6>
-                      <div className="flex items-center">
-                        {lesson.completed ? (
-                          <MdCheckCircle className="text-green-500 mr-2" />
-                        ) : (
-                          <MdCancel className="text-red-500 mr-2" />
-                        )}
-                        <p className="text-xs">
-                          {lesson.completed
-                            ? "Completed"
-                            : lesson.unlocked
-                            ? "Unlocked"
-                            : "Locked"}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="mt-4 text-gray-500">Loading lessons progress...</div>
-              )}
-            </div>
+              classroomId={classroomId}
+              studentId={studentId}
+              chapter={chapter}
+            />
           ))}
         </div>
       </section>
@@ -180,11 +115,7 @@ const StudentDetails = () => {
                   <MdCancel className="text-red-500 mr-2" />
                 )}
                 <p className="text-sm">
-                  {lab.completed
-                    ? "Completed"
-                    : lab.unlocked
-                    ? "Unlocked"
-                    : "Locked"}
+                  {lab.completed ? "Completed" : lab.unlocked ? "Unlocked" : "Locked"}
                 </p>
               </div>
             </div>
@@ -215,17 +146,89 @@ const StudentDetails = () => {
                   <MdCancel className="text-red-500 mr-2" />
                 )}
                 <p className="text-sm">
-                  {quiz.completed
-                    ? "Completed"
-                    : quiz.unlocked
-                    ? "Unlocked"
-                    : "Locked"}
+                  {quiz.completed ? "Completed" : quiz.unlocked ? "Unlocked" : "Locked"}
                 </p>
               </div>
             </div>
           ))}
         </div>
       </section>
+    </div>
+  );
+};
+
+const ChapterWithLessonsProgress = ({ classroomId, studentId, chapter }) => {
+  const { data: lessonsProgress, isLoading, error } = useGetStudentLessonsProgressQuery({
+    classroomId,
+    studentId,
+    chapterId: chapter.chapterId._id,
+  });
+
+  return (
+    <div
+      className={`p-4 border  grid rounded-lg shadow-md ${
+        chapter.completed
+          ? "bg-green-50 border-green-200"
+          : chapter.unlocked
+          ? "bg-blue-50 border-blue-200"
+          : "bg-gray-50 border-gray-200"
+      }`}
+    >
+      <div  className="grid grid-cols-1  md:grid-cols-2 gap-2 ">
+        <div>
+          <h4 className="text-lg font-semibold mb-2">{chapter.chapterId.title}</h4>
+          <div className="flex items-center mb-2">
+            {chapter.completed ? (
+              <MdCheckCircle className="text-green-500 mr-2" />
+            ) : (
+              <MdCancel className="text-red-500 mr-2" />
+            )}
+            <p className="text-sm">
+              {chapter.completed ? "Completed" : chapter.unlocked ? "Unlocked" : "Locked"}
+            </p>
+          </div>
+          <p className="text-sm mb-2">
+            <span className="font-semibold">Lessons:</span> {chapter.chapterId.lessons.length}
+          </p>
+          <p className="text-sm mb-2">
+            <span className="font-semibold">Quiz:</span> {chapter.chapterId.quiz ? "Available" : "Not available"}
+          </p>
+        </div>
+
+        {isLoading ? (
+          <div className="mt-4 text-gray-500">Loading lessons progress...</div>
+        ) : error ? (
+          <div className="mt-4 text-red-500">Error loading lessons progress</div>
+        ) : (
+          <div className="mt-4">
+            <h5 className="text-md font-bold">Lessons Progress:</h5>
+            {lessonsProgress.map((lesson) => (
+              <div
+                key={lesson.lessonId._id}
+                className={`p-2 border rounded-lg mb-2 ${
+                  lesson.completed
+                    ? "bg-green-50 border-green-200"
+                    : lesson.unlocked
+                    ? "bg-blue-50 border-blue-200"
+                    : "bg-gray-50 border-gray-200"
+                }`}
+              >
+                <h6 className="text-sm font-semibold">{lesson.lessonId.title}</h6>
+                <div className="flex items-center">
+                  {lesson.completed ? (
+                    <MdCheckCircle className="text-green-500 mr-2" />
+                  ) : (
+                    <MdCancel className="text-red-500 mr-2" />
+                  )}
+                  <p className="text-xs">
+                    {lesson.completed ? "Completed" : lesson.unlocked ? "Unlocked" : "Locked"}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
