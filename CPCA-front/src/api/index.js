@@ -31,11 +31,15 @@ export const api = createApi({
 });
 
 export const {
+
+  // user endpoints 
   useLoginUserMutation,
   useLogoutUserMutation,
   useRegisterUserMutation,
   useEditUserInfoMutation,
   useFetchUserProfileQuery,
+
+  // courses endpoints
   useGetAllCoursesQuery,
   useGetCourseQuery,
   useCreateCourseMutation,

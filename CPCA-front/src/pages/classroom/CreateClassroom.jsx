@@ -42,20 +42,27 @@ function CreateClassroom() {
         className="card p-8 bg-base-100 shadow-lg flex flex-col gap-y-4"
       >
         <SectionTitle text={"Create Classroom"} />
-        <div className="w-[70%] ">
+        <div className="w-[70%]">
           <CreateClassroomForm type="text" label="Name" name="name" />
           <CreateClassroomForm type="text" label="Description" name="description" />
           <div className="form-control mt-5">
             <label htmlFor="courseId" className="label">
               <span className="label-text capitalize">Course</span>
             </label>
-            <select id="courseId" name="courseId" className="select select-bordered select-text capitalize">
-              <option key={"0"} className="capitalize" value="">Select a course</option>
-              {courses && courses.map((course) => (
-                <option className="capitalize" key={course._id} value={course._id}>
-                  {course.title}
-                </option>
-              ))}
+            <select
+              id="courseId"
+              name="courseId"
+              className="select select-bordered select-text capitalize"
+            >
+              <option key={"0"} className="capitalize" value="">
+                Select a course
+              </option>
+              {courses &&
+                courses.map((course) => (
+                  <option className="capitalize" key={course._id} value={course._id}>
+                    {course.title}
+                  </option>
+                ))}
             </select>
           </div>
           <div className="mt-4">

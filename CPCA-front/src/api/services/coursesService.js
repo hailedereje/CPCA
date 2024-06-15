@@ -2,7 +2,7 @@ export const courseService = (builder) => {
   return {
     getAllCourses: builder.query({
       query: () => ({
-        url: "/courses",
+        url: "/courses/all",
         method: "get",
       }),
     }),
