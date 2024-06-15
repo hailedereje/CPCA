@@ -18,7 +18,7 @@ import RichTextExample from "@/components/textEditor/textEditor";
 import StudentDetails from "@/pages/classroom/StudentDetails";
 
 const instructorRoutes = (store) => [
-  { index: true, element: <Activities /> },
+  // { index: true, element: <Activities /> },
   { path: "profile", element: <Profile /> },
   { path: "add-course", element: <RichTextExample /> },
   { path: "courses", element: <AllCourses />, loader: CoursesLoader(store) },

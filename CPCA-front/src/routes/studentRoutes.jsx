@@ -14,9 +14,11 @@ import { LabPractice } from "@/components/practiceQuestions/code-edtior";
 import CourseDetails from "@/pages/course/CourseDetails";
 import { Quiz } from "@/components/Quiz";
 import StudentDetails from "@/pages/classroom/StudentDetails";
+import StudentLandingPage from "@/pages/studentLandingPage";
 
 const studentRoutes = (store) => [
-  { index: true, element: <Status /> },
+  // { index: true, element: <Status /> },
+  { index: true, element: <StudentLandingPage />},
   { path: "profile", element: <Profile /> },
   { path: "courses", element: <AllCourses />, loader: CoursesLoader(store), errorElement: <div>Failed to load courses</div> },
   {

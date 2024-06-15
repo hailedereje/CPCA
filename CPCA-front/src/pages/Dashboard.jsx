@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AdminLinks, InstructLinks, StudentLinks } from "@/utils/links";
 import Notifications from "@/components/Notification";
@@ -72,7 +72,9 @@ function Dashboard() {
       <div className="flex flex-col min-h-screen">
         <div className="flex justify-between gap-3 h-16 items-center fixed top-0 w-full p-4 bg-white z-40 border">
           <DropdownMenu />
-          <img src={logo} alt="logo" className="object-contain w-24" />
+          <Link to="/dashboard">
+            <img src={logo} alt="logo" className="object-contain w-24" />
+          </Link>
           <div className="hidden md:flex w-full h-full">
             <QuickLinks />
           </div>

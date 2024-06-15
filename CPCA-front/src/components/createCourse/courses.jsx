@@ -31,21 +31,16 @@ export const Courses = () => {
         <div
           key={course._id}
           onClick={() => navigate(`/dashboard/course/update/${course._id}`)}
-          className="relative bg-white p-4 rounded-xl shadow-sm border transform hover:-translate-y-1 hover:shadow-md transition-transform duration-300 cursor-pointer"
+          className="flex flex-col gap-2 relative bg-white rounded-xl shadow-sm border transform hover:-translate-y-1 hover:shadow-md transition-transform duration-300 cursor-pointer"
         >
-          <div className="w-full h-40 bg-gray-100 rounded-t-md overflow-hidden">
+          <div className="w-full h-40 rounded-t-md overflow-hidden">
             <img src={course.templateImg || DefaultImage} alt={course.title} className="w-full h-full object-cover" />
           </div>
-          <div className="mt-4">
-            <h2 className="text-xl font-semibold capitalize text-gray-800">
+          <div className="mt-4 p-4">
+            <h2 className="text-md font-semibold capitalize text-gray-800">
               {course.title}
             </h2>
             <div className="mt-2 flex items-center text-gray-600 text-xs">
-              {course.isPublished ? (
-                <RiCheckLine size={16} className="text-green-700 mr-1" />
-              ) : (
-                <RiEdit2Line size={16} className="text-blue-700 mr-1" />
-              )}
               <span>Click to edit</span>
             </div>
             <div className="absolute bottom-2 right-2">

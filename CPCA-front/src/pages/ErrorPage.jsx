@@ -50,3 +50,35 @@ const ErrorPage = () => {
   }
 
 export default ErrorPage;
+
+export const ErrorHandlingComponent = ({ isError, errorCode }) => {
+  if (!isError) return null;
+
+  const getErrorMessage = () => {
+    switch (errorCode) {
+      case 404:
+        return "The lesson you're looking for was not found.";
+      case 500:
+        return "Internal server error. Please try again later.";
+      case 403:
+        return "You don't have permission to access this lesson.";
+      case 401:
+        return "You need to be logged in to access this lesson.";
+      default:
+        return "An unexpected error occurred. Please try again.";
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center h-full p-4 text-center">
+      <p className="text-2xl font-bold text-red-600 mb-4">Failed to Load Lesson</p>
+      <p className="text-lg text-gray-600 mb-4">{getErrorMessage()}</p>
+      <button
+        onClick={() => window.location.reload()}
+        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        Retry
+      </button>
+    </div>
+  );
+};

@@ -1,7 +1,7 @@
 import { addChapter, addLesson, close, deleteChapterConfirmation, openConfirmationDialog, renameChapter, renameLesson, setActiveLesson, setTitle } from '@/features/course/coursSidebarSlice';
 import React, { useState } from 'react';
 
-import { FaBook, FaBookOpen, FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
+import { FaAngleLeft, FaBook, FaBookOpen, FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 import { IoMdAddCircleOutline, IoMdList } from 'react-icons/io';
 import { MdAdd, MdModeEditOutline } from 'react-icons/md';
 import { TiWarningOutline } from "react-icons/ti";
@@ -14,6 +14,7 @@ import { ActionTypes } from '../action.Types';
 import { useCreateChapter, useCreateLesson, useRenameChapter, useRenameLesson } from '../hooks/course-hooks';
 import { Confirmation } from './confirmationDialog';
 import { BsQuestionOctagonFill } from 'react-icons/bs';
+import { AiOutlineClose } from 'react-icons/ai';
 
 const deleteMessage = "The chapter and its corresponding lessons will be removed.This means that both the main section of the material (the chapter) and all the associated lessons that explain or expand on that chapter will no longer be available."
 
@@ -55,17 +56,13 @@ export const Drawer = ({ data }) => {
                             </h2>
                             <div className="relative group text-black">
                                 <MenuWrapper>
-                                    <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-slate-50 rounded-t-md">
-                                        <span className="mr-2"><MdModeEditOutline /></span>
-                                        <span className='text-sm capitalize'>rename</span>
+                                    <li onClick={() => navigate(`/dashboard/course/update/${course._id}`)} className="px-4 py-2 flex items-center cursor-pointer hover:bg-slate-50 rounded-t-md">
+                                        <span className="mr-2"><FaAngleLeft/></span>
+                                        <span className='text-sm capitalize'>Back to update</span>
                                     </li>
                                     <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-slate-50" onClick={() => dispatch(addChapter({ courseId: course._id, label: "create Chapter", actionType: ActionTypes.ADD_CHAPTER }))}>
                                         <span className="mr-2"><IoMdAddCircleOutline /></span>
                                         <span className='text-sm capitalize'>add chapter </span>
-                                    </li>
-                                    <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-slate-50">
-                                        <span className="mr-2"><RiDeleteBin6Line className="text-red-400" /></span>
-                                        <span className='text-sm capitalize'>delete</span>
                                     </li>
                                 </MenuWrapper>
                             </div>
@@ -226,107 +223,127 @@ const titleSchema = yup.object().shape({
 
 
 const PopupForm = () => {
-    const dispatch = useDispatch();
-    const { show, actionType, courseId, chapterId, lessonId, label, value } = useSelector(x => x.courseInputState.formState);
+  const dispatch = useDispatch();
+  const { show, actionType, courseId, chapterId, lessonId, label, value } = useSelector(
+    (state) => state.courseInputState.formState
+  );
 
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-    const { mutateAsync: postChapter } = useCreateChapter(courseId);
-    const { mutateAsync: updateChapter } = useRenameChapter(courseId);
-    const { mutateAsync: postLesson } = useCreateLesson(chapterId, courseId)
-    const { mutateAsync: renameLesson } = useRenameLesson(courseId)
+  const { mutateAsync: postChapter } = useCreateChapter(courseId);
+  const { mutateAsync: updateChapter } = useRenameChapter(courseId);
+  const { mutateAsync: postLesson } = useCreateLesson(chapterId, courseId);
+  const { mutateAsync: renameLesson } = useRenameLesson(courseId);
 
-    const actions = {
-        addChapter: {
-            action: async (title, courseId) => await postChapter({ title, courseId })
-                .then(() => console.log("Chapter created successfully"))
-                .catch((err) => console.log(err)),
-        },
-        renameChapter: {
-            action: async (title, chapterId) => await updateChapter({ chapterId, title })
-                .then(() => console.log("Chapter renamed"))
-                .catch((err) => console.log(err)),
-        },
-        addLesson: {
-            action: async (title, chapterId) => await postLesson({ chapterId, title })
-                .then(() => console.log("Chapter renamed"))
-                .catch((err) => console.log(err)),
-        }
-    };
+  const actions = {
+    addChapter: {
+      action: async (title, courseId) =>
+        await postChapter({ title, courseId })
+          .then(() => console.log('Chapter created successfully'))
+          .catch((err) => console.log(err)),
+    },
+    renameChapter: {
+      action: async (title, chapterId) =>
+        await updateChapter({ chapterId, title })
+          .then(() => console.log('Chapter renamed'))
+          .catch((err) => console.log(err)),
+    },
+    addLesson: {
+      action: async (title, chapterId) =>
+        await postLesson({ chapterId, title })
+          .then(() => console.log('Lesson added'))
+          .catch((err) => console.log(err)),
+    },
+  };
 
-    const onSubmit = async () => {
-        try {
-            await titleSchema.validate({ title: value }).catch(err => {
-                setError(err.message);
-                throw new Error(err.message);
-            });
-            setLoading(true);
+  const onSubmit = async () => {
+    try {
+      await titleSchema.validate({ title: value }).catch((err) => {
+        setError(err.message);
+        throw new Error(err.message);
+      });
+      setLoading(true);
 
-            switch (actionType) {
-                case ActionTypes.ADD_CHAPTER:
-                    await postChapter({title: value, courseId});
-                    break;
-                case ActionTypes.RENAME_CHAPTER:
-                    await updateChapter({ chapterId, title: value })
-                    break;
-                case ActionTypes.ADD_LESSON:
-                    await postLesson({ title: value, chapterId })
-                    break
-                case ActionTypes.RENAME_LESSON:
-                    await renameLesson({ lessonId, title: value })
-                    break
-                    
-                default:
-                    throw new Error('Unknown action type');
+      switch (actionType) {
+        case ActionTypes.ADD_CHAPTER:
+          await postChapter({ title: value, courseId });
+          break;
+        case ActionTypes.RENAME_CHAPTER:
+          await updateChapter({ chapterId, title: value });
+          break;
+        case ActionTypes.ADD_LESSON:
+          await postLesson({ title: value, chapterId });
+          break;
+        case ActionTypes.RENAME_LESSON:
+          await renameLesson({ lessonId, title: value });
+          break;
+        default:
+          throw new Error('Unknown action type');
+      }
+      setError('');
 
-            }
-            setError('')
+      dispatch(close()); // Close the form on success
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            dispatch(close()); // Close the form on success
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div className={`fixed inset-0 flex items-center justify-center z-50 ${show ? "" : "hidden"}`}>
-            <div onClick={() => dispatch(close())} className="cursor-pointer absolute inset-0 w-screen h-screen bg-black/25"></div>
-            <div className="bg-white rounded-lg shadow-lg transform transition-all duration-300 scale-100 sm:scale-105 md:scale-100">
-                <div className="flex flex-col gap-2 min-w-[400px] rounded-md p-4 dark:text-white dark:bg-gray-600">
-                    <div className="border-b border-gray-500 p-2">
-                        <h1>{label}</h1>
-                    </div>
-                    <div className="flex flex-col gap-2 justify-center w-full">
-                        <label htmlFor="title" className='text-sm font-bold capitalize dark:text-white'>Title</label>
-                        <input
-                            autoFocus
-                            value={value}
-                            onChange={(e) => dispatch(setTitle(e.target.value))}
-                            type="text"
-                            id="title"
-                            className='outline-none p-1 ps-2 rounded text-sm dark:text-white dark:bg-gray-600 border border-gray-400'
-                        />
-                        <p className='text-red-500 text-xs'>{error}</p>
-                    </div>
-                    <div className="flex gap-2 w-full">
-                        <button onClick={onSubmit} type='button' className='flex w-full items-center justify-center p-2 rounded-md bg-blue-500 text-white dark:bg-gray-200 dark:text-black'>
-                            {loading ? "Submitting..." : "Submit"}
-                        </button>
-                        <button onClick={() => {
-                            dispatch(close());
-                            dispatch(setTitle('')); // Clear the title on cancel
-                        }} type='button' className='flex w-full items-center justify-center p-2 rounded-md text-white dark:bg-red-600 dark:text-white'>
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className={`fixed inset-0 flex items-center justify-center z-50 ${show ? '' : 'hidden'}`}>
+      <div onClick={() => dispatch(close())} className="cursor-pointer absolute inset-0 w-screen h-screen bg-black/50"></div>
+      <div className="relative bg-white rounded-lg shadow-lg transform transition-all duration-300 scale-100 max-w-md w-full p-4">
+        <button
+          onClick={() => dispatch(close())}
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+        >
+          <AiOutlineClose size={20} />
+        </button>
+        <div className="flex flex-col gap-4">
+          <div className="border-b border-gray-300 pb-2 mb-4">
+            <h1 className="text-xl font-semibold capitalize">{label}</h1>
+          </div>
+          <div className="flex flex-col gap-3">
+            <label htmlFor="title" className="text-md font-bold">Title</label>
+            <input
+              autoFocus
+              value={value}
+              onChange={(e) => dispatch(setTitle(e.target.value))}
+              type="text"
+              id="title"
+              className="outline-none p-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm"
+            />
+            <p className="text-red-500 text-xs">{error}</p>
+          </div>
+          <div className="flex gap-3 mt-4">
+            <button
+              onClick={onSubmit}
+              type="button"
+              className="flex-1 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+              disabled={loading}
+            >
+              {loading ? 'Submitting...' : 'Submit'}
+            </button>
+            <button
+              onClick={() => {
+                dispatch(close());
+                dispatch(setTitle('')); // Clear the title on cancel
+              }}
+              type="button"
+              className="flex-1 py-2 rounded-md bg-gray-500 text-white hover:bg-gray-600 transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
+
+export default PopupForm;
 
 
 
