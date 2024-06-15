@@ -1,12 +1,12 @@
 import { Classroom, Discussion, Invitation, User } from "../models/index.js";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import { BadRequestError } from "../errors/index.js";
+import { BadRequestError, NotFoundError } from "../errors/index.js";
 
 // Create a new classroom
 export const createClassroom = async (req, res) => {
     const { name, description, courseId } = req.body;
-    const newClassroom = Classroom.create({
+    const newClassroom =  await Classroom.create({
       name,
       description,
       instructorId: req.user._id,
@@ -16,6 +16,9 @@ export const createClassroom = async (req, res) => {
     if(!newClassroom) {
       throw new BadRequestError('failed to create classroom');
     }
+
+    console.log(newClassroom); 
+    console.log('new Classroom', newClassroom)
     await Discussion.create({ classroomId: newClassroom._id });
     res.status(201).json(newClassroom);
 };

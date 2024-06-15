@@ -1,19 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams, useOutletContext } from "react-router-dom";
 import {
   useGetStudentChaptersProgressQuery,
   useGetStudentLabsProgressQuery,
   useGetStudentQuizzesProgressQuery,
   useGetStudentLessonsProgressQuery,
+  useCalculateStudentCourseProgressMutation, // Import the mutation hook
 } from "@/api";
 import { BiLoaderCircle } from "react-icons/bi";
 import { MdCheckCircle, MdCancel, MdOutlineSchool } from "react-icons/md";
-import CourseProgressBar from "@/components/Classroom/CourseProgressBar";
 
 const StudentDetails = () => {
   const { studentId } = useParams();
   const { classroom } = useOutletContext();
   const { _id: classroomId, courseId } = classroom;
+
+  console.log('classroom', classroom);
 
   const {
     data: chaptersProgress,
@@ -33,13 +35,8 @@ const StudentDetails = () => {
     error: errorQuizzes,
   } = useGetStudentQuizzesProgressQuery({ classroomId, studentId });
 
-  // Combined loading state
-  const isLoading = isLoadingChapters || isLoadingLabs || isLoadingQuizzes;
-
-  // Combined error state
-  const error = errorChapters || errorLabs || errorQuizzes;
-
-  if (isLoading) {
+ 
+  if (isLoadingChapters || isLoadingLabs || isLoadingQuizzes) {
     return (
       <div className="flex items-center justify-center text-gray-500 dark:text-gray-400">
         <BiLoaderCircle className="animate-spin h-6 w-6 mr-2" />
@@ -48,7 +45,7 @@ const StudentDetails = () => {
     );
   }
 
-  if (error) {
+  if (errorChapters || errorLabs || errorQuizzes ) {
     return (
       <div className="flex justify-center items-center h-full text-red-500">
         Error loading progress
@@ -56,23 +53,16 @@ const StudentDetails = () => {
     );
   }
 
-  if (!chaptersProgress || !labsProgress || !quizzesProgress) {
-    return (
-      <div className="flex justify-center items-center h-full text-gray-500">
-        Data not available
-      </div>
-    );
-  }
+  console.log(chaptersProgress, labsProgress, quizzesProgress )
 
-  const student = chaptersProgress[0]?.studentId;
 
-  if (!student) {
-    return (
-      <div className="flex justify-center items-center h-full text-gray-500">
-        Student data not available
-      </div>
-    );
-  }
+  if(chaptersProgress.length === 0) {
+    return ( <div className="flex justify-center items-center h-full text-red-500">
+      No progress data available for this student</div>); 
+
+    }
+
+  const {studentId: student} = chaptersProgress[0]; 
 
   return (
     <div className="container mx-auto p-4">
@@ -96,17 +86,31 @@ const StudentDetails = () => {
             <span className="font-semibold">Phone:</span> {student.phoneNumber}
           </p>
 
-          {/* Include the CourseProgressBar component */}
-          {/* <div className="mt-4">
-            <h3 className="text-xl font-bold mb-2 flex items-center">
-              <MdOutlineSchool className="mr-2 text-blue-500" /> Course Progress
-            </h3>
-            <CourseProgressBar 
-              classroomId={classroomId} 
-              studentId={studentId} 
-              courseId={courseId} 
-            />
-          </div> */}
+          {/* Display the course progress */}
+          {/* {courseProgressData && (
+            <div className="mt-4">
+              <h3 className="text-xl font-bold mb-2 flex items-center">
+                <MdOutlineSchool className="mr-2 text-blue-500" /> Course Progress
+              </h3>
+              <div className="flex items-center">
+                <div className="w-16 h-16">
+                  <CircularProgressbar
+                    value={courseProgressData.progress}
+                    text={`${Math.round(courseProgressData.progress)}%`}
+                    styles={buildStyles({
+                      textSize: '1.2rem',
+                      pathColor: `#4caf50`,
+                      textColor: '#4caf50',
+                      trailColor: '#d6d6d6'
+                    })}
+                  />
+                </div>
+                <p className="ml-4 text-lg font-semibold">
+                  {`Overall course progress: ${Math.round(courseProgressData.progress)}%`}
+                </p>
+              </div>
+            </div>
+          )} */}
         </div>
       </div>
 
