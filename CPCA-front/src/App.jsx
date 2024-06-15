@@ -1,8 +1,6 @@
 import "react-toastify/dist/ReactToastify.css";
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
 import { Dashboard, ErrorPage, ForumLayout, HomeLayout, Landing, Login, MyQuestions, Register } from "./pages";
-import { action as loginAction } from "./pages/Login";
-import { action as registerAction } from "./pages/Register";
 import { store } from "./store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";

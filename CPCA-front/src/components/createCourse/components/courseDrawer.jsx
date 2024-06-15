@@ -42,20 +42,17 @@ export const Drawer = ({ data }) => {
         <div className="">
             <PopupForm />
             <Confirmation />
-            <div
-                className={`fixed inset-0 z-10 ${isOpen ? "" : "hidden"}`}
-                onClick={toggleDrawer}
-            ></div>
-            <div className={` fixed top-12 h-full left-0 bg-white w-80 z-10 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
+            <div className={`fixed inset-0 z-10 ${isOpen ? "" : "hidden"}`} onClick={toggleDrawer} />
+            <div className={` fixed top-12 h-full left-0 bg-white w-80 z-30 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
                 <div className="w-full">
                     <div className="h-screen max-h-[1024px] bg-gray-50 border shadow-sm overflow-auto editor">
                         <div className="flex justify-between rounded z-50 gap-2 items-center p-6 bg-blue-400 text-white">
                             <h2 className="text-md flex items-center line-clamp-1 gap-2">
                                 <span><FaBook className="text-md" /> </span>
-                                <p className='text-left line-clamp-2'>{course.title}</p>
+                                <p className='text-left line-clamp-2 text-sm'>{course.title}</p>
                             </h2>
                             <div className="relative group text-black">
-                                <MenuWrapper>
+                                <MenuWrapper color={"text-white"}>
                                     <li onClick={() => navigate(`/dashboard/course/update/${course._id}`)} className="px-4 py-2 flex items-center cursor-pointer hover:bg-slate-50 rounded-t-md">
                                         <span className="mr-2"><FaAngleLeft/></span>
                                         <span className='text-sm capitalize'>Back to update</span>
@@ -181,7 +178,8 @@ const Lessons = ({ courseId, lessons, chapterId }) => {
                                 <span className='text-sm capitalize'>rename</span>
                             </li>
 
-                            <li className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100">
+                            <li 
+                                className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-100">
                                 <span className="mr-2"><RiDeleteBin6Line className="text-red-400" /></span>
                                 <span className='text-sm capitalize'>delete</span>
                             </li>

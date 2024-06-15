@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -11,6 +11,8 @@ import newRequests from '@/utils/newRequest';
 import { showErrorToast, showSuccessToast } from '@/toasts/toast';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@/features/user/userSlice';
+import { BiHide } from 'react-icons/bi';
+import { GrView } from 'react-icons/gr';
 
 // Define the validation schema using yup
 const schema = yup.object().shape({
@@ -18,25 +20,11 @@ const schema = yup.object().shape({
   password: yup.string().min(5, 'Password must be at least 6 characters').required('Password is required'),
 });
 
-export const action = (store) => async ({ request }) => {
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData); // convert to plain js
-  try {
-    const result = await store.dispatch(api.endpoints.loginUser.initiate(data)).unwrap();
-    if (result) {
-      toast.success('User Logged in successfully');
-      return redirect('/dashboard');
-    }
-  } catch (err) {
-    const errorMessage = err?.data?.msg || 'Server Error. Please try again later.';
-    toast.error(errorMessage);
-  }
-  return null;
-};
 
 function Login() {
   const { control, handleSubmit, formState: { errors, isSubmitting }, } = useForm({ resolver: yupResolver(schema), });
   const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
 
   const { mutateAsync: postUser, isPending } = useMutation({
     mutationFn: (data) => newRequests.post("/user/login", data),
@@ -87,11 +75,26 @@ function Login() {
               render={({ field }) => (
                 <div>
                   <label className="block text-gray-700">Password</label>
-                  <input
-                    type="password"
-                    {...field}
-                    className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      {...field}
+                      className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                    <div className="absolute top-3 right-0 pr-3 flex items-center text-sm leading-5">
+                      <button
+                        type="button"
+                        className="focus:outline-none"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <BiHide className="h-5 w-5 text-gray-500" />
+                        ) : (
+                          <GrView className="h-5 w-5 text-gray-500" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
                   {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
                 </div>
               )}
@@ -99,7 +102,7 @@ function Login() {
             <div className="mt-4">
               <button
                 type="submit"
-                className="w-full bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-150"
+                className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-150"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? 'Logging in...' : 'Login'}
@@ -107,7 +110,7 @@ function Login() {
             </div>
             <p className="text-center">
               Not a member yet?{' '}
-              <Link to="/register" className="ml-2 text-green-600 hover:underline">
+              <Link to="/register" className="ml-2 text-blue-600 hover:underline">
                 Register
               </Link>
             </p>

@@ -27,7 +27,7 @@ function RichTextExample() {
       {!isSuccess ? <Loading/>: <div className="flex flex-col w-full mx-auto max-w-[1024px]">
         <div className={`group flex items-end  gap-4 ${data.data.lesson.content.length === 0 ? "":"hidden"}`}>
           <EditLinks />
-          <span className="text-lg font-medium uppercase ">click here and start adding contents to your <span className="text-red-400">lesson</span></span>
+          <span className="md:text-lg font-medium uppercase xxs:text-sm ">click here and start adding contents to your <span className="text-red-400">lesson</span></span>
         </div>
         <CodeContentEditor lessonId={param.lessonId}/>
         <TextEditor lessonId={param.lessonId}/>
@@ -51,7 +51,7 @@ function RichTextExample() {
                       </svg>
                     </button>
                   </div>
-                  <div className="flex rounded-md shadow-sm p-4 w-full h-full max-h-[300px] overflow-auto editor">
+                  <div className="flex rounded-md shadow-sm p-4 w-full h-full max-h-[500px] overflow-auto editor">
                     <FroalaEditorView
                       model={item.value.content}
                     />
@@ -123,12 +123,12 @@ const EditLinks = ({ idx }) => {
             <path fill="currentColor" d="M1 2v3h2V4h2v5H3.5v2h5V9H7V4h2v1h2V2zm20 1h-7v2h6v14H4v-5H2v6a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1" />
           </svg>
         </button>
-        <label  htmlFor="image-file" className="cursor-pointer">
+        {/* <label  htmlFor="image-file" className="cursor-pointer">
           <svg className={`w-6 text-green-600`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path fill="currentColor" d="M18.75 4A3.25 3.25 0 0 1 22 7.25v11.5A3.25 3.25 0 0 1 18.75 22H7.25A3.25 3.25 0 0 1 4 18.75v-6.248c.474.198.977.34 1.5.422v5.826q.001.313.103.594l5.823-5.701a2.25 2.25 0 0 1 3.02-.116l.128.116l5.822 5.702q.102-.28.104-.595V7.25a1.75 1.75 0 0 0-1.75-1.75h-5.826a6.5 6.5 0 0 0-.422-1.5zm-6.191 10.644l-.084.07l-5.807 5.687q.274.097.582.099h11.5c.203 0 .399-.035.58-.099l-5.805-5.686a.75.75 0 0 0-.966-.071M16.252 7.5a2.252 2.252 0 1 1 0 4.504a2.252 2.252 0 0 1 0-4.504M6.5 1a5.5 5.5 0 1 1 0 11a5.5 5.5 0 0 1 0-11m9.752 8a.752.752 0 1 0 0 1.504a.752.752 0 0 0 0-1.504M6.5 3l-.09.007a.5.5 0 0 0-.402.402L6 3.5V6H3.498l-.09.008a.5.5 0 0 0-.402.402l-.008.09l.008.09a.5.5 0 0 0 .402.402l.09.008H6v2.503l.008.09a.5.5 0 0 0 .402.402l.09.009l.09-.009a.5.5 0 0 0 .402-.402L7 9.503V7h2.505l.09-.008a.5.5 0 0 0 .402-.402l.008-.09l-.008-.09a.5.5 0 0 0-.403-.402L9.504 6H7V3.5l-.008-.09a.5.5 0 0 0-.402-.403z" />
           </svg>
         </label>
-        <input type="file" name="" id="image-file" hidden  />
+        <input type="file" name="" id="image-file" hidden  /> */}
       </div>
     </div>
   )

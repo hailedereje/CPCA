@@ -16,11 +16,12 @@ import Askquestion from "@/pages/forum/Askquestion";
 import {loader as CoursesLoader} from "@/pages/dashboard/AllCourses";
 import RichTextExample from "@/components/textEditor/textEditor";
 import StudentDetails from "@/pages/classroom/StudentDetails";
+import InstructorLandingPage from "@/pages/instructorLandingPage";
 
 const instructorRoutes = (store) => [
-  // { index: true, element: <Activities /> },
+  { index: true, element: <InstructorLandingPage /> },
   { path: "profile", element: <Profile /> },
-  { path: "add-course", element: <RichTextExample /> },
+  // { path: "add-course", element: <RichTextExample /> },
   { path: "courses", element: <AllCourses />, loader: CoursesLoader(store) },
   {
     path: "classrooms",

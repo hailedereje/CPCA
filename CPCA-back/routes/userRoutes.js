@@ -10,24 +10,30 @@ import {
   userLogout,
   userRegister,
   getAllUsers,
-  createInstructor
+  createInstructor,
+  getInstructors,
+  setInstructorscToCourse,
+  deleteUser
 } from "../controllers/userController.js";
 import { imageStorage } from "../config/multerConfig.js";
+import { validateRequest } from "../middlewares/validateRequest.js";
+import { registerSchema } from "../validation/user/registerValidation.js";
 const router = express.Router();
 
 
 const upload = multer({ storage: imageStorage });
 
+router.post("/register",validateRequest(registerSchema),userRegister);
 router.route("/register").post(userRegister);
 router.route("/login").post(userLogin);
 router.use(authenticate);
 router.route("/all").get(getAllUsers);
-router
-  .route("/profile")
-  .get(getUserProfile)
-  .patch( editUserProfile);
+router.route("/profile").get(getUserProfile).patch( editUserProfile);
 router.route("/logout").post(userLogout);
 router.use(isAdmin)
 router.route("/create-instructor").post(createInstructor);
+router.get("/instructors",getInstructors)
+router.post("/instructors/course",setInstructorscToCourse)
+router.delete("/:id",deleteUser)
 
 export default router;

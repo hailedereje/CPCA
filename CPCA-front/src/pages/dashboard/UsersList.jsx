@@ -6,6 +6,10 @@ import { MenuWrapper } from "@/components/createCourse/components/courseDrawer";
 import { MdModeEditOutline } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useQuery } from "@tanstack/react-query";
+import Confirmation from "@/components/createCourse/components/confirmationDialog";
+import { useDispatch } from "react-redux";
+import { openConfirmationDialog } from "@/features/course/coursSidebarSlice";
+import { ActionTypes } from "@/components/createCourse/action.Types";
 
 const UsersList = () => {
   const [users, setUsers] = useState([]);
@@ -15,7 +19,8 @@ const UsersList = () => {
   const [roleFilter, setRoleFilter] = useState("");
   const [showDetails, setShowDetails] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  
+  const dispatch = useDispatch()
+
   const {data: listOfUsers ,isSuccess } = useQuery({
     queryKey: ["users", currentPage, searchTerm, roleFilter],
     queryFn: async () => {
@@ -41,20 +46,6 @@ const UsersList = () => {
     }
 
   }, [isSuccess, currentPage, roleFilter, searchTerm, listOfUsers]);
-
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      newRequests
-        .delete(`/users/${id}`)
-        .then((res) => {
-          console.log(res.data);
-          setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
-        })
-        .catch((error) => {
-          console.error("Error deleting user:", error);
-        });
-    }
-  };
 
   const handleDetails = (user) => {
     setSelectedUser(user);
@@ -94,6 +85,7 @@ const UsersList = () => {
 
   return (
     <div className="flex flex-col w-full p-4">
+      <Confirmation />
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold">Users List</h2>
         <AddInstructor />
@@ -147,7 +139,7 @@ const UsersList = () => {
                     <span className="mr-2"><MdModeEditOutline /></span>
                     <span className='text-sm capitalize'>details</span>
                     </li>
-                    <li onClick={() => handleDelete(user._id)} className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-200 rounded-lg">
+                    <li onClick={() => dispatch(openConfirmationDialog({ userId:user._id, message:"are you sure you want to delete the user",actionType:ActionTypes.DELETE_USER}))} className="px-4 py-2 flex items-center cursor-pointer hover:bg-gray-200 rounded-lg">
                       <span className="mr-2"><RiDeleteBin6Line className="text-red-400" /></span>
                       <span className='text-sm capitalize'>delete</span>
                     </li>
