@@ -54,12 +54,11 @@ const App = () => {
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <Landing /> },
-        { path: "register/:token?", element: <Register />, action: registerAction(store) },
         { path: "login", element: <Login />, action: loginAction(store) },
-        { path: "join/:token", element: <JoinClass /> },
-        { path: "quiz", element: <Quiz /> },
       ],
     },
+    { path: "register/:token?", element: <Register />, action: registerAction(store) },
+    { path: "join/:token", element: <JoinClass /> },
     {
       path: "/dashboard",
       element: <Dashboard />,

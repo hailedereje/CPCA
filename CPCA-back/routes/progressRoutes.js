@@ -30,15 +30,15 @@ const router = express.Router();
 router.use(authenticate);
 
 // Instructor routes
-router.get("/:classroomId/student/:studentId", isInstructor, getStudentProgress);
+router.get("/:classroomId/student/:studentId", getStudentProgress);
 
 // Add new instructor routes to track individual student progress
-router.get("/:classroomId/student/:studentId/chapters", isInstructor, getStudentChaptersProgress);
-router.get("/:classroomId/student/:studentId/lessons/:chapterId", isInstructor, getStudentLessonsProgress);
-router.get("/:classroomId/student/:studentId/labs", isInstructor, getStudnetLabsProgress);
-router.get("/:classroomId/student/:studentId/quizzes", isInstructor, getStudentQuizzesProgress);
-router.post("/:classroomId/student/:studentId/course/:courseId", isInstructor, calculateStudentCourseProgress);
-router.post("/:classroomId/student/:studentId/chapter/:chapterId", isInstructor, calculateStudentChapterProgress);
+router.get("/:classroomId/student/:studentId/chapters", getStudentChaptersProgress);
+router.get("/:classroomId/student/:studentId/lessons/:chapterId", getStudentLessonsProgress);
+router.get("/:classroomId/student/:studentId/labs", getStudnetLabsProgress);
+router.get("/:classroomId/student/:studentId/quizzes", getStudentQuizzesProgress);
+router.post("/:classroomId/student/:studentId/course/:courseId", calculateStudentCourseProgress);
+router.post("/:classroomId/student/:studentId/chapter/:chapterId", calculateStudentChapterProgress);
 
 // Student routes
 router.get("/chapters/:classroomId/:courseId", studentCheck, getChaptersProgress);

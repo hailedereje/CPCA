@@ -1,7 +1,7 @@
 import { Classroom, Discussion, Invitation, User } from "../models/index.js";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import { BadRequestError } from "../errors/index.js";
+import { BadRequestError, NotFoundError } from "../errors/index.js";
 
 // Create a new classroom
 export const createClassroom = async (req, res) => {
