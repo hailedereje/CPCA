@@ -8,6 +8,5 @@ export const useGetQuizStats = () => {
         queryFn: () => getQuizStats(),
         staleTime: 1000 * 60 * 60,
         retry: 3,
-        refetchInterval: false
     })
 }
