@@ -14,14 +14,14 @@ export const InstructLinks = [
 ];
 
 export const StudentLinks = [
-  { id: 1, text: "status", path: "/dashboard", icon: <IoBarChartSharp /> },
+  // { id: 1, text: "status", path: "/dashboard", icon: <IoBarChartSharp /> },
   { id: 2, text: "profile", path: "profile", icon: <ImProfile /> },
   {id: 3, text: "courses", path: "courses", icon: <FaChalkboardTeacher/>},
   {id: 4, text: "classrooms", path: "classrooms", icon: <FaChalkboardTeacher/>}
 ];
 
 export const AdminLinks = [
-  { id: 1, text: "status", path: "/dashboard", icon: <IoBarChartSharp /> },
+  { id: 1, text: "statistics", path: "/dashboard", icon: <IoBarChartSharp /> },
   { id: 2, text: "profile", path: "profile", icon: <ImProfile /> },
   { id: 3, text: "users", path: "users", icon: <FaUsers /> },
   // { id: 4, text: "create course",path: "course/create",icon: <RiSoundModuleLine />},

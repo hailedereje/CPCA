@@ -134,16 +134,16 @@ export const AddQuestion = () => {
   };
 
   return (
-      <div className="w-full h-full flex flex-col items-center gap-6  dark:bg-gray-600 p-4">
+      <div className="w-full h-full flex flex-col items-center gap-6 p-4">
         <div className="flex flex-col gap-4 ">
-          <div className="flex flex-col rounded-md gap-4 relative h-fit w-fit max-w-4xl shadow-md">
-            <span className="flex flex-col gap-4">
+          <div className="flex flex-col rounded-md gap-4 relative h-fit w-fit max-w-4xl shadow-md bg-white p-4">
+            <span className="flex flex-col gap-4 text-black">
               <span className="text-xl capitalize font-medium flex gap-4 items-center">
                 <IconWrapper bg="bg-blue-500" color="text-white" icon={<MdOutlineIntegrationInstructions />} />
                 <span >Question</span>
               </span>
 
-              <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2 text-gray-500 dark:text-white">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+              <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
             </span>
             <FroalaEditor
               tag='div'
@@ -152,19 +152,17 @@ export const AddQuestion = () => {
               onModelChange={(model) => setValue(model)}
             />
           </div>
-          <div className="flex flex-col gap-4 max-w-2xl dark:bg-gray-600 p-2 rounded-md">
+          <div className="flex flex-col gap-4 max-w-4xl text-black p-4 rounded-md bg-white">
             <span className="flex flex-col gap-2">
               <span className="text-xl capitalize font-medium flex gap-4 items-center">
-                <span>
-                  <MdOutlineDescription />
-                </span>
+                <IconWrapper bg="bg-blue-500" color="text-white" icon={<MdOutlineDescription />} />
                 <span >Choice</span>
               </span>
-              <span className="text-xs lowercase line-clamp-2 text-gray-500 dark:text-white">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+              <span className="text-xs lowercase line-clamp-2 text-gray-500">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
             </span>
-            <div className="w-full max-w-2xl flex flex-col gap-4 border rounded-md p-4 shadow-lg">
+            <div className="w-full max-w-2xl flex flex-col gap-4 rounded-md p-4 ">
               <div className="flex justify-between items-center mb-6 ">
-                <div className="bg-green-400 text-gray-700 px-4 py-2 rounded-md font-semibold">
+                <div className="bg-gray-300  px-4 py-2 rounded-md font-semibold">
                   {choices.length} choices created
                 </div>
               </div>
@@ -203,7 +201,7 @@ export const AddQuestion = () => {
                             <button
                               onClick={() => deleteChoice(choice.id)}
                             >
-                              <FaTrash className="text-red-500" />
+                              <FaTrash className="" />
                             </button>
                           </div>
                         </div>
@@ -230,17 +228,19 @@ export const AddQuestion = () => {
                 </div>
               )}
             </div>
+            <div className="flex flex-col items-center w-full gap-4">
+            <ErrorBanner message={error} />
+            <button
+              onClick={onSubmit}
+              disabled={!isChanged}
+              className={`w-full max-w-xs flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-md font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-1  focus:ring-indigo-500 ${isChanged ? '' : 'cursor-not-allowed'}`}
+            >
+              {loading ? <span><AiOutlineLoading3Quarters className='animate-spin text-center' /></span> : <span>save</span>}
+            </button>
+            </div>
           </div>
+          
         </div>
-
-        <ErrorBanner message={error} />
-        <button
-          onClick={onSubmit}
-          disabled={!isChanged}
-          className={`w-full max-w-xs flex items-center justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-md font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-1  focus:ring-indigo-500 ${isChanged ? '' : 'cursor-not-allowed'}`}
-        >
-          {loading ? <span><AiOutlineLoading3Quarters className='animate-spin text-center' /></span> : <span>save</span>}
-        </button>
       </div>
   );
 };

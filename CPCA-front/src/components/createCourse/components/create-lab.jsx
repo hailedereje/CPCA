@@ -9,9 +9,9 @@ import { GiTestTubes } from "react-icons/gi";
 import 'froala-editor/css/themes/gray.min.css';
 import { MdOutlineIntegrationInstructions, MdOutlineTitle } from "react-icons/md";
 import { TbFileDescription } from "react-icons/tb";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiFillBackward, AiOutlinePlus } from "react-icons/ai";
 import * as yup from 'yup';
-import { useLoaderData, useNavigation, useParams } from "react-router-dom";
+import { useLoaderData, useNavigate, useNavigation, useParams } from "react-router-dom";
 import { useCreateLab, useGetLab, useUpdateLab } from "../hooks/course-hooks";
 import { fetchLab } from "../hooks/actions";
 import { Loading } from "./loader";
@@ -33,7 +33,7 @@ export const UpdateLab = () => {
     )
 }
 export const CreateLab = ({data,title}) => {
-
+    const navigate = useNavigate();
     const param = useParams();
     const [loading, setLoading] = useState(false);
     const [error,setError] = useState(null);
@@ -72,9 +72,15 @@ export const CreateLab = ({data,title}) => {
     }
 
     return (
-        <div className="flex flex-col items-center overflow-auto editor gap-6 w-full h-full p-4">
+        <div className="flex flex-col items-center overflow-auto editor gap-6 w-full h-full p-4 relative">
+            <div className="absolute top-2 left-2">
+                <button onClick={() => navigate(-1)} className="flex gap-2 p-2 border bg-blue-400 text-white">
+                    <span><AiFillBackward className="text-2xl" /></span>
+                     Back
+                </button>
+            </div>
             <h1 className="text-center text-4xl font-bold capitalize">{title || "Create Lab"}</h1>
-            <div className="max-w-4xl w-full p-2 rounded-md flex  xxs:flex-col md:flex-row gap-4 justify-between shadow-md bg-white">
+            <div className="max-w-4xl w-full p-4 rounded-md flex  xxs:flex-col md:flex-row gap-4 justify-between shadow-md bg-white">
                 <div className="flex flex-col gap-4 w-full">
                     <span className="flex flex-col gap-4">
                         <span className="flex justify-between items-center gap-4">
@@ -92,7 +98,7 @@ export const CreateLab = ({data,title}) => {
                         name="title"
                         value={labForm.title}
                         onChange={(e) => setLabForm({ ...labForm, title: e.target.value })}
-                        className=" mt-1 p-2 w-full text-sm border border-gray-600 rounded-md text-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none dark "
+                        className=" mt-1 p-2 w-full text-sm border border-gray-600 rounded-md text-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 appearance-none dark "
                             />
                 </div>
                 <div className="flex flex-col gap-4 w-full">
@@ -115,7 +121,7 @@ export const CreateLab = ({data,title}) => {
                     />
                 </div>
             </div>
-            <div className="flex flex-col rounded-md gap-4 relative h-fit w-fit max-w-4xl p-2 shadow-md bg-white">
+            <div className="flex flex-col rounded-md gap-4 relative h-fit w-fit max-w-4xl p-4 shadow-md bg-white">
                 <span className="flex flex-col gap-4">
                     <span className="text-xl capitalize font-medium flex gap-4 items-center">
                         <IconWrapper bg="bg-blue-500" color="text-white" icon={<MdOutlineIntegrationInstructions />} />

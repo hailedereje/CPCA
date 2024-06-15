@@ -174,7 +174,7 @@ const Lab = ({ lab }) => {
 
 const CourseComponent = ({ course }) => {
   return (
-    <div className="max-w-4xl max-h-screen overflow-auto w-full h-full shadow-lg pt-4">
+    <div className="max-w-4xl max-h-screen overflow-auto w-full h-full shadow-lg pt-4 bg-white">
       <div className="w-full p-4 flex justify-between items-center bg-blue-400 ">
         <div className="flex items-center gap-2">
           <FaBook className="text-white text-xl" />
@@ -239,14 +239,14 @@ export const SidebarDrawer = ({ children }) => {
     setIsOpen(!isOpen);
   };
   return (
-    <div className="z-30">
+    <div className="z-30 ">
       <div
         className={`fixed inset-0 z-10 ${isOpen ? "" : "hidden"}`}
         onClick={toggleDrawer}
       ></div>
-      <div className={`fixed  h-full top-0 left-0 w-1/2 z-20 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
+      <div className={`fixed h-full top-14 left-0 w-1/2 z-20 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out shadow-lg`} >
         {children}
-        <button onClick={toggleDrawer} className="absolute top-1/2 -right-10 rounded p-2 bg-gray-500/10 h-20">
+        <button onClick={toggleDrawer} className="absolute top-1/2 -right-10 rounded p-2 bg-black/50 h-20">
           {isOpen ? <FaChevronLeft className="text-white"/> : <FaChevronRight className="text-white"/>}
         </button>
       </div>

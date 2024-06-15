@@ -1,8 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 export default function Navbar(props) {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
+  const user = useSelector((state) => state.userState.user);
   return (
     <nav
       className={
@@ -91,7 +93,7 @@ export default function Navbar(props) {
               </a>
             </li>
 
-            <li className="flex items-center">
+            {!user && <li className="flex items-center">
               <NavLink to = '/login'
                 className={
                   (props.transparent
@@ -104,7 +106,7 @@ export default function Navbar(props) {
               >
                 Login/Register
               </NavLink>
-            </li>
+            </li>}
           </ul>
         </div>
       </div>

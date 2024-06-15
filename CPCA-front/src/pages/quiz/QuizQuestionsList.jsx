@@ -46,9 +46,9 @@ const QuizQuestionsList = () => {
   };
 
   return (
-    <div className="w-full h-full p-4 dark:bg-transparent dark:text-white">
+    <div className="w-full h-full p-4 ">
       {/* <Navbar /> */}
-      {<div className="container p-4 ">
+      {<div className="container p-4 bg-white rounded-md">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold text-gray-800 dark:text-white">Quiz Questions</h2>
           <button onClick={() => navigate("question")} className="flex items-center justify-center bg-blue-500 p-2 rounded-md">

@@ -1,10 +1,12 @@
-import { Outlet, useParams } from "react-router-dom"
+import { Outlet, useNavigate, useParams } from "react-router-dom"
 import { Loading } from "./components/loader"
 import { Drawer } from "./components/courseDrawer"
 import { useCourse } from "./hooks/course-hooks"
+import { AiFillBackward } from "react-icons/ai"
 
 export const CourseLayout = () => {
     const param = useParams()
+    const navigate = useNavigate()
     const { data,isLoading,isError,error } = useCourse(param.id)
 
     if(isError) {
@@ -15,7 +17,8 @@ export const CourseLayout = () => {
            {isLoading ? <Loading/>: <>
                 <div className="flex w-full h-full">
                     <Drawer data={data.data.course}/>
-                    <div className="flex items-start justify-center w-full h-full">
+                    <div className="flex items-start justify-center w-full h-full relative">
+                        <BackButton/>
                         <Outlet/>
                     </div>
                 </div>
@@ -25,3 +28,12 @@ export const CourseLayout = () => {
 }
 
 
+export const BackButton = () => {
+    const navigate = useNavigate()
+    return (
+        <div className="flex items-center gap-2 cursor-pointer z-40 bg-blue-400 p-2 rounded-md text-white absolute top-2 left-2" onClick={() => navigate(-1)}>
+            <AiFillBackward className="text-lg"/>
+            <span>Back</span>
+        </div>
+    )
+}

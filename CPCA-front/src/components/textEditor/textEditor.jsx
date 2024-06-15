@@ -8,9 +8,10 @@ import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 import { addLessonItem, createLessonItem, openConfirmationDialog, updateLessonItem } from "@/features/course/coursSidebarSlice";
 import { useLesson, useLessons } from "../createCourse/hooks/course-hooks";
 import { Loading } from "../createCourse/components/loader";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ActionTypes } from "../createCourse/action.Types";
 import { Breadcrumb } from "../createCourse/components/bread-crumb";
+import { ErrorHandlingComponent } from "@/pages/ErrorPage";
 
 const deleteLessonItemMessage = "Warning: You are about to delete a lesson item. This action cannot be undone"
 
@@ -18,24 +19,11 @@ function RichTextExample() {
   const param = useParams()
   const dispatch = useDispatch()
   const { data, isSuccess, isError,error } = useLesson(param.lessonId)
-
   if(isError) {
-    return (
-      <div className="flex flex-col items-center justify-center h</svg>-full p-4 text-center">
-        <p className="text-2xl font-bold dark:text-white mb-4">Failed to Load Lesson</p>
-        <p className="text-lg text-gray-600 mb-4">Check your connection and try again.</p>
-        <button
-          onClick={() => window.location.reload()}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Retry
-        </button>
-      </div>
-    )
+    return <ErrorHandlingComponent isError={isError} errorCode={error.status}/>
   }
-
   return (
-    <div className=" h-full p-4 flex flex-col w-full gap-4">
+    <div className=" h-full p-4 flex flex-col w-full gap-4 relative">
       {!isSuccess ? <Loading/>: <div className="flex flex-col w-full mx-auto max-w-[1024px]">
         <div className={`group flex items-end  gap-4 ${data.data.lesson.content.length === 0 ? "":"hidden"}`}>
           <EditLinks />
