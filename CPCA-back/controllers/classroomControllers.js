@@ -3,6 +3,8 @@ import crypto from "crypto";
 import nodemailer from "nodemailer";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
 
+
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 // Create a new classroom
 export const createClassroom = async (req, res) => {
     const { name, description, courseId } = req.body;
@@ -114,7 +116,7 @@ export const inviteStudents = async (req, res) => {
 
   const sendInvitation = async (email) => {
     const token = crypto.randomBytes(20).toString("hex");
-    const invitationLink = `${process.env.CLIENT_URL}/join/${token}`;
+    const invitationLink = `${CLIENT_URL}/join/${token}`;
     const mailOptions = {
       from: "Computer Programmming Course Assistant",
       to: email,

@@ -13,10 +13,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { useQuery } from "react-query";
 import DiscussionContext from "@/context/DiscussionContext";
 
-
 const Forum = () => {
   const user = useSelector((state) => state.userState.user);
-  const {socket, classroomId} = useContext(DiscussionContext);
+  const { socket, classroomId } = useContext(DiscussionContext);
   const dispatch = useDispatch();
   const { topic } = useParams();
   const [openId, setOpenId] = useState([]);
@@ -25,7 +24,6 @@ const Forum = () => {
 
   const { isLoading, data } = useQuery("getDiscussionByClassroomId", async () => {
     if (topic) {
-      console.log(topic);
       const res = await newRequests.get(`/discussion/find/${topic}`);
       return res.data;
     } else {
@@ -45,8 +43,8 @@ const Forum = () => {
       return q;
     });
     setQuestions(updatedQuestions);
-  }
-  
+  };
+
   useEffect(() => {
     if (data && data.discussion) {
       setQuestions(data.discussion);
@@ -57,9 +55,9 @@ const Forum = () => {
     const handleReceiveQuestion = async ({ question }) => {
       setQuestions((prevQuestions) => [question, ...prevQuestions]);
     };
-    if(socket){
+    if (socket) {
       socket.on('receive-question', handleReceiveQuestion);
-      
+
       return () => {
         socket.off('receive-question', handleReceiveQuestion);
       };
@@ -79,9 +77,9 @@ const Forum = () => {
       });
       setQuestions(updatedQuestions);
     };
-    if(socket){
+    if (socket) {
       socket.on('receive-answer', handleReceiveAnswer);
-      
+
       return () => {
         socket.off('receive-answer', handleReceiveAnswer);
       };
@@ -92,7 +90,7 @@ const Forum = () => {
 
   return (
     <div
-      className="flex flex-col items-center w-1/2 bg-slate-100 dark:bg-slate-400 h-screen overflow-y-auto"
+      className="flex flex-col items-center w-1/2 bg-slate-100  h-screen overflow-y-auto"
     >
       <Toaster />
       {questions.length > 0 &&
@@ -104,14 +102,14 @@ const Forum = () => {
               items-end p-3 md:p-4 border-b border-gray-200 w-full"
             >
               <div
-                className="w-full bg-white dark:bg-[#1E212A]
+                className="w-full bg-white 
                 p-4 md:p-5 rounded-lg shadow-md flex items-start gap-5"
               >
                 <div className="left-section space-y-1 text-center">
                   <LikeDislikeComponent question={question} />
                 </div>
                 <div className="right-section w-full">
-                  <h1 className="text-base md:text-lg dark:text-white">
+                  <h1 className="text-base md:text-lg ">
                     {question?.question}
                   </h1>
                   <p className="text-sm md:text-base">
@@ -136,7 +134,7 @@ const Forum = () => {
                           src="https://cdn.icon-icons.com/icons2/2596/PNG/512/nested_arrows_icon_155086.png"
                           alt=""
                         />
-                        <div className="bg-white dark:bg-[#32353F] dark:text-white max-w-xl p-5 rounded-lg shadow-md flex flex-col items-start gap-5 mt-2">
+                        <div className="bg-white   max-w-xl p-5 rounded-lg shadow-md flex flex-col items-start gap-5 mt-2">
                           <p className="text-inherit">{answer?.reply}</p>
                           <UserInfo answer={answer} />
                         </div>
@@ -144,7 +142,7 @@ const Forum = () => {
                     );
                   })}
                   <div
-                    className="w-full bg-white dark:bg-slate-900 flex items-center gap-4
+                    className="w-full bg-white  flex items-center gap-4
        px-5 py-2 rounded-lg shadow-md  mt-2"
                   >
                     <Write />

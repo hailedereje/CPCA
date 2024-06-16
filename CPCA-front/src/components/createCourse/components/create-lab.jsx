@@ -140,7 +140,7 @@ export const CreateLab = ({data,title}) => {
                     onModelChange={(model) => setLabForm({ ...labForm, labManual: model })}
                 />
             </div>
-            <button onClick={onSubmit} className="flex w-full max-w-xs justify-center items-center bg-blue-500 p-2 rounded-md text-white">
+            <button onClick={onSubmit} className="flex w-full max-w-4xl justify-center items-center bg-blue-500 p-2 rounded-md text-white">
                 <span className="xxs:text-sm md:text-lg capitalize">{loading ? "saving ...": "save Lab"}</span>
             </button>
         </div>

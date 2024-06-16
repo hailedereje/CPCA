@@ -1,11 +1,13 @@
 import { Server } from "socket.io";
 import { Classroom, DiscussionQuestion, Notification } from "../models/index.js";
 
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+
 export const socketConnection = async (server) => {
   const io = new Server(server, {
     secure: true,
     cors: {
-      origin: "http://localhost:5173",
+      origin: `${CLIENT_URL}`,
       methods: ["GET", "POST"],
       credentials: true,
     },
