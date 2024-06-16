@@ -6,8 +6,9 @@ import { chatKn } from './constants';
 import { IoMdClose, IoMdSend } from 'react-icons/io';
 import { FaComments } from 'react-icons/fa';
 
+const API_KEY = import.meta.env.VITE_API_KEY;
 export const MyChatBot = () => {
-  const genAI = new GoogleGenerativeAI('AIzaSyB7fkcTTyRh0kQ1NpWJtMYYm6X_EwlsNp8');
+  const genAI = new GoogleGenerativeAI(`${API_KEY}`);
   const [inputText, setInputText] = useState('');
   const [prompt, setPrompt] = useState('');
   const [messages, setMessages] = useState([]);
