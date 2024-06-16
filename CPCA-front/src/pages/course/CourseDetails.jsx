@@ -316,7 +316,7 @@ const CourseDetails = () => {
 
   return (
     <div className="flex h-[90vh]">
-      <aside className="w-1/4 h-full bg-slate-300 rounded shadow p-4 overflow-y-auto">
+      <aside className="w-1/4 h-full bg-white rounded shadow-md p-4 overflow-y-auto">
         {course && (
           <div>
             <h2 className="text-2xl font-bold my-4 text-center">
