@@ -121,8 +121,7 @@ export const inviteStudents = async (req, res) => {
       from: "Computer Programmming Course Assistant",
       to: email,
       subject: "Classroom Invitation",
-      text: `You are invited to join the classroom. Click here to join: ${invitationLink}`,
-      // html: `<p>You are invited to join the classroom. Click <a href="${invitationLink}">here</a> to join.</p>`,
+      html: `<p>You are invited to join the classroom. <a href="${invitationLink}">Click here</a> to join.</p>`,
     };
 
     try {
@@ -162,6 +161,17 @@ export const getInvitationByToken = async (req, res) => {
     res.status(200).json(invitation);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch invitation" });
+  }
+};
+
+// Delete an invitation
+export const deleteInvitation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Invitation.findByIdAndDelete(id);
+    res.status(200).json({ message: "Invitation deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete invitation" });
   }
 };
 
