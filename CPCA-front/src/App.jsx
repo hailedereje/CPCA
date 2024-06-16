@@ -14,6 +14,7 @@ import adminRoutes from "./routes/adminRoutes";
 import instructorRoutes from "./routes/instructorRoutes";
 import studentRoutes from "./routes/studentRoutes";
 import React from "react";
+import MyChatBot from "./components/chatbot/chat";
 
 const queryClient = new QueryClient();
 
