@@ -13,6 +13,7 @@ import { ActionTypes } from "../createCourse/action.Types";
 import { Breadcrumb } from "../createCourse/components/bread-crumb";
 import { ErrorHandlingComponent } from "@/pages/ErrorPage";
 import { defaultFroalaConfig } from "@/constants";
+import parse from 'html-react-parser';
 
 const deleteLessonItemMessage = "Warning: You are about to delete a lesson item. This action cannot be undone"
 
@@ -53,10 +54,11 @@ function RichTextExample() {
                     </button>
                   </div>
                   <div className="flex rounded-md shadow-sm p-4 w-full h-full max-h-[500px] overflow-auto editor bg-white">
-                    <FroalaEditorView
+                    {parse(item.value.content)}
+                    {/* <FroalaEditorView
                       model={item.value.content}
                       config={defaultFroalaConfig}
-                    />
+                    /> */}
                   </div>
                 </div>
                 

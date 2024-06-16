@@ -39,18 +39,18 @@ export const AddQuestion = () => {
   let data = {}
 
   if (!!questionId) {
-    data = client.getQueryData(['quiz', quizId]).data.questions.find(question => question._id === questionId)
+    data = client.getQueryData(['quiz', quizId])?.data.questions.find(question => question._id === questionId)
   }
   const [value, setValue] = useState(data.question || '');
   const [error, setError] = useState('')
-  const [isEditing, setEditing] = useState(false)
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
   const [choices, setChoices] = useState(data?.options?.map(option => ({ ...option, id: nanoid() })) || []);
   const [newChoice, setNewChoice] = useState({ id: nanoid(), option: '', isCorrect: false });
   const [editingChoice, setEditingChoice] = useState(null);
-  const [correctAnswerIndex, setCorrectAnswerIndex] = useState(null);
+  const [correctAnswerIndex, setCorrectAnswerIndex] = useState(choices?.find(choice => choice.isCorrect)?.id || null);
   const isChanged = value !== data.question || !deepEqualArray(choices, data.options);
+
 
   const { mutateAsync: createQuestion } = useCreateQuestion(quizId)
   const { mutateAsync: updateQuestion } = useUpdateQuestion(quizId)
@@ -69,12 +69,12 @@ export const AddQuestion = () => {
       if (!!questionId) {
         const data = { question: value, options: choices, questionId, quizId }
         await updateQuestion({ data, questionId }).then(result => {
-          // navigate("/question")
+          navigate(-1)
         })
       }
       else {
         await createQuestion({ question: value, options: choices, quizId }).then(result => {
-          // navigate("/question")
+          navigate(-1)
         })
       }
 

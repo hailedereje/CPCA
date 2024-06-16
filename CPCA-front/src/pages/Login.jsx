@@ -27,6 +27,7 @@ function Login() {
     try {
       const response = await loginUser(data).unwrap();
       toast.success("User Logged in successfully");
+      console.log("loginUser",response)
       dispatch(setUser(response));
       redirect('/dashboard');
     } catch (error) {

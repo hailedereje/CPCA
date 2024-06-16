@@ -20,7 +20,9 @@ const studentCheck = async (req, res, next) => {
 };
 
 const isAdmin = async (req, res, next) => {
+  // console.log("userID",req.user._id)
   const user = await User.findById(req.user._id);
+  console.log(user)
   if (!user || !user.isAdmin) {
     throw new UnautorizedError("Access denied: Admin role required");
   }

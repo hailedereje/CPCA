@@ -18,12 +18,7 @@ const userRegister = async (req, res) => {
     role: "student"
   });
 
-  if (newUser) {
-    const tokenData = { _id: newUser._id };
-    await GenerateJWT(res, tokenData);
 
-    return res.status(StatusCodes.CREATED).json({ msg: "User registered successfully" });
-  }
   throw new BadRequestError("Invalid user data");
 };
 const userLogin = async (req, res) => {
@@ -152,19 +147,12 @@ const editUserProfile = async (req, res) => {
 
 const createInstructor = async (req, res) => {
   const { username, email, password } = req.body;
-
-  // check if all fields are field
-  if (!username || !email || !password) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ msg: "Please provide all required fields" });
-  }
-  // Check if the email is already registered
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
     return res.status(400).json({ msg: "Email already registered" });
   }
-  // Create the instructor
+  
   const newInstructor = await User.create({
     username,
     email,
@@ -172,17 +160,11 @@ const createInstructor = async (req, res) => {
     role: "instructor",
     isInstructor: true,
   });
-
-  if (newInstructor) {
-    const tokenData = { _id: newInstructor._id };
-    await GenerateJWT(res, tokenData);
-    console.log(newInstructor);
-    return res
-      .status(StatusCodes.CREATED)
-      .json({ msg: "Instructor registered successfully" });
+  return res.status(201).json({ msg: "Instructor created successfully" });
+  }catch(error) {
+    return res.status(500).json({ msg: "internal server error"})
   }
 
-  throw new BadRequestError("Invalid user data");
 };
 export {
   userRegister,

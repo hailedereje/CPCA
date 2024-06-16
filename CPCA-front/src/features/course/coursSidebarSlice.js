@@ -8,6 +8,7 @@ const initialValue = {
   lessonId: '',
   lessonItemId:'',
   userId: '',
+  questionId:'',
   actionType: '',
   message: '',
   showConfirmation: false,
@@ -67,8 +68,8 @@ const uiSlice = createSlice({
       state.formState = {...state.formState,courseId,chapterId,message,showConfirmation:true}
     },
     openConfirmationDialog: (state,action) => {
-      const { courseId = '',chapterId = '',lessonId = '',lessonItemId = '',userId='',actionType,message,lessonIds } = action.payload
-      state.formState = { ...state.formState,courseId,chapterId,lessonId,userId,lessonItemId,actionType,message,lessonIds,showConfirmation:true }
+      const { courseId = '',chapterId = '',lessonId = '',lessonItemId = '',userId='',questionId='',actionType,message,lessonIds } = action.payload
+      state.formState = { ...state.formState,courseId,chapterId,lessonId,userId,questionId,lessonItemId,actionType,message,lessonIds,showConfirmation:true }
     },
     deleteLesson: (state,action) => {
 
