@@ -55,7 +55,7 @@ const Forum = () => {
 
   useEffect(() => {
     const handleReceiveQuestion = async ({ question }) => {
-      setQuestions((prevQuestions) => [...prevQuestions, question]);
+      setQuestions((prevQuestions) => [question, ...prevQuestions]);
     };
     if(socket){
       socket.on('receive-question', handleReceiveQuestion);

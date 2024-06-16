@@ -36,7 +36,7 @@ export const socketConnection = async (server) => {
       const students = classroom.students;
       const joinedUsers = rooms[roomId] || [];
       const studentsToNotify = students.filter(student => 
-        !joinedUsers.map(user => user._id.toString()).includes(student.toString()));
+      !joinedUsers.map(user => user._id.toString()).includes(student.toString()));
       studentsToNotify.forEach(async (student) => {
         const notification = new Notification({
           message: `New question in ${classroom.name}: ${question.description}`,
@@ -44,6 +44,9 @@ export const socketConnection = async (server) => {
           user: student._id,
         });
         await notification.save();
+      });
+      studentsToNotify.forEach(async (student) => {
+        io.to(student).emit('notification', { message: `New question in ${classroom.name}: ${question.description}` });
       });
     });
 
@@ -63,6 +66,7 @@ export const socketConnection = async (server) => {
         });
         await notification.save();
       }
+      io.to(student).emit('notification', { message: `New reply in ${classroom.name}: ${newAnswer.reply}` });
     });
 
     socket.on("leaveRoom", ({ roomId, user }) => {

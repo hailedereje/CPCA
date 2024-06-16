@@ -1,15 +1,35 @@
 /* eslint-disable react/prop-types */
 // src/components/Notifications.js
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import newRequests from "@/utils/newRequest";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import SocketContext from "@/context/DiscussionContext";
 
 const Notifications = ({ onNotificationCount }) => {
   const user = useSelector((state) => state.userState.user);
+  const socket = useContext(SocketContext);
   const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      console.log("connecting to socket")
+      socket.connect();
+      socket.auth = user;
+
+      socket.on("receive-notification", (notification) => {
+        setNotifications((prev) => [notification, ...prev]);
+        onNotificationCount(notifications.length + 1);
+        toast.success(notification.message);
+      });
+
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [socket, user]);
 
   useEffect(() => {
     const fetchNotifications = () => {
@@ -20,7 +40,7 @@ const Notifications = ({ onNotificationCount }) => {
     };
 
     fetchNotifications();
-  }, [onNotificationCount, user]);
+  }, [user]);
 
   const readNotification = (id, classroom) => {
     newRequests.put(`/notifications/${id}`).then(() => {
