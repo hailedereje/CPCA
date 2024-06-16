@@ -10,8 +10,9 @@ export const MyChatBot = () => {
   const genAI = new GoogleGenerativeAI('AIzaSyB7fkcTTyRh0kQ1NpWJtMYYm6X_EwlsNp8');
   const [inputText, setInputText] = useState('');
   const [prompt, setPrompt] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([{ text: "hey there! I'm a chatbot. Ask me anything!", type: 'bot'}]);
   const [showChat, setShowChat] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const chatContainerRef = useRef(null);
 
@@ -44,6 +45,7 @@ export const MyChatBot = () => {
 
   useEffect(() => {
     if (prompt) {
+      // setLoading(true);
       const fetchResponse = async () => {
         const result = await run(prompt);
         const responseMessage = { text: result, type: 'bot' };
@@ -51,6 +53,7 @@ export const MyChatBot = () => {
         scrollToBottom();
       };
       fetchResponse();
+      // setLoading(false);
     }
   }, [prompt]);
 
@@ -113,6 +116,7 @@ export const MyChatBot = () => {
                   }`}
                 >
                   <span className='text-sm'>{message.text}</span>
+                  {/* {loading && message.type === 'bot' && <div className='loader'/>} */}
                 </div>
                 {message.type === 'user' && (
                   <img

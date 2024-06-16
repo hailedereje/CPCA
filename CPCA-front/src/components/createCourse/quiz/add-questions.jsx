@@ -213,7 +213,7 @@ export const AddQuestion = () => {
                     <span><FaRegCircle size={20} /></span>
                     <textarea
                       placeholder="Enter choice"
-                      className="text-sm p-2 w-full outline-none bg-transparent border-b focus:border-blue-500 resize-none capitalize"
+                      className="text-sm p-2 w-full outline-none bg-transparent border-b-2 border-gray-500 focus:border-blue-500 resize-none capitalize"
                       value={newChoice.option}
                       onChange={handleNewChoiceChange}
                       rows={1}
@@ -228,7 +228,7 @@ export const AddQuestion = () => {
                 </div>
               )}
             </div>
-            <div className="flex flex-col items-center w-full gap-4">
+            <div className="flex flex-col  w-full gap-4">
             <ErrorBanner message={error} />
             <button
               onClick={onSubmit}

@@ -12,6 +12,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { ActionTypes } from "../createCourse/action.Types";
 import { Breadcrumb } from "../createCourse/components/bread-crumb";
 import { ErrorHandlingComponent } from "@/pages/ErrorPage";
+import { defaultFroalaConfig } from "@/constants";
 
 const deleteLessonItemMessage = "Warning: You are about to delete a lesson item. This action cannot be undone"
 
@@ -51,9 +52,10 @@ function RichTextExample() {
                       </svg>
                     </button>
                   </div>
-                  <div className="flex rounded-md shadow-sm p-4 w-full h-full max-h-[500px] overflow-auto editor">
+                  <div className="flex rounded-md shadow-sm p-4 w-full h-full max-h-[500px] overflow-auto editor bg-white">
                     <FroalaEditorView
                       model={item.value.content}
+                      config={defaultFroalaConfig}
                     />
                   </div>
                 </div>
