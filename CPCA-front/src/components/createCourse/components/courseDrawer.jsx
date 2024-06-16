@@ -47,8 +47,8 @@ export const Drawer = ({ data }) => {
                 <div className="w-full">
                     <div className="h-screen max-h-[1024px] bg-gray-50 border shadow-sm overflow-auto editor">
                         <div className="flex justify-between rounded z-50 gap-2 items-center p-6 bg-blue-400 text-white">
-                            <h2 className="text-md flex items-center line-clamp-1 gap-2">
-                                <span><FaBook className="text-md" /> </span>
+                            <h2 className="text-md flex items-center line-clamp-1 gap-2 w-full">
+                                <span><FaBook className="text-sm" /> </span>
                                 <p className='text-left line-clamp-2 text-sm'>{course.title}</p>
                             </h2>
                             <div className="relative group text-black">
@@ -68,10 +68,10 @@ export const Drawer = ({ data }) => {
                             {course.chapters.map((chapter, index) => (
                                 
                                 <div key={chapter._id} className="flex flex-col gap-1">
-                                    <div className="flex justify-between items-start gap-2 p-2 bg-gray-100   transition duration-300" >
+                                    <div className="flex justify-between items-center gap-2 p-2 bg-gray-100   transition duration-300" >
                                         <button className="flex items-start gap-2 w-full p-2 text-black" onClick={() => toggleChapter(index)}>
                                             <span className=''>
-                                                {openChapterIndex === index ? <FaBookOpen className="text-md" /> : <FaBook className="text-md" />}
+                                                {openChapterIndex === index ? <FaBookOpen className="text-sm" /> : <FaBook className="text-sm" />}
                                             </span>
                                             <span className="text-sm  capitalize line-clamp-1 text-left">{chapter.title + '(' + chapter.lessons.length + ')'}</span>
                                         </button>

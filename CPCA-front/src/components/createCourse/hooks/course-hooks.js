@@ -216,7 +216,11 @@ export const useRenameChapter = (courseId) => {
     mutationFn: renameChapter,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey:['course',courseId]});
+      showSuccessToast("chapter renamed successfully")
     },
+    onError: () => {
+      showErrorToast("failed to rename chapter")
+    }
   })
 }
 
@@ -292,8 +296,11 @@ export const useCreateLesson = (chapterId,courseId) => {
   return useMutation({
     mutationFn: createLesson,
     onSuccess: () => {
-      // queryClient.invalidateQueries({queryKey: ['lessons',chapterId]})
       queryClient.invalidateQueries({queryKey: ['course',courseId]})
+      showSuccessToast("lesson created successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to create lesson")
     }
   })
 }
@@ -304,6 +311,7 @@ export const useRenameLesson = (courseId) => {
     mutationFn: renameLesson,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: ['course',courseId]})
+      showSuccessToast("lesson renamed successfully")
     },
     onError: () => {
       showErrorToast("failed to rename lesson")

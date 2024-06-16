@@ -8,6 +8,7 @@ import blankProfile from "@/assets/blank_profile.webp";
 import logo from "@/assets/logo.png";
 import newRequests from "@/utils/newRequest";
 import { useLogoutUserMutation } from "@/api";
+import MyChatBot from "@/components/chatbot/chat";
 
 function Dashboard() {
   const location = useLocation();
@@ -77,6 +78,7 @@ function Dashboard() {
     <>
       <div className="flex flex-col min-h-screen">
         <div className="flex justify-between gap-3 h-16 items-center fixed top-0 w-full p-4 bg-white z-40 border">
+          <MyChatBot  />
           <DropdownMenu />
           <Link to="/dashboard">
             <img src={logo} alt="logo" className="object-contain w-24" />
