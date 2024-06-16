@@ -15,9 +15,11 @@ import instructorRoutes from "./routes/instructorRoutes";
 import studentRoutes from "./routes/studentRoutes";
 import React from "react";
 
+const API_URL = import.meta.env.VITE_PUBLIC_API_URL;
+
 const queryClient = new QueryClient();
 
-export const socket = io("http://localhost:5000", {
+export const socket = io(`${API_URL}`, {
   withCredentials: true,
   secure: true,
 });
