@@ -15,7 +15,7 @@ export const Confirmation = () => {
     const [loading, setLoading] = useState(false)
 
     const { actionType, courseId, chapterId, lessonId, lessonIds, lessonItemId,userId, showConfirmation, message } = useSelector(x => x.courseInputState.formState);
-    console.log(userId)
+   
     const { mutateAsync: deleteLessonItem } = useDeleteLessonItem(lessonId)
     const { mutateAsync: deleteChapter } = useDeleteChapter(courseId, lessonIds)
     const { mutateAsync: deleteCourse } = useDeleteCourse(courseId)

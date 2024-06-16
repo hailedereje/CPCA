@@ -9,7 +9,7 @@ const initialState = {
         name:"course-1",
         chapters:[]
     },
-    draftCourses: await db.table(table).toArray().then(data => data),
+    // draftCourses: await db.table(table).toArray().then(data => data),
     activeLesson:{},
     prerequisites:[],
     tags:[],

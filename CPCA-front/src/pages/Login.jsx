@@ -2,17 +2,14 @@ import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Form, Link, redirect } from 'react-router-dom';
+import { Link, redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { api } from '../api';
 import SVGImage from '@/assets/login.jpg'; // Add your SVG image here
-import { useMutation } from '@tanstack/react-query';
-import newRequests from '@/utils/newRequest';
-import { showErrorToast, showSuccessToast } from '@/toasts/toast';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@/features/user/userSlice';
 import { BiHide } from 'react-icons/bi';
 import { GrView } from 'react-icons/gr';
+import { useLoginUserMutation } from '@/api';
 
 // Define the validation schema using yup
 const schema = yup.object().shape({
@@ -20,31 +17,24 @@ const schema = yup.object().shape({
   password: yup.string().min(5, 'Password must be at least 6 characters').required('Password is required'),
 });
 
-
 function Login() {
   const { control, handleSubmit, formState: { errors, isSubmitting }, } = useForm({ resolver: yupResolver(schema), });
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-
-  const { mutateAsync: postUser, isPending } = useMutation({
-    mutationFn: (data) => newRequests.post("/user/login", data),
-    onSuccess: (data) => {
-      showSuccessToast("User Logged in successfully");
-      dispatch(setUser(data.data));
-      redirect('/dashboard');
-    },
-    onError: (error) => {
-      showErrorToast("Error logging in")
-    }
-  })
+  const [loginUser, { isLoading }] = useLoginUserMutation(); // Use the mutation hook
 
   const onSubmit = async (data) => {
     try {
-      await postUser(data);
+      const response = await loginUser(data).unwrap();
+      toast.success("User Logged in successfully");
+      dispatch(setUser(response));
+      redirect('/dashboard');
     } catch (error) {
+      toast.error("Error logging in");
       console.log("Error logging in:", error);
     }
   };
+
   return (
     <section id="login" className="h-screen flex items-center justify-center bg-gray-200">
       <div className="flex flex-col md:flex-row w-full md:w-3/4 lg:w-2/3 bg-white shadow-lg rounded-lg overflow-hidden">
@@ -103,9 +93,9 @@ function Login() {
               <button
                 type="submit"
                 className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-150"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isLoading}
               >
-                {isSubmitting ? 'Logging in...' : 'Login'}
+                {isSubmitting || isLoading ? 'Logging in...' : 'Login'}
               </button>
             </div>
             <p className="text-center">
