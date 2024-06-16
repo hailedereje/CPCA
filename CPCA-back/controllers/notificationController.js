@@ -2,7 +2,7 @@ import { Notification } from "../models/index.js";
 
 export const getNotificationByUserId = async (req, res) => {
     const user = req.user._id;
-    const notifications = await Notification.find({ user, read: false});
+    const notifications = await Notification.find({ user, read: false}).sort({ timestamp: -1 });
     res.json(notifications);
 };
   

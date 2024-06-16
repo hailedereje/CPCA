@@ -9,9 +9,9 @@ const InstructorLandingPage = () => {
   const instructor = useSelector((state) => state.userState.user);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen w-screen bg-gray-50">
       <header className="bg-blue-400 text-white p-6 shadow-md">
-        <div className="container mx-auto flex justify-between items-center">
+        <div className="flex justify-between items-center">
           <div className="flex items-center gap-4">
             <img
               src={instructor?.profileImg || DefaultProfileImage}

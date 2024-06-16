@@ -10,4 +10,9 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+   build: {
+    minify: true,
+    target: 'es2015',
+    outDir: 'dist', // Adjust as needed
+  },
 })
