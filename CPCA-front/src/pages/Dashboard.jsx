@@ -3,15 +3,16 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AdminLinks, InstructLinks, StudentLinks } from "@/utils/links";
 import Notifications from "@/components/Notification";
-import { logoutUser } from "@/features/user/userSlice";
+import { logoutUser as logoutUserAction } from "@/features/user/userSlice";
 import blankProfile from "@/assets/blank_profile.webp";
 import logo from "@/assets/logo.png";
 import newRequests from "@/utils/newRequest";
+import { useLogoutUserMutation } from "@/api";
 
 function Dashboard() {
   const location = useLocation();
   const path = location.pathname.split("/").filter((path) => path !== "");
-
+  const [logoutUser, { isLoading, isSuccess, error }] = useLogoutUserMutation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [toggleNotification, setToggleNotification] = useState(false);
   const [count, setCount] = useState(0);
@@ -35,9 +36,14 @@ function Dashboard() {
     setDropdownOpen(!dropdownOpen);
   };
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await logoutUser().unwrap();
+      dispatch(logoutUserAction());
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to logout:", error);
+    }
   };
 
   const QuickLinks = () => {
