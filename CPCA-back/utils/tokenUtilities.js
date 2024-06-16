@@ -11,11 +11,11 @@ const GenerateJWT = async (res, tokenData) => {
     secure: process.env.NODE_ENV !== "development", // ensure HTTPS in production
     sameSite: process.env.NODE_ENV !== "development" ? "None" : "Lax", // Allow cross-origin in production, but restrict in development
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    domain: process.env.NODE_ENV !== "development" ? 'cpca-front.vercel.app' : "localhost", // Set domain for production, localhost for development
+    // domain: process.env.NODE_ENV !== "development" ? 'cpca-front.vercel.app' : "localhost", // Set domain for production, localhost for development
     path: "/", // root path
   });
 
-  console.log(process.env.COOKIE_DOMAIN)
+  // console.log(process.env.COOKIE_DOMAIN)
   console.log('node env', NODE_ENV); 
   console.log('cookie domain', COOKIE_DOMAIN);
   console.log('token expiry', TOKEN_EXPIRY);
@@ -28,6 +28,7 @@ const GenerateJWT = async (res, tokenData) => {
 
 const ValidateJWT = async (res) => {
   let token = await res.cookies.jwt;
+
   if (token ) {
     try {
       const payload = jwt.verify(token, TOKEN_KEY);
