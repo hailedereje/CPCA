@@ -1,6 +1,6 @@
 import "express-async-errors";
 import express from "express";
-import morgan from "morgan";
+// import morgan from "morgan";
 import { errorHandler, notFound } from "../middlewares/index.js";
 import { userRoutes, courseRoutes, lessonRoutes, 
   quizRoutes, practiceQuestionRoutes, 
@@ -24,7 +24,7 @@ const App = async (app) => {
   }));
   app.use(cookieParser());
   
-  app.use(morgan("dev"));
+  // app.use(morgan("dev"));
   app.get("/", (req, res) => {
     res.send("server running successfully ...");
   });
