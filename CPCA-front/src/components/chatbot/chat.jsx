@@ -3,7 +3,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import chatBotImage from "@/assets/chatbot.jpg";
 import userAvatar from "@/assets/userAvatar.jpg"; // Add the path to the user avatar image
 import { chatKn } from './constants';
-import { IoMdSend } from 'react-icons/io';
+import { IoMdClose, IoMdSend } from 'react-icons/io';
+import { FaComments } from 'react-icons/fa';
 
 export const MyChatBot = () => {
   const genAI = new GoogleGenerativeAI('AIzaSyB7fkcTTyRh0kQ1NpWJtMYYm6X_EwlsNp8');
@@ -75,16 +76,19 @@ export const MyChatBot = () => {
   return (
     <div className="fixed bottom-4 left-4">
       {!showChat &&<button
-        onClick={toggleChat}
-        className="bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg focus:outline-none"
-      >
-        Chat
-      </button>}
+      onClick={toggleChat}
+      className="bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg focus:outline-none flex items-center space-x-2 fixed bottom-4 left-4"
+    >
+      <FaComments className="w-6 h-6" /> {/* Add the message icon */}
+      <span>Chat</span>
+    </button>}
       {showChat && (
         <div className="w-[400px] max-w-md  h-[90vh] mx-auto mt-5 border rounded-lg shadow-lg bg-white flex flex-col">
           <div className="bg-blue-500 text-white p-4 rounded-t-lg flex justify-between items-center">
-            <h2 className="text-lg font-semibold">CPCA Chat AI</h2>
-            <button onClick={toggleChat} className="text-white">X</button>
+            <h2 className="text-lg font-semibold">CPCA Chatbot</h2>
+            <button onClick={toggleChat} className="text-white">
+              <IoMdClose className='text-xl' />
+            </button>
           </div>
           <div className="h-full overflow-y-auto p-4" ref={chatContainerRef}>
             {messages.map((message, index) => (
@@ -121,7 +125,7 @@ export const MyChatBot = () => {
             ))}
             {messages.length === 0 && (
                 <div className='w-full h-full flex items-center justify-center'>
-                    <span className='text-xl font-bold  text-gray-400'>start chatting</span>
+                    <span className='text-xl font-bold  text-blue-500'>start chatting</span>
                 </div>
             )}
           </div>
@@ -130,7 +134,7 @@ export const MyChatBot = () => {
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               type="text"
-              className="flex-grow px-4 py-2 border-2 border-blue-400 rounded-full focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="pe-6 text-sm flex-grow px-4 py-2 border-2 border-blue-400 rounded-full focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Type a message..."
             />
             <button
@@ -140,9 +144,6 @@ export const MyChatBot = () => {
               <IoMdSend className='text-blue-400 text-xl' />
             </button>
           </form>
-          <button onClick={() => setMessages([])} className='px-2 '>
-            clear
-          </button>
         </div>
       )}
     </div>
