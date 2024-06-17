@@ -78,7 +78,7 @@ export const MyChatBot = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 ">
+    <div className="fixed bottom-4 right-4 z-50">
       {!showChat &&<button
       onClick={toggleChat}
       className="bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg focus:outline-none flex items-center space-x-2 fixed bottom-4 right-4"
@@ -87,7 +87,7 @@ export const MyChatBot = () => {
       <span>Chat</span>
     </button>}
       {showChat && (
-        <div className=" z-50 w-[400px] max-w-md  h-[70vh] mx-auto mt-5 border rounded-lg shadow-lg bg-white flex flex-col">
+        <div className=" w-[400px] max-w-md  h-[70vh] mx-auto mt-5 border rounded-lg shadow-lg bg-white flex flex-col">
           <div className="bg-blue-500 text-white p-4 rounded-t-lg flex justify-between items-center">
             <h2 className="text-lg font-semibold">CPCA Chatbot</h2>
             <button onClick={toggleChat} className="text-white">
