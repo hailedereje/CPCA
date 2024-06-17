@@ -50,12 +50,12 @@ function Stats() {
 
 function StatCard({ icon: Icon, color, title, value }) {
   return (
-    <div className="p-6 bg-white dark:bg-gray-800 border-l-4 border-blue-500 rounded-lg shadow-lg transform hover:scale-104 transition-transform duration-300">
+    <div className="p-6 bg-white text-black  border-l-4 border-blue-500 rounded-lg shadow-lg transform hover:scale-104 transition-transform duration-300">
       <div className="flex items-center mb-2">
-        <Icon className={`text-${color}-500 h-6 w-6 mr-2`} />
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{title}</h3>
+        <Icon className={`text-black-500 h-6 w-6 mr-2`} />
+        <h3 className="text-lg font-semibold text-gray-800 ">{title}</h3>
       </div>
-      <p className="text-gray-700 dark:text-gray-300">{value}</p>
+      <p className="text-gray-700 ">{value}</p>
     </div>
   );
 }

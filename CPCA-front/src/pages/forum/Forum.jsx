@@ -88,7 +88,7 @@ const Forum = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <div className="flex flex-col items-center w-full h-screen overflow-y-auto bg-slate-100">
+    <div className="flex flex-col items-center w-full max-w-3xl h-screen overflow-y-auto bg-slate-100">
       <Toaster />
       {questions.length > 0 &&
         questions.map((question, index) => {

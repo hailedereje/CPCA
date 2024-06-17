@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import parse from "html-react-parser"
 import {
   api,
   useCompleteLessonMutation,
@@ -45,7 +46,7 @@ const CourseDetails = () => {
   const [completeLesson] = useCompleteLessonMutation();
   const [chapterId, setChapterId] = useState(null);
   const navigate = useNavigate();
-
+  console.log(data)
   // get progress
   const {
     data: chapterProgressData,
@@ -96,8 +97,8 @@ const CourseDetails = () => {
     },
     { refetchOnMountOrArgChange: true }
   );
-  
-// request unlock
+
+  // request unlock
   const requestChapterUnlock = async (chapterId) => {
     try {
       await requestUnlockChapter({
@@ -154,7 +155,7 @@ const CourseDetails = () => {
     }
   };
 
-// render progress
+  // render progress
   const renderChapterProgress = (id) => {
     const itemProgress = chapterProgressData?.filter(
       (item) => item.chapterId === id
@@ -216,7 +217,7 @@ const CourseDetails = () => {
     return null;
   };
 
-// toggle 
+  // toggle 
   const toggleChapter = (chapterId) => {
     const itemProgress = chapterProgressData?.filter(
       (item) => item.chapterId === chapterId
@@ -298,7 +299,7 @@ const CourseDetails = () => {
     if (selectedLesson) {
       lessonComplete();
     }
-  },[selectedLesson, classroom, chapterId, lessonProgressData, completeLesson, refetchLessonProgress]);
+  }, [selectedLesson, classroom, chapterId, lessonProgressData, completeLesson, refetchLessonProgress]);
 
   useEffect(() => {
     if (!contentLoading && !contentError && contentData) {
@@ -373,7 +374,7 @@ const CourseDetails = () => {
                           className="flex items-center w-full p-2 text-left hover:bg-gray-400 rounded"
                           onClick={() => {
                             setChapterId(chapter._id),
-                            toggleChapter(chapter._id);
+                              toggleChapter(chapter._id);
                           }}
                           title={chapter.title}
                         >
@@ -465,7 +466,11 @@ const CourseDetails = () => {
         ) : (
           <div>
             <h2 className="text-2xl font-semibold mb-4">
-              Select a content to view
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(course.description),
+                }}
+              />
             </h2>
           </div>
         )}

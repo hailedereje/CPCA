@@ -44,19 +44,19 @@ const StudentList = ({ students }) => {
           {students.map((student) => (
             <NavLink to={`${student._id}`} key={student._id}>
               <article className="border border-base-200 shadow-sm p-4 rounded-lg hover:bg-gray-100 cursor-pointer">
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center bg-white p-4 ">
                   <img
                     src={student.profileImg || "https://via.placeholder.com/150"}
                     alt={student.username}
                     className="h-24 w-24 rounded-lg object-cover mb-4"
                   />
                   <div className="text-center">
-                    <h3 className="text-xl font-semibold">{student.fullName || "N/A"}</h3>
-                    <p className="text-gray-600 dark:text-gray-400">{student.email || "N/A"}</p>
-                    <p className="text-gray-600 dark:text-gray-400">{student.studentId || "N/A"}</p>
-                    <p className="text-gray-600 dark:text-gray-400">{student.username || "N/A"}</p>
-                    <p className="text-gray-600 dark:text-gray-400">{student.phoneNumber || "N/A"}</p>
-                    <p className="text-gray-600 dark:text-gray-400">{student.bio || "N/A"}</p>
+                    <h3 className="text-xl font-semibold">{student.fullName || ""}</h3>
+                    <p className="text-gray-600 dark:text-gray-400">{student.email || ""}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{student.studentId || ""}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{student.username || ""}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{student.phoneNumber || ""}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{student.bio || ""}</p>
                   </div>
                 </div>
               </article>
