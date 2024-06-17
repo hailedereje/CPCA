@@ -58,10 +58,12 @@ export const CreateLab = ({data,title}) => {
 
             if(data) {
                 await updateLab({labId:data.data._id,labForm});
+                navigate(-1)
             }
                 
             else {
                 await createLab(labForm);
+                navigate(-1)
             }
             
         } catch (error) {

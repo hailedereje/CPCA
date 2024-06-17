@@ -143,7 +143,9 @@ export const AddQuestion = () => {
                 <span >Question</span>
               </span>
 
-              <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+              <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2">
+                 create question for the quiz which will be displayed to the students to answer it should be clear and concise
+                </span>
             </span>
             <FroalaEditor
               tag='div'
@@ -158,7 +160,9 @@ export const AddQuestion = () => {
                 <IconWrapper bg="bg-blue-500" color="text-white" icon={<MdOutlineDescription />} />
                 <span >Choice</span>
               </span>
-              <span className="text-xs lowercase line-clamp-2 text-gray-500">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+              <span className="text-xs lowercase line-clamp-2 text-gray-500">
+                add multiple choices for the question and set the correct answer by clicking on the circle icon
+                </span>
             </span>
             <div className="w-full max-w-2xl flex flex-col gap-4 rounded-md p-4 ">
               <div className="flex justify-between items-center mb-6 ">

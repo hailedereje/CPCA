@@ -216,7 +216,6 @@ const titleSchema = yup.object().shape({
     title: yup.string().required('Name is required')
         .min(4, 'title must be at least 4 characters long')
         .max(50, 'title must not exceed 50 characters')
-        .matches(/^[a-zA-Z\s]+$/, 'Name should only contain letters and spaces')
 });
 
 

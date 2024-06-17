@@ -78,10 +78,10 @@ export const MyChatBot = () => {
   };
 
   return (
-    <div className="fixed bottom-4 left-4">
+    <div className="">
       {!showChat &&<button
       onClick={toggleChat}
-      className="bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg focus:outline-none flex items-center space-x-2 fixed bottom-4 left-4"
+      className="bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg focus:outline-none flex items-center space-x-2 fixed bottom-4 right-4"
     >
       <FaComments className="w-6 h-6" /> {/* Add the message icon */}
       <span>Chat</span>
