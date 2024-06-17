@@ -13,6 +13,7 @@ import {
   getMyQuestionsByClassroomId,
   getAllInvitations,
   updateInvitationAccepted,
+  deleteInvitation,
   topTenClassRooms
 } from "../controllers/index.js";
 
@@ -46,6 +47,7 @@ router.get('/:id', getClassroomById)
 router.delete("/delete/:id", deleteClassroom);
 router.post("/invite", inviteStudents);
 router.get("/invitations/:id", getAllInvitations);
+router.delete("/invitation/:id", deleteInvitation);
 router.get("/instructor/:id", getClassroomsByInstructorId);
 
 

@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { Course, User } from "../models/index.js";
 import { GenerateJWT } from "../utils/tokenUtilities.js";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
+import nodemailer from "nodemailer";
 
 const userRegister = async (req, res) => {
   const { username, email, password } = req.body;
@@ -149,24 +150,52 @@ const editUserProfile = async (req, res) => {
   return res.status(404).json({ message: "User not found" });
 };
 
+const sendEmail = async (email, password) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    },
+  });
+
+  console.log(process.env.EMAIL);
+
+  const mailOptions = {
+    from: "Computer Programmming Course Assistant",
+    to: email,
+    subject: "Wellcome to CPCA",
+    text: `Your instructor account is created. your password is "${password}"`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.log(error);
+    throw new Error('failed to send email ')
+  }
+};
+
+
 const createInstructor = async (req, res) => {
   const { username, email, password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ msg: "Email already registered" });
-    }
-
-    const newInstructor = await User.create({
-      username,
-      email,
-      password,
-      role: "instructor",
-      isInstructor: true,
-    });
-    return res.status(201).json({ msg: "Instructor created successfully" });
-  } catch (error) {
-    return res.status(500).json({ msg: "internal server error" })
+    return res.status(400).json({ msg: "Email already registered" });
+  }
+  
+  const newInstructor = await User.create({
+    username,
+    email,
+    password,
+    role: "instructor",
+    isInstructor: true,
+  });
+  await sendEmail(email, password);
+  return res.status(201).json({ msg: "Instructor created successfully" });
+  }catch(error) {
+    return res.status(500).json({ msg: "internal server error"})
   }
 
 };
