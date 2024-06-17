@@ -39,18 +39,18 @@ export const AddQuestion = () => {
   let data = {}
 
   if (!!questionId) {
-    data = client.getQueryData(['quiz', quizId]).data.questions.find(question => question._id === questionId)
+    data = client.getQueryData(['quiz', quizId])?.data.questions.find(question => question._id === questionId)
   }
   const [value, setValue] = useState(data.question || '');
   const [error, setError] = useState('')
-  const [isEditing, setEditing] = useState(false)
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
   const [choices, setChoices] = useState(data?.options?.map(option => ({ ...option, id: nanoid() })) || []);
   const [newChoice, setNewChoice] = useState({ id: nanoid(), option: '', isCorrect: false });
   const [editingChoice, setEditingChoice] = useState(null);
-  const [correctAnswerIndex, setCorrectAnswerIndex] = useState(null);
+  const [correctAnswerIndex, setCorrectAnswerIndex] = useState(choices?.find(choice => choice.isCorrect)?.id || null);
   const isChanged = value !== data.question || !deepEqualArray(choices, data.options);
+
 
   const { mutateAsync: createQuestion } = useCreateQuestion(quizId)
   const { mutateAsync: updateQuestion } = useUpdateQuestion(quizId)
@@ -69,12 +69,12 @@ export const AddQuestion = () => {
       if (!!questionId) {
         const data = { question: value, options: choices, questionId, quizId }
         await updateQuestion({ data, questionId }).then(result => {
-          // navigate("/question")
+          navigate(-1)
         })
       }
       else {
         await createQuestion({ question: value, options: choices, quizId }).then(result => {
-          // navigate("/question")
+          navigate(-1)
         })
       }
 
@@ -143,7 +143,9 @@ export const AddQuestion = () => {
                 <span >Question</span>
               </span>
 
-              <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+              <span className="text-xs lowercase xxs:line-clamp-1 md:line-clamp-2">
+                 create question for the quiz which will be displayed to the students to answer it should be clear and concise
+                </span>
             </span>
             <FroalaEditor
               tag='div'
@@ -158,7 +160,9 @@ export const AddQuestion = () => {
                 <IconWrapper bg="bg-blue-500" color="text-white" icon={<MdOutlineDescription />} />
                 <span >Choice</span>
               </span>
-              <span className="text-xs lowercase line-clamp-2 text-gray-500">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatem perspiciatis consequatur qui numquam veniam similique rem ut esse architecto.</span>
+              <span className="text-xs lowercase line-clamp-2 text-gray-500">
+                add multiple choices for the question and set the correct answer by clicking on the circle icon
+                </span>
             </span>
             <div className="w-full max-w-2xl flex flex-col gap-4 rounded-md p-4 ">
               <div className="flex justify-between items-center mb-6 ">
@@ -213,7 +217,7 @@ export const AddQuestion = () => {
                     <span><FaRegCircle size={20} /></span>
                     <textarea
                       placeholder="Enter choice"
-                      className="text-sm p-2 w-full outline-none bg-transparent border-b focus:border-blue-500 resize-none capitalize"
+                      className="text-sm p-2 w-full outline-none bg-transparent border-b-2 border-gray-500 focus:border-blue-500 resize-none capitalize"
                       value={newChoice.option}
                       onChange={handleNewChoiceChange}
                       rows={1}
@@ -228,7 +232,7 @@ export const AddQuestion = () => {
                 </div>
               )}
             </div>
-            <div className="flex flex-col items-center w-full gap-4">
+            <div className="flex flex-col  w-full gap-4">
             <ErrorBanner message={error} />
             <button
               onClick={onSubmit}

@@ -11,8 +11,9 @@ export const MyChatBot = () => {
   const genAI = new GoogleGenerativeAI(`${API_KEY}`);
   const [inputText, setInputText] = useState('');
   const [prompt, setPrompt] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([{ text: "hey there! I'm a chatbot. Ask me anything!", type: 'bot'}]);
   const [showChat, setShowChat] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const chatContainerRef = useRef(null);
 
@@ -45,6 +46,7 @@ export const MyChatBot = () => {
 
   useEffect(() => {
     if (prompt) {
+      // setLoading(true);
       const fetchResponse = async () => {
         const result = await run(prompt);
         const responseMessage = { text: result, type: 'bot' };
@@ -52,6 +54,7 @@ export const MyChatBot = () => {
         scrollToBottom();
       };
       fetchResponse();
+      // setLoading(false);
     }
   }, [prompt]);
 
@@ -75,10 +78,10 @@ export const MyChatBot = () => {
   };
 
   return (
-    <div className="fixed bottom-4 left-4">
+    <div className="">
       {!showChat &&<button
       onClick={toggleChat}
-      className="bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg focus:outline-none flex items-center space-x-2 fixed bottom-4 left-4"
+      className="bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg focus:outline-none flex items-center space-x-2 fixed bottom-4 right-4"
     >
       <FaComments className="w-6 h-6" /> {/* Add the message icon */}
       <span>Chat</span>
@@ -114,6 +117,7 @@ export const MyChatBot = () => {
                   }`}
                 >
                   <span className='text-sm'>{message.text}</span>
+                  {/* {loading && message.type === 'bot' && <div className='loader'/>} */}
                 </div>
                 {message.type === 'user' && (
                   <img

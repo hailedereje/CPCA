@@ -390,3 +390,19 @@ export const useDeleteLessonItem = (lessonId) => {
     }
   })
 }
+
+export const useDeleteQuestion  = (quizId,questionId) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: () => newRequests.delete(`/quiz_question/${questionId}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:['quiz',quizId]})
+      showSuccessToast("question deleted successfully")
+    },
+    onError: () => {
+      showErrorToast("failed to delete question")
+    }
+
+  })
+}

@@ -12,6 +12,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { ActionTypes } from "../createCourse/action.Types";
 import { Breadcrumb } from "../createCourse/components/bread-crumb";
 import { ErrorHandlingComponent } from "@/pages/ErrorPage";
+import { defaultFroalaConfig } from "@/constants";
+import parse from 'html-react-parser';
 
 const deleteLessonItemMessage = "Warning: You are about to delete a lesson item. This action cannot be undone"
 
@@ -51,10 +53,12 @@ function RichTextExample() {
                       </svg>
                     </button>
                   </div>
-                  <div className="flex rounded-md shadow-sm p-4 w-full h-full max-h-[500px] overflow-auto editor">
-                    <FroalaEditorView
+                  <div className="rounded-md p-4 w-full h-full max-h-[500px] overflow-auto editor bg-white ">
+                    {parse(item.value.content)}
+                    {/* <FroalaEditorView
                       model={item.value.content}
-                    />
+                      config={defaultFroalaConfig}
+                    /> */}
                   </div>
                 </div>
                 
@@ -66,6 +70,7 @@ function RichTextExample() {
                 <div className="w-4/5 group  flex flex-col-reverse gap-y-4 rounded-lg relative">
                   <div className="absolute bottom-0 right-0 z-10 flex items-center justify-end gap-5 p-3 invisible group-hover:visible">
                     <button onClick={() => dispatch(updateLessonItem({ lessonId:param.lessonId, lessonItemId: item._id, type:'code', value:item.value}))}>
+                      {console.log(item.value)}
                       <svg className="w-6 text-[#32bc6e]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m3.1 5.07c.14 0 .28.05.4.16l1.27 1.27c.23.22.23.57 0 .78l-1 1l-2.05-2.05l1-1c.1-.11.24-.16.38-.16m-1.97 1.74l2.06 2.06l-6.06 6.06H7.07v-2.06z" />
                       </svg>

@@ -16,6 +16,7 @@ const userSchema = new Schema(
     studentId: { type: String, default: null },
     //aditional fields to add
   },
+  { timestamps: true},
   {
     toJSON: {
       transform: function (doc, ret) {

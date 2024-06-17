@@ -4,7 +4,7 @@ import 'froala-editor/css/themes/gray.min.css';
 
 import { useDispatch, useSelector } from "react-redux";
 import { Editor } from "@monaco-editor/react";
-import {  useRef, useState } from "react";
+import {  useEffect, useRef, useState } from "react";
 import {  LANGUAGES, LANGUAGE_List } from '../../assets/constants';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import { closeEditor, setLessonItemValue } from '@/features/course/coursSidebarSlice';
@@ -49,6 +49,13 @@ export const CodeContentEditor = ({lessonId}) => {
     const  {showCodeEditor,lessonItem}  = useSelector(x => x.courseInputState)
     const { value,lessonItemId,actionType,idx } = lessonItem
 
+    useEffect(() => {
+        if(editorRef.current){
+            editorRef.current.focus()
+        }
+    }, [editorRef.current,value])
+
+    console.log("code",value)
     const code = value
     const [loading,setLoading] = useState(false)
 
@@ -89,14 +96,14 @@ export const CodeContentEditor = ({lessonId}) => {
             <div className="absolute top-0 left-0 w-full h-full bg-black/60" />
             <div className="flex flex-col items-start justify-between z-10 w-fit duration-300 rounded-md bg-[#1e1e1e] relative">
                 <div className="">
-                    <CodeMenu code={lessonItem.value}/>
+                    <CodeMenu code={value}/>
                 </div>
                 <Editor
                     theme='vs-dark'
                     line={1}
                     height={"60vh"}
                     width={"60vw"}
-                    defaultLanguage='javascript'
+                    defaultLanguage={code?.language || 'javascript'}
                     language={code.language}
                     value={code.content}
                     onMount={onMount}

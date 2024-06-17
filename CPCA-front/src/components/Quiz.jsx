@@ -11,6 +11,7 @@ import { ActionTypes } from "./createCourse/action.Types"
 import { closeQuizDialog, openQuizDialog, showScoreDialog } from "@/features/course/quizSlice"
 import { MdWarning } from "react-icons/md"
 import { ScorePage } from "./quiz-score"
+import parse from 'html-react-parser';
 
 export const Quiz = () => {
   const params = useParams();
@@ -57,15 +58,14 @@ const Question = ({ questions,quizId,duration }) => {
       const answerIndex = prevAnswers.findIndex(answer => answer.questionId === questionId);
   
       if (answerIndex >= 0) {
-        // If questionId exists, create a new array with updated answerId
         const updatedAnswers = [
-          ...prevAnswers.slice(0, answerIndex), // before the updated answer
-          { ...prevAnswers[answerIndex], answerId }, // updated answer
-          ...prevAnswers.slice(answerIndex + 1), // after the updated answer
+          ...prevAnswers.slice(0, answerIndex), 
+          { ...prevAnswers[answerIndex], answerId }, 
+          ...prevAnswers.slice(answerIndex + 1), 
         ];
         return updatedAnswers;
       } else {
-        // If questionId does not exist, add a new answer object
+
         return [
           ...prevAnswers,
           { questionId, answerId },
@@ -124,7 +124,8 @@ const Question = ({ questions,quizId,duration }) => {
           </div>
         </div>
         <div className="text-sm h-2/3">
-          <FroalaEditorView model={questions[currentPage - 1]?.question} config={{}} /> 
+          {/* <FroalaEditorView model={questions[currentPage - 1]?.question} config={{}} />  */}
+          {parse( questions[currentPage - 1]?.question)}
         </div>
         <div className="md:flex w-full justify-center xxs:hidden ">
           <Pagination

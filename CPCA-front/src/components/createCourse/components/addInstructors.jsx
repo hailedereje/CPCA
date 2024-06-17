@@ -12,7 +12,7 @@ import { showErrorToast, showSuccessToast } from "@/toasts/toast";
     const { instructors } = useSelector(x => x.createCourseState)
     
     const {data: instructorList, isSuccess} = useQuery({
-      queryKey: 'instructors',
+      queryKey: ['instructors'],
       queryFn: () => newRequests.get('/user/instructors'),
       retry: 3,
       staleTime: 1000 * 60 * 500

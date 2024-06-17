@@ -48,10 +48,10 @@ const InvitationList = () => {
     setStatusFilter(e.target.value);
   };
 
-  const handleDelete = async (email) => {
+  const handleDelete = async (id) => {
     try {
-      await newRequests.delete(`/classroom/invitations/${classroom._id}/${email}`);
-      setInvitations(prev => prev.filter(invitation => invitation.email !== email));
+      await newRequests.delete(`/classroom/invitation/${id}`);
+      setInvitations(prev => prev.filter(invitation => invitation._id !== id));
       toast.success("Invitation deleted successfully.");
     } catch (error) {
       console.error("Failed to delete invitation:", error);
@@ -152,7 +152,7 @@ const InvitationList = () => {
                   </span>
                 </div>
                 <button
-                  onClick={() => handleDelete(invitation.email)}
+                  onClick={() => handleDelete(invitation._id)}
                   className="btn btn-error btn-sm"
                 >
                   <FiTrash2 />

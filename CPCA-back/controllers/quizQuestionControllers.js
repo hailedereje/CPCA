@@ -87,13 +87,19 @@ const updateQuizQuestionById = async (req, res) => {
 // Delete a quiz question by ID
 const deleteQuizQuestionById = async (req, res) => {
   try {
-    const quizQuestion = await QuizQuestion.findByIdAndDelete(req.params.id);
-    if (!quizQuestion) {
-      return res.status(404).json({ message: "Quiz question not found" });
-    }
-    res.json({ message: "Quiz question deleted" });
+      const {id} = req.params;
+      const quizQuestion = await QuizQuestion.findById(id)
+      if(!quizQuestion){
+          return res.status(404).json({message:'Quiz question not found'})
+      }
+      const quiz = await Quiz.findById(quizQuestion.quizId)
+      quiz.questions = quiz.questions.filter(x => x.toString() !== id)
+      
+      await quiz.save()
+      await quizQuestion.deleteOne()
+      return res.status(200).json({message:'Quiz question deleted successfully'})
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 

@@ -12,7 +12,9 @@ import {
   getDiscussionByClassroomId,
   getMyQuestionsByClassroomId,
   getAllInvitations,
-  updateInvitationAccepted
+  updateInvitationAccepted,
+  deleteInvitation,
+  topTenClassRooms
 } from "../controllers/index.js";
 
 import {
@@ -36,12 +38,16 @@ router.get("/student/:id", getClassroomsByUserId);
 router.get("/discussion/:id", getDiscussionByClassroomId);
 router.get("/discussion/my-questions/:id", getMyQuestionsByClassroomId);
 
+router.get("/top-classrooms/find",topTenClassRooms)
+
 router.use(isInstructor);
 router.post("/", createClassroom);
+
 router.get('/:id', getClassroomById)
 router.delete("/delete/:id", deleteClassroom);
 router.post("/invite", inviteStudents);
 router.get("/invitations/:id", getAllInvitations);
+router.delete("/invitation/:id", deleteInvitation);
 router.get("/instructor/:id", getClassroomsByInstructorId);
 
 

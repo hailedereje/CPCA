@@ -78,7 +78,6 @@ function Dashboard() {
     <>
       <div className="flex flex-col min-h-screen">
         <div className="flex justify-between gap-3 h-16 items-center fixed top-0 w-full p-4 bg-white z-40 border">
-          <MyChatBot  />
           <DropdownMenu />
           <Link to="/dashboard">
             <img src={logo} alt="logo" className="object-contain w-24" />
@@ -86,7 +85,7 @@ function Dashboard() {
           <div className="hidden md:flex w-full h-full">
             <QuickLinks />
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 relative">
             <button
               className="btn btn-ghost btn-circle"
               onClick={() => setToggleNotification(!toggleNotification)}
@@ -107,21 +106,19 @@ function Dashboard() {
                   />
                 </svg>
                 {count > 0 && (
-                  <div className="relative">
+                  <div className="">
                     <span className="badge badge-xs bg-red-500 indicator-item text-white">
                       {count}
                     </span>
-                    {toggleNotification && (
-                      <div className="absolute right-0 top-10 w-96 bg-white rounded-lg shadow-lg">
-                        <Notifications
-                          onNotificationCount={handleNotificationCount}
-                        />
-                      </div>
-                    )}
                   </div>
                 )}
               </div>
             </button>
+            {toggleNotification && (
+              <div className="absolute right-12 top-12 w-96 bg-white rounded-lg shadow-lg z-50">
+                <Notifications onNotificationCount={handleNotificationCount} />
+              </div>
+            )}
             {user && (
               <div className="relative w-full">
                 <img
@@ -145,6 +142,7 @@ function Dashboard() {
           </div>
         </div>
         <div className="flex flex-1 pt-16 bg-gray-200">
+        <MyChatBot />
           <Outlet />
         </div>
       </div>

@@ -13,10 +13,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { useQuery } from "react-query";
 import DiscussionContext from "@/context/DiscussionContext";
 
-
 const Forum = () => {
   const user = useSelector((state) => state.userState.user);
-  const {socket, classroomId} = useContext(DiscussionContext);
+  const { socket, classroomId } = useContext(DiscussionContext);
   const dispatch = useDispatch();
   const { topic } = useParams();
   const [openId, setOpenId] = useState([]);
@@ -25,7 +24,6 @@ const Forum = () => {
 
   const { isLoading, data } = useQuery("getDiscussionByClassroomId", async () => {
     if (topic) {
-      console.log(topic);
       const res = await newRequests.get(`/discussion/find/${topic}`);
       return res.data;
     } else {
@@ -45,8 +43,8 @@ const Forum = () => {
       return q;
     });
     setQuestions(updatedQuestions);
-  }
-  
+  };
+
   useEffect(() => {
     if (data && data.discussion) {
       setQuestions(data.discussion);
@@ -55,11 +53,11 @@ const Forum = () => {
 
   useEffect(() => {
     const handleReceiveQuestion = async ({ question }) => {
-      setQuestions((prevQuestions) => [...prevQuestions, question]);
+      setQuestions((prevQuestions) => [question, ...prevQuestions]);
     };
-    if(socket){
+    if (socket) {
       socket.on('receive-question', handleReceiveQuestion);
-      
+
       return () => {
         socket.off('receive-question', handleReceiveQuestion);
       };
@@ -79,9 +77,9 @@ const Forum = () => {
       });
       setQuestions(updatedQuestions);
     };
-    if(socket){
+    if (socket) {
       socket.on('receive-answer', handleReceiveAnswer);
-      
+
       return () => {
         socket.off('receive-answer', handleReceiveAnswer);
       };

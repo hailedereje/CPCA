@@ -4,6 +4,7 @@ import newRequests from "@/utils/newRequest";
 import Navbar from "@/components/coursePages/Navbar";
 import AddQuestionForm from "./PracticeQuestionForm";
 import { FaSearch } from "react-icons/fa";
+import Confirmation from "@/components/createCourse/components/confirmationDialog";
 
 const QuestionsList = () => {
   const [questions, setQuestions] = useState([]);
@@ -82,6 +83,7 @@ const QuestionsList = () => {
 
   return (
     <div className="pt-20">
+      <Confirmation/>
       <Navbar />
       <div className="p-4">
         <div className="flex justify-between items-center mb-4 ">
