@@ -42,7 +42,7 @@ const getDashboardRoutes = (user) => {
 
 const App = () => {
   const user = useSelector((state) => state.userState.user);
-  console.log(user)
+
   const router = createBrowserRouter([
     {
       path: "/",

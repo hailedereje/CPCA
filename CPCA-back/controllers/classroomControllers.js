@@ -273,3 +273,21 @@ export const getMyQuestionsByClassroomId = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch questions" });
   }
 };
+
+export const topTenClassRooms = async (req, res) => {
+  try {
+    const classrooms = await Classroom.find()
+      .populate('students', '_id') // Populate student IDs
+      .sort({ 'students.length': -1 }) // Sort by the number of students
+      .limit(10);
+
+    const topClassroomsData = classrooms.map((classroom) => ({
+      name: classroom.name,
+      studentCount: classroom.students.length,
+    }));
+
+    return res.status(200).json(topClassroomsData);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch classrooms',error });
+  }
+};

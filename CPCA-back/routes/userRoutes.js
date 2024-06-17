@@ -13,7 +13,8 @@ import {
   createInstructor,
   getInstructors,
   setInstructorscToCourse,
-  deleteUser
+  deleteUser,
+  getStudentsGrowth
 } from "../controllers/userController.js";
 import { imageStorage } from "../config/multerConfig.js";
 import { validateRequest } from "../middlewares/validateRequest.js";
@@ -35,5 +36,7 @@ router.route("/create-instructor").post(createInstructor);
 router.get("/instructors",getInstructors)
 router.post("/instructors/course",setInstructorscToCourse)
 router.delete("/:id",deleteUser)
+
+router.get('/student-growth/get',getStudentsGrowth)
 
 export default router;

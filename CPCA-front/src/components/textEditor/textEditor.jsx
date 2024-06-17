@@ -53,7 +53,7 @@ function RichTextExample() {
                       </svg>
                     </button>
                   </div>
-                  <div className="flex rounded-md shadow-sm p-4 w-full h-full max-h-[500px] overflow-auto editor bg-white">
+                  <div className="rounded-md p-4 w-full h-full max-h-[500px] overflow-auto editor bg-white ">
                     {parse(item.value.content)}
                     {/* <FroalaEditorView
                       model={item.value.content}

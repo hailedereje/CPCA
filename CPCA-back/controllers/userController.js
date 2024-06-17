@@ -5,31 +5,35 @@ import { BadRequestError, NotFoundError } from "../errors/index.js";
 
 const userRegister = async (req, res) => {
   const { username, email, password } = req.body;
- 
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ msg: "Email already registered" });
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ msg: "Email already registered" });
+    }
+
+    const newUser = await User.create({
+      username,
+      email,
+      password,
+      role: "student"
+    });
+
+
+    return res.status(StatusCodes.CREATED).json({ msg: "User created successfully" });
+  }catch(error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: "internal server error" }  )
   }
-
-  const newUser = await User.create({
-    username,
-    email,
-    password,
-    role: "student"
-  });
-
-
-  throw new BadRequestError("Invalid user data");
 };
 const userLogin = async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (user && (await user.matchPasswords(password))) {
-      const jwt = await GenerateJWT(res, { _id: user._id });
-      console.log(user.role);
-      return res.json({ userId: user._id, user, jwt });
-    }
-    throw new NotFoundError("Invalid email or password");
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (user && (await user.matchPasswords(password))) {
+    const jwt = await GenerateJWT(res, { _id: user._id });
+    console.log(user.role);
+    return res.json({ userId: user._id, user, jwt });
+  }
+  throw new NotFoundError("Invalid email or password");
 }
 
 export const deleteUser = async (req, res) => {
@@ -73,8 +77,8 @@ export const setInstructorscToCourse = async (req, res) => {
   } catch (error) {
     res.status(500).json({ msg: 'Error setting instructors', error });
   }
-    
-  }
+
+}
 
 
 
@@ -123,15 +127,15 @@ const getUserProfile = async (req, res) => {
 const editUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   // console.log(req.body);
-  if (user) { 
+  if (user) {
     const { username, profileImg, phoneNumber, bio, studentId, fullName, password } = req.body;
 
-    user.fullName = fullName || user.fullName;  
+    user.fullName = fullName || user.fullName;
     user.username = username || user.username;
     user.profileImg = profileImg || user.profileImg;
     // user.password = password || user.password; 
     user.phoneNumber = phoneNumber || user.phoneNumber;
-    user.bio = bio || user.bio; 
+    user.bio = bio || user.bio;
     user.studentId = studentId || user.studentId;
     if (password) {
       user.password = password;
@@ -150,22 +154,63 @@ const createInstructor = async (req, res) => {
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-    return res.status(400).json({ msg: "Email already registered" });
-  }
-  
-  const newInstructor = await User.create({
-    username,
-    email,
-    password,
-    role: "instructor",
-    isInstructor: true,
-  });
-  return res.status(201).json({ msg: "Instructor created successfully" });
-  }catch(error) {
-    return res.status(500).json({ msg: "internal server error"})
+      return res.status(400).json({ msg: "Email already registered" });
+    }
+
+    const newInstructor = await User.create({
+      username,
+      email,
+      password,
+      role: "instructor",
+      isInstructor: true,
+    });
+    return res.status(201).json({ msg: "Instructor created successfully" });
+  } catch (error) {
+    return res.status(500).json({ msg: "internal server error" })
   }
 
 };
+
+
+
+export const getStudentsGrowth = async (req, res) => {
+  try {
+    const now = new Date();
+    const hours = [];
+
+    for (let i = 0; i < 8; i++) {
+      const hour = new Date(now.getTime() - i * 60 * 60 * 1000);
+      hours.push(hour);
+    }
+
+    const students = await User.find({ role: 'student' }).sort({ createdAt: 1 });
+
+    const counts = hours.map(hour => ({
+      hour: hour.toISOString(),
+      count: 0
+    }));
+
+    students.forEach(student => {
+      const createdAt = new Date(student.createdAt);
+
+      counts.forEach((count, index) => {
+        if (createdAt <= new Date(count.hour)) {
+          counts[index].count++;
+        }
+      });
+    });
+
+    res.status(200).json(counts);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching student growth' });
+  }
+};
+
+
+
+
+
+
 export {
   userRegister,
   userLogin,
