@@ -41,6 +41,7 @@ export const {
 
   // courses endpoints
   useGetAllCoursesQuery,
+  useGetCoursesByInstructorIdQuery, 
   useGetCourseQuery,
   useCreateCourseMutation,
   useAddPrerequistesMutation,

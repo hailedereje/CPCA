@@ -5,6 +5,7 @@ import {
   getAllCourses,
   getChapterById,
   getCourseListFilter,
+  getCoursesByInstructorId,
   updateCourse,
 } from "../controllers/index.js";
 import { createCourseController, publishCourseController } from "../controllers/course/createCourseController.js";
@@ -44,6 +45,7 @@ router.use(authenticate);
 // router.use(isAdmin);
 router.get("/all",getAllCourses)
 router.get("/course/:id",getSinglCourseController)
+router.get('/instructor/:instructorId', getCoursesByInstructorId);
 router.post("/new",validateRequest(createCourseSchema), createCourseController);
 router.put("/course/:id",validateRequest(createCourseSchema), updateCourse);
 router.delete("/course/:id",deleteCourse)

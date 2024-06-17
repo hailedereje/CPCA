@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FiList, FiGrid, FiUserPlus } from "react-icons/fi";
+import { FiList, FiGrid, FiUserPlus, FiUsers } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 
 const StudentList = ({ students }) => {
@@ -10,7 +10,7 @@ const StudentList = ({ students }) => {
   };
 
   return (
-    <div className="mt-4  p-4">
+    <div className="mt-4 p-4">
       <div className="flex justify-between items-center mb-4">
         <div className="space-x-2">
           <button
@@ -33,8 +33,14 @@ const StudentList = ({ students }) => {
           Invite Student
         </NavLink>
       </div>
-      {view === "detailed" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6  p-3">
+      {students.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-64 border border-dashed border-gray-300 rounded-lg p-8 text-center">
+          <FiUsers className="text-6xl text-gray-400 mb-4" />
+          <h2 className="text-xl font-bold mb-2">No Students Found</h2>
+          <p className="text-gray-600">No Students have been invited yet.</p>
+        </div>
+      ) : view === "detailed" ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-3">
           {students.map((student) => (
             <NavLink to={`${student._id}`} key={student._id}>
               <article className="border border-base-200 shadow-sm p-4 rounded-lg hover:bg-gray-100 cursor-pointer">
@@ -71,13 +77,6 @@ const StudentList = ({ students }) => {
               </tr>
             </thead>
             <tbody>
-              {students.length === 0 && (
-                <tr>
-                  <td colSpan="6" className="text-center text-gray-500">
-                    No Students Found
-                  </td>
-                </tr>
-              )}
               {students.map((student) => (
                 <tr key={student._id} className="items-center">
                   <td>
