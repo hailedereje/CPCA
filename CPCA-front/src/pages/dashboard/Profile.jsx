@@ -147,7 +147,7 @@ export default function Profile() {
                 <ProfileInputElt
                   name="studentId"
                   type="text"
-                  label="Student ID"
+                  label="ID"
                   value={formData.studentId}
                   onChange={handleChange}
                   icon={<NameIcon />}

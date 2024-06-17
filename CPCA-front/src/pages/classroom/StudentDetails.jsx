@@ -53,7 +53,7 @@ const StudentDetails = () => {
     );
   }
 
-  console.log(chaptersProgress, labsProgress, quizzesProgress )
+  console.log('chatper', chaptersProgress, 'lab',  labsProgress, 'quiz', quizzesProgress )
 
 
   if(chaptersProgress.length === 0) {
@@ -225,7 +225,7 @@ const ChapterWithLessonsProgress = ({ classroomId, studentId, chapter }) => {
             </p>
           </div>
           <p className="text-sm mb-2">
-            <span className="font-semibold">Lessons:</span> {chapter.chapterId.lessons.length}
+            <span className="font-semibold">Lessons:</span> {chapter.chapterId.lessons?.length}
           </p>
           <p className="text-sm mb-2">
             <span className="font-semibold">Quiz:</span> {chapter.chapterId.quiz ? "Available" : "Not available"}

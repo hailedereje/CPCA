@@ -21,7 +21,7 @@ export const classroomService = (builder) => ({
   }),
   deleteClassroom: builder.mutation({
     query: (id) => ({
-      url: `/classroom/${id}`,
+      url: `/classroom/delete/${id}`,
       method: "DELETE",
     }),
   }),

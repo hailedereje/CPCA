@@ -53,6 +53,22 @@ const getAllCourses = async (req, res) => {
   
 };
 
+const getCoursesByInstructorId = async (req, res) => {
+  const { instructorId } = req.params;
+  
+  try {
+    const courses = await Course.find({ instructors: instructorId });
+
+    if (!courses || courses.length === 0) {
+      return res.status(404).json({ message: 'No courses found for this instructor' });
+    }
+
+    res.json(courses);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 const getChapterById = async (req, res) => {
   const { courseId, chapterId } = req.params;
@@ -120,5 +136,6 @@ export {
   updateCourse,
   deleteCourse,
   addPrerequistes,
-  getChapterById
+  getChapterById, 
+  getCoursesByInstructorId
 };
