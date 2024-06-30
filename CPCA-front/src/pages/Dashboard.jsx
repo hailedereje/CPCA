@@ -86,6 +86,19 @@ function Dashboard() {
             <QuickLinks />
           </div>
           <div className="flex items-center gap-4 relative">
+            
+           
+            {user && (
+              <div className="relative w-full">
+                <img
+                  src={user.profileImg || blankProfile}
+                  alt="profile"
+                  className="w-10 object-cover flex items-center rounded-full cursor-pointer"
+                  onClick={toggleDropdown}
+                />
+                
+              </div>
+            )}
             <button
               className="btn btn-ghost btn-circle"
               onClick={() => setToggleNotification(!toggleNotification)}
@@ -114,31 +127,12 @@ function Dashboard() {
                 )}
               </div>
             </button>
-            {toggleNotification && (
+            
+             {/* {toggleNotification && (
               <div className="absolute right-12 top-12 w-96 bg-white rounded-lg shadow-lg z-50">
                 <Notifications onNotificationCount={handleNotificationCount} />
               </div>
-            )}
-            {user && (
-              <div className="relative w-full">
-                <img
-                  src={user.profileImg || blankProfile}
-                  alt="profile"
-                  className="w-10 object-cover flex items-center rounded-full cursor-pointer"
-                  onClick={toggleDropdown}
-                />
-                {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md border shadow-sm">
-                    <div
-                      onClick={handleLogout}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100 cursor-pointer"
-                    >
-                      Logout
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
+            )} */}
           </div>
         </div>
         <div className="flex flex-1 pt-16 bg-gray-200">
